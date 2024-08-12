@@ -2,14 +2,12 @@ package parts;
 
 import parts.cell.Cell;
 
-import java.util.ArrayList;
-
 public class Sheet {
     private int version;
     private String name;
-    private int rowsNum;
-    private int columnsNum;
-    private int columnWidth;
+    private int numberOfRows;
+    private int numberOfCols;
+    private int colWidth;
     private int rowHeight;
     private Cell[][] cellsMatrix; // מערך דו-ממדי של תאים
 
@@ -23,14 +21,12 @@ public class Sheet {
         return versionNumber;
     }
 
-
-
     //print function - shouldnt be here!!!!!!!
     public void printSheetCell()
     {
         // הדפסת שמות העמודות
         System.out.print("    "); // רווח לתחילת השורה
-        for (int col = 0; col < columns; col++) {
+        for (int col = 0; col < numberOfCols; col++) {
             char columnName = (char) ('A' + col);
             System.out.print(String.format("%-" + columnWidth + "s", columnName) + "|");
             //אולי לא חייב ליישר שמאלה עם האחוז מינוס
@@ -54,8 +50,6 @@ public class Sheet {
             }
             System.out.println(); // מעבר לשורה הבאה
         }
-        //change23
-        System.out.println("Hello world");
 
 //        //maybe change to row col
 //         for(ArrayList<Cell> row : cellsMatrix)
