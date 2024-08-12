@@ -1,7 +1,7 @@
-package parts.cell.expressions.implementors;
-import parts.cell.expressions.Expression;
+package parts.cell.implementors;
+import parts.cell.Calculable;
 
-public class Number implements Expression {
+public class Number implements Calculable {
 
     private double num;
 

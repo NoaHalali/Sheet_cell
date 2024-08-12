@@ -1,4 +1,4 @@
-//package parts.cell.expressions.implementors.function;
+//package parts.cell.implementors.function;
 //
 //public abstract class BinaryExpression extends Function{
 //    private Expression expression1;
