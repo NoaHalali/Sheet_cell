@@ -1,6 +1,6 @@
 import parts.Sheet;
 import parts.cell.Cell;
-import parts.cell.implementors.Number;
+import parts.cell.impl.Number;
 
 public class Main {
     public Main() {
