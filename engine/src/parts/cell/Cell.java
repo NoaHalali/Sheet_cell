@@ -13,11 +13,11 @@ public class Cell {
     private List<Cell> affectOn;//משפיע על התאים האלה
     private List<Cell> affectedBy; //התאים שמושפע מהם
 
-    public String geEffectiveValue() {
-        return EffectiveValue;
-    }
-    public void updateEffectiveValue(Expression newValue) {
-        //בדיקת תקינות
-        EffectiveValue = newValue.evaluate();
-    }
+//    public String geEffectiveValue() {
+//        return EffectiveValue;
+//    }
+//    public void updateEffectiveValue(Expression newValue) {
+//        //בדיקת תקינות
+//        EffectiveValue = newValue.evaluate();
+//    }
 }
