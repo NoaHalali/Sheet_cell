@@ -14,6 +14,7 @@ public class Number implements Expression {
     {
         return num;
     }
+    public double getNum(){ return num; }
 
     @Override
     public Expression evaluate() {

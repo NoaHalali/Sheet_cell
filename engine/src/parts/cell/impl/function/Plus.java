@@ -4,15 +4,19 @@ import parts.cell.Expression;
 import parts.cell.impl.Number;
 
 public class Plus extends BinaryExpression {
+    public Plus(Expression expression1, Expression expression2) {
+        super(expression1, expression2);
+    }
+
     @Override
     public Expression evaluate(Expression arg1, Expression arg2) {
-        double num1, num2, res ;
-        num1 = arg1.getValue();
-        num2 = arg2.getValue();
-        res = (double)num1 + num2;
-        return new Number(res);
+        Number num1, num2;
+        num1 = (Number) arg1.evaluate();
+        num2 = (Number) arg2.evaluate();
+        return new Number(num1.getNum() + num2.getNum());
 
-//       arg1.evaluate() ;
-//       arg2.evaluate();
     }
+
+
+
 }
