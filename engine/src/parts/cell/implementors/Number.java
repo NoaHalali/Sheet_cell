@@ -1,24 +1,27 @@
 package parts.cell.implementors;
+
 import parts.cell.Calculable;
+import java.text.DecimalFormat;
 
 public class Number implements Calculable {
 
     private double num;
 
+    public void setNum(double num) {
+        this.num = num;
+    }
+
     @Override
-    public String evaluate() { //אולי לא מחזיר string? לחשוב על זה
-        //String res;
-        double temp = num, mod;
-        StringBuilder str = new StringBuilder();
+    public String evaluate() {
+        DecimalFormat decimalFormat;
 
-        while (temp > 0) {
-            temp = temp / 1000;
-            mod = temp % 1000;
-            str.insert(0, "," + mod);
+        // בדיקה אם המספר שלם או ממשי
+        if (num == (long) num) {
+            decimalFormat = new DecimalFormat("#,###");
+        } else {
+            decimalFormat = new DecimalFormat("#,###.00");
         }
-        mod = temp % 1000;
-        str.insert(0, mod);
 
-        return String.valueOf(str); //הצעה של הקומפיילר
+        return decimalFormat.format(num);
     }
 }
