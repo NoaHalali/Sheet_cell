@@ -6,8 +6,7 @@ import java.text.DecimalFormat;
 public class Number implements Calculable {
 
     private double num;
-
-    public void setNum(double num) {
+    public Number(double num) {
         this.num = num;
     }
 

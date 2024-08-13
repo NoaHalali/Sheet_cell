@@ -16,8 +16,8 @@ public class Cell {
     public String geEffectiveValue() {
         return EffectiveValue;
     }
-    public void updateEffectiveValue(String newValue) {
+    public void updateEffectiveValue(Calculable newValue) {
         //בדיקת תקינות
-        //EffectiveValue=originalValue.evaluate(newValue);
+        EffectiveValue = newValue.evaluate();
     }
 }
