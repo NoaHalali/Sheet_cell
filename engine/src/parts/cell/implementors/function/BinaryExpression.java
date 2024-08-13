@@ -1,6 +1,8 @@
 //package parts.cell.implementors.function;
 //
-//public abstract class BinaryExpression extends Function{
+//import parts.cell.Expression;
+//
+//public abstract class BinaryExpression implements Expression{
 //    private Expression expression1;
 //    private Expression expression2;
 //
@@ -15,10 +17,10 @@
 //        return String.valueOf(evaluate(expression1.evaluate(), expression2.evaluate()));
 //    }
 //
-//    @Override
-//    public String toString() {
-//        return "(" + expression1 + getOperationSign() + expression2 + ")";
-//    }
+////    @Override
+////    public String toString() {
+////        return "(" + expression1 + getOperationSign() + expression2 + ")";
+////    }
 //
-//    abstract protected double evaluate(double evaluate, double evaluate2);
+//    abstract protected String evaluate(String evaluate, String evaluate2);
 //}

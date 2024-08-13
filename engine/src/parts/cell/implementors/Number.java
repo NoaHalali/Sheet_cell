@@ -1,9 +1,9 @@
 package parts.cell.implementors;
 
-import parts.cell.Calculable;
+import parts.cell.Expression;
 import java.text.DecimalFormat;
 
-public class Number implements Calculable {
+public class Number implements Expression {
 
     private double num;
     public Number(double num) {

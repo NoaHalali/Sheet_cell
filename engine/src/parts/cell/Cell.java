@@ -7,7 +7,7 @@ public class Cell {
     private int lastUpdatedVersion;
     private int rowsIndex;
     private int columnsIndex;
-    private Calculable originalValue;
+    private Expression originalValue;
     private String EffectiveValue; //אולי להוסיף intetface במקום ב-string
     private List<Cell> neighbors;
     private List<Cell> affectOn;//משפיע על התאים האלה
@@ -16,7 +16,7 @@ public class Cell {
     public String geEffectiveValue() {
         return EffectiveValue;
     }
-    public void updateEffectiveValue(Calculable newValue) {
+    public void updateEffectiveValue(Expression newValue) {
         //בדיקת תקינות
         EffectiveValue = newValue.evaluate();
     }
