@@ -9,14 +9,9 @@ public class Plus extends BinaryExpression {
     }
 
     @Override
-    public Expression evaluate(Expression arg1, Expression arg2) {
-        Number num1, num2;
-        num1 = (Number) arg1.evaluate();
-        num2 = (Number) arg2.evaluate();
-        return new Number(num1.getNum() + num2.getNum());
-
+    public String calculateOriginalValue() {
+        double leftVal = Double.parseDouble(left.evaluate().replace(",", ""));
+        double rightVal = Double.parseDouble(right.evaluate().replace(",", ""));
+        return String.valueOf(leftVal + rightVal);
     }
-
-
-
 }
