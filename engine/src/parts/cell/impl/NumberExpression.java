@@ -1,32 +1,25 @@
 package parts.cell.impl;
 
-import parts.cell.Expression;
 import java.text.DecimalFormat;
 
-public class Number implements Expression {
-
+public class NumberExpression extends AbstractExpression {
     private double num;
 
-    public Number(double num) {
+    //or get String and then Parse to double
+    public NumberExpression(double num) {
+        super(Double.toString(num));
         this.num = num;
     }
-    public double getValue()
-    {
-        return num;
-    }
-    public double getNum(){ return num; }
 
     @Override
-    public Expression evaluate() {
+    protected String calculateEffectiveValue() {
         DecimalFormat decimalFormat;
 
-        // בדיקה אם המספר שלם או ממשי
         if (num == (long) num) {
             decimalFormat = new DecimalFormat("#,###");
         } else {
             decimalFormat = new DecimalFormat("#,###.00");
         }
-
         return decimalFormat.format(num);
     }
 }

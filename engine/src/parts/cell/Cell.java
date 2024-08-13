@@ -3,7 +3,6 @@ package parts.cell;
 import java.util.List;
 
 public class Cell {
-
     private int lastUpdatedVersion;
     private int rowsIndex;
     private int columnsIndex;
@@ -12,6 +11,10 @@ public class Cell {
     private List<Cell> neighbors;
     private List<Cell> affectOn;//משפיע על התאים האלה
     private List<Cell> affectedBy; //התאים שמושפע מהם
+
+    public void updateValue(String newValue) {
+        cellValue.setOriginalValue(newValue);
+    }
 
 //    public String geEffectiveValue() {
 //        return EffectiveValue;

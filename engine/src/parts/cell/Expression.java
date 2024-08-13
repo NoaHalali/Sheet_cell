@@ -2,6 +2,10 @@ package parts.cell;
 
 public interface Expression {
 
-      public String evaluate();
-      public String getOriginalValue();
+      //returns the calculated value - Effective Value
+      String evaluate();
+      String getOriginalValue();
+
+       //הגדרת ערך חדש כערך המקורי (מעודכן גם את ה-Evaluate)
+      void setOriginalValue(String originalValue);
 }

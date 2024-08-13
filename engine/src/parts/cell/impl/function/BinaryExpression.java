@@ -1,10 +1,11 @@
 package parts.cell.impl.function;
 
 import parts.cell.Expression;
+import parts.cell.impl.AbstractExpression;
 
 import java.security.PublicKey;
 
-public abstract class BinaryExpression implements Expression {
+public abstract class BinaryExpression extends AbstractExpression {
     protected Expression left;
     protected Expression right;
     private String operator;
@@ -12,13 +13,16 @@ public abstract class BinaryExpression implements Expression {
     private String effectiveValue;
 
     public BinaryExpression(Expression left, Expression right) {
+        //super();
         this.left = left;
         this.right = right;
         this.operator = operator;
         //this.originalValue = calculateOriginalValue();
         this.effectiveValue = calculateEffectiveValue();
     }
-    protected abstract String calculateOriginalValue();
+
+
+    protected abstract String calculateEffectiveValue();
 
     // חישוב הערך המקורי (בדוגמה הזו הוא מבוסס על הביטוי המקורי)
 //    private String calculateOriginalValue() {
