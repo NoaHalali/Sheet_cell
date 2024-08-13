@@ -16,18 +16,16 @@ public class Main {
         for (int i = 0; i < 2; i++) {
             for (int j = 0; j < 3; j++) {
                 matrix[i][j]=new Cell();
-                matrix[i][j].updateEffectiveValue(new Number(3));
+                matrix[i][j].updateEffectiveValue(new Number(value));
                 value++;
             }
         }
+
         sheet.setCellsMatrix(matrix);
         sheet.printSheetCell();
     }
 }
-//        Number myNumber = new Number();
-//        myNumber.setNum(100060.5974);
-//        String s = myNumber.evaluate();
-//        System.out.println(s);
+
 
 
 
