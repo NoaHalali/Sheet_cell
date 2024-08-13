@@ -3,5 +3,5 @@ package parts.cell;
 public interface Expression {
 
       public String evaluate();
-      public String getExpression();
+      public String getOriginalValue();
 }

@@ -50,10 +50,9 @@ public abstract class BinaryExpression implements Expression {
         return originalValue;
     }
 
-    public String getEffectiveValue() {
-        return effectiveValue;
-    }
-
+//    public String getEffectiveValue() {
+//        return effectiveValue;
+//    }
 }
 
 //public abstract class BinaryExpression implements Expression {
