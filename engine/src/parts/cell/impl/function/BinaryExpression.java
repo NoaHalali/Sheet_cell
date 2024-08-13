@@ -13,7 +13,7 @@ public abstract class BinaryExpression extends AbstractExpression {
     private String effectiveValue;
 
     public BinaryExpression(Expression left, Expression right) {
-        //super();
+        //super(originalValue);
         this.left = left;
         this.right = right;
         this.operator = operator;

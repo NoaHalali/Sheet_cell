@@ -5,10 +5,12 @@ public abstract class AbstractExpression implements Expression {
     protected String originalValue;
     protected String effectiveValue;
 
+    //לא בטוח שצריך בכלל את הערך המקורי
     public AbstractExpression(String originalValue) {
         this.originalValue = originalValue;
         this.effectiveValue = calculateEffectiveValue();
     }
+    public AbstractExpression(){};
 
     protected abstract String calculateEffectiveValue();
 
