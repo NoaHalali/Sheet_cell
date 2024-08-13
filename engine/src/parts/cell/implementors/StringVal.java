@@ -6,6 +6,6 @@ public class StringVal implements Calculable {
     private String value;
     @Override
     public String evaluate() {
-        return "";
+        return value.trim();
     }
 }
