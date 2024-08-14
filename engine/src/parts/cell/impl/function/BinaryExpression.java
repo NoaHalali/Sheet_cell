@@ -8,15 +8,14 @@ import java.security.PublicKey;
 public abstract class BinaryExpression extends AbstractExpression {
     protected Expression left;
     protected Expression right;
-    private String operator;
-    private String originalValue;
-    private String effectiveValue;
+
+    //private String originalValue;
+   // private String effectiveValue;
 
     public BinaryExpression(Expression left, Expression right) {
         //super(originalValue);
         this.left = left;
         this.right = right;
-        this.operator = operator;
         //this.originalValue = calculateOriginalValue();
         this.effectiveValue = calculateEffectiveValue();
     }
@@ -34,15 +33,6 @@ public abstract class BinaryExpression extends AbstractExpression {
 //    private String calculateEffectiveValue() {
 //        double leftVal = Double.parseDouble(left.evaluate().replace(",", ""));
 //        double rightVal = Double.parseDouble(right.evaluate().replace(",", ""));
-//        switch (operator) {
-//            case "+":
-//                return String.valueOf(leftVal + rightVal);
-//            case "-":
-//                return String.valueOf(leftVal - rightVal);
-//            // הוספה של פעולות נוספות לפי הצורך
-//            default:
-//                throw new UnsupportedOperationException("Unsupported operator: " + operator);
-//        }
 //    }
 
     @Override
