@@ -9,6 +9,7 @@ public class Plus extends BinaryExpression {
 
     @Override
     protected String calculateEffectiveValue() {
+        //TODO - add try,catch
         double leftVal = Double.parseDouble(left.evaluate().replace(",", ""));
         double rightVal = Double.parseDouble(right.evaluate().replace(",", ""));
         return String.valueOf(leftVal + rightVal);

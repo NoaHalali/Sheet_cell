@@ -27,7 +27,7 @@ public class Sheet {
     }
 
     //TODO - Move to UI or something
-    public void printSheetCell()
+    public void printSheetData()
     {
         System.out.println("Version: " + version);
         System.out.println("Sheet Name: " + name);
