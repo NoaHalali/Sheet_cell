@@ -7,5 +7,5 @@ public interface Expression {
       String getOriginalValue();
 
        //הגדרת ערך חדש כערך המקורי (מעודכן גם את ה-Evaluate)
-      void setOriginalValue(String originalValue);
+      void setOriginalValue(Expression originalValue);
 }

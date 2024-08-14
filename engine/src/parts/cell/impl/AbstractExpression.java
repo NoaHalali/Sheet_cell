@@ -25,8 +25,8 @@ public abstract class AbstractExpression implements Expression {
     }
 
     //?
-    public void setOriginalValue(String originalValue) {
-        this.originalValue = originalValue;
+    public void setOriginalValue(Expression originalValue) {
+        this.originalValue = originalValue.getOriginalValue();
         this.effectiveValue = calculateEffectiveValue();
     }
 }

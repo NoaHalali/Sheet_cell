@@ -14,8 +14,8 @@ public class Sheet {
     public Sheet(int numberOfRows, int numberOfCols) {
         this.numberOfRows = numberOfRows;
         this.numberOfCols = numberOfCols;
-        this.columnWidth = 5; // לדוגמה, אפשר להתאים את הערך על פי הדרישה
-        this.rowHeight = 1; // לדוגמה, אפשר להתאים את הערך על פי הדרישה
+        this.columnWidth = 3; // לדוגמה, אפשר להתאים את הערך על פי הדרישה
+        this.rowHeight = 2; // לדוגמה, אפשר להתאים את הערך על פי הדרישה
     }
 
     public String getSheetName() {
@@ -55,13 +55,14 @@ public class Sheet {
 
             for (int col = 0; col < numberOfCols; col++) {
                 Cell cell = cellsMatrix[row][col];
-                String cellValue = cell != null ? cell.geEffectiveValue() : "";
+                String cellEffectiveValue = cell != null ? cell.geEffectiveValue() : ""; //?
+
 
                 // הדפסת ערך התא
-                System.out.print("|" + cellValue);
+                System.out.print("|" + cellEffectiveValue);
 
                 // הוספת רווחים אם התוכן קצר יותר מרוחב העמודה
-                for (int i = cellValue.length(); i < columnWidth; i++) {
+                for (int i = cellEffectiveValue.length(); i < columnWidth; i++) {
                     System.out.print(" ");
                 }
             }

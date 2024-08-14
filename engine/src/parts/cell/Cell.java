@@ -12,8 +12,17 @@ public class Cell {
     private List<Cell> affectOn;//משפיע על התאים האלה
     private List<Cell> affectedBy; //התאים שמושפע מהם
 
-    public void updateValue(String newValue) {
+//    public Cell()
+//    {
+//       // cellValue = new Expression();
+//    }
+    public void updateValue(Expression newValue) {
+        cellValue = newValue; //בינתיים
         cellValue.setOriginalValue(newValue);
+    }
+    public String geEffectiveValue()
+    {
+        return cellValue.evaluate();
     }
 
 //    public String geEffectiveValue() {

@@ -1,7 +1,9 @@
 import parts.Sheet;
 import parts.cell.Cell;
 import parts.cell.Expression;
+import parts.cell.impl.BoolExpression;
 import parts.cell.impl.NumberExpression;
+import parts.cell.impl.StringExpression;
 import parts.cell.impl.function.Plus;
 
 public class Main {
@@ -15,12 +17,22 @@ public class Main {
 
         int value = 1;
 
+//        for (int i = 0; i < 2; i++) {
+//            for (int j = 0; j < 3; j++) {
+//                matrix[i][j]=new Cell();
+//                matrix[i][j].updateValue(String.valueOf(value));
+//                value++;
+//            }
+//        }
         for (int i = 0; i < 2; i++) {
             for (int j = 0; j < 3; j++) {
-                matrix[i][j]=new Cell();
-                matrix[i][j].updateValue(String.valueOf(value));
-                value++;
+                matrix[i][j] = new Cell();
             }
+            matrix[i][0].updateValue(new NumberExpression(value));
+            value++;
+            matrix[i][1].updateValue(new BoolExpression(false));
+            matrix[i][2].updateValue(new StringExpression("Amir"));
+
         }
 
         sheet.setCellsMatrix(matrix);
