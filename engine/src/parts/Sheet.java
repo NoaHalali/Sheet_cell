@@ -25,12 +25,18 @@ public class Sheet {
     public int getVersionNumber() {
         return version;
     }
-    // הדפסת מספר גרסה ושם הגיליון
-//        System.out.println("Version: " + version);
-//        System.out.println("Sheet Name: " + name);
-//        System.out.println();
 
-    public void printSheetCell() {
+    //TODO - Move to UI or something
+    public void printSheetCell()
+    {
+        System.out.println("Version: " + version);
+        System.out.println("Sheet Name: " + name);
+        System.out.println();
+        printCellsMatrix();
+    }
+
+
+    public void printCellsMatrix() {
         // ריפוד לרוחב השורה עבור מספרי השורות
         for (int i = 0; i < 3; i++) {
             System.out.print(" ");
@@ -55,16 +61,29 @@ public class Sheet {
 
             for (int col = 0; col < numberOfCols; col++) {
                 Cell cell = cellsMatrix[row][col];
-                String cellEffectiveValue = cell != null ? cell.geEffectiveValue() : ""; //?
+                String cellEffectiveValue = cell != null ? cell.geEffectiveValue() : ""; //צריך?
 
-
-                // הדפסת ערך התא
-                System.out.print("|" + cellEffectiveValue);
-
-                // הוספת רווחים אם התוכן קצר יותר מרוחב העמודה
-                for (int i = cellEffectiveValue.length(); i < columnWidth; i++) {
-                    System.out.print(" ");
+                System.out.print("|");
+                int strIndex = 0;
+                while (strIndex < cellEffectiveValue.length() && strIndex < columnWidth) {
+                    System.out.print(cellEffectiveValue.charAt(strIndex));
+                    strIndex++;
                 }
+
+                while(strIndex < columnWidth)
+                {
+                    System.out.print(" ");
+                    strIndex++;
+                }
+
+                //TODO - in the next missions - add the option of overflow to next line (if possible according to the height of cell)
+
+//                הדפסת ערך התא
+//                System.out.print("|" + cellEffectiveValue);
+//               הוספת רווחים אם התוכן קצר יותר מרוחב העמודה
+//                for (int i = cellEffectiveValue.length(); i < columnWidth; i++) {
+//                    System.out.print(" ");
+//                }
             }
             System.out.println(); // מעבר לשורה הבאה
         }
