@@ -1,5 +1,6 @@
 package parts.cell;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Cell {
@@ -34,18 +35,36 @@ public class Cell {
 //        EffectiveValue = newValue.evaluate();
 //    }
 
-    public CellDTO getDTO() {
+    public CellDTO toCellDTO() {
         return new CellDTO(
-                rowsIndex,
-                columnsIndex,
-                lastUpdatedVersion,
-                cellValue.geEffectiveValue(),
+                getIdentity(), //"A4"
                 cellValue.getOriginalValue(),
-                //getNeighborNames(),
-                c(),
+                lastUpdatedVersion,
+                geEffectiveValue(),
+                getAffectOnNames(),
                 getAffectedByNames()
         );
     }
+
+    private Object getAffectedByNames() {
+        //List<String> affectOnNames = affectOn.stream().map() משהו בסגנון
+        return new ArrayList<String>();
+        //TODO
+    }
+
+    private List<String> getAffectOnNames() {
+        //List<String> affectOnNames = affectOn.stream().map()
+        return new ArrayList<String>();
+        //TODO
+
+    }
+
+    private String getIdentity() {
+        return "";
+        //TODO
+        //getCoordinate?
+    }
+
 
 
 }

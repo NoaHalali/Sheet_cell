@@ -1,20 +1,19 @@
 package parts.cell;
 //import engine.parts.Version;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class CellDTO {
-    private final String coordinate; // "A4"
+    private final String identity; // "A4"
     private final String originalValue;
     private final String effectiveValue;
     private final int lastUpdatedVersion;
     private final List<String> affectOn;
     private final List<String> affectedBy;
 
-    public CellDTO(String coordinate, String originalValue, int lastUpdatedVersion, String effectiveValue, List<String> affectOn,
-                   List<String> affectedBy) {
-        this.coordinate = coordinate;
+    public CellDTO(String identity, String originalValue, int lastUpdatedVersion,
+                   String effectiveValue, List<String> affectOn, List<String>  affectedBy) {
+        this.identity = identity;
         this.originalValue = originalValue;
         this.lastUpdatedVersion = lastUpdatedVersion;
 //        this.rowsIndex = rowsIndex;
@@ -41,8 +40,8 @@ public class CellDTO {
         return affectedBy;
     }
 
-    public String getCoordinate() {
-        return coordinate;
+    public String getIdentity() {
+        return identity;
     }
 
     public String getOriginalValue() {

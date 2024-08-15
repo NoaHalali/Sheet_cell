@@ -1,6 +1,8 @@
 package console;
 
 import parts.EngineImpl;
+import parts.cell.Cell;
+
 public class ControllerImpl implements Controller {
 
     private EngineImpl engine = new EngineImpl();
@@ -21,6 +23,8 @@ public class ControllerImpl implements Controller {
     }
 
     public void displayCellData(String cellId) {
+        //TODO - validation checking
+
         CellDTO cellData = engine.getCellData(cellId);
         System.out.println("Cell ID: " + cellId);
         System.out.println("Original Value: " + cellData.getOriginalValue());

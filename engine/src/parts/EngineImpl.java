@@ -1,6 +1,7 @@
 package parts;
 
 import parts.cell.Cell;
+import parts.cell.CellDTO;
 import parts.cell.Expression;
 
 public class EngineImpl implements Engine{
@@ -24,7 +25,7 @@ public class EngineImpl implements Engine{
     //הUI יקבל מחרוזת 'A4' למשל, ויעביר למנוע את התא עצמו?
     public void showCellEffectiveValue(Cell cell)
     {
-        cell.
+
 
     }
 
@@ -47,11 +48,14 @@ public class EngineImpl implements Engine{
     }
 
 
+    public CellDTO getCellData(String cellId) {
+        /*
+        TODO
+         Parse Cell
+         return cell.toCellDTO
+        */
 
+        return null;
 
-
-
-
-
-
+    }
 }
