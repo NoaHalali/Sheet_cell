@@ -20,4 +20,17 @@ public class ControllerImpl implements Controller {
         }
     }
 
+    public void displayCellData(String cellId) {
+        CellDTO cellData = engine.getCellData(cellId);
+        System.out.println("Cell ID: " + cellId);
+        System.out.println("Original Value: " + cellData.getOriginalValue());
+        System.out.println("Effective Value: " + cellData.getEffectiveValue());
+        System.out.println("Version: " + cellData.getVersionNumber());
+        System.out.println("Dependencies: " + String.join(", ", cellData.getDependencies()));
+    }
+
+
+
+
+
 }

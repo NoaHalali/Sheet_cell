@@ -5,20 +5,47 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CellDTO {
-    private final String coordinate  ;//TODO - maybe create coordinate class?
+    private final String coordinate; // "A4"
     private final String originalValue;
     private final String effectiveValue;
-    private final int version;
+    private final int lastUpdatedVersion;
     private final List<String> affectOn;
     private final List<String> affectedBy;
 
-    public CellDTO(String coordinate ,String originalValue, String effectiveValue,
-                   int version, List<String> affectOn, List<String> affectedBy) {
+    public CellDTO(String coordinate, String originalValue, int lastUpdatedVersion, String effectiveValue, List<String> affectOn,
+                   List<String> affectedBy) {
         this.coordinate = coordinate;
         this.originalValue = originalValue;
+        this.lastUpdatedVersion = lastUpdatedVersion;
+//        this.rowsIndex = rowsIndex;
+//        this.columnsIndex = columnsIndex;
         this.effectiveValue = effectiveValue;
-        this.version = version;
-        this.affectOn = new ArrayList<>(affectOn);
-        this.affectedBy = new ArrayList<>(affectedBy);
+        this.affectOn = affectOn;
+        this.affectedBy = affectedBy;
+    }
+
+    public int getLastUpdatedVersion() {
+        return lastUpdatedVersion;
+    }
+
+
+    public String getEffectiveValue() {
+        return effectiveValue;
+    }
+
+    public List<String> getAffectOn() {
+        return affectOn;
+    }
+
+    public List<String> getAffectedBy() {
+        return affectedBy;
+    }
+
+    public String getCoordinate() {
+        return coordinate;
+    }
+
+    public String getOriginalValue() {
+        return originalValue;
     }
 }

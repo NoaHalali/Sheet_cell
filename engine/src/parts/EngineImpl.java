@@ -24,6 +24,7 @@ public class EngineImpl implements Engine{
     //הUI יקבל מחרוזת 'A4' למשל, ויעביר למנוע את התא עצמו?
     public void showCellEffectiveValue(Cell cell)
     {
+        cell.
 
     }
 

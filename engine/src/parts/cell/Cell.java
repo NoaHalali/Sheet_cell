@@ -3,9 +3,10 @@ package parts.cell;
 import java.util.List;
 
 public class Cell {
-    private int lastUpdatedVersion;
+    //row and col, or coordinate?
     private int rowsIndex;
     private int columnsIndex;
+    private int lastUpdatedVersion;
     private Expression cellValue;
     //private String EffectiveValue; //אולי להוסיף intetface במקום ב-string
     private List<Cell> neighbors;
@@ -32,4 +33,19 @@ public class Cell {
 //        //בדיקת תקינות
 //        EffectiveValue = newValue.evaluate();
 //    }
+
+    public CellDTO getDTO() {
+        return new CellDTO(
+                rowsIndex,
+                columnsIndex,
+                lastUpdatedVersion,
+                cellValue.geEffectiveValue(),
+                cellValue.getOriginalValue(),
+                //getNeighborNames(),
+                c(),
+                getAffectedByNames()
+        );
+    }
+
+
 }
