@@ -1,9 +1,10 @@
 package parts.cell.impl;
+import parts.cell.EffectiveValue;
 import parts.cell.Expression;
 
 public abstract class AbstractExpression implements Expression {
     protected String originalValue;
-    protected String effectiveValue;
+    protected EffectiveValue effectiveValue;
 
     //לא בטוח שצריך בכלל את הערך המקורי
     public AbstractExpression(String originalValue) {
@@ -12,10 +13,10 @@ public abstract class AbstractExpression implements Expression {
     }
     public AbstractExpression(){};
 
-    protected abstract String calculateEffectiveValue();
+    protected abstract EffectiveValue calculateEffectiveValue();
 
     @Override
-    public String evaluate() {
+    public EffectiveValue evaluate() {
         return effectiveValue;
     }
 

@@ -1,5 +1,6 @@
 package parts.cell.impl.function;
 
+import parts.cell.EffectiveValue;
 import parts.cell.Expression;
 import parts.cell.impl.AbstractExpression;
 
@@ -21,7 +22,7 @@ public abstract class BinaryExpression extends AbstractExpression {
     }
 
 
-    protected abstract String calculateEffectiveValue();
+    protected abstract EffectiveValue calculateEffectiveValue();
 
     // חישוב הערך המקורי (בדוגמה הזו הוא מבוסס על הביטוי המקורי)
 //    private String calculateOriginalValue() {
@@ -36,7 +37,7 @@ public abstract class BinaryExpression extends AbstractExpression {
 //    }
 
     @Override
-    public String evaluate() {
+    public EffectiveValue evaluate() {
         return effectiveValue; // מחזיר את הערך המוערך שכבר חושב
     } //אולי להוסיף בוליאני שאומר אם מעודכן
 

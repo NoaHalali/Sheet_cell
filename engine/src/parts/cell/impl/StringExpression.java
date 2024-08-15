@@ -1,12 +1,17 @@
 package parts.cell.impl;
 
+import parts.cell.EffectiveValue;
+import parts.cell.EffectiveValueImpl;
+
 public class StringExpression extends AbstractExpression {
     public StringExpression(String value) {
         super(value);
     }
 
     @Override
-    protected String calculateEffectiveValue() {
-        return originalValue.trim(); // חישוב ערך אפקטיבי, במקרה זה חיתוך רווחים
+    protected EffectiveValue calculateEffectiveValue() {
+
+            return new EffectiveValueImpl(CellType.STRING, originalValue); // חישוב ערך אפקטיבי, במקרה זה חיתוך רווחים
+
     }
 }
