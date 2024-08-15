@@ -46,7 +46,7 @@ public class Cell {
         );
     }
 
-    private Object getAffectedByNames() {
+    private List<String> getAffectedByNames() {
         //List<String> affectOnNames = affectOn.stream().map() משהו בסגנון
         return new ArrayList<String>();
         //TODO
