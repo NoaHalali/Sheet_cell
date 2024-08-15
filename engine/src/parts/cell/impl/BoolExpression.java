@@ -1,4 +1,6 @@
 package parts.cell.impl;
+import parts.cell.EffectiveValue;
+import parts.cell.EffectiveValueImpl;
 import parts.cell.Expression;
 
 public class BoolExpression extends AbstractExpression {
@@ -10,7 +12,7 @@ public class BoolExpression extends AbstractExpression {
     }
 
     @Override
-    protected String calculateEffectiveValue() {
-        return flag ? "TRUE" : "FALSE"; // ערך אפקטיבי עבור ביטויים לוגיים
+    protected EffectiveValue calculateEffectiveValue() {
+        return new EffectiveValueImpl(CellType.BOOLEAN,originalValue.toLowerCase()=="true" ); // ערך אפקטיבי עבור ביטויים לוגיים
     }
 }

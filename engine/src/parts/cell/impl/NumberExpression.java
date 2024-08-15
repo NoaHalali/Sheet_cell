@@ -1,5 +1,8 @@
 package parts.cell.impl;
 
+import parts.cell.EffectiveValue;
+import parts.cell.EffectiveValueImpl;
+
 import java.text.DecimalFormat;
 
 public class NumberExpression extends AbstractExpression {
@@ -12,14 +15,8 @@ public class NumberExpression extends AbstractExpression {
     }
 
     @Override
-    protected String calculateEffectiveValue() {
-        DecimalFormat decimalFormat;
-
-        if (num == (long) num) {
-            decimalFormat = new DecimalFormat("#,###");
-        } else {
-            decimalFormat = new DecimalFormat("#,###.00");
-        }
-        return decimalFormat.format(num);
+    protected EffectiveValue calculateEffectiveValue() {
+//num =Double.parseDouble(originalValue);?????
+    return new EffectiveValueImpl(CellType.NUMERIC,num);
     }
 }

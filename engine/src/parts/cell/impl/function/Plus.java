@@ -1,6 +1,9 @@
 package parts.cell.impl.function;
 
+import parts.cell.EffectiveValue;
+import parts.cell.EffectiveValueImpl;
 import parts.cell.Expression;
+import parts.cell.impl.CellType;
 
 public class Plus extends BinaryExpression {
     public Plus(Expression expression1, Expression expression2) {
@@ -8,10 +11,19 @@ public class Plus extends BinaryExpression {
     }
 
     @Override
-    protected String calculateEffectiveValue() {
+    protected EffectiveValue calculateEffectiveValue() {
         //TODO - add try,catch
-        double leftVal = Double.parseDouble(left.evaluate().replace(",", ""));
-        double rightVal = Double.parseDouble(right.evaluate().replace(",", ""));
-        return String.valueOf(leftVal + rightVal);
+
+        EffectiveValue leftValue = left.evaluate();
+        EffectiveValue rightValue=right.evaluate();
+
+
+       /// double leftVal = Double.parseDouble(left.evaluate().replace(",", ""));
+      //  double rightVal = Double.parseDouble(right.evaluate().replace(",", ""));
+
+        // do some checking... error handling...
+        //double result = (Double) leftValue.getValue() + (Double) rightValue.getValue();
+        double result = leftValue.extractValueWithExpectation(Double.class) + rightValue.extractValueWithExpectation(Double.class);
+        return  new EffectiveValueImpl(CellType.NUMERIC, result);
     }
 }
