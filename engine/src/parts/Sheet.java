@@ -22,6 +22,10 @@ public class Sheet {
         return name;
     }
 
+    public  Cell GetCellFromIndex(String val){
+
+     return null;//TODO GOOD implement
+    }
     public int getVersionNumber() {
         return version;
     }
