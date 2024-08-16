@@ -1,11 +1,13 @@
 package parts.cell;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Cell {
-    private int lastUpdatedVersion;
+    //row and col, or coordinate?
     private int rowsIndex;
     private int columnsIndex;
+    private int lastUpdatedVersion;
     private Expression cellValue;
     //private String EffectiveValue; //אולי להוסיף intetface במקום ב-string
     private List<Cell> neighbors;
@@ -32,4 +34,37 @@ public class Cell {
 //        //בדיקת תקינות
 //        EffectiveValue = newValue.evaluate();
 //    }
+
+    public CellDTO toCellDTO() {
+        return new CellDTO(
+                getIdentity(), //"A4"
+                cellValue.getOriginalValue(),
+                lastUpdatedVersion,
+                geEffectiveValue(),
+                getAffectOnNames(),
+                getAffectedByNames()
+        );
+    }
+
+    private List<String> getAffectedByNames() {
+        //List<String> affectOnNames = affectOn.stream().map() משהו בסגנון
+        return new ArrayList<String>();
+        //TODO
+    }
+
+    private List<String> getAffectOnNames() {
+        //List<String> affectOnNames = affectOn.stream().map()
+        return new ArrayList<String>();
+        //TODO
+
+    }
+
+    private String getIdentity() {
+        return "";
+        //TODO
+        //getCoordinate?
+    }
+
+
+
 }

@@ -1,6 +1,7 @@
 package parts;
 
 import parts.cell.Cell;
+import parts.cell.CellDTO;
 import parts.cell.Expression;
 
 public class EngineImpl implements Engine{
@@ -25,6 +26,7 @@ public class EngineImpl implements Engine{
     public void showCellEffectiveValue(Cell cell)
     {
 
+
     }
 
     public void updeteCellValue(Cell cell, Expression value) //?
@@ -46,11 +48,14 @@ public class EngineImpl implements Engine{
     }
 
 
+    public CellDTO getCellData(String cellId) {
+        /*
+        TODO
+         Parse Cell
+         return cell.toCellDTO
+        */
 
+        return null;
 
-
-
-
-
-
+    }
 }
