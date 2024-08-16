@@ -20,7 +20,7 @@ public class Cell {
         cellValue = newValue; //בינתיים
         cellValue.setOriginalValue(newValue);
     }
-    public String geEffectiveValue()
+    public EffectiveValue geEffectiveValue()
     {
         return cellValue.evaluate();
     }

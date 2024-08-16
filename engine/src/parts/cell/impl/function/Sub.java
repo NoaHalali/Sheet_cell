@@ -2,9 +2,14 @@ package parts.cell.impl.function;
 
 import parts.cell.EffectiveValue;
 import parts.cell.EffectiveValueImpl;
+import parts.cell.Expression;
 import parts.cell.impl.CellType;
 
 public class Sub extends TernaryExpression{
+    public Sub(Expression exp1, Expression exp2, Expression exp3) {
+        super(exp1, exp2, exp3);
+    }
+
     @Override
     protected EffectiveValue calculateEffectiveValue() {
         EffectiveValue mainValue = exp1.evaluate();

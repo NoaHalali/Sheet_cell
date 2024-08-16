@@ -2,10 +2,14 @@ package parts.cell.impl.function;
 
 import parts.cell.EffectiveValue;
 import parts.cell.EffectiveValueImpl;
+import parts.cell.Expression;
 import parts.cell.impl.CellType;
 
 public class Abs extends UnaryExpression{
 
+    public Abs(Expression exp) {
+        super(exp);
+    }
 
     @Override
     protected EffectiveValue calculateEffectiveValue() {
