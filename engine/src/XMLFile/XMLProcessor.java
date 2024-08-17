@@ -20,7 +20,7 @@ public class XMLProcessor {
         this.sheet = loader.loadXML(filePath);
 
         if (validator.validate(filePath)) {
-            System.out.println("XML file loaded and managed successfully.");
+            System.out.println("XML file loaded successfully.");
         } else {
             System.out.println("Invalid XML file.");
 
