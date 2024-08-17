@@ -1,0 +1,43 @@
+<component name="libraryTable">
+  <library name="Jaxb">
+    <CLASSES />
+    <JAVADOC />
+    <SOURCES>
+      <root url="file://$PROJECT_DIR$/../jaxb-ri-4.0.5/docs/download" />
+      <root url="file://$PROJECT_DIR$/../jaxb-ri-4.0.5/samples/character-escape/src" />
+      <root url="file://$PROJECT_DIR$/../jaxb-ri-4.0.5/samples/class-resolver/src" />
+      <root url="file://$PROJECT_DIR$/../jaxb-ri-4.0.5/samples/create-marshal/src" />
+      <root url="file://$PROJECT_DIR$/../jaxb-ri-4.0.5/samples/cycle-recovery/src" />
+      <root url="file://$PROJECT_DIR$/../jaxb-ri-4.0.5/samples/datatypeconverter/src" />
+      <root url="file://$PROJECT_DIR$/../jaxb-ri-4.0.5/samples/dtd/src" />
+      <root url="file://$PROJECT_DIR$/../jaxb-ri-4.0.5/samples/element-substitution/src" />
+      <root url="file://$PROJECT_DIR$/../jaxb-ri-4.0.5/samples/external-customize/src" />
+      <root url="file://$PROJECT_DIR$/../jaxb-ri-4.0.5/samples/fix-collides/src" />
+      <root url="file://$PROJECT_DIR$/../jaxb-ri-4.0.5/samples/inline-customize/src" />
+      <root url="file://$PROJECT_DIR$/../jaxb-ri-4.0.5/samples/j2s-create-marshal/src" />
+      <root url="file://$PROJECT_DIR$/../jaxb-ri-4.0.5/samples/j2s-xmlAccessorOrder/src" />
+      <root url="file://$PROJECT_DIR$/../jaxb-ri-4.0.5/samples/j2s-xmlAdapter/src" />
+      <root url="file://$PROJECT_DIR$/../jaxb-ri-4.0.5/samples/j2s-xmlAttribute/src" />
+      <root url="file://$PROJECT_DIR$/../jaxb-ri-4.0.5/samples/j2s-xmlRootElement/src" />
+      <root url="file://$PROJECT_DIR$/../jaxb-ri-4.0.5/samples/j2s-xmlSchemaType/src" />
+      <root url="file://$PROJECT_DIR$/../jaxb-ri-4.0.5/samples/j2s-xmlType/src" />
+      <root url="file://$PROJECT_DIR$/../jaxb-ri-4.0.5/samples/modify-marshal/src" />
+      <root url="file://$PROJECT_DIR$/../jaxb-ri-4.0.5/samples/namespace-prefix/src" />
+      <root url="file://$PROJECT_DIR$/../jaxb-ri-4.0.5/samples/partial-unmarshalling/src" />
+      <root url="file://$PROJECT_DIR$/../jaxb-ri-4.0.5/samples/pull-parser/src" />
+      <root url="file://$PROJECT_DIR$/../jaxb-ri-4.0.5/samples/relaxng/src" />
+      <root url="file://$PROJECT_DIR$/../jaxb-ri-4.0.5/samples/spec-samples/j2s/class-propOrder-complextype" />
+      <root url="file://$PROJECT_DIR$/../jaxb-ri-4.0.5/samples/spec-samples/j2s/class-simpletype" />
+      <root url="file://$PROJECT_DIR$/../jaxb-ri-4.0.5/samples/spec-samples/runtime/derivedtype/src" />
+      <root url="file://$PROJECT_DIR$/../jaxb-ri-4.0.5/samples/streaming-unmarshalling/src" />
+      <root url="file://$PROJECT_DIR$/../jaxb-ri-4.0.5/samples/subgroup-extend/src" />
+      <root url="file://$PROJECT_DIR$/../jaxb-ri-4.0.5/samples/type-substitution/src" />
+      <root url="file://$PROJECT_DIR$/../jaxb-ri-4.0.5/samples/unmarshal-read/src" />
+      <root url="file://$PROJECT_DIR$/../jaxb-ri-4.0.5/samples/unmarshal-validate/src" />
+      <root url="file://$PROJECT_DIR$/../jaxb-ri-4.0.5/samples/updateablePartialBind/src" />
+      <root url="file://$PROJECT_DIR$/../jaxb-ri-4.0.5/samples/vendor-extensions/src" />
+      <root url="file://$PROJECT_DIR$/../jaxb-ri-4.0.5/samples/xml-channel/src" />
+      <root url="file://$PROJECT_DIR$/../jaxb-ri-4.0.5/samples/xml-stylesheet/src" />
+    </SOURCES>
+  </library>
+</component>
