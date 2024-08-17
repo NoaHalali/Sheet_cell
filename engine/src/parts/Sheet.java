@@ -1,6 +1,7 @@
 package parts;
 
 import parts.cell.Cell;
+import parts.cell.Coordinate;
 
 public class Sheet {
     private int version;
@@ -20,6 +21,10 @@ public class Sheet {
 
     public String getSheetName() {
         return name;
+    }
+    public Cell GerCellFromCoord(Coordinate coord){
+        //בדיקות תקינות
+        return cellsMatrix[coord.getRow()][coord.getCol()];
     }
 
     public  Cell GetCellFromIndex(String val){

@@ -2,6 +2,7 @@ package parts;
 
 import parts.cell.Cell;
 import parts.cell.CellDTO;
+import parts.cell.Coordinate;
 import parts.cell.Expression;
 import parts.cell.impl.BoolExpression;
 import parts.cell.impl.NumberExpression;
@@ -121,7 +122,13 @@ public class EngineImpl implements Engine{
             return new StringExpression(OriginalValue);
         }
     }
-    public void ShowCellState()
+    public void ShowCellState(Coordinate coord){
+
+
+    }
+    public Cell GerCellFromCoord(Coordinate coord){
+        return null;
+    }
 
 
     public Expression getExpressionForCell(Cell SourceCell,String OriginalValue,List<Cell> newAffectByCellList) {//עוד בבדיקה !!!

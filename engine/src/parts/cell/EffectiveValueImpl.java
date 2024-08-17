@@ -20,7 +20,7 @@ public class EffectiveValueImpl implements EffectiveValue {
     public Object getValue() {
         return value;
     }
-
+public void setValue(Object value) {}
 
     @Override
     public <T> T extractValueWithExpectation(Class<T> type) {

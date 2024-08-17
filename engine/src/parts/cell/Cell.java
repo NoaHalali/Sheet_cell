@@ -17,6 +17,8 @@ public class Cell {
 //    {//
 //       // cellValue = new Expression();
 //    }
+
+
     public void updateValue(Expression newValue) {
         cellValue = newValue; //בינתיים
         cellValue.setOriginalValue(newValue);
