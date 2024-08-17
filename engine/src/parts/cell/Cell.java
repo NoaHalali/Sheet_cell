@@ -5,8 +5,7 @@ import java.util.List;
 
 public class Cell {
     //row and col, or coordinate?
-    private int rowsIndex;
-    private int columnsIndex;
+    private Coordinate coordinate;
     private int lastUpdatedVersion;
     private Expression cellValue;
     //private String EffectiveValue; //אולי להוסיף intetface במקום ב-string
@@ -35,16 +34,16 @@ public class Cell {
 //        EffectiveValue = newValue.evaluate();
 //    }
 
-    public CellDTO toCellDTO() {
-        return new CellDTO(
-                getIdentity(), //"A4"
-                cellValue.getOriginalValue(),
-                lastUpdatedVersion,
-                geEffectiveValue(),
-                getAffectOnNames(),
-                getAffectedByNames()
-        );
-    }
+//    public CellDTO toCellDTO() {
+//        return new CellDTO(
+//                getIdentity(), //"A4"
+//                cellValue.getOriginalValue(),
+//                lastUpdatedVersion,
+//                geEffectiveValue(),
+//                getAffectOnNames(),
+//                getAffectedByNames()
+//        );
+//    }
 
     private List<String> getAffectedByNames() {
         //List<String> affectOnNames = affectOn.stream().map() משהו בסגנון

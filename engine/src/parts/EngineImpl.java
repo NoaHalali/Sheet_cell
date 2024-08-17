@@ -121,6 +121,8 @@ public class EngineImpl implements Engine{
             return new StringExpression(OriginalValue);
         }
     }
+    public void ShowCellState()
+
 
     public Expression getExpressionForCell(Cell SourceCell,String OriginalValue,List<Cell> newAffectByCellList) {//עוד בבדיקה !!!
         List<String> list = parseExpression(OriginalValue);
