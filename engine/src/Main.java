@@ -30,10 +30,6 @@ public class Main {
 //            }
 //        }
 
-        String  S ="1";
-       // List<String> list = parseExpression(S);
-        //list.stream().forEach(System.out::println);
-
         for (int i = 0; i < 2; i++) {
             for (int j = 0; j < 3; j++) {
                 matrix[i][j] = new Cell();
@@ -45,11 +41,12 @@ public class Main {
 
         }
 
+        sheet.printSheetData();
 
 
-
-        //sheet.printSheetCell();
-
+        //String  S ="1";
+        // List<String> list = parseExpression(S);
+        //list.stream().forEach(System.out::println);
 //        Expression i=new Plus(new Plus(new Number(7),new Number(5)),new Plus(new Number(1),new Number(3)));
 //        String t=   i.evaluate();
 //        System.out.println(t);
