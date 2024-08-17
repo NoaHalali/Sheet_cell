@@ -9,5 +9,6 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="DTO" />
     <orderEntry type="library" name="download" level="project" />
+    <orderEntry type="library" name="mod" level="project" />
   </component>
 </module>
