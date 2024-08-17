@@ -35,16 +35,16 @@ public class Cell {
 //        EffectiveValue = newValue.evaluate();
 //    }
 
-    public CellDTO toCellDTO() {
-        return new CellDTO(
-                getIdentity(), //"A4"
-                cellValue.getOriginalValue(),
-                lastUpdatedVersion,
-                geEffectiveValue(),
-                getAffectOnNames(),
-                getAffectedByNames()
-        );
-    }
+//    public CellDTO toCellDTO() {
+//        return new CellDTO(
+//                getIdentity(), //"A4"
+//                cellValue.getOriginalValue(),
+//                lastUpdatedVersion,
+//                geEffectiveValue(),
+//                getAffectOnNames(),
+//                getAffectedByNames()
+//        );
+//    }
 
     private List<String> getAffectedByNames() {
         //List<String> affectOnNames = affectOn.stream().map() משהו בסגנון
