@@ -1,5 +1,8 @@
 package parts;
 
+import XMLFile.GeneratedFiles.STLSheet;
+import XMLFile.Loader;
+import XMLFile.Validator;
 import parts.cell.*;
 import parts.cell.impl.BoolExpression;
 import parts.cell.impl.NumberExpression;
@@ -9,6 +12,7 @@ import parts.cell.impl.function.*;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Scanner;
 import java.util.stream.Collectors;
 
 public class EngineImpl implements Engine{
@@ -16,13 +20,22 @@ public class EngineImpl implements Engine{
     //maybe static? (Amir, REF function)
     private  Sheet currentSheet = null;
 
-    //1
     //TODO move all functions to UI,
+
+    //1
     // change names to get and not print/show
     public void readFileData()
     {
-        //TODO
+//        Scanner scanner = new Scanner(System.in);
+//        System.out.print("Please enter the full path to the XML file: ");
+//        String filePath = scanner.nextLine();
+//
+//        STLSheet sheet = Loader.loadXML(filePath);
+//        Validator.validate()
+
     }
+
+
 
     //2
     //TODO - maybe return data (DTO?) and not void?

@@ -5,7 +5,7 @@
 //
 
 
-package GeneratedFiles;
+package XMLFile.GeneratedFiles;
 
 import javax.xml.namespace.QName;
 import jakarta.xml.bind.JAXBElement;

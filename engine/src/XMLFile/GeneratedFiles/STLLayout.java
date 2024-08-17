@@ -5,7 +5,7 @@
 //
 
 
-package GeneratedFiles;
+package XMLFile.GeneratedFiles;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;

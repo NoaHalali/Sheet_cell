@@ -1,38 +1,10 @@
-import parts.Sheet;
-import parts.cell.Cell;
-import parts.cell.Expression;
-import parts.cell.impl.BoolExpression;
-import parts.cell.impl.NumberExpression;
-import parts.cell.impl.StringExpression;
-import parts.cell.impl.function.*;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-
 public class Main {
 
-    private final static String JAXB_XML_GAME_PACKAGE_NAME = "GeneratedFiles";
+    private final static String JAXB_XML_GAME_PACKAGE_NAME = "XMLFile/GeneratedFiles";
+    private final static String FILE_PATH = "C:\\Users\\noa40\\OneDrive - The Academic College of Tel-Aviv Jaffa - MTA\\שנה ב\\קורסי בחירה\\פיתוח תוכנה מבוסס גאווה\\מטלות\\Shticell\\engine\\src\\resources\\basic.xml";
 
     public static void main(String[] args) {
 
-        try {
-            InputStream inputStream = new FileInputStream(new File("src/resources/world.xml"));
-
-            Countries countries = deserializeFrom(inputStream);
-            System.out.println("name of first country is: " + countries.getCountry().get(0).getName());
-        } catch (JAXBException | FileNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
-    private static Countries deserializeFrom(InputStream in) throws JAXBException {
-        JAXBContext jc = JAXBContext.newInstance(JAXB_XML_GAME_PACKAGE_NAME);
-        Unmarshaller u = jc.createUnmarshaller();
-        return (Countries) u.unmarshal(in);
 
 
 
@@ -56,8 +28,30 @@ public class Main {
 //        sheet.printSheetData();
 
     }
-
 }
+//
+//}
+//    public static void main(String[] args) {
+//
+//        try {
+//            File xmlFile = new File("path/to/your/basic.xml");
+//            JAXBContext context = JAXBContext.newInstance(STLSheet.class);
+//            Unmarshaller unmarshaller = context.createUnmarshaller();
+//            STLSheet sheet = (STLSheet) unmarshaller.unmarshal(xmlFile);
+//
+//            // עבודה עם האובייקטים
+//            System.out.println("Sheet Name: " + sheet.getName());
+//            System.out.println("Number of Rows: " + sheet.getLayout().getRows());
+//            System.out.println("Number of Columns: " + sheet.getLayout().getColumns());
+//            sheet.getCells().getCells().forEach(cell -> {
+//                System.out.println("Cell [" + cell.getRow() + ", " + cell.getColumn() + "]: " + cell.getOriginalValue());
+//            });
+//
+//        } catch (JAXBException e) {
+//            e.printStackTrace();
+//        }
+//    }
+
 
 //String  S ="1";
 // List<String> list = parseExpression(S);
