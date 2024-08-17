@@ -123,12 +123,11 @@ public class EngineImpl implements Engine{
         }
     }
     public void ShowCellState(Coordinate coord){
-
+     Cell PrintedCell=currentSheet.GerCellFromCoord(coord);
+        System.out.println(coord.toString());
 
     }
-    public Cell GerCellFromCoord(Coordinate coord){
-        return null;
-    }
+
 
 
     public Expression getExpressionForCell(Cell SourceCell,String OriginalValue,List<Cell> newAffectByCellList) {//עוד בבדיקה !!!
