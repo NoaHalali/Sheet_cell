@@ -14,7 +14,7 @@ public class Cell {
     private List<Cell> affectedBy; //התאים שמושפע מהם
 
 //    public Cell()
-//    {
+//    {//
 //       // cellValue = new Expression();
 //    }
     public void updateValue(Expression newValue) {
