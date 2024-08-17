@@ -1,9 +1,6 @@
 package parts;
 
-import parts.cell.Cell;
-import parts.cell.CellDTO;
-import parts.cell.Coordinate;
-import parts.cell.Expression;
+import parts.cell.*;
 import parts.cell.impl.BoolExpression;
 import parts.cell.impl.NumberExpression;
 import parts.cell.impl.StringExpression;
@@ -19,6 +16,7 @@ public class EngineImpl implements Engine{
     //maybe static? (Amir, REF function)
     private  Sheet currentSheet = null;
 
+    //1
     //TODO move all functions to UI,
     // change names to get and not print/show
     public void readFileData()
@@ -26,19 +24,37 @@ public class EngineImpl implements Engine{
         //TODO
     }
 
-
+    //2
     //TODO - maybe return data (DTO?) and not void?
-    public void showCurrentSheet()
-    {
+    public void showCurrentSheet() {
         currentSheet.printSheetData();
     }
 
-    //הUI יקבל מחרוזת 'A4' למשל, ויעביר למנוע את התא עצמו?
-    public void showCellEffectiveValue(Cell cell)
-    {
+    //3
+    public void ShowCellState(Coordinate coord){
 
+        System.out.println("Cell identity: " + coord.toString());
+        Cell cell = currentSheet.GetCellByCoord(coord);
 
+        String originalValue = cell.getOriginalValue();
+        System.out.println("Original Value: " + originalValue);
+
+        //TODO - implement the toString()
+        EffectiveValue effectiveValue = cell.getEffectiveValue();
+        System.out.println("Effective Value: " + effectiveValue);
+
+        int version = cell.getLastUpdatedVersion();
+        System.out.println("Last Updated Version: " + version);
+
+        List<String> dependsOnNames = cell.getDependsOnNames();
+        System.out.println("DependsOn Names: " + dependsOnNames);
+
+        List<String> influencingOn = cell.getInfluencingOnNames();
+        System.out.println("InfluencingOn Names: " + influencingOn);
     }
+
+
+    //4 , ???
     public void updateCellValueFromOriginalValue(String originalValue){
         //נבדוק אם תא זהקיים במבנה הנתונים אם לא נקצה מקום תא לו נעדכן ערך
         Cell changeCell =new Cell();// למצוא אותו במבנה הנתונים
@@ -50,13 +66,15 @@ public class EngineImpl implements Engine{
         //נחשב את הערך
     }
 
-    public void updeteCellValue(Cell cell, Expression value) //?
-    {
-        cell.updateValue(value);
-        //.............. להמשיך
-        //......
-    }
+//    //4
+//    public void updeteCellValue(Cell cell, Expression value) //?
+//    {
+//        cell.updateValue(value);
+//        //.............. להמשיך
+//        //......
+//    }
 
+    //5
     public void showVersions()
     {
 
@@ -111,6 +129,7 @@ public class EngineImpl implements Engine{
                 .collect(Collectors.toList());
         return updatedList;
     }
+
     public Expression getSmallArgs(String OriginalValue){
         if (OriginalValue.trim().toLowerCase()=="false"||OriginalValue.trim().toLowerCase()=="true"){
             return new BoolExpression(false);
@@ -122,13 +141,6 @@ public class EngineImpl implements Engine{
             return new StringExpression(OriginalValue);
         }
     }
-    public void ShowCellState(Coordinate coord){
-     Cell PrintedCell=currentSheet.GerCellFromCoord(coord);
-        System.out.println(coord.toString());
-
-    }
-
-
 
     public Expression getExpressionForCell(Cell SourceCell,String OriginalValue,List<Cell> newAffectByCellList) {//עוד בבדיקה !!!
         List<String> list = parseExpression(OriginalValue);
@@ -189,14 +201,13 @@ public class EngineImpl implements Engine{
     // רשימה של תאים המושפעים ישירות מתא זה כלומר בהנחה שמעדכנים תא X נרמה רשימה ל X המקיימת את כל תאי Ref(x)
     // כאשר נעדכן את X נעבוא על רשימת תאי אלו ונעדכן את ערכם לאחר עדכון ערכם נעבור על רשימת Ref שלהם וכך הלאה עד שיסתיים
 
-    public CellDTO getCellData(String cellId) {
-        /*
-        TODO
-         Parse Cell
-         return cell.toCellDTO
-        */
-
-        return null;
-
-    }
+//    public CellDTO getCellData(String cellId) {
+//        /*
+//        TODO
+//         Parse Cell
+//         return cell.toCellDTO
+//        */
+//
+//        return null;
+//    }
 }

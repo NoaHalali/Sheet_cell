@@ -22,15 +22,11 @@ public class Sheet {
     public String getSheetName() {
         return name;
     }
-    public Cell GerCellFromCoord(Coordinate coord){
+    public Cell GetCellByCoord(Coordinate coord){
         //בדיקות תקינות
         return cellsMatrix[coord.getRow()][coord.getCol()];
     }
 
-    public  Cell GetCellFromIndex(String val){
-
-     return null;//TODO GOOD implement
-    }
     public int getVersionNumber() {
         return version;
     }
@@ -43,7 +39,6 @@ public class Sheet {
         System.out.println();
         printCellsMatrix();
     }
-
 
     public void printCellsMatrix() {
         // ריפוד לרוחב השורה עבור מספרי השורות

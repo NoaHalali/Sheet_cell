@@ -2,6 +2,7 @@ package parts.cell;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Cell {
     //row and col, or coordinate?
@@ -10,8 +11,8 @@ public class Cell {
     private Expression cellValue;
     //private String EffectiveValue; //אולי להוסיף intetface במקום ב-string
     private List<Cell> neighbors;
-    private List<Cell> affectOn;//משפיע על התאים האלה
-    private List<Cell> affectedBy; //התאים שמושפע מהם
+    private List<Cell> influencingOn ;//משפיע על התאים האלה
+    private List<Cell> dependsOn ; //התאים שמושפע מהם
 
 //    public Cell()
 //    {//
@@ -47,25 +48,39 @@ public class Cell {
 //        );
 //    }
 
-    private List<String> getAffectedByNames() {
-        //List<String> affectOnNames = affectOn.stream().map() משהו בסגנון
-        return new ArrayList<String>();
-        //TODO
+
+    public List<Cell> getInfluencingOn() {
+        return influencingOn;
     }
 
-    private List<String> getAffectOnNames() {
-        //List<String> affectOnNames = affectOn.stream().map()
-        return new ArrayList<String>();
-        //TODO
+    public List<Cell> getDependsOn() {
+        return dependsOn;
+    }
+
+    //Move to UI
+    public List<String> getDependsOnNames() {
+        return dependsOn.stream().map(Cell::getCoordinateString).collect(Collectors.toList());
 
     }
 
-    private String getIdentity() {
-        return "";
-        //TODO
-        //getCoordinate?
+    public List<String> getInfluencingOnNames() {
+        return influencingOn.stream().map(Cell::getCoordinateString).collect(Collectors.toList());
     }
 
+    public String getCoordinateString() {
+        return coordinate.toString();
+    }
 
+    public String getOriginalValue() {
+        return cellValue.getOriginalValue();
+    }
+
+    public EffectiveValue getEffectiveValue() {
+        return cellValue.evaluate();
+    }
+
+    public int getLastUpdatedVersion() {
+        return lastUpdatedVersion;
+    }
 
 }
