@@ -15,8 +15,8 @@ public class Sheet {
     public Sheet(int numberOfRows, int numberOfCols) {
         this.numberOfRows = numberOfRows;
         this.numberOfCols = numberOfCols;
-        this.columnWidth = 3; // לדוגמה, אפשר להתאים את הערך על פי הדרישה
-        this.rowHeight = 2; // לדוגמה, אפשר להתאים את הערך על פי הדרישה
+        this.columnWidth = 4; // לדוגמה, אפשר להתאים את הערך על פי הדרישה
+        this.rowHeight = 4; // לדוגמה, אפשר להתאים את הערך על פי הדרישה
     }
 
     public String getSheetName() {
