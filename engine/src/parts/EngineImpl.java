@@ -1,8 +1,5 @@
 package parts;
 
-import XMLFile.GeneratedFiles.STLSheet;
-import XMLFile.Loader;
-import XMLFile.Validator;
 import parts.cell.*;
 import parts.cell.impl.BoolExpression;
 import parts.cell.impl.NumberExpression;
@@ -12,7 +9,6 @@ import parts.cell.impl.function.*;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Scanner;
 import java.util.stream.Collectors;
 
 public class EngineImpl implements Engine{
@@ -68,14 +64,26 @@ public class EngineImpl implements Engine{
 
 
     //4 , ???
-    public void updateCellValueFromOriginalValue(String originalValue){
+    public void updateCellValueFromOriginalValue(String originalValue,Coordinate coord){
         //נבדוק אם תא זהקיים במבנה הנתונים אם לא נקצה מקום תא לו נעדכן ערך
-        Cell changeCell =new Cell();// למצוא אותו במבנה הנתונים
+        Cell changeCell =currentSheet.GetCellByCoord(coord);// למצוא אותו במבנה הנתונים
        //ליצור רשימה חדשה של תאים ונבצע השמה ל- רשימת התאים מהם הוא מושפע בנוסף נשמור את הרשימה הישנה במשתנה כלשהו
-        List<Cell> newAffectByCellList=new LinkedList<Cell>();
-        Expression expression = getExpressionForCell(changeCell,originalValue,newAffectByCellList);//אם הכל עבר בהצלחה
-        // נעבור על הרשימה העדכנית של changecell עבוא התאים שמשפיע עליהם ועבור כל תא נוציא את changecell מרשימת התאים שמפעים עליהם
-        // נעדכן את הרשימה של changecell לרשימה זו
+        List<Cell> dependsOnCellList=new LinkedList<Cell>();
+        try {
+            Expression expression = getExpressionForCell(changeCell, originalValue, dependsOnCellList);//אם הכל עבר בהצלחה
+            List<Cell> tmpList = changeCell.getDependsOn();
+            changeCell.setDependsOn(dependsOnCellList);
+            for (Cell cell : tmpList) {
+                cell.removeCellFromInfluencingOnList(changeCell);
+            }
+            for(Cell cell : dependsOnCellList){
+               cell.AddCellToInfluencingOnList(changeCell);
+            }
+
+        }
+        catch (Exception ex){
+          //TODO throw new Exception(ex);
+        }
         //נחשב את הערך
     }
 
@@ -155,15 +163,16 @@ public class EngineImpl implements Engine{
         }
     }
 
-    public Expression getExpressionForCell(Cell SourceCell,String OriginalValue,List<Cell> newAffectByCellList) {//עוד בבדיקה !!!
+
+    public Expression getExpressionForCell(Cell SourceCell,String OriginalValue,List<Cell> dependsONCellList) {//עוד בבדיקה !!!
         List<String> list = parseExpression(OriginalValue);
         Expression res=null;
         if(list.size() == 1){
             res= getSmallArgs(list.get(0));
         }
         else {
-            Expression arg1 = getExpressionForCell( SourceCell,list.get(1),newAffectByCellList);
-            Expression arg2 = getExpressionForCell(SourceCell,list.get(2),newAffectByCellList);
+            Expression arg1 = getExpressionForCell( SourceCell,list.get(1),dependsONCellList);
+            Expression arg2 = getExpressionForCell(SourceCell,list.get(2),dependsONCellList);
             switch (list.get(0)) {
                 case "PLUS":
                     res = new Plus(arg1, arg2);
@@ -191,15 +200,18 @@ public class EngineImpl implements Engine{
                     break;
                 case "SUB":
                     if (list.size() > 2) {
-                        Expression arg3 = getExpressionForCell(SourceCell,list.get(3),newAffectByCellList);
+                        Expression arg3 = getExpressionForCell(SourceCell,list.get(3),dependsONCellList);
                         res= new Sub(arg1,arg2,arg3);
                     }
                     break;
                 case "REF"://sheet סטטי ?
-                    Cell refcell=null;//find Cell in map or 2dim array and cell coord: list.get(1)
-                    newAffectByCellList.add(refcell); // לתא עליו התבקשנו לעדכן אערך נקצה רשימה חדשה בההתאים המשפיעים על תא זה שהיא תהיה רשימת המושפעים מהתא עליו נבצע עדכון +refcell
+                    //לבדוק שאין ארגומנט שלישי
+                    Coordinate RefCoord = CoordinateImpl.StringToCoord( list.get(1));
+                    Cell refcell= currentSheet.GetCellByCoord(RefCoord);//find Cell in map or 2dim array and cell coord: list.get(1)
+                    dependsONCellList.add(refcell); // לתא עליו התבקשנו לעדכן אערך נקצה רשימה חדשה בההתאים המשפיעים על תא זה שהיא תהיה רשימת המושפעים מהתא עליו נבצע עדכון +refcell
+                    //res = refcell.getCellValue();
+                    res = new Ref(refcell);
 
-                    //res =refcell.getCellValue
 //להוסיף תא זה רלשימת המשפעים ומושפעים
 
 

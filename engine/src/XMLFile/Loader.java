@@ -16,14 +16,16 @@ public class Loader {
 
     public static STLSheet loadXML(String filePath)
     {
+        STLSheet sheet=null;
         try {
             InputStream inputStream = new FileInputStream(new File(filePath));
 
-            STLSheet sheet = deserializeFrom(inputStream);
+            sheet = deserializeFrom(inputStream);
 
         } catch (JAXBException | FileNotFoundException e) {
             e.printStackTrace();
         }
+        return sheet;
     }
 
     private static STLSheet deserializeFrom(InputStream in) throws JAXBException {

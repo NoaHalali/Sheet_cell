@@ -10,6 +10,18 @@ public class CoordinateImpl implements Coordinate{
         this.column = column;
 
     }
+    public static Coordinate StringToCoord(String Coord){
+      if(Coord.length()!=2){
+          //error
+          return null;
+      }
+      else{
+          int row = Coord.charAt(0) - 'A';
+          int column = Coord.charAt(1) - '1';
+          //בדיקה שהשורה והעמודה אכן בטווח TODO
+          return new CoordinateImpl(row, column);
+      }
+    }
 
     @Override
     public int getRow() {

@@ -1,6 +1,5 @@
 package parts.cell;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -48,6 +47,15 @@ public class Cell {
 //        );
 //    }
 
+public Expression getCellValue() {
+        return cellValue;
+}
+public void removeCellFromInfluencingOnList(Cell cell){
+        influencingOn.remove(cell);
+}
+    public void AddCellToInfluencingOnList(Cell cell){
+        influencingOn.add(cell);
+    }
 
     public List<Cell> getInfluencingOn() {
         return influencingOn;
@@ -55,6 +63,9 @@ public class Cell {
 
     public List<Cell> getDependsOn() {
         return dependsOn;
+    }
+    public void setDependsOn(List<Cell> dependsOn) {
+        this.dependsOn = dependsOn;
     }
 
     //Move to UI

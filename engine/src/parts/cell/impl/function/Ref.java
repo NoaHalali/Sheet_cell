@@ -2,16 +2,16 @@ package parts.cell.impl.function;
 
 import parts.cell.Cell;
 import parts.cell.EffectiveValue;
-import parts.cell.Expression;
+import parts.cell.impl.AbstractExpression;
 
-public class Ref extends UnaryExpression {
-    public Ref(Expression exp) {
-        super(exp);
+public class Ref extends AbstractExpression {
+    Cell refCell;
+    public Ref(Cell refCell) {
+        this.refCell=refCell;
     }
 
     @Override
     protected EffectiveValue calculateEffectiveValue() {
-        //get
-        return null;
+       return refCell.geEffectiveValue();
     }
 }

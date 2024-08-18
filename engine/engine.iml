@@ -10,5 +10,6 @@
     <orderEntry type="module" module-name="DTO" />
     <orderEntry type="library" name="download" level="project" />
     <orderEntry type="library" name="mod" level="project" />
+    <orderEntry type="library" name="modAmir" level="project" />
   </component>
 </module>
