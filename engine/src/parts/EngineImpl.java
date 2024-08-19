@@ -35,12 +35,14 @@ public class EngineImpl implements Engine{
 
     //2
     //TODO - maybe return data (DTO?) and not void?
-    public void showCurrentSheet() {
-        currentSheet.printSheetData();
+    public SheetDTO getCurrentSheet() {
+
+        //currentSheet.toSheetDTO();
+        return null; //temp
     }
 
     //3
-    public void ShowCellState(Coordinate coord){
+    public void showCellState(Coordinate coord){
 
         System.out.println("Cell identity: " + coord.toString());
         Cell cell = currentSheet.GetCellByCoord(coord);
@@ -142,7 +144,7 @@ public class EngineImpl implements Engine{
             }
             token.append(c);
         }
-        
+
 
         if (token.length() > 0) {
             parsed.add(token.toString().trim());

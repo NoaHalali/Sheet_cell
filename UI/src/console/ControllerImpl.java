@@ -1,7 +1,6 @@
 package console;
 
 import parts.EngineImpl;
-import parts.cell.Cell;
 
 public class ControllerImpl implements Controller {
 
@@ -16,11 +15,18 @@ public class ControllerImpl implements Controller {
     {
         while (systemIsRunning) {
             menu.printMenu();
-            //
-            //
+         //
+            String inputHandler.get
+            switch(choic)
+            case menu.MenuOption.LOAD_FILE:
+
 
 
         }
+    }
+
+    public void displaySheetToUser(){
+       //Todo SheetDTO tmpSheet=engine.;
     }
 //
 //    public void displayCellData(String cellId) {

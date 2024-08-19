@@ -1,7 +1,6 @@
 package parts;
 
 import parts.cell.Cell;
-import parts.cell.CellDTO;
 import parts.cell.Coordinate;
 
 public class Sheet {
@@ -28,19 +27,20 @@ public class Sheet {
         //בדיקות תקינות
         return cellsMatrix[coord.getRow()][coord.getCol()];
     }
-    public SheetDTO toSheetDTO() {
-        return new CellDTO(
-                version, //"A4"
-                name,
-                numberOfRows,
-                numberOfCols,
-                columnWidth,
-                rowHeight,
-                //ADDCELLDTOMATRIX
 
+//    public SheetDTO toSheetDTO() {
+//        return new SheetDTO(
+//                version, //"A4"
+//                name,
+//                numberOfRows,
+//                numberOfCols,
+//                columnWidth,
+//                rowHeight,
+//                //ADDCELLDTOMATRIX
+//
+//        );
+//    }
 
-        );
-    }
 
     public int getVersionNumber() {
         return version;

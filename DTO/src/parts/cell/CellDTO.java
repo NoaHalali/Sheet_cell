@@ -4,16 +4,16 @@ package parts.cell;
 import java.util.List;
 
 public class CellDTO {
-    private final Coordinate identity; // "A4"
+    private final Coordinate coordinate; // "A4"
     private final String originalValue;
     private final EffectiveValue effectiveValue;
     private final int lastUpdatedVersion;
     private final List<Coordinate> influencingOn;
     private final List<Coordinate> dependsOn;
 
-    public CellDTO(Coordinate identity, String originalValue,
+    public CellDTO(Coordinate coordinate, String originalValue,
                    EffectiveValue effectiveValue, int lastUpdatedVersion, List<Coordinate> influencingOn, List<Coordinate>  dependsOn) {
-        this.identity = identity;
+        this.coordinate = coordinate;
         this.originalValue = originalValue;
         this.lastUpdatedVersion = lastUpdatedVersion;
 //        this.rowsIndex = rowsIndex;
@@ -27,7 +27,6 @@ public class CellDTO {
         return lastUpdatedVersion;
     }
 
-
     public EffectiveValue getEffectiveValue() {
         return effectiveValue;
     }
@@ -40,8 +39,8 @@ public class CellDTO {
         return dependsOn;
     }
 
-    public Coordinate getIdentity() {
-        return identity;
+    public Coordinate getCoord() {
+        return coordinate;
     }
 
     public String getOriginalValue() {
