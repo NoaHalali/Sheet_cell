@@ -1,16 +1,15 @@
 package console;
 
 import parts.SheetDTO;
-import parts.cell.Cell;
-import parts.cell.CellDTO;
-import parts.cell.Coordinate;
-import parts.cell.EffectiveValue;
-
-import java.util.List;
 
 public class OutputHandler {
 
-
+    public void printMenu(){
+        System.out.println("Choose a number of action to preform:");
+        for( ControllerImpl.MenuOption option: ControllerImpl.MenuOption.values() ){
+            System.out.println(option.ordinal() + 1 + ". " + option);
+        }
+    }
 
     public void printSheetData(SheetDTO sheet)
     {
@@ -96,7 +95,4 @@ public class OutputHandler {
         List<String> influencingOn = cell.getInfluencingOn().stream().map(Coordinate::toString).toList();
         System.out.println("InfluencingOn Names: " + influencingOn);
     }
-
-
-
 }

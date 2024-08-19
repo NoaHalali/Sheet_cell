@@ -11,10 +11,18 @@ public class Divide extends BinaryExpression{
     }
 
     @Override
-    protected EffectiveValue calculateEffectiveValue() {//בדיקה שלא מחלקים ב0- ומידה וכן יוציא אקספשיון ויזרק למשתמש בUI
-        EffectiveValue leftValue = left.evaluate();
-        EffectiveValue rightValue=right.evaluate();
-        double result = leftValue.extractValueWithExpectation(Double.class) / rightValue.extractValueWithExpectation(Double.class);
+    protected EffectiveValue calculateEffectiveValue()throws ArithmeticException {//בדיקה שלא מחלקים ב0- ומידה וכן יוציא אקספשיון ויזרק למשתמש בUI
+        try {
+            EffectiveValue leftValue = left.evaluate();
+            EffectiveValue rightValue = right.evaluate();
+            if (rightValue.extractValueWithExpectation(Double.class) == 0) {
+                throw new ArithmeticException("Divide by zero");
+            }
+            double result = leftValue.extractValueWithExpectation(Double.class) / rightValue.extractValueWithExpectation(Double.class);
+        }catch (Exception EX){
+
+        }
+
         return  new EffectiveValueImpl(CellType.NUMERIC, result);
     }
 }
