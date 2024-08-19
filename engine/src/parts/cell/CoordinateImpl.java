@@ -16,8 +16,8 @@ public class CoordinateImpl implements Coordinate{
           return null;
       }
       else{
-          int row = Coord.charAt(0) - 'A';
-          int column = Coord.charAt(1) - '1';
+          int  column = Coord.charAt(0) - 'A';
+          int row = Coord.charAt(1) - '1';
           //בדיקה שהשורה והעמודה אכן בטווח TODO
           return new CoordinateImpl(row, column);
       }

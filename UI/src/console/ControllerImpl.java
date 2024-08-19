@@ -1,6 +1,8 @@
 package console;
 
 import parts.EngineImpl;
+import parts.cell.CellDTO;
+import parts.cell.Coordinate;
 
 public class ControllerImpl implements Controller {
 
@@ -15,7 +17,7 @@ public class ControllerImpl implements Controller {
     {
         while (systemIsRunning) {
             outputHandler.printMenu();
-            MenuOption option =inputHandler.getMenuOption();
+            MenuOption option =inputHandler.getMenuOptionFromUser();
             option.execute(this);
         }
     }
@@ -49,9 +51,11 @@ public class ControllerImpl implements Controller {
             @Override
             public void execute(ControllerImpl controller) {
 
+
                 System.out.println("Please, enter cell coordinate ");
-                //קלט
-                // בדיקת תקינות והבאת CELLDTO
+                Coordinate coordinate = cont;
+                CellDTO cell = controller.engine.getCellDTOByCoordinate(coordinate);
+                controller.outputHandler.showCellState(cell);
                 //outputHadlern קריאה למתודה
 
             }

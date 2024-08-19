@@ -42,26 +42,9 @@ public class EngineImpl implements Engine{
     }
 
     //3
-    public void showCellState(Coordinate coord){
+    public CellDTO getCellDTOByCoordinate(Coordinate coordinate){
+        return currentSheet.GetCellByCoord(coordinate).toCellDTO();
 
-        System.out.println("Cell identity: " + coord.toString());
-        Cell cell = currentSheet.GetCellByCoord(coord);
-
-        String originalValue = cell.getOriginalValue();
-        System.out.println("Original Value: " + originalValue);
-
-        //TODO - implement the toString()
-        EffectiveValue effectiveValue = cell.getEffectiveValue();
-        System.out.println("Effective Value: " + effectiveValue);
-
-        int version = cell.getLastUpdatedVersion();
-        System.out.println("Last Updated Version: " + version);
-
-        List<String> dependsOnNames = cell.getDependsOnNames();
-        System.out.println("DependsOn Names: " + dependsOnNames);
-
-        List<String> influencingOn = cell.getInfluencingOnNames();
-        System.out.println("InfluencingOn Names: " + influencingOn);
     }
 
 

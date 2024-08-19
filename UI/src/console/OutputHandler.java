@@ -1,6 +1,7 @@
 package console;
 
 import parts.SheetDTO;
+import parts.cell.CellDTO;
 
 public class OutputHandler {
 
