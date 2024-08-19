@@ -28,28 +28,29 @@ public class Cell {
         return cellValue.evaluate();
     }
 
-//    public String geEffectiveValue() {
-//        return EffectiveValue;
-//    }
+
 //    public void updateEffectiveValue(Expression newValue) {
 //        //בדיקת תקינות
 //        EffectiveValue = newValue.evaluate();
-//    }
+//    }in
 
-//    public CellDTO toCellDTO() {
-//        return new CellDTO(
-//                getIdentity(), //"A4"
-//                cellValue.getOriginalValue(),
-//                lastUpdatedVersion,
-//                geEffectiveValue(),
-//                getAffectOnNames(),
-//                getAffectedByNames()
-//        );
-//    }
+    public CellDTO toCellDTO() {
+        return new CellDTO(
+                coordinate, //"A4"
+                cellValue.getOriginalValue(),
+                geEffectiveValue(),
+                lastUpdatedVersion,
+                getInfluencingOnCoordinates(),
+                getDependsOnCoordinates()
+
+
+        );
+    }
 
 public Expression getCellValue() {
         return cellValue;
 }
+
 public void removeCellFromInfluencingOnList(Cell cell){
         influencingOn.remove(cell);
 }
@@ -68,14 +69,28 @@ public void removeCellFromInfluencingOnList(Cell cell){
         this.dependsOn = dependsOn;
     }
 
-    //Move to UI
+    //TODO- Move to UI
     public List<String> getDependsOnNames() {
         return dependsOn.stream().map(Cell::getCoordinateString).collect(Collectors.toList());
 
     }
-
     public List<String> getInfluencingOnNames() {
         return influencingOn.stream().map(Cell::getCoordinateString).collect(Collectors.toList());
+    }
+
+
+    public List<Coordinate> getDependsOnCoordinates() {
+        return dependsOn.stream().map(Cell::getCoordinate).collect(Collectors.toList());
+
+    }
+
+    public List<Coordinate> getInfluencingOnCoordinates() {
+        return influencingOn.stream().map(Cell::getCoordinate).collect(Collectors.toList());
+
+    }
+
+    public Coordinate getCoordinate() {
+        return coordinate;
     }
 
     public String getCoordinateString() {

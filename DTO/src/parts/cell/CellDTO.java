@@ -4,23 +4,23 @@ package parts.cell;
 import java.util.List;
 
 public class CellDTO {
-    private final String identity; // "A4"
+    private final Coordinate identity; // "A4"
     private final String originalValue;
-    private final String effectiveValue;
+    private final EffectiveValue effectiveValue;
     private final int lastUpdatedVersion;
-    private final List<String> affectOn;
-    private final List<String> affectedBy;
+    private final List<Coordinate> influencingOn;
+    private final List<Coordinate> dependsOn;
 
-    public CellDTO(String identity, String originalValue, int lastUpdatedVersion,
-                   String effectiveValue, List<String> affectOn, List<String>  affectedBy) {
+    public CellDTO(Coordinate identity, String originalValue,
+                   EffectiveValue effectiveValue, int lastUpdatedVersion, List<Coordinate> influencingOn, List<Coordinate>  dependsOn) {
         this.identity = identity;
         this.originalValue = originalValue;
         this.lastUpdatedVersion = lastUpdatedVersion;
 //        this.rowsIndex = rowsIndex;
 //        this.columnsIndex = columnsIndex;
         this.effectiveValue = effectiveValue;
-        this.affectOn = affectOn;
-        this.affectedBy = affectedBy;
+        this.influencingOn = influencingOn;
+        this.dependsOn = dependsOn;
     }
 
     public int getLastUpdatedVersion() {
@@ -28,19 +28,19 @@ public class CellDTO {
     }
 
 
-    public String getEffectiveValue() {
+    public EffectiveValue getEffectiveValue() {
         return effectiveValue;
     }
 
-    public List<String> getAffectOn() {
-        return affectOn;
+    public List<Coordinate> getInfluencingOn() {
+        return influencingOn;
     }
 
-    public List<String> getAffectedBy() {
-        return affectedBy;
+    public List<Coordinate> getDependsOn() {
+        return dependsOn;
     }
 
-    public String getIdentity() {
+    public Coordinate getIdentity() {
         return identity;
     }
 

@@ -80,6 +80,7 @@ public class EngineImpl implements Engine{
                cell.AddCellToInfluencingOnList(changeCell);
             }
 
+
         }
         catch (Exception ex){
           //TODO throw new Exception(ex);
@@ -141,6 +142,7 @@ public class EngineImpl implements Engine{
             }
             token.append(c);
         }
+        
 
         if (token.length() > 0) {
             parsed.add(token.toString().trim());
@@ -164,7 +166,7 @@ public class EngineImpl implements Engine{
     }
 
 
-    public Expression getExpressionForCell(Cell SourceCell,String OriginalValue,List<Cell> dependsONCellList) {//עוד בבדיקה !!!
+    public Expression getExpressionForCell(Cell SourceCell,String OriginalValue,List<Cell> dependsONCellList)throws Exception {//עוד בבדיקה !!!
         List<String> list = parseExpression(OriginalValue);
         Expression res=null;
         if(list.size() == 1){
