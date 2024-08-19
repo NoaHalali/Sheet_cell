@@ -50,10 +50,8 @@ public class ControllerImpl implements Controller {
         PRINT_CELL {
             @Override
             public void execute(ControllerImpl controller) {
-
-
-                System.out.println("Please, enter cell coordinate ");
-                Coordinate coordinate = cont;
+                System.out.println("Please enter cell coordinate ");
+                Coordinate coordinate = controller.inputHandler.getCoordinateFromUser();
                 CellDTO cell = controller.engine.getCellDTOByCoordinate(coordinate);
                 controller.outputHandler.showCellState(cell);
                 //outputHadlern קריאה למתודה
