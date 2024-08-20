@@ -4,8 +4,6 @@ import parts.cell.EffectiveValue;
 import parts.cell.Expression;
 import parts.cell.impl.AbstractExpression;
 
-import java.security.PublicKey;
-
 public abstract class BinaryExpression extends AbstractExpression {
     protected Expression left;
     protected Expression right;
@@ -22,7 +20,7 @@ public abstract class BinaryExpression extends AbstractExpression {
     }
 
 
-    protected abstract EffectiveValue calculateEffectiveValue();
+    public abstract EffectiveValue calculateEffectiveValue();
 
     // חישוב הערך המקורי (בדוגמה הזו הוא מבוסס על הביטוי המקורי)
 //    private String calculateOriginalValue() {

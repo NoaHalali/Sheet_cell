@@ -9,7 +9,7 @@ public class StringExpression extends AbstractExpression {
     }
 
     @Override
-    protected EffectiveValue calculateEffectiveValue() {
+    public EffectiveValue calculateEffectiveValue() {
 
             return new EffectiveValueImpl(CellType.STRING, originalValue); // חישוב ערך אפקטיבי, במקרה זה חיתוך רווחים
 

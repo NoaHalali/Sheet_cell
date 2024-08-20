@@ -11,7 +11,7 @@ public class Plus extends BinaryExpression {
     }
 
     @Override
-    protected EffectiveValue calculateEffectiveValue() {
+    public EffectiveValue calculateEffectiveValue() {
         //TODO - add try,catch
 
         EffectiveValue leftValue = left.evaluate();

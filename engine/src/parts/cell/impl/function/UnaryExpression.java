@@ -13,7 +13,7 @@ public  abstract class UnaryExpression extends AbstractExpression {
         this.effectiveValue = calculateEffectiveValue();
     }
     @Override
-    protected abstract EffectiveValue calculateEffectiveValue();
+    public abstract EffectiveValue calculateEffectiveValue();
 
     public EffectiveValue evaluate() {
         return effectiveValue; // מחזיר את הערך המוערך שכבר חושב

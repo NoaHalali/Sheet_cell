@@ -17,5 +17,5 @@ public abstract class TernaryExpression extends AbstractExpression {
         this.effectiveValue = calculateEffectiveValue();
     }
     @Override
-    protected abstract EffectiveValue calculateEffectiveValue();
+    public abstract EffectiveValue calculateEffectiveValue();
 }

@@ -11,7 +11,7 @@ public class Minus extends BinaryExpression {
     }
 
     @Override
-    protected EffectiveValue calculateEffectiveValue() {
+    public EffectiveValue calculateEffectiveValue() {
         EffectiveValue leftValue = left.evaluate();
         EffectiveValue rightValue=right.evaluate();
         double result = leftValue.extractValueWithExpectation(Double.class) - rightValue.extractValueWithExpectation(Double.class);

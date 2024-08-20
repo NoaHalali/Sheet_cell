@@ -11,7 +11,7 @@ public class Divide extends BinaryExpression{
     }
 
     @Override
-    protected EffectiveValue calculateEffectiveValue()throws ArithmeticException {//בדיקה שלא מחלקים ב0- ומידה וכן יוציא אקספשיון ויזרק למשתמש בUI
+    public EffectiveValue calculateEffectiveValue()throws ArithmeticException {//בדיקה שלא מחלקים ב0- ומידה וכן יוציא אקספשיון ויזרק למשתמש בUI
         try {
             EffectiveValue leftValue = left.evaluate();
             EffectiveValue rightValue = right.evaluate();

@@ -3,8 +3,6 @@ package parts.cell.impl;
 import parts.cell.EffectiveValue;
 import parts.cell.EffectiveValueImpl;
 
-import java.text.DecimalFormat;
-
 public class NumberExpression extends AbstractExpression {
     private double num;
 
@@ -15,7 +13,7 @@ public class NumberExpression extends AbstractExpression {
     }
 
     @Override
-    protected EffectiveValue calculateEffectiveValue() {
+    public EffectiveValue calculateEffectiveValue() {
 //num =Double.parseDouble(originalValue);?????
     return new EffectiveValueImpl(CellType.NUMERIC,num);
     }

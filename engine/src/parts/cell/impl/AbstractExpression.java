@@ -13,7 +13,7 @@ public abstract class AbstractExpression implements Expression {
     }
     public AbstractExpression(){};
 
-    protected abstract EffectiveValue calculateEffectiveValue();
+    public abstract EffectiveValue calculateEffectiveValue();
 
     @Override
     public EffectiveValue evaluate() {

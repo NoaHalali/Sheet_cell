@@ -64,7 +64,8 @@ public class EngineImpl implements Engine{
             for(Cell cell : dependsOnCellList){
                cell.AddCellToInfluencingOnList(changeCell);
             }
-
+            currentSheet.upgradeVersion();
+            changeCell.UpdateCellEffectiveValue(currentSheet.getVersion());
 
         }
         catch (Exception ex){

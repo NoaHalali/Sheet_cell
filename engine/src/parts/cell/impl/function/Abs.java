@@ -12,7 +12,7 @@ public class Abs extends UnaryExpression{
     }
 
     @Override
-    protected EffectiveValue calculateEffectiveValue() {
+    public EffectiveValue calculateEffectiveValue() {
         EffectiveValue Value = exp.evaluate();
 
         double result = Math.abs(Value.extractValueWithExpectation(Double.class) );

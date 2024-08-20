@@ -4,7 +4,7 @@ import parts.cell.Cell;
 import parts.cell.Coordinate;
 
 public class Sheet {
-    private int version;
+    private int  version;
     private String name;
     private int numberOfRows;
     private int numberOfCols;
@@ -22,9 +22,16 @@ public class Sheet {
     public String getSheetName() {
         return name;
     }
+    public void upgradeVersion(){
+        version++;
+    }
+    public int getVersion() {
+        return version;
+    }
 
     public Cell GetCellByCoord(Coordinate coord){
         //בדיקות תקינות
+
         return cellsMatrix[coord.getRow()][coord.getCol()];
     }
 

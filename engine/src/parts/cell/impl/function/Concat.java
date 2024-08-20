@@ -12,7 +12,7 @@ public class Concat extends BinaryExpression{
 
     //TODO FIX IMPLEMENT WAIT FOR AVIAD RESPONSE
     @Override
-    protected EffectiveValue calculateEffectiveValue() {
+    public EffectiveValue calculateEffectiveValue() {
         EffectiveValue leftValue = left.evaluate();
         EffectiveValue rightValue=right.evaluate();
         String LeftStr = leftValue.extractValueWithExpectation(String.class);

@@ -11,7 +11,7 @@ public class Sub extends TernaryExpression{
     }
 
     @Override
-    protected EffectiveValue calculateEffectiveValue() {
+    public EffectiveValue calculateEffectiveValue() {
         EffectiveValue mainValue = exp1.evaluate();
         EffectiveValue index1Val = exp2.evaluate();
         EffectiveValue index2Val = exp3.evaluate();

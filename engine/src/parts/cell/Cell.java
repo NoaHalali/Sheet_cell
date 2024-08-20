@@ -55,6 +55,13 @@ public void removeCellFromInfluencingOnList(Cell cell){
     public void AddCellToInfluencingOnList(Cell cell){
         influencingOn.add(cell);
     }
+    public void UpdateCellEffectiveValue(int currentVersion){
+        lastUpdatedVersion= currentVersion;
+        cellValue.calculateEffectiveValue();
+        for(Cell cell: influencingOn){
+            UpdateCellEffectiveValue(currentVersion);
+        }
+    }
 
     public List<Cell> getInfluencingOn() {
         return influencingOn;
