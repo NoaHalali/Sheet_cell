@@ -82,4 +82,10 @@ public class InputHandler {
 
         return selectedOption;
     }
+    public String getFilePathFromUser(){
+        System.out.println("Please enter a full path of the XML file you wish to load to the system: ");
+        Scanner scanner = new Scanner(System.in);
+        String path = scanner.nextLine();
+        return path;
+    }
 }

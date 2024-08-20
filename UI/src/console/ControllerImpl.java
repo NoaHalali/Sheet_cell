@@ -4,12 +4,13 @@ import parts.EngineImpl;
 import parts.cell.CellDTO;
 import parts.cell.Coordinate;
 
+import java.util.Scanner;
+
 public class ControllerImpl implements Controller {
 
     private EngineImpl engine = new EngineImpl();
     private InputHandler inputHandler = new InputHandler();
     private OutputHandler outputHandler = new OutputHandler();
-    private Menu menu = new Menu();
     private boolean systemIsRunning = true;
 
     @Override
@@ -28,8 +29,9 @@ public class ControllerImpl implements Controller {
         LOAD_FILE {
             @Override
             public void execute(ControllerImpl controller) {
-                System.out.println("Viewing items...");
-                // Add view logic here
+                 String path = controller.inputHandler.getFilePathFromUser();
+                 //controller.engine.exit();
+
             }
             @Override
             public String toString() {
@@ -65,8 +67,12 @@ public class ControllerImpl implements Controller {
         UPDATE_CELL {
             @Override
             public void execute(ControllerImpl controller) {
-                System.out.println("Deleting item...");
-                // Add delete logic here
+                System.out.println("Please enter cell coordinate ");
+                Coordinate coordinate = controller.inputHandler.getCoordinateFromUser();
+                System.out.println("Please enter value you want ");//לעשות חפירה שתסביר את הפורמט וקליטה בinput handler חלוקת אחריות על בידקות תקינות וכו,
+                Scanner scanner = new Scanner(System.in);//input handler
+                String input = scanner.nextLine();//input handler
+                controller.engine.updateCellValueFromOriginalValue(input, coordinate);
             }
             @Override
             public String toString() {

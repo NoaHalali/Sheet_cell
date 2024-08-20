@@ -1,5 +1,6 @@
 package parts;
 
+import XMLFile.FileManager;
 import parts.cell.*;
 import parts.cell.impl.BoolExpression;
 import parts.cell.impl.NumberExpression;
@@ -15,6 +16,7 @@ public class EngineImpl implements Engine{
 
     //maybe static? (Amir, REF function)
     private  Sheet currentSheet = null;
+    private FileManager fileManager = null; ;
 
     //TODO move all functions to UI,
 
@@ -22,6 +24,7 @@ public class EngineImpl implements Engine{
     // change names to get and not print/show
     public void readFileData()
     {
+        currentSheet=  .load("   ");
 //        Scanner scanner = new Scanner(System.in);
 //        System.out.print("Please enter the full path to the XML file: ");
 //        String filePath = scanner.nextLine();
