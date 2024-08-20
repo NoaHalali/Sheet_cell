@@ -3,7 +3,7 @@ package parts.cell.impl.function;
 import parts.cell.EffectiveValue;
 import parts.cell.EffectiveValueImpl;
 import parts.cell.Expression;
-import parts.cell.impl.CellType;
+import parts.cell.CellType;
 
 public class Concat extends BinaryExpression{
     public Concat(Expression left, Expression right) {

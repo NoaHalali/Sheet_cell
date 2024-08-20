@@ -3,7 +3,7 @@ package parts.cell.impl.function;
 import parts.cell.EffectiveValue;
 import parts.cell.EffectiveValueImpl;
 import parts.cell.Expression;
-import parts.cell.impl.CellType;
+import parts.cell.CellType;
 
 public class Sub extends TernaryExpression{
     public Sub(Expression exp1, Expression exp2, Expression exp3) {

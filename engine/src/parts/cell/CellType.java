@@ -1,4 +1,4 @@
-package parts.cell.impl;
+package parts.cell;
 
 public enum CellType {
     NUMERIC(Double.class) ,
