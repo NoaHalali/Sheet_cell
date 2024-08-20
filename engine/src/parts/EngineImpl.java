@@ -58,7 +58,8 @@ public class EngineImpl implements Engine{
        //ליצור רשימה חדשה של תאים ונבצע השמה ל- רשימת התאים מהם הוא מושפע בנוסף נשמור את הרשימה הישנה במשתנה כלשהו
         List<Cell> dependsOnCellList=new LinkedList<Cell>();
         try {
-            Expression expression = getExpressionForCell(changeCell, originalValue, dependsOnCellList);//אם הכל עבר בהצלחה
+            Expression expression = getExpressionOfCell(changeCell, originalValue, dependsOnCellList);
+            //אם הכל עבר בהצלחה
             List<Cell> tmpList = changeCell.getDependsOn();
             changeCell.setDependsOn(dependsOnCellList);
             for (Cell cell : tmpList) {
@@ -67,6 +68,7 @@ public class EngineImpl implements Engine{
             for(Cell cell : dependsOnCellList){
                cell.AddCellToInfluencingOnList(changeCell);
             }
+            //לעדכן את הרשימה החדשה של התלויות
             currentSheet.upgradeVersion();
             changeCell.UpdateCellEffectiveValue(currentSheet.getVersion());
 
@@ -143,7 +145,7 @@ public class EngineImpl implements Engine{
     }
 
     public Expression getSmallArgs(String OriginalValue){
-        if (OriginalValue.trim().toLowerCase()=="false"||OriginalValue.trim().toLowerCase()=="true"){
+        if (OriginalValue.trim().toLowerCase() == "false"||OriginalValue.trim().toLowerCase() == "true"){
             return new BoolExpression(false);
         }
         try{
@@ -155,15 +157,16 @@ public class EngineImpl implements Engine{
     }
 
 
-    public Expression getExpressionForCell(Cell SourceCell,String OriginalValue,List<Cell> dependsONCellList)throws Exception {//עוד בבדיקה !!!
+    public Expression getExpressionOfCell(Cell SourceCell,String OriginalValue,List<Cell> dependsONCellList)throws Exception {//עוד בבדיקה !!!
         List<String> list = parseExpression(OriginalValue);
+
         Expression res=null;
         if(list.size() == 1){
             res= getSmallArgs(list.get(0));
         }
         else {
-            Expression arg1 = getExpressionForCell( SourceCell,list.get(1),dependsONCellList);
-            Expression arg2 = getExpressionForCell(SourceCell,list.get(2),dependsONCellList);
+            Expression arg1 = getExpressionOfCell( SourceCell,list.get(1),dependsONCellList);
+            Expression arg2 = getExpressionOfCell(SourceCell,list.get(2),dependsONCellList);
             switch (list.get(0)) {
                 case "PLUS":
                     res = new Plus(arg1, arg2);
@@ -191,13 +194,13 @@ public class EngineImpl implements Engine{
                     break;
                 case "SUB":
                     if (list.size() > 2) {
-                        Expression arg3 = getExpressionForCell(SourceCell,list.get(3),dependsONCellList);
+                        Expression arg3 = getExpressionOfCell(SourceCell,list.get(3),dependsONCellList);
                         res= new Sub(arg1,arg2,arg3);
                     }
                     break;
                 case "REF"://sheet סטטי ?
                     //לבדוק שאין ארגומנט שלישי
-                    Coordinate RefCoord = CoordinateImpl.StringToCoord( list.get(1));
+                    Coordinate RefCoord = CoordinateImpl.StringToCoord(list.get(1));
                     Cell refcell= currentSheet.GetCellByCoord(RefCoord);//find Cell in map or 2dim array and cell coord: list.get(1)
                     dependsONCellList.add(refcell); // לתא עליו התבקשנו לעדכן אערך נקצה רשימה חדשה בההתאים המשפיעים על תא זה שהיא תהיה רשימת המושפעים מהתא עליו נבצע עדכון +refcell
                     //res = refcell.getCellValue();

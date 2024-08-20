@@ -21,7 +21,7 @@ public class FileManager {
     public Sheet processFile(String filePath) throws FileNotFoundException,IllegalArgumentException {
 
         validatePath(filePath);
-        STLSheet tmpSheet =loadXML(filePath);
+        STLSheet
 
     }
 
@@ -38,7 +38,7 @@ public class FileManager {
         }
     }
 
-    public STLSheet loadXML(String filePath)
+    public  STLSheet loadXML(String filePath)
     {
         STLSheet sheet=null;
         try {
@@ -58,16 +58,9 @@ public class FileManager {
         Unmarshaller unmarshaller = context.createUnmarshaller();
         return (STLSheet) unmarshaller.unmarshal(in);
     }
-
-    public void validateXmlSheet(STLSheet sheet) {
-
-    }
-
-
-
 }
 
 
 
 
-
+}
