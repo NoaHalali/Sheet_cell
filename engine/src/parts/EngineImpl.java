@@ -1,12 +1,14 @@
 package parts;
 
 import XMLFile.FileManager;
+import XMLFile.GeneratedFiles.STLSheet;
 import parts.cell.*;
 import parts.cell.impl.BoolExpression;
 import parts.cell.impl.NumberExpression;
 import parts.cell.impl.StringExpression;
 import parts.cell.impl.function.*;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -22,9 +24,9 @@ public class EngineImpl implements Engine{
 
     //1
     // change names to get and not print/show
-    public void readFileData()
-    {
-        currentSheet=  .load("   ");
+    public void readFileData(String filePath) throws FileNotFoundException ,IllegalArgumentException {
+          currentSheet = fileManager.processFile(filePath);
+
 //        Scanner scanner = new Scanner(System.in);
 //        System.out.print("Please enter the full path to the XML file: ");
 //        String filePath = scanner.nextLine();
