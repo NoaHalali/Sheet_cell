@@ -1,7 +1,5 @@
 package parts.cell;
 
-import parts.cell.impl.CellType;
-
 public class EffectiveValueImpl implements EffectiveValue {
     private CellType cellType;
     private Object value;
@@ -28,6 +26,8 @@ public void setValue(Object value) {}
         if (cellType.isAssignableFrom(type)) {
             return type.cast(value);
         }
+        if()
+
         // error handling... exception ? return null ?
         return null;
     }

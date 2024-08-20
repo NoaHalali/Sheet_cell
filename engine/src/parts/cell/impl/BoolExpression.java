@@ -1,4 +1,5 @@
 package parts.cell.impl;
+import parts.cell.CellType;
 import parts.cell.EffectiveValue;
 import parts.cell.EffectiveValueImpl;
 
