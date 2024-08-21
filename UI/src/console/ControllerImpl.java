@@ -35,33 +35,32 @@ public class ControllerImpl implements Controller {
             }
             @Override
             public String toString() {
-                return "View Items";
+                return "Load a file to the system";
             }
 
         },
-        PRINT_SHEET {
+        DISPLAY_SHEET {
             @Override
             public void execute(ControllerImpl controller) {
+                //check if there is no sheet
 
             }
             @Override
             public String toString() {
-                return "View Items";
+                return "Display current sheet state";
             }
         },
-        PRINT_CELL {
+        DISPLAY_CELL {
             @Override
             public void execute(ControllerImpl controller) {
                 System.out.println("Please enter cell coordinate ");
                 Coordinate coordinate = controller.inputHandler.getCoordinateFromUser();
                 CellDTO cell = controller.engine.getCellDTOByCoordinate(coordinate);
-                controller.outputHandler.showCellState(cell);
-                //outputHadlern קריאה למתודה
-
+                controller.outputHandler.displayCellState(cell);
             }
             @Override
             public String toString() {
-                return "View Items";
+                return "Display a cell state";
             }
         },
         UPDATE_CELL {
@@ -76,10 +75,10 @@ public class ControllerImpl implements Controller {
             }
             @Override
             public String toString() {
-                return "View Items";
+                return "Update cell value";
             }
         },
-        PRINT_VERSIONS {
+        DISPLAY_VERSIONS {
             @Override
             public void execute(ControllerImpl controller) {
                 System.out.println("Deleting item...");
@@ -87,7 +86,7 @@ public class ControllerImpl implements Controller {
             }
             @Override
             public String toString() {
-                return "View Items";
+                return "Display system versions";
             }
         },
         EXIT {
@@ -97,7 +96,7 @@ public class ControllerImpl implements Controller {
             }
             @Override
             public String toString() {
-                return "View Items";
+                return "Exit";
             }
         };
 
@@ -118,9 +117,6 @@ public class ControllerImpl implements Controller {
 //        System.out.println("Version: " + cellData.getVersionNumber());
 //        System.out.println("Dependencies: " + String.join(", ", cellData.getDependencies()));
 //    }
-
-
-
 
 
 }

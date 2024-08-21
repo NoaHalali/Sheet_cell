@@ -19,6 +19,7 @@ public class EngineImpl implements Engine{
     //maybe static? (Amir, REF function)
     private  Sheet currentSheet = null;
     private FileManager fileManager = null; ;
+    private static final String SHEET_NOT_LOADED_MESSAGE = "Sheet is not loaded. Please load a sheet before attempting to access it.";
 
     //TODO move all functions to UI,
 
@@ -41,6 +42,9 @@ public class EngineImpl implements Engine{
     //2
     //TODO - maybe return data (DTO?) and not void?
     public SheetDTO getCurrentSheet() {
+        if(!sheetLoadad()) {
+            throw new IllegalStateException(SHEET_NOT_LOADED_MESSAGE);
+        }
 
         //currentSheet.toSheetDTO();
         return null; //temp
@@ -48,6 +52,10 @@ public class EngineImpl implements Engine{
 
     //3
     public CellDTO getCellDTOByCoordinate(Coordinate coordinate){
+        if(!sheetLoadad()) {
+            throw new IllegalStateException(SHEET_NOT_LOADED_MESSAGE);
+        }
+
         return currentSheet.GetCellByCoord(coordinate).toCellDTO();
 
     }
@@ -55,6 +63,9 @@ public class EngineImpl implements Engine{
 
     //4 , ???
     public void updateCellValueFromOriginalValue(String originalValue,Coordinate coord){
+        if(!sheetLoadad()) {
+            throw new IllegalStateException(SHEET_NOT_LOADED_MESSAGE);
+        }
         //נבדוק אם תא זהקיים במבנה הנתונים אם לא נקצה מקום תא לו נעדכן ערך
         Cell changeCell =currentSheet.GetCellByCoord(coord);// למצוא אותו במבנה הנתונים
        //ליצור רשימה חדשה של תאים ונבצע השמה ל- רשימת התאים מהם הוא מושפע בנוסף נשמור את הרשימה הישנה במשתנה כלשהו
@@ -92,6 +103,11 @@ public class EngineImpl implements Engine{
     //5
     public void showVersions()
     {
+        if(!sheetLoadad()) {
+            throw new IllegalStateException(SHEET_NOT_LOADED_MESSAGE);
+        }
+
+        //TODO
 
     }
 
@@ -222,6 +238,10 @@ public class EngineImpl implements Engine{
     // רשימה של תאים המושפעים ישירות מתא זה כלומר בהנחה שמעדכנים תא X נרמה רשימה ל X המקיימת את כל תאי Ref(x)
     // כאשר נעדכן את X נעבוא על רשימת תאי אלו ונעדכן את ערכם לאחר עדכון ערכם נעבור על רשימת Ref שלהם וכך הלאה עד שיסתיים
 
+    public boolean sheetLoadad()
+    {
+        return currentSheet != null;
+    }
 //    public CellDTO getCellData(String cellId) {
 //        /*
 //        TODO

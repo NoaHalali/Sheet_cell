@@ -77,7 +77,7 @@ public class OutputHandler {
 //        }
 //    }
 
-    public void showCellState(CellDTO cell){
+    public void displayCellState(CellDTO cell){
 
         Coordinate coord = cell.getCoord();
         System.out.println("Cell identity: " + coord.toString());
