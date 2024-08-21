@@ -1,16 +1,21 @@
 package XMLFile;
 
 import XMLFile.GeneratedFiles.STLCell;
+import XMLFile.GeneratedFiles.STLLayout;
 import XMLFile.GeneratedFiles.STLSheet;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Unmarshaller;
 import parts.Sheet;
+import parts.cell.Cell;
+import parts.cell.Coordinate;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 public class FileManager {
 
@@ -35,7 +40,6 @@ public class FileManager {
 
         return sheet;
     }
-
 
     public void validatePath(String filePath) throws FileNotFoundException, IllegalArgumentException {
         File file = new File(filePath);
@@ -103,6 +107,42 @@ public class FileManager {
         }
     }
 
+    private Sheet convertSLTSheetToSheet(STLSheet xmlSheet) {
+        STLLayout layout = xmlSheet.getSTLLayout();
+        int rows = layout.getRows();
+        int columns = layout.getColumns();
+        int columnWidth = layout.getSTLSize().getColumnWidthUnits();
+        int rowHeight = layout.getSTLSize().getRowsHeightUnits();
+        String name = xmlSheet.getName();
+
+        Sheet sheet = new Sheet(name, rows, columns, columnWidth, rowHeight);
+
+        // קביעת מערך התאים
+        Cell[][] cellsMatrix = new Cell[rows][columns];
+
+        for (STLCell xmlCell : xmlSheet.getSTLCells().getSTLCell()) {
+            int row = xmlCell.getRow() - 1; // Assuming 1-based indexing in XML
+            int col = xmlCell.getColumn().charAt(0) - 'A'; // Assuming columns are A, B, C...
+
+            // אתחול רשימות לרשימות שמשפיעות ותלויות
+            List<Cell> neighbors = new ArrayList<>();
+            List<Cell> influencingOn = new ArrayList<>();
+            List<Cell> dependsOn = new ArrayList<>();
+
+            // אתחול התא בעזרת הקונסטרקטור החדש
+            Cell cell = new Cell(
+                    new Coordinate(row, col),                  // האתחול של הקואורדינטה
+                    new Expression(xmlCell.getSTLOriginalValue()), // יצירת Expression מערך התא
+                    0,                                          // גרסה ראשונית של 0
+                    neighbors,                                  // שכנים ריקים בהתחלה
+                    influencingOn,                              // רשימת משפיעים ריקה בהתחלה
+                    dependsOn                                   // רשימת תלויות ריקה בהתחלה
+            );
+
+            cellsMatrix[row][col] = cell;
+
+        return sheet;
+    }
 
 
 
