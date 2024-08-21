@@ -16,9 +16,13 @@ public class Sub extends TernaryExpression{
         EffectiveValue index1Val = exp2.evaluate();
         EffectiveValue index2Val = exp3.evaluate();
         String str = mainValue.extractValueWithExpectation(String.class);
-        int firstIndex=index1Val.extractValueWithExpectation(Double.class).intValue();//לוודא שבאמת int
-        int secondIndex=index2Val.extractValueWithExpectation(Double.class).intValue();
+        int firstIndex = index1Val.extractValueWithExpectation(Double.class).intValue();//לוודא שבאמת int
+        int secondIndex = index2Val.extractValueWithExpectation(Double.class).intValue();
         String  result = str.substring(firstIndex,secondIndex);
         return new EffectiveValueImpl(CellType.STRING, result);
+    }
+    @Override
+    public CellType getFunctionResultType(){
+        return CellType.STRING;
     }
 }

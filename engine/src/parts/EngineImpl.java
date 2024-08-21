@@ -167,7 +167,7 @@ public class EngineImpl implements Engine{
             return new BoolExpression(false);
         }
         try{
-            double num=Double.parseDouble(OriginalValue);
+            double num = Double.parseDouble(OriginalValue);
             return new NumberExpression(num);
         }catch (Exception e){
             return new StringExpression(OriginalValue);
@@ -177,14 +177,17 @@ public class EngineImpl implements Engine{
 
     public Expression getExpressionOfCell(Cell SourceCell,String OriginalValue,List<Cell> dependsONCellList)throws Exception {//עוד בבדיקה !!!
         List<String> list = parseExpression(OriginalValue);
-
-        Expression res=null;
+        Expression arg2 = null;
+        Expression res = null;
         if(list.size() == 1){
-            res= getSmallArgs(list.get(0));
+            res = getSmallArgs(list.get(0));
         }
         else {
             Expression arg1 = getExpressionOfCell( SourceCell,list.get(1),dependsONCellList);
-            Expression arg2 = getExpressionOfCell(SourceCell,list.get(2),dependsONCellList);
+            if(list.size() > 2 ){
+                arg2 = getExpressionOfCell( SourceCell,list.get(2),dependsONCellList);
+            }
+
             switch (list.get(0)) {
                 case "PLUS":
                     res = new Plus(arg1, arg2);
@@ -219,17 +222,15 @@ public class EngineImpl implements Engine{
                 case "REF"://sheet סטטי ?
                     //לבדוק שאין ארגומנט שלישי
                     Coordinate RefCoord = CoordinateImpl.StringToCoord(list.get(1));
-                    Cell refcell= currentSheet.GetCellByCoord(RefCoord);//find Cell in map or 2dim array and cell coord: list.get(1)
+                    Cell refcell = currentSheet.GetCellByCoord(RefCoord);//find Cell in map or 2dim array and cell coord: list.get(1)
                     dependsONCellList.add(refcell); // לתא עליו התבקשנו לעדכן אערך נקצה רשימה חדשה בההתאים המשפיעים על תא זה שהיא תהיה רשימת המושפעים מהתא עליו נבצע עדכון +refcell
                     //res = refcell.getCellValue();
                     res = new Ref(refcell);
 
 //להוסיף תא זה רלשימת המשפעים ומושפעים
-
-
                     break;
                 default:
-
+                 //EXEPTION
 
             }
         }

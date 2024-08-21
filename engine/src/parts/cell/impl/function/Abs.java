@@ -18,4 +18,8 @@ public class Abs extends UnaryExpression{
         double result = Math.abs(Value.extractValueWithExpectation(Double.class) );
         return  new EffectiveValueImpl(CellType.NUMERIC, result);
     }
+    @Override
+    public  CellType getFunctionResultType(){
+        return CellType.NUMERIC;
+    }
 }

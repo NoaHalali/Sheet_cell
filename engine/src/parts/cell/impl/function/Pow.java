@@ -18,4 +18,8 @@ public class Pow extends BinaryExpression{
         return  new EffectiveValueImpl(CellType.NUMERIC, result);
 
     }
+    @Override
+    public  CellType getFunctionResultType(){
+        return CellType.NUMERIC;
+    }
 }

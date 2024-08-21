@@ -11,13 +11,13 @@ public abstract class BinaryExpression extends AbstractExpression {
     //private String originalValue;
    // private String effectiveValue;
 
-    public BinaryExpression(Expression left, Expression right) {
-        //super(originalValue);
-        this.left = left;
-        this.right = right;
-        //this.originalValue = calculateOriginalValue();
-        this.effectiveValue = calculateEffectiveValue();
-    }
+//    public BinaryExpression(Expression left, Expression right) {
+//        //super(originalValue);
+//        this.left = left;
+//        this.right = right;
+//        //this.originalValue = calculateOriginalValue();
+//        this.effectiveValue = calculateEffectiveValue();
+//    }
 
 
     public abstract EffectiveValue calculateEffectiveValue();

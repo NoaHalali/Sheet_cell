@@ -17,4 +17,8 @@ public class Times extends BinaryExpression{
         double result = leftValue.extractValueWithExpectation(Double.class) * rightValue.extractValueWithExpectation(Double.class);
         return  new EffectiveValueImpl(CellType.NUMERIC, result);
     }
+    @Override
+    public  CellType getFunctionResultType(){
+        return CellType.NUMERIC;
+    }
 }

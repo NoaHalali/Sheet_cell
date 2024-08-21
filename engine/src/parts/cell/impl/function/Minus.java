@@ -7,7 +7,14 @@ import parts.cell.CellType;
 
 public class Minus extends BinaryExpression {
     public Minus(Expression expression1, Expression expression2) {
-        super(expression1, expression2);
+        CellType leftCellType = left.getFunctionResultType();
+        CellType rightCellType = right.getFunctionResultType();
+        if ( (!leftCellType.equals(CellType.NUMERIC) && !leftCellType.equals(CellType.UNKNOWN)) ||
+                (!rightCellType.equals(CellType.NUMERIC) && !rightCellType.equals(CellType.UNKNOWN)) ) {
+            throw new IllegalArgumentException("Invalid argument types for MINUS function. Expected NUMERIC, but got " + leftCellType + " and " + rightCellType);
+        }
+        left = left;
+        right = right;
     }
 
     @Override
@@ -15,6 +22,10 @@ public class Minus extends BinaryExpression {
         EffectiveValue leftValue = left.evaluate();
         EffectiveValue rightValue=right.evaluate();
         double result = leftValue.extractValueWithExpectation(Double.class) - rightValue.extractValueWithExpectation(Double.class);
-        return  new EffectiveValueImpl(CellType.NUMERIC, result);
+        return new EffectiveValueImpl(CellType.NUMERIC, result);
+    }
+    @Override
+    public  CellType getFunctionResultType(){
+        return CellType.NUMERIC;
     }
 }
