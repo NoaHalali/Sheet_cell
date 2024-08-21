@@ -12,11 +12,14 @@ public class Sheet {
     private int rowHeight;
     private Cell[][] cellsMatrix; // מערך דו-ממדי של תאים
 
-    public Sheet(int numberOfRows, int numberOfCols) {
+    public Sheet(String name, int numberOfRows, int numberOfCols, int columnWidth, int rowHeight) {
         this.numberOfRows = numberOfRows;
         this.numberOfCols = numberOfCols;
-        this.columnWidth = 4; // לדוגמה, אפשר להתאים את הערך על פי הדרישה
-        this.rowHeight = 4; // לדוגמה, אפשר להתאים את הערך על פי הדרישה
+        this.columnWidth = columnWidth;
+        this.rowHeight = rowHeight;
+
+//        this.columnWidth = 4; // לדוגמה, אפשר להתאים את הערך על פי הדרישה
+//        this.rowHeight = 4; // לדוגמה, אפשר להתאים את הערך על פי הדרישה
     }
 
     public String getSheetName() {
