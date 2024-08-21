@@ -145,10 +145,12 @@ public class Sheet {
         try {
             Expression expression = getExpressionOfCell(originalValue, dependsOnCellList);
             //אם הכל עבר בהצלחה
+
             if(GetCellByCoord(coord) == null){
                 CreateNewCell(coord);
             }
             Cell changeCell = GetCellByCoord(coord);
+            changeCell.checkForCircularDependency(coord,dependsOnCellList);
             changeCell.setExpression(expression);
             List<Cell> tmpList = changeCell.getDependsOn();
             changeCell.setDependsOn(dependsOnCellList);
@@ -226,7 +228,7 @@ public class Sheet {
         }
     }
 
-    public Expression getExpressionOfCell(String OriginalValue,List<Cell> dependsONCellList)throws Exception {//עוד בבדיקה !!!
+    public Expression getExpressionOfCell(String OriginalValue,List<Cell> dependsONCellList) throws Exception {//עוד בבדיקה !!!
         List<String> list = parseExpression(OriginalValue);
         Expression arg2 = null;
         Expression res = null;
@@ -267,7 +269,7 @@ public class Sheet {
                 case "SUB":
                     if (list.size() > 2) {
                         Expression arg3 = getExpressionOfCell(list.get(3),dependsONCellList);
-                        res= new Sub(arg1,arg2,arg3);
+                        res = new Sub(arg1,arg2,arg3);
                     }
                     break;
                 case "REF"://sheet סטטי ?

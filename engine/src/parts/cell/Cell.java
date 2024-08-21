@@ -1,7 +1,9 @@
 package parts.cell;
 
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class Cell {
@@ -107,6 +109,24 @@ public class Cell {
     public Coordinate getCoordinate() {
         return coordinate;
     }
+
+    public void checkForCircularDependencyWrapper(Coordinate coordinate ,List<Cell> dependsOn) {
+        HashSet<Coordinate> Coordset = new HashSet<>();
+        Coordset.add(coordinate);
+        checkForCircularDependency(Coordset,dependsOn);
+
+    }
+    public void checkForCircularDependency(HashSet<Coordinate> coordSet,List<Cell> dependsOn) {
+        for(Cell cell: dependsOn){
+            if(coordSet.contains(cell.getCoordinate())){
+                throw new RuntimeException("Circular dependency found");//לחפור וזה
+            }
+            coordSet.add(cell.getCoordinate());
+            cell.checkForCircularDependency(coordSet,cell.getDependsOn());
+        }
+
+    }
+
 
     public String getCoordinateString() {
         return coordinate.toString();
