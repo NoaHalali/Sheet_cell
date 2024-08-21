@@ -20,7 +20,6 @@ public class Plus extends BinaryExpression {
 
     @Override
     public EffectiveValue calculateEffectiveValue() {
-        //TODO - add try,catch
 
         EffectiveValue leftValue = left.evaluate();
         EffectiveValue rightValue = right.evaluate();

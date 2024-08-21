@@ -131,7 +131,8 @@ public class FileManager {
 
             // אתחול התא בעזרת הקונסטרקטור החדש
             Cell cell = new Cell(
-                    new Coordinate(row, col),                  // האתחול של הקואורדינטה
+                    new Coordinate(row, col),
+                    // האתחול של הקואורדינטה
                     new Expression(xmlCell.getSTLOriginalValue()), // יצירת Expression מערך התא
                     0,                                          // גרסה ראשונית של 0
                     neighbors,                                  // שכנים ריקים בהתחלה
@@ -143,9 +144,6 @@ public class FileManager {
 
         return sheet;
     }
-
-
-
 }
 //        public class ValueOutOfRangeException extends RuntimeException {
 //            public ValueOutOfRangeException(String message) {
