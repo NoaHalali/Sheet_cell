@@ -8,7 +8,15 @@ import parts.cell.CellType;
 public class Abs extends UnaryExpression{
 
     public Abs(Expression exp) {
-        super(exp);
+
+        CellType expCellType = exp.getFunctionResultType();
+
+        if ( (!expCellType.equals(CellType.NUMERIC) && !expCellType.equals(CellType.UNKNOWN)) ) {
+            throw new IllegalArgumentException("Invalid argument types for MOD function. Expected NUMERIC, but got " + expCellType);
+        }
+        this.exp=exp;
+
+
     }
 
     @Override

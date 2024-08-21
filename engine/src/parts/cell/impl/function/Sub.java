@@ -7,7 +7,19 @@ import parts.cell.CellType;
 
 public class Sub extends TernaryExpression{
     public Sub(Expression exp1, Expression exp2, Expression exp3) {
-        super(exp1, exp2, exp3);
+        CellType exp1CellType = exp1.getFunctionResultType();
+        CellType exp2CellType = exp2.getFunctionResultType();
+        CellType exp3CellType = exp3.getFunctionResultType();
+
+        if ( (!exp1CellType.equals(CellType.NUMERIC) && !exp1CellType.equals(CellType.UNKNOWN)) ||
+                (!exp2CellType.equals(CellType.NUMERIC) && !exp2CellType.equals(CellType.UNKNOWN)) ||
+                (!exp3CellType.equals(CellType.NUMERIC) && !exp3CellType.equals(CellType.UNKNOWN)))
+          {
+            throw new IllegalArgumentException("Invalid argument types for POW function. Expected STRING, NUMERIC, NUMERIC, but got " + exp1CellType + " , " + exp2CellType + " and " + exp3CellType);
+          }
+        this.exp1 = exp1;
+        this.exp2 = exp2;
+        this.exp3=exp3;
     }
 
     @Override

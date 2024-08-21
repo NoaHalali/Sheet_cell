@@ -6,12 +6,12 @@ import parts.cell.impl.AbstractExpression;
 
 public  abstract class UnaryExpression extends AbstractExpression {
     protected Expression exp;
-    public UnaryExpression(Expression exp) {
-        //super(originalValue);
-        this.exp = exp;
-        //this.originalValue = calculateOriginalValue();
-        this.effectiveValue = calculateEffectiveValue();
-    }
+//    public UnaryExpression(Expression exp) {
+//        //super(originalValue);
+//        this.exp = exp;
+//        //this.originalValue = calculateOriginalValue();
+//        this.effectiveValue = calculateEffectiveValue();
+//    }
     @Override
     public abstract EffectiveValue calculateEffectiveValue();
 

@@ -26,9 +26,10 @@ public void setValue(Object value) {}
         if (cellType.isAssignableFrom(type)) {
             return type.cast(value);
         }
-        if()
+        throw new ClassCastException("referenced to cell with type " + cellType + "does not match the type" + type);
+
 
         // error handling... exception ? return null ?
-        return null;
+
     }
 }
