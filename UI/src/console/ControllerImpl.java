@@ -1,6 +1,7 @@
 package console;
 
 import parts.EngineImpl;
+import parts.SheetDTO;
 import parts.cell.CellDTO;
 import parts.cell.Coordinate;
 
@@ -30,6 +31,7 @@ public class ControllerImpl implements Controller {
             @Override
             public void execute(ControllerImpl controller) {
                  String path = controller.inputHandler.getFilePathFromUser();
+
                  //controller.engine.exit();
 
             }
@@ -42,7 +44,8 @@ public class ControllerImpl implements Controller {
         DISPLAY_SHEET {
             @Override
             public void execute(ControllerImpl controller) {
-                //check if there is no sheet
+                SheetDTO sheet = controller.engine.getCurrentSheetDTO();
+                controller.outputHandler.
 
             }
             @Override

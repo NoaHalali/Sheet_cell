@@ -11,4 +11,44 @@ public class SheetDTO {
     private int rowHeight;
     private CellDTO[][] cellsMatrix; // מערך דו-ממדי של תאים
 
+    //TODO - create method in sheet that creates the sheetDTO
+    public SheetDTO(int version, String name, int numberOfRows, int numberOfCols,
+                    int columnWidth, int rowHeight) {
+        this.version = version;
+        this.name = name;
+        this.numberOfRows = numberOfRows;
+        this.numberOfCols = numberOfCols;
+        this.columnWidth = columnWidth;
+        this.rowHeight = rowHeight;
+        this.cellsMatrix = new CellDTO[numberOfRows][numberOfCols];
+    }
+
+
+    public int getVersion() {
+        return version;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getNumberOfRows() {
+        return numberOfRows;
+    }
+
+    public int getNumberOfCols() {
+        return numberOfCols;
+    }
+
+    public int getColumnWidth() {
+        return columnWidth;
+    }
+
+    public int getRowHeight() {
+        return rowHeight;
+    }
+
+    public CellDTO[][] getCellsMatrix() {
+        return cellsMatrix;
+    }
 }
