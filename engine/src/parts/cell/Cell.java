@@ -1,5 +1,6 @@
 package parts.cell;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -9,7 +10,6 @@ public class Cell {
     private int lastUpdatedVersion;
     private Expression cellValue;
     //private String EffectiveValue; //אולי להוסיף intetface במקום ב-string
-    private List<Cell> neighbors;
     private List<Cell> influencingOn ;//משפיע על התאים האלה
     private List<Cell> dependsOn ; //התאים שמושפע מהם
 
@@ -17,6 +17,11 @@ public class Cell {
 //    {//
 //       // cellValue = new Expression();
 //    }
+    public Cell(Coordinate coordinate) {
+        this.coordinate = coordinate;
+        this.influencingOn = new LinkedList<Cell>();
+        this.dependsOn = new LinkedList<Cell>();
+    }
 
 
     public void updateValue(Expression newValue) {
@@ -45,16 +50,21 @@ public class Cell {
         );
     }
 
-public Expression getCellValue() {
+    public Expression getCellValue() {
         return cellValue;
-}
+    }
+    public void setExpression(Expression cellValue) {
+       this.cellValue = cellValue;
+    }
 
-public void removeCellFromInfluencingOnList(Cell cell){
+    public void removeCellFromInfluencingOnList(Cell cell){
         influencingOn.remove(cell);
-}
+    }
+
     public void AddCellToInfluencingOnList(Cell cell){
         influencingOn.add(cell);
     }
+
     public void UpdateCellEffectiveValue(int currentVersion){
         lastUpdatedVersion= currentVersion;
         cellValue.calculateEffectiveValue();
@@ -116,4 +126,4 @@ public void removeCellFromInfluencingOnList(Cell cell){
 
 
 
-}
+    }
