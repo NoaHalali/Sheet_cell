@@ -23,6 +23,7 @@ public class OutputHandler {
         System.out.println("Sheet Name: " + sheet.getName());
         System.out.println();
         printCellsMatrix(sheet);
+        System.out.println();
     }
 
     public void printCellsMatrix(SheetDTO sheet) {
@@ -89,6 +90,11 @@ public class OutputHandler {
         //TODO- maybe add exceptions, try and catch
         if(effectiveValue.getCellType() == CellType.NUMERIC) {
             double num = effectiveValue.extractValueWithExpectation(Double.class);
+
+            if (Double.isNaN(num)) {
+                return "NaN"; // החזרה של "NaN" אם הערך הוא NaN
+            }
+
             StringBuilder str = new StringBuilder();
 
             // המרת double ל-int והשוואה
@@ -150,5 +156,7 @@ public class OutputHandler {
 
         List<String> influencingOn = cell.getInfluencingOn().stream().map(Coordinate::toString).toList();
         System.out.println("InfluencingOn Names: " + influencingOn);
+
+        System.out.println();
     }
 }

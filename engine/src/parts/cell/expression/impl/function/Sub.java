@@ -28,16 +28,29 @@ public class Sub extends TernaryExpression{
             EffectiveValue mainValue = exp1.calculateEffectiveValue();
             EffectiveValue index1Val = exp2.calculateEffectiveValue();
             EffectiveValue index2Val = exp3.calculateEffectiveValue();
+
+            // בדיקה אם הערך של המחרוזת הוא "UNDEFINED"
             String str = mainValue.extractValueWithExpectation(String.class);
-            int firstIndex = index1Val.extractValueWithExpectation(Double.class).intValue();//לוודא שבאמת int
+            if ("UNDEFINED".equals(str)) {
+                return new EffectiveValueImpl(CellType.STRING, "UNDEFINED");
+            }
+
+            // חישוב האינדקסים
+            int firstIndex = index1Val.extractValueWithExpectation(Double.class).intValue();
             int secondIndex = index2Val.extractValueWithExpectation(Double.class).intValue();
-            String result = str.substring(firstIndex, secondIndex);
+
+            if (firstIndex < 0 || secondIndex < 0 || firstIndex >= str.length() || secondIndex >= str.length() || firstIndex > secondIndex) {
+                return new EffectiveValueImpl(CellType.STRING, "UNDEFINED");
+            }
+
+            String result = str.substring(firstIndex, secondIndex + 1);
+
             return new EffectiveValueImpl(CellType.STRING, result);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             return new EffectiveValueImpl(CellType.STRING, "UNDEFINED");
         }
     }
+
     @Override
     public CellType getFunctionResultType(){
         return CellType.STRING;

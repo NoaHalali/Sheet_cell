@@ -41,6 +41,7 @@ public class ControllerImpl implements Controller {
                     System.out.println("File loaded succesfully!\n");
                 }
                 catch (Exception e) {
+                    System.out.println("File loading failed");
                     System.out.println(e.getMessage());
                     System.out.println();
                 }

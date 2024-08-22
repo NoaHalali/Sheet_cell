@@ -20,13 +20,27 @@ public class Concat extends BinaryExpression{
     //TODO FIX IMPLEMENT WAIT FOR AVIAD RESPONSE
     @Override
     public EffectiveValue calculateEffectiveValue() {
-        EffectiveValue leftValue = left.calculateEffectiveValue();
-        EffectiveValue rightValue=right.calculateEffectiveValue();
-        String LeftStr = leftValue.extractValueWithExpectation(String.class);
-        String RightStr = rightValue.extractValueWithExpectation(String.class);
-        String Res = LeftStr + RightStr;
-        return new EffectiveValueImpl(CellType.STRING,Res) ;
+        try {
+            EffectiveValue leftValue = left.calculateEffectiveValue();
+            EffectiveValue rightValue = right.calculateEffectiveValue();
+
+            // בדיקה אם אחת מהמחרוזות היא "UNDEFINED"
+            String leftStr = leftValue.extractValueWithExpectation(String.class);
+            String rightStr = rightValue.extractValueWithExpectation(String.class);
+
+            if ("UNDEFINED".equals(leftStr) || "UNDEFINED".equals(rightStr)) {
+                return new EffectiveValueImpl(CellType.STRING, "UNDEFINED");
+            }
+
+            // ביצוע הקונקט (שרשור המחרוזות)
+            String result = leftStr + rightStr;
+            return new EffectiveValueImpl(CellType.STRING, result);
+        } catch (Exception e) {
+            // במקרה של חריגה כלשהי, מחזירים "UNDEFINED"
+            return new EffectiveValueImpl(CellType.STRING, "UNDEFINED");
+        }
     }
+
     @Override
     public  CellType getFunctionResultType(){
         return CellType.STRING;
