@@ -87,21 +87,33 @@ public class OutputHandler {
 
     private String calcValueToPrint(EffectiveValue effectiveValue) {
         //TODO- maybe add exceptions, try and catch
-        if(effectiveValue.getCellType() == CellType.NUMERIC)
-        {
+        if(effectiveValue.getCellType() == CellType.NUMERIC) {
             double num = effectiveValue.extractValueWithExpectation(Double.class);
-            double mod;
             StringBuilder str = new StringBuilder();
 
-            while (num > 0) {
-                num = num / 1000;
-                mod = num % 1000;
-                str.insert(0, "," + mod);
+            // המרת double ל-int והשוואה
+            int intValue = (int) num;
+            if (num == intValue) {
+                // במקרה שה-double שווה לערך int, נמשיך את העיבוד
+                while (num > 1000) {
+                    num = num / 1000;
+                    double mod = num % 1000;
+                    str.insert(0, "," + (int)mod);  // כאן נשמור רק את החלק השלם של התוצאה
+                }
+                double mod = num % 1000;
+                str.insert(0, (int)mod);  // המרה ל-int כדי לשמור את החלק השלם בלבד
+            } else {
+                // במקרה שה-double אינו שווה לערך int, נעבד את המספר כ-double
+                while (num > 1000) {
+                    num = num / 1000;
+                    double mod = num % 1000;
+                    str.insert(0, "," + String.format("%.2f", mod));  // שמירה של המספר עם שלוש ספרות אחרי הנקודה
+                }
+                double mod = num % 1000;
+                str.insert(0, String.format("%.2f", mod));  // שמירה של המספר עם שלוש ספרות אחרי הנקודה
             }
-            mod = num % 1000;
-            str.insert(0, mod);
 
-            return String.valueOf(str); //הצעה של הקומפיילר
+            return str.toString();  // מחזירים את התוצאה כמחרוזת
         }
 
         else if(effectiveValue.getCellType() == CellType.STRING)

@@ -141,15 +141,14 @@ public class Cell {
     }
 
     public String getOriginalValue() {
-        return cellValue.getOriginalValue();
+        return originalValue;
     }
 
-//    public EffectiveValue getEffectiveValue() {
-//        return cellValue.evaluate();
-//    }
     public EffectiveValue getEffectiveValue() {
-        return new EffectiveValueImpl(CellType.NUMERIC, 3);
+        //return new EffectiveValueImpl(CellType.NUMERIC, 9.0);
+        return cellValue.calculateEffectiveValue();
     }
+
 
     public int getLastUpdatedVersion() {
         return lastUpdatedVersion;
