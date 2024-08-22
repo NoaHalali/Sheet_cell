@@ -2,6 +2,8 @@ package console;
 
 import parts.SheetDTO;
 import parts.cell.*;
+import parts.cell.coordinate.Coordinate;
+import parts.cell.expression.effectiveValue.EffectiveValue;
 
 import java.util.List;
 
@@ -54,10 +56,8 @@ public class OutputHandler {
 
             for (int col = 0; col < numberOfCols; col++) {
                 CellDTO cell = cellsMatrix[row][col];
-                //TODO - להבין מה עושים עם הערך שחזר ואיך מדפיסים למסך
-
-                //String cellEffectiveValue = cell != null ? String.valueOf(cell.getEffectiveValue().getValue()) : ""; //צריך?
                 String cellEffectiveValue;
+
                 if (cell != null) {
                     cellEffectiveValue = calcValueToPrint(cell.getEffectiveValue());
                 }

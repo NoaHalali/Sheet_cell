@@ -1,4 +1,7 @@
-package parts.cell;
+package parts.cell.expression;
+
+import parts.cell.CellType;
+import parts.cell.expression.effectiveValue.EffectiveValue;
 
 public interface Expression {
 

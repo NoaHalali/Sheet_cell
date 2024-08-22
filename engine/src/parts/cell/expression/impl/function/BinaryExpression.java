@@ -1,7 +1,7 @@
-package parts.cell.impl.function;
+package parts.cell.expression.impl.function;
 
-import parts.cell.EffectiveValue;
-import parts.cell.Expression;
+import parts.cell.expression.effectiveValue.EffectiveValue;
+import parts.cell.expression.Expression;
 
 
 public abstract class BinaryExpression implements Expression {

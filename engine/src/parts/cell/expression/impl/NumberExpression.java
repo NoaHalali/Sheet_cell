@@ -1,9 +1,9 @@
-package parts.cell.impl;
+package parts.cell.expression.impl;
 
 import parts.cell.CellType;
-import parts.cell.EffectiveValue;
-import parts.cell.EffectiveValueImpl;
-import parts.cell.Expression;
+import parts.cell.expression.effectiveValue.EffectiveValue;
+import parts.cell.expression.effectiveValue.EffectiveValueImpl;
+import parts.cell.expression.Expression;
 
 public class NumberExpression implements Expression {
     private double num;

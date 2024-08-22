@@ -1,4 +1,4 @@
-package parts.cell;
+package parts.cell.coordinate;
 
 public interface Coordinate {
     public int getRow();

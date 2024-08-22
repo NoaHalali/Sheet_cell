@@ -1,9 +1,9 @@
-package parts.cell.impl.function;
+package parts.cell.expression.impl.function;
 
 import parts.cell.Cell;
 import parts.cell.CellType;
-import parts.cell.EffectiveValue;
-import parts.cell.Expression;
+import parts.cell.expression.effectiveValue.EffectiveValue;
+import parts.cell.expression.Expression;
 
 
 public class Ref implements Expression {

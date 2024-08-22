@@ -1,6 +1,9 @@
 package parts.cell;
 //import engine.parts.Version;
 
+import parts.cell.coordinate.Coordinate;
+import parts.cell.expression.effectiveValue.EffectiveValue;
+
 import java.util.List;
 
 public class CellDTO {

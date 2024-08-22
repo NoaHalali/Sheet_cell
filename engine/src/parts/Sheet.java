@@ -1,10 +1,13 @@
 package parts;
 
 import parts.cell.*;
-import parts.cell.impl.BoolExpression;
-import parts.cell.impl.NumberExpression;
-import parts.cell.impl.StringExpression;
-import parts.cell.impl.function.*;
+import parts.cell.coordinate.Coordinate;
+import parts.cell.coordinate.CoordinateImpl;
+import parts.cell.expression.Expression;
+import parts.cell.expression.impl.BoolExpression;
+import parts.cell.expression.impl.NumberExpression;
+import parts.cell.expression.impl.StringExpression;
+import parts.cell.expression.impl.function.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -14,12 +17,17 @@ import java.util.stream.Collectors;
 
 public class Sheet {
     private int  version;
-    private String name;
-    private int numberOfRows;
-    private int numberOfCols;
-    private int columnWidth;
-    private int rowHeight;
+    private final String name;
+    private final int numberOfRows;
+    private final int numberOfCols;
+    private final int columnWidth;
+    private final int rowHeight;
     private Cell[][] cellsMatrix; // מערך דו-ממדי של תאים
+
+    private static final char minCol = 'A';
+    private static final int minRow = 1;
+    private final char maxCol;
+    private final int maxRow;
 
     public Sheet(String name, int numberOfRows, int numberOfCols, int columnWidth, int rowHeight) {
         this.name = name;
@@ -28,6 +36,8 @@ public class Sheet {
         this.columnWidth = columnWidth;
         this.rowHeight = rowHeight;
         this.version = 1;
+        this.maxCol = (char) (minCol + numberOfCols - 1);
+        this.maxRow = numberOfRows;
     }
 
     public String getSheetName() {
@@ -59,15 +69,25 @@ public class Sheet {
                 .toArray(CellDTO[][]::new);
     }
 
-    public Cell GetCellByCoord(Coordinate coord){
-        //בדיקות תקינות
+    public Cell getCellByCoord(Coordinate coord){
 
+        //TODO - add checking if cell is out of bounds, or empty?
+        if (!isCoordinateValid(coord)) {
+
+
+            String errorMessage = String.format("The coordinate is out of bounds. " +
+                            "Valid column range: %c to %c, " +
+                            "Valid row range: %d to %d. " +
+                            "Given coordinate: %s",
+                    minCol, maxCol, minRow, maxRow, coord.toString());
+
+            throw new IllegalArgumentException(errorMessage);
+        }
         return cellsMatrix[coord.getRow()-1][coord.getCol()-1];
     }
 
 
-
-    public void CreateNewCell(Coordinate coord,String originalValue){
+    public void createNewCell(Coordinate coord, String originalValue){
         cellsMatrix[coord.getRow()][coord.getCol()] = new Cell(coord,originalValue);
     }
 
@@ -80,17 +100,17 @@ public class Sheet {
     public void updateCellValueFromOriginalValue(String originalValue, Coordinate coord){
 
         //נבדוק אם תא זהקיים במבנה הנתונים אם לא נקצה מקום תא לו נעדכן ערך
-        //Cell changeCell =currentSheet.GetCellByCoord(coord);// למצוא אותו במבנה הנתונים
+        //Cell changeCell =currentSheet.getCellByCoord(coord);// למצוא אותו במבנה הנתונים
         //ליצור רשימה חדשה של תאים ונבצע השמה ל- רשימת התאים מהם הוא מושפע בנוסף נשמור את הרשימה הישנה במשתנה כלשהו
         List<Cell> dependsOnCellList = new LinkedList<Cell>();
         try {
             Expression expression = getExpressionOfCellCommand4(originalValue, dependsOnCellList);
             //אם הכל עבר בהצלחה
 
-            if(GetCellByCoord(coord) == null){
-                CreateNewCell(coord,originalValue);
+            if(getCellByCoord(coord) == null){
+                createNewCell(coord,originalValue);
             }
-            Cell changeCell = GetCellByCoord(coord);
+            Cell changeCell = getCellByCoord(coord);
             changeCell.checkForCircularDependencyWrapper(coord,dependsOnCellList);
             changeCell.setExpression(expression);
             List<Cell> tmpList = changeCell.getDependsOn();
@@ -116,7 +136,7 @@ public class Sheet {
 
     public void setCellValueFromOriginalValueCommand1(String originalValue,Coordinate coord){
         try {
-            Cell changeCell = GetCellByCoord(coord);
+            Cell changeCell = getCellByCoord(coord);
             Expression expression = getExpressionOfCellCommand1(originalValue);
             changeCell.setExpression(expression);
         }
@@ -228,8 +248,8 @@ public class Sheet {
                     }
                     break;
                 case "REF":
-                    Coordinate RefCoord = CoordinateImpl.StringToCoord(list.get(1));
-                    Cell refcell = GetCellByCoord(RefCoord);//find Cell in map or 2dim array and cell coord: list.get(1)
+                    Coordinate RefCoord = CoordinateImpl.stringToCoord(list.get(1));
+                    Cell refcell = getCellByCoord(RefCoord);//find Cell in map or 2dim array and cell coord: list.get(1)
                     res = new Ref(refcell);
 
 //להוסיף תא זה רלשימת המשפעים ומושפעים
@@ -287,8 +307,8 @@ public class Sheet {
                     break;
                 case "REF"://sheet סטטי ?
                     //לבדוק שאין ארגומנט שלישי
-                    Coordinate RefCoord = CoordinateImpl.StringToCoord(list.get(1));
-                    Cell refcell = GetCellByCoord(RefCoord);//find Cell in map or 2dim array and cell coord: list.get(1)
+                    Coordinate RefCoord = CoordinateImpl.stringToCoord(list.get(1));
+                    Cell refcell = getCellByCoord(RefCoord);//find Cell in map or 2dim array and cell coord: list.get(1)
                     dependsONCellList.add(refcell); // לתא עליו התבקשנו לעדכן אערך נקצה רשימה חדשה בההתאים המשפיעים על תא זה שהיא תהיה רשימת המושפעים מהתא עליו נבצע עדכון +refcell
                     //res = refcell.getCellValue();
                     res = new Ref(refcell);
@@ -306,8 +326,16 @@ public class Sheet {
     public Cell[][] getCellsMatrix() {
         return cellsMatrix;
     }
+
+    public boolean isCoordinateValid(Coordinate coord) {
+        int row = coord.getRow();
+        int col = coord.getCol();
+
+        // בדיקה שהשורה והעמודה נמצאות בתוך הגבולות של הגיליון
+        return row > 0 && row <= numberOfRows && col > 0 && col <= numberOfCols;
+    }
+}
     // איך לעדכן מידע של תאים בעולם של רפרנס
     // רשימה של תאים המושפעים ישירות מתא זה כלומר בהנחה שמעדכנים תא X נרמה רשימה ל X המקיימת את כל תאי Ref(x)
     // כאשר נעדכן את X נעבוא על רשימת תאי אלו ונעדכן את ערכם לאחר עדכון ערכם נעבור על רשימת Ref שלהם וכך הלאה עד שיסתיים
 
-}

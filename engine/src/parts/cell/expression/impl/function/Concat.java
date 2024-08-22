@@ -1,8 +1,8 @@
-package parts.cell.impl.function;
+package parts.cell.expression.impl.function;
 
-import parts.cell.EffectiveValue;
-import parts.cell.EffectiveValueImpl;
-import parts.cell.Expression;
+import parts.cell.expression.effectiveValue.EffectiveValue;
+import parts.cell.expression.effectiveValue.EffectiveValueImpl;
+import parts.cell.expression.Expression;
 import parts.cell.CellType;
 
 public class Concat extends BinaryExpression{

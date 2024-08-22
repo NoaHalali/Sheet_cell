@@ -3,34 +3,28 @@ package XMLFile;
 import XMLFile.GeneratedFiles.STLCell;
 import XMLFile.GeneratedFiles.STLLayout;
 import XMLFile.GeneratedFiles.STLSheet;
-import XMLFile.GeneratedFiles.ObjectFactory;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Unmarshaller;
 import parts.Sheet;
 import parts.cell.Cell;
-import parts.cell.Coordinate;
-import parts.cell.CoordinateImpl;
+import parts.cell.coordinate.Coordinate;
+import parts.cell.coordinate.CoordinateImpl;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
 
 public class FileManager {
 
     private static final String JAXB_XML_GAME_PACKAGE_NAME = "XMLFile.GeneratedFiles";
-    private final int maxRows = 50;
-    private final int minRows = 1;
-    private final int maxCols = 20;
-    private final int minCols = 1;
-
-    //validate path
-    //load from xml to stlsheet
-    //stl sheet check
-    //stlsheet to sheet
+    private static final int maxRows = 50;
+    private static final int minRows = 1;
+    private static final int maxCols = 20;
+    private static final int minCols = 1;
+    private static final char minCol = 'A';
+    private static final int minRow = 1;
 
     public Sheet processFile(String filePath) throws FileNotFoundException, IllegalArgumentException {
 
@@ -73,14 +67,15 @@ public class FileManager {
     }
 
     public void validateSheetSize(STLSheet sheet) throws IllegalArgumentException {
+
         int rows = sheet.getSTLLayout().getRows();
         int cols = sheet.getSTLLayout().getColumns();
 
         if (rows < minRows || rows > maxRows) {
-            throw new IllegalArgumentException(String.format("Rows number must be between %d and %d.", minRows, maxRows));
+            throw new IllegalArgumentException(String.format("Rows number must be between %d and %d. Given: %d", minRows, maxRows, rows));
         }
         if (cols < minCols || cols > maxCols) {
-            throw new IllegalArgumentException(String.format("Cols number must be between %d and %d.", minRows, maxRows));
+            throw new IllegalArgumentException(String.format("Columns number must be between %d and %d. Given: %d", minCols, maxCols, cols));
         }
     }
 
@@ -89,26 +84,31 @@ public class FileManager {
         //TODO - 4
     }
 
-    public void checkCellInBoardRange(STLSheet sheet) throws IllegalArgumentException{
+    public void checkCellInBoardRange(STLSheet sheet) throws IllegalArgumentException {
 
-        for(STLCell cell : sheet.getSTLCells().getSTLCell()){
+        int numberOfRows = sheet.getSTLLayout().getRows();
+        int numberOfCols = sheet.getSTLLayout().getColumns();
+
+        char maxCol = (char) (minCol + numberOfCols - 1);
+        int maxRow = numberOfRows;
+
+        for (STLCell cell : sheet.getSTLCells().getSTLCell()) {
             String colStr = cell.getColumn();
-            if(colStr.length() != 1){
-                throw new IllegalArgumentException("Column must be between 'A' to 'T'.");
+
+            if (colStr.length() != 1 || colStr.charAt(0) < minCol || colStr.charAt(0) > maxCol) {
+                throw new IllegalArgumentException(
+                        String.format("Column must be between '%c' and '%c'. Given: %s", minCol, maxCol, colStr)
+                );
             }
 
-            int cellCol = colStr.charAt(0)-'A'+1;
-            int givenRowsRange = sheet.getSTLLayout().getRows();
-            int givenColsRange = sheet.getSTLLayout().getColumns();
-
-            if(cell.getRow() < minRows||cell.getRow()> givenRowsRange ){
-                throw new IllegalArgumentException(String.format("Cell row must be between %d and %d.", minRows, givenRowsRange));
-            }
-            else if(cellCol < minCols || cellCol > givenColsRange){
-                throw new IllegalArgumentException(String.format("Cell column must be between %d and %d.", minCols, givenColsRange));
+            if (cell.getRow() < minRow || cell.getRow() > maxRow) {
+                throw new IllegalArgumentException(
+                        String.format("Cell row must be between %d and %d. Given: %d", minRow, maxRow, cell.getRow())
+                );
             }
         }
     }
+
 
     private Sheet convertSLTSheetToSheet(STLSheet xmlSheet) {
         STLLayout layout = xmlSheet.getSTLLayout();

@@ -1,9 +1,9 @@
-package parts.cell.impl;
+package parts.cell.expression.impl;
 
 import parts.cell.CellType;
-import parts.cell.EffectiveValue;
-import parts.cell.EffectiveValueImpl;
-import parts.cell.Expression;
+import parts.cell.expression.effectiveValue.EffectiveValue;
+import parts.cell.expression.effectiveValue.EffectiveValueImpl;
+import parts.cell.expression.Expression;
 
 public class StringExpression implements Expression {
     String value;
@@ -13,9 +13,7 @@ public class StringExpression implements Expression {
 
     @Override
     public EffectiveValue calculateEffectiveValue() {
-
-            return new EffectiveValueImpl(CellType.STRING, value); // חישוב ערך אפקטיבי, במקרה זה חיתוך רווחים
-
+        return new EffectiveValueImpl(CellType.STRING, value); // חישוב ערך אפקטיבי, במקרה זה חיתוך רווחים
     }
 
     @Override

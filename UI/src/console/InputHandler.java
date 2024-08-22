@@ -1,7 +1,7 @@
 package console;
 
-import parts.cell.Coordinate;
-import parts.cell.CoordinateImpl;
+import parts.cell.coordinate.Coordinate;
+import parts.cell.coordinate.CoordinateImpl;
 import console.ControllerImpl.MenuOption;
 import java.util.Scanner;
 
@@ -18,7 +18,7 @@ public class InputHandler {
         while (!validInput) {
             input = scanner.nextLine();
             try {
-                coordinate = parseCoordinate(input); // קריאה לפונקציית parseCoordinate המחזירה Coordinate ישירות
+                coordinate = parseCoordinate(input);
                 validInput = true;
             } catch (IllegalArgumentException e) {
                 System.out.println(e.getMessage());
@@ -33,17 +33,13 @@ public class InputHandler {
 
     public Coordinate parseCoordinate(String input) {
 
-        // בדיקה שהקלט תואם את הפורמט
         if (input.matches("^[A-Z]+[0-9]+$")) {
-            // חילוץ האותיות (עמודה) והמספרים (שורה)
             String columnString = input.replaceAll("[0-9]", "");
             String rowString = input.replaceAll("[A-Z]", "");
 
-            // המרת העמודה והשורה למספרים
             int column = columnStringToIndex(columnString);
             int row = Integer.parseInt(rowString);
 
-            // החזרת אובייקט Coordinate
             return new CoordinateImpl(row, column);
         } else {
             throw new IllegalArgumentException("Invalid coordinate format. ");
@@ -58,7 +54,6 @@ public class InputHandler {
         return index ;
     }
 
-    // הפונקציה הזו לא משתנה ונשארת כפי שכתבת
     public MenuOption getMenuOptionFromUser() {
         Scanner scanner = new Scanner(System.in);
         int userInput = 0;
@@ -68,7 +63,7 @@ public class InputHandler {
         while (!validInput) {
             try {
                 userInput = Integer.parseInt(scanner.nextLine());
-                if (userInput < 1 || userInput > 5) {
+                if (userInput < 1 || userInput > 6) {
                     throw new IllegalArgumentException("The number must be between 1 and " + MenuOption.values().length + ".");
                 }
                 selectedOption = MenuOption.values()[userInput - 1];
@@ -82,6 +77,7 @@ public class InputHandler {
 
         return selectedOption;
     }
+
     public String getFilePathFromUser(){
         System.out.println("Please enter a full path of the XML file you wish to load to the system: ");
         Scanner scanner = new Scanner(System.in);

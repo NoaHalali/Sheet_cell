@@ -3,9 +3,8 @@ package console;
 import parts.EngineImpl;
 import parts.SheetDTO;
 import parts.cell.CellDTO;
-import parts.cell.Coordinate;
+import parts.cell.coordinate.Coordinate;
 
-import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 public class ControllerImpl implements Controller {
@@ -32,8 +31,6 @@ public class ControllerImpl implements Controller {
     }
     public enum MenuOption {
 
-        //sub question
-        //sub "menasha" ,3.4 ,4 is okay ?/????/
         //1
         LOAD_FILE {
             @Override
@@ -41,11 +38,11 @@ public class ControllerImpl implements Controller {
                 try {
                     String path = controller.inputHandler.getFilePathFromUser();
                     controller.engine.readFileData(path);
-                    //controller.engine.exit();
                     System.out.println("File loaded succesfully!\n");
                 }
                 catch (Exception e) {
                     System.out.println(e.getMessage());
+                    System.out.println();
                 }
             }
             @Override
@@ -70,16 +67,28 @@ public class ControllerImpl implements Controller {
         DISPLAY_CELL {
             @Override
             public void execute(ControllerImpl controller) {
-                System.out.println("Please enter cell coordinate ");
-                Coordinate coordinate = controller.inputHandler.getCoordinateFromUser();
-                CellDTO cell = controller.engine.getCellDTOByCoordinate(coordinate);
-                controller.outputHandler.printCellState(cell);
+                try {
+                    System.out.println("Please enter cell coordinate ");
+                    Coordinate coordinate = controller.inputHandler.getCoordinateFromUser();
+                    CellDTO cell = controller.engine.getCellDTOByCoordinate(coordinate);
+                    controller.outputHandler.printCellState(cell);
+                }
+
+                catch (Exception e)
+                {
+                    //TODO -
+                    // add checking if cell is out of bounds -V
+                    // what if empty?
+                    System.out.println(e.getMessage());
+                }
+
             }
             @Override
             public String toString() {
                 return "Display a cell state";
             }
         },
+        //4
         UPDATE_CELL {
             @Override
             public void execute(ControllerImpl controller) {
@@ -95,6 +104,7 @@ public class ControllerImpl implements Controller {
                 return "Update cell value";
             }
         },
+        //5
         DISPLAY_VERSIONS {
             @Override
             public void execute(ControllerImpl controller) {
@@ -106,6 +116,7 @@ public class ControllerImpl implements Controller {
                 return "Display system versions";
             }
         },
+        //6
         EXIT {
             @Override
             public void execute(ControllerImpl controller) {
@@ -120,20 +131,5 @@ public class ControllerImpl implements Controller {
         // Abstract method to be implemented by each enum constant
         public abstract void execute(ControllerImpl controller);
     }
-    public void displaySheetToUser(){
-       //Todo SheetDTO tmpSheet=engine.;
-    }
-//
-//    public void displayCellData(String cellId) {
-//        //TODO - validation checking
-//
-//        CellDTO cellData = engine.getCellData(cellId);
-//        System.out.println("Cell ID: " + cellId);
-//        System.out.println("Original Value: " + cellData.getOriginalValue());
-//        System.out.println("Effective Value: " + cellData.getEffectiveValue());
-//        System.out.println("Version: " + cellData.getVersionNumber());
-//        System.out.println("Dependencies: " + String.join(", ", cellData.getDependencies()));
-//    }
-
 
 }

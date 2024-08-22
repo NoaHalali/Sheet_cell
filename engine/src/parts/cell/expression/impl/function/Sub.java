@@ -1,8 +1,8 @@
-package parts.cell.impl.function;
+package parts.cell.expression.impl.function;
 
-import parts.cell.EffectiveValue;
-import parts.cell.EffectiveValueImpl;
-import parts.cell.Expression;
+import parts.cell.expression.effectiveValue.EffectiveValue;
+import parts.cell.expression.effectiveValue.EffectiveValueImpl;
+import parts.cell.expression.Expression;
 import parts.cell.CellType;
 
 public class Sub extends TernaryExpression{
@@ -24,14 +24,19 @@ public class Sub extends TernaryExpression{
 
     @Override
     public EffectiveValue calculateEffectiveValue() {
-        EffectiveValue mainValue = exp1.calculateEffectiveValue();
-        EffectiveValue index1Val = exp2.calculateEffectiveValue();
-        EffectiveValue index2Val = exp3.calculateEffectiveValue();
-        String str = mainValue.extractValueWithExpectation(String.class);
-        int firstIndex = index1Val.extractValueWithExpectation(Double.class).intValue();//לוודא שבאמת int
-        int secondIndex = index2Val.extractValueWithExpectation(Double.class).intValue();
-        String  result = str.substring(firstIndex,secondIndex);
-        return new EffectiveValueImpl(CellType.STRING, result);
+        try {
+            EffectiveValue mainValue = exp1.calculateEffectiveValue();
+            EffectiveValue index1Val = exp2.calculateEffectiveValue();
+            EffectiveValue index2Val = exp3.calculateEffectiveValue();
+            String str = mainValue.extractValueWithExpectation(String.class);
+            int firstIndex = index1Val.extractValueWithExpectation(Double.class).intValue();//לוודא שבאמת int
+            int secondIndex = index2Val.extractValueWithExpectation(Double.class).intValue();
+            String result = str.substring(firstIndex, secondIndex);
+            return new EffectiveValueImpl(CellType.STRING, result);
+        }
+        catch (Exception e) {
+            return new EffectiveValueImpl(CellType.STRING, "UNDEFINED");
+        }
     }
     @Override
     public CellType getFunctionResultType(){

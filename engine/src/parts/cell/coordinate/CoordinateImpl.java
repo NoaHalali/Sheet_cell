@@ -1,6 +1,6 @@
-package parts.cell;
+package parts.cell.coordinate;
 
-public class CoordinateImpl implements Coordinate{
+public class CoordinateImpl implements Coordinate {
     private final int row;
     private final int column;
 
@@ -10,7 +10,8 @@ public class CoordinateImpl implements Coordinate{
         this.column = column;
 
     }
-    public static Coordinate StringToCoord(String Coord){
+
+    public static Coordinate stringToCoord(String Coord){
       if(Coord.length()!=2){
           //error
           return null;
@@ -32,6 +33,7 @@ public class CoordinateImpl implements Coordinate{
     public int getCol() {
         return column;
     }
+
     @Override
     public String toString() {
         char char1= (char) ('A'+ column -1);

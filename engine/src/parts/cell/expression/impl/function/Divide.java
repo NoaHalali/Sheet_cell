@@ -1,8 +1,8 @@
-package parts.cell.impl.function;
+package parts.cell.expression.impl.function;
 
-import parts.cell.EffectiveValue;
-import parts.cell.EffectiveValueImpl;
-import parts.cell.Expression;
+import parts.cell.expression.effectiveValue.EffectiveValue;
+import parts.cell.expression.effectiveValue.EffectiveValueImpl;
+import parts.cell.expression.Expression;
 import parts.cell.CellType;
 
 public class Divide extends BinaryExpression{
@@ -18,15 +18,20 @@ public class Divide extends BinaryExpression{
     }
 
     @Override
-    public EffectiveValue calculateEffectiveValue() throws ArithmeticException {//בדיקה שלא מחלקים ב0- ומידה וכן יוציא אקספשיון ויזרק למשתמש בUI
-
+    public EffectiveValue calculateEffectiveValue() throws ArithmeticException {
+        try {
             EffectiveValue leftValue = left.calculateEffectiveValue();
             EffectiveValue rightValue = right.calculateEffectiveValue();
 
             double result = leftValue.extractValueWithExpectation(Double.class) / rightValue.extractValueWithExpectation(Double.class);
 
-        return  new EffectiveValueImpl(CellType.NUMERIC, result);
+            return new EffectiveValueImpl(CellType.NUMERIC, result);
+        }
+        catch (ArithmeticException arithmeticException) {
+            return new EffectiveValueImpl(CellType.NUMERIC, Double.NaN);
+        }
     }
+
     @Override
     public  CellType getFunctionResultType(){
         return CellType.NUMERIC;

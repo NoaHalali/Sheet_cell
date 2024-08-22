@@ -1,4 +1,6 @@
-package parts.cell;
+package parts.cell.expression.effectiveValue;
+
+import parts.cell.CellType;
 
 public class EffectiveValueImpl implements EffectiveValue {
     private CellType cellType;
