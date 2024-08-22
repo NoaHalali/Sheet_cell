@@ -1,12 +1,13 @@
 package parts.cell.impl.function;
 
+import parts.cell.CellType;
 import parts.cell.EffectiveValue;
 import parts.cell.Expression;
-import parts.cell.impl.AbstractExpression;
 
-public  abstract class UnaryExpression extends AbstractExpression {
+public  abstract class UnaryExpression implements Expression {
     protected Expression exp;
-//    public UnaryExpression(Expression exp) {
+
+    //    public UnaryExpression(Expression exp) {
 //        //super(originalValue);
 //        this.exp = exp;
 //        //this.originalValue = calculateOriginalValue();
@@ -15,7 +16,7 @@ public  abstract class UnaryExpression extends AbstractExpression {
     @Override
     public abstract EffectiveValue calculateEffectiveValue();
 
-    public EffectiveValue evaluate() {
-        return effectiveValue; // מחזיר את הערך המוערך שכבר חושב
-    }
+    @Override
+    public abstract CellType getFunctionResultType();
+
 }

@@ -5,6 +5,7 @@ import parts.SheetDTO;
 import parts.cell.CellDTO;
 import parts.cell.Coordinate;
 
+import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 public class ControllerImpl implements Controller {
@@ -20,20 +21,31 @@ public class ControllerImpl implements Controller {
         while (systemIsRunning) {
             outputHandler.printMenu();
             MenuOption option =inputHandler.getMenuOptionFromUser();
-            option.execute(this);
+            try {
+                option.execute(this);
+            }
+            catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
         }
     }
     public enum MenuOption {
 
         //sub question
         //sub "menasha" ,3.4 ,4 is okay ?/????/
+        //1
         LOAD_FILE {
             @Override
             public void execute(ControllerImpl controller) {
-                 String path = controller.inputHandler.getFilePathFromUser();
-
-                 //controller.engine.exit();
-
+                try {
+                    String path = controller.inputHandler.getFilePathFromUser();
+                    controller.engine.readFileData(path);
+                    //controller.engine.exit();
+                    System.out.println("File loaded succesfully!\n");
+                }
+                catch (Exception e) {
+                    System.out.println(e.getMessage());
+                }
             }
             @Override
             public String toString() {
@@ -41,18 +53,19 @@ public class ControllerImpl implements Controller {
             }
 
         },
+        //2
         DISPLAY_SHEET {
             @Override
             public void execute(ControllerImpl controller) {
                 SheetDTO sheet = controller.engine.getCurrentSheetDTO();
                 controller.outputHandler.printSheetData(sheet);
-
             }
             @Override
             public String toString() {
                 return "Display current sheet state";
             }
         },
+        //3
         DISPLAY_CELL {
             @Override
             public void execute(ControllerImpl controller) {

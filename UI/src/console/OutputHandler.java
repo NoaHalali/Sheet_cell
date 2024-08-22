@@ -12,6 +12,7 @@ public class OutputHandler {
         for( ControllerImpl.MenuOption option: ControllerImpl.MenuOption.values() ){
             System.out.println(option.ordinal() + 1 + ". " + option);
         }
+        System.out.println();
     }
 
     public void printSheetData(SheetDTO sheet)
@@ -127,7 +128,7 @@ public class OutputHandler {
 
         //TODO - implement the toString()
         EffectiveValue effectiveValue = cell.getEffectiveValue();
-        System.out.println("Effective Value: " + effectiveValue);
+        System.out.println("Effective Value: " + calcValueToPrint(effectiveValue));
 
         int version = cell.getLastUpdatedVersion();
         System.out.println("Last Updated Version: " + version);

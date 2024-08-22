@@ -27,9 +27,7 @@ public class Sheet {
         this.numberOfCols = numberOfCols;
         this.columnWidth = columnWidth;
         this.rowHeight = rowHeight;
-
-//        this.columnWidth = 4; // לדוגמה, אפשר להתאים את הערך על פי הדרישה
-//        this.rowHeight = 4; // לדוגמה, אפשר להתאים את הערך על פי הדרישה
+        this.version = 1;
     }
 
     public String getSheetName() {
@@ -40,12 +38,6 @@ public class Sheet {
     }
     public int getVersion() {
         return version;
-    }
-
-    public Cell GetCellByCoord(Coordinate coord){
-        //בדיקות תקינות
-
-        return cellsMatrix[coord.getRow()][coord.getCol()];
     }
 
     public SheetDTO toSheetDTO() {
@@ -67,10 +59,12 @@ public class Sheet {
                 .toArray(CellDTO[][]::new);
     }
 
+    public Cell GetCellByCoord(Coordinate coord){
+        //בדיקות תקינות
 
-    public int getVersionNumber() {
-        return version;
+        return cellsMatrix[coord.getRow()-1][coord.getCol()-1];
     }
+
 
 //    //TODO - Move to UI or something
 //    public void printSheetData()

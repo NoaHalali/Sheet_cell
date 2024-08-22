@@ -96,7 +96,7 @@ public class FileManager {
                 throw new IllegalArgumentException("Column must be between 'A' to 'T'.");
             }
 
-            int cellCol = colStr.charAt(0)-'A';
+            int cellCol = colStr.charAt(0)-'A'+1;
             int givenRowsRange = sheet.getSTLLayout().getRows();
             int givenColsRange = sheet.getSTLLayout().getColumns();
 
@@ -123,8 +123,8 @@ public class FileManager {
         Cell[][] cellsMatrix = new Cell[rows][columns];
 
         for (STLCell xmlCell : xmlSheet.getSTLCells().getSTLCell()) {
-            int row = xmlCell.getRow() - 1; // Assuming 1-based indexing in XML
-            int col = xmlCell.getColumn().charAt(0) - 'A'; // Assuming columns are A, B, C...
+            int row = xmlCell.getRow() ; // Assuming 1-based indexing in XML
+            int col = xmlCell.getColumn().charAt(0) - 'A'+1; // Assuming columns are A, B, C...
 
             // אתחול רשימות לרשימות שמשפיעות ותלויות
 //            List<Cell> neighbors = new ArrayList<>();
@@ -140,7 +140,7 @@ public class FileManager {
             );
             //sheet.updateCellValueFromOriginalValue(xmlCell.getSTLOriginalValue(),coord);
 
-            cellsMatrix[row][col] = cell;
+            cellsMatrix[row-1][col-1] = cell;
         }
         sheet.setCellsMatrix(cellsMatrix);
         return sheet;

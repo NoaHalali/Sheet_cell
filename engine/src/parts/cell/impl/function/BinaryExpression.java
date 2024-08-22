@@ -2,14 +2,14 @@ package parts.cell.impl.function;
 
 import parts.cell.EffectiveValue;
 import parts.cell.Expression;
-import parts.cell.impl.AbstractExpression;
 
-public abstract class BinaryExpression extends AbstractExpression {
+
+public abstract class BinaryExpression implements Expression {
     protected Expression left;
     protected Expression right;
 
     //private String originalValue;
-   // private String effectiveValue;
+    // private String effectiveValue;
 
 //    public BinaryExpression(Expression left, Expression right) {
 //        //super(originalValue);
@@ -19,8 +19,9 @@ public abstract class BinaryExpression extends AbstractExpression {
 //        this.effectiveValue = calculateEffectiveValue();
 //    }
 
-
     public abstract EffectiveValue calculateEffectiveValue();
+
+}
 
     // חישוב הערך המקורי (בדוגמה הזו הוא מבוסס על הביטוי המקורי)
 //    private String calculateOriginalValue() {
@@ -34,19 +35,7 @@ public abstract class BinaryExpression extends AbstractExpression {
 //        double rightVal = Double.parseDouble(right.evaluate().replace(",", ""));
 //    }
 
-    @Override
-    public EffectiveValue evaluate() {
-        return effectiveValue; // מחזיר את הערך המוערך שכבר חושב
-    } //אולי להוסיף בוליאני שאומר אם מעודכן
 
-    public String getOriginalValue() {
-        return originalValue;
-    }
-
-//    public String getEffectiveValue() {
-//        return effectiveValue;
-//    }
-}
 
 //public abstract class BinaryExpression implements Expression {
 //

@@ -55,7 +55,7 @@ public class InputHandler {
         for (int i = 0; i < column.length(); i++) {
             index = index * 26 + (column.charAt(i) - 'A' + 1);
         }
-        return index - 1;
+        return index ;
     }
 
     // הפונקציה הזו לא משתנה ונשארת כפי שכתבת

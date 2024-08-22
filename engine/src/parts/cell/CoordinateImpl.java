@@ -34,8 +34,8 @@ public class CoordinateImpl implements Coordinate{
     }
     @Override
     public String toString() {
-        char char1= (char) ('A'+row);
-        char char2= (char) ('1'+column);
+        char char1= (char) ('A'+ column -1);
+        char char2= (char) ('1'+row-1);
         return ""+char1+char2;
     }
 }

@@ -20,12 +20,15 @@ public class Main {
             //File xmlFile = new File("path/to/your/basic.xml");
             engine.readFileData(FILE_PATH);
             SheetDTO sheet = engine.getCurrentSheetDTO();
+            System.out.println("Hi");
+
 
         }
         catch (Exception e) {
-            System.out.println("ERROR");
+            System.out.println(e.getMessage());
+            e.printStackTrace();
+            //System.out.println("ERROR");
         }
-
 
 //        Sheet sheet = new Sheet(2, 3);
 //

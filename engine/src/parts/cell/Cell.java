@@ -16,13 +16,14 @@ public class Cell {
     private List<Cell> influencingOn ;//משפיע על התאים האלה
     private List<Cell> dependsOn ; //התאים שמושפע מהם
 
+    //TODO - maybe send version of sheet
     public Cell(Coordinate coordinate, String originalValue) {
         this.coordinate = coordinate;
         this.originalValue = originalValue;
-        lastUpdatedVersion = 0;
+        lastUpdatedVersion = 1;
 
-//        this.influencingOn = new LinkedList<Cell>();
-//        this.dependsOn = new LinkedList<Cell>();
+        this.influencingOn = new LinkedList<Cell>();
+        this.dependsOn = new LinkedList<Cell>();
     }
 
     public void setCellValue(String originalValue)
@@ -30,9 +31,6 @@ public class Cell {
 
     }
 
-    public EffectiveValue getEffectiveValueNow(){
-        return cellValue.evaluate();
-    }
 
 //    public void updateValue(Expression newValue) {
 //        cellValue = newValue; //בינתיים
@@ -53,7 +51,8 @@ public class Cell {
         return new CellDTO(
                 coordinate, //"A4"
                 originalValue,
-                cellValue.calculateEffectiveValue(),
+                //cellValue.calculateEffectiveValue(),
+                getEffectiveValue(),
                 lastUpdatedVersion,
                 getInfluencingOnCoordinates(),
                 getDependsOnCoordinates()
@@ -144,8 +143,11 @@ public class Cell {
         return cellValue.getOriginalValue();
     }
 
+//    public EffectiveValue getEffectiveValue() {
+//        return cellValue.evaluate();
+//    }
     public EffectiveValue getEffectiveValue() {
-        return cellValue.evaluate();
+        return new EffectiveValueImpl(CellType.NUMERIC, 3);
     }
 
     public int getLastUpdatedVersion() {

@@ -1,10 +1,10 @@
 package parts.cell.impl.function;
 
+import parts.cell.CellType;
 import parts.cell.EffectiveValue;
 import parts.cell.Expression;
-import parts.cell.impl.AbstractExpression;
 
-public abstract class TernaryExpression extends AbstractExpression {
+public abstract class TernaryExpression implements Expression {
     protected Expression exp1;
     protected Expression exp2;
     protected Expression exp3;
@@ -18,4 +18,6 @@ public abstract class TernaryExpression extends AbstractExpression {
 //    }
     @Override
     public abstract EffectiveValue calculateEffectiveValue();
+    @Override
+    public abstract CellType getFunctionResultType();
 }
