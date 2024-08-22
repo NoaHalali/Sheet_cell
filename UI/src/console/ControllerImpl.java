@@ -26,6 +26,7 @@ public class ControllerImpl implements Controller {
             }
             catch (Exception e) {
                 System.out.println(e.getMessage());
+                e.printStackTrace();
             }
         }
     }
