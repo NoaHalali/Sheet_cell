@@ -24,9 +24,9 @@ public class Sub extends TernaryExpression{
 
     @Override
     public EffectiveValue calculateEffectiveValue() {
-        EffectiveValue mainValue = exp1.evaluate();
-        EffectiveValue index1Val = exp2.evaluate();
-        EffectiveValue index2Val = exp3.evaluate();
+        EffectiveValue mainValue = exp1.calculateEffectiveValue();
+        EffectiveValue index1Val = exp2.calculateEffectiveValue();
+        EffectiveValue index2Val = exp3.calculateEffectiveValue();
         String str = mainValue.extractValueWithExpectation(String.class);
         int firstIndex = index1Val.extractValueWithExpectation(Double.class).intValue();//לוודא שבאמת int
         int secondIndex = index2Val.extractValueWithExpectation(Double.class).intValue();

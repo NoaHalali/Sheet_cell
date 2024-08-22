@@ -62,6 +62,7 @@ public class Cell {
     public Expression getCellValue() {
         return cellValue;
     }
+
     public void setExpression(Expression cellValue) {
        this.cellValue = cellValue;
     }

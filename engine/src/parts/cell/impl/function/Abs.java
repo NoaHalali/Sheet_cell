@@ -21,7 +21,7 @@ public class Abs extends UnaryExpression{
 
     @Override
     public EffectiveValue calculateEffectiveValue() {
-        EffectiveValue Value = exp.evaluate();
+        EffectiveValue Value = exp.calculateEffectiveValue();
 
         double result = Math.abs(Value.extractValueWithExpectation(Double.class) );
         return  new EffectiveValueImpl(CellType.NUMERIC, result);

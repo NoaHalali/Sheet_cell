@@ -19,8 +19,8 @@ public class Times extends BinaryExpression{
 
     @Override
     public EffectiveValue calculateEffectiveValue() {
-        EffectiveValue leftValue = left.evaluate();
-        EffectiveValue rightValue=right.evaluate();
+        EffectiveValue leftValue = left.calculateEffectiveValue();
+        EffectiveValue rightValue=right.calculateEffectiveValue();
         double result = leftValue.extractValueWithExpectation(Double.class) * rightValue.extractValueWithExpectation(Double.class);
         return  new EffectiveValueImpl(CellType.NUMERIC, result);
     }

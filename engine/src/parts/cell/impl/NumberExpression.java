@@ -3,13 +3,14 @@ package parts.cell.impl;
 import parts.cell.CellType;
 import parts.cell.EffectiveValue;
 import parts.cell.EffectiveValueImpl;
+import parts.cell.Expression;
 
-public class NumberExpression extends AbstractExpression {
+public class NumberExpression implements Expression {
     private double num;
 
     //or get String and then Parse to double
     public NumberExpression(double num) {
-        super(Double.toString(num));
+
         this.num = num;
     }
 

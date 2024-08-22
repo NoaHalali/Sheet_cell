@@ -20,8 +20,8 @@ public class Concat extends BinaryExpression{
     //TODO FIX IMPLEMENT WAIT FOR AVIAD RESPONSE
     @Override
     public EffectiveValue calculateEffectiveValue() {
-        EffectiveValue leftValue = left.evaluate();
-        EffectiveValue rightValue=right.evaluate();
+        EffectiveValue leftValue = left.calculateEffectiveValue();
+        EffectiveValue rightValue=right.calculateEffectiveValue();
         String LeftStr = leftValue.extractValueWithExpectation(String.class);
         String RightStr = rightValue.extractValueWithExpectation(String.class);
         String Res = LeftStr + RightStr;

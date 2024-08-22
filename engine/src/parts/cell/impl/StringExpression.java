@@ -3,16 +3,18 @@ package parts.cell.impl;
 import parts.cell.CellType;
 import parts.cell.EffectiveValue;
 import parts.cell.EffectiveValueImpl;
+import parts.cell.Expression;
 
-public class StringExpression extends AbstractExpression {
+public class StringExpression implements Expression {
+    String value;
     public StringExpression(String value) {
-        super(value);
+        this.value=value;
     }
 
     @Override
     public EffectiveValue calculateEffectiveValue() {
 
-            return new EffectiveValueImpl(CellType.STRING, originalValue); // חישוב ערך אפקטיבי, במקרה זה חיתוך רווחים
+            return new EffectiveValueImpl(CellType.STRING, value); // חישוב ערך אפקטיבי, במקרה זה חיתוך רווחים
 
     }
 

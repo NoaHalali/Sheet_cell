@@ -20,8 +20,8 @@ public class Divide extends BinaryExpression{
     @Override
     public EffectiveValue calculateEffectiveValue() throws ArithmeticException {//בדיקה שלא מחלקים ב0- ומידה וכן יוציא אקספשיון ויזרק למשתמש בUI
 
-            EffectiveValue leftValue = left.evaluate();
-            EffectiveValue rightValue = right.evaluate();
+            EffectiveValue leftValue = left.calculateEffectiveValue();
+            EffectiveValue rightValue = right.calculateEffectiveValue();
 
             double result = leftValue.extractValueWithExpectation(Double.class) / rightValue.extractValueWithExpectation(Double.class);
 

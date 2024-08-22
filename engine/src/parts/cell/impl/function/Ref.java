@@ -3,9 +3,10 @@ package parts.cell.impl.function;
 import parts.cell.Cell;
 import parts.cell.CellType;
 import parts.cell.EffectiveValue;
-import parts.cell.impl.AbstractExpression;
+import parts.cell.Expression;
 
-public class Ref extends AbstractExpression {
+
+public class Ref implements Expression {
     Cell refCell;
     public Ref(Cell refCell) throws NullPointerException  {
         if(refCell == null){

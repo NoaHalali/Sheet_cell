@@ -2,19 +2,20 @@ package parts.cell.impl;
 import parts.cell.CellType;
 import parts.cell.EffectiveValue;
 import parts.cell.EffectiveValueImpl;
+import parts.cell.Expression;
 
-public class BoolExpression extends AbstractExpression {
+public class BoolExpression implements Expression {
     private boolean flag;
 
     public BoolExpression(boolean flag) {
-        super(Boolean.toString(flag));
+        //super(Boolean.toString(flag));
         this.flag = flag;
     }
 
     @Override
     public EffectiveValue calculateEffectiveValue() {
         //
-        return new EffectiveValueImpl(CellType.BOOLEAN,originalValue.toLowerCase()=="true" ); // ערך אפקטיבי עבור ביטויים לוגיים
+        return new EffectiveValueImpl(CellType.BOOLEAN,flag ); // ערך אפקטיבי עבור ביטויים לוגיים
     }
 
     @Override

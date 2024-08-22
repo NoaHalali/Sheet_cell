@@ -21,8 +21,8 @@ public class Plus extends BinaryExpression {
     @Override
     public EffectiveValue calculateEffectiveValue() {
 
-        EffectiveValue leftValue = left.evaluate();
-        EffectiveValue rightValue = right.evaluate();
+        EffectiveValue leftValue = left.calculateEffectiveValue();
+        EffectiveValue rightValue = right.calculateEffectiveValue();
         //double result=null;
 
        /// double leftVal = Double.parseDouble(left.evaluate().replace(",", ""));
