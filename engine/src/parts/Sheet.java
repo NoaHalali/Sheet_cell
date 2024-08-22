@@ -172,6 +172,41 @@ public class Sheet {
         }
         //נחשב את הערך
     }
+    public void setCellValueFromOriginalValueCommand1(String originalValue,Coordinate coord){
+
+        //נבדוק אם תא זהקיים במבנה הנתונים אם לא נקצה מקום תא לו נעדכן ערך
+        //Cell changeCell =currentSheet.GetCellByCoord(coord);// למצוא אותו במבנה הנתונים
+        //ליצור רשימה חדשה של תאים ונבצע השמה ל- רשימת התאים מהם הוא מושפע בנוסף נשמור את הרשימה הישנה במשתנה כלשהו
+        List<Cell> dependsOnCellList = new LinkedList<Cell>();
+        try {
+            Expression expression = getExpressionOfCell(originalValue, dependsOnCellList);
+            //אם הכל עבר בהצלחה
+
+            if(GetCellByCoord(coord) == null){
+                CreateNewCell(coord,originalValue);
+            }
+            Cell changeCell = GetCellByCoord(coord);
+            changeCell.checkForCircularDependencyWrapper(coord,dependsOnCellList);
+            changeCell.setExpression(expression);
+            List<Cell> tmpList = changeCell.getDependsOn();
+            changeCell.setDependsOn(dependsOnCellList);
+            for (Cell cell : tmpList) {
+                cell.removeCellFromInfluencingOnList(changeCell);
+            }
+            for(Cell cell : dependsOnCellList){
+                cell.AddCellToInfluencingOnList(changeCell);
+            }
+
+//            //לעדכן את הרשימה החדשה של התלויות
+//            upgradeVersion();
+            changeCell.updateCellsVersions(getVersion());
+
+        }
+        catch (Exception ex){
+            //TODO throw new Exception(ex);
+        }
+        //נחשב את הערך
+    }
 
     public static List<String> parseExpression(String expression) {
         expression = expression.trim();

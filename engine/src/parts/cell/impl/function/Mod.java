@@ -7,14 +7,14 @@ import parts.cell.CellType;
 
 public class Mod  extends BinaryExpression{
     public Mod(Expression expression1, Expression expression2) {
-        CellType leftCellType = left.getFunctionResultType();
-        CellType rightCellType = right.getFunctionResultType();
+        CellType leftCellType = expression1.getFunctionResultType();
+        CellType rightCellType = expression2.getFunctionResultType();
         if ( (!leftCellType.equals(CellType.NUMERIC) && !leftCellType.equals(CellType.UNKNOWN)) ||
                 (!rightCellType.equals(CellType.NUMERIC) && !rightCellType.equals(CellType.UNKNOWN)) ) {
             throw new IllegalArgumentException("Invalid argument types for MOD function. Expected NUMERIC, but got " + leftCellType + " and " + rightCellType);
         }
-        left = left;
-        right = right;
+        left = expression1;
+        right = expression2;
     }
 
     @Override

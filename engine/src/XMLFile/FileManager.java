@@ -145,7 +145,7 @@ public class FileManager {
 
         sheet.setCellsMatrix(cellsMatrix);
 
-        parseExpressions(sheet);
+
 
 
 
