@@ -15,14 +15,12 @@ public class testMain {
         try {
             Controller controller = new ControllerImpl();
             controller.runSystem();
-
-
-            //File xmlFile = new File("path/to/your/basic.xml");
-            engine.readFileData(FILE_PATH);
-            SheetDTO sheet = engine.getCurrentSheetDTO();
-            System.out.println("Hi");
-
-
+//
+//            //File xmlFile = new File("path/to/your/basic.xml");
+//            engine.readFileData(FILE_PATH);
+//            SheetDTO sheet = engine.getCurrentSheetDTO();
+//            System.out.println("Hi");
+//
         }
         catch (Exception e) {
             System.out.println(e.getMessage());
