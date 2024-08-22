@@ -137,14 +137,14 @@ public class Sheet {
     }
 
     //TODO - maybe move to Cell
-    public void updateCellValueFromOriginalValue(String originalValue,Coordinate coord){
+    public void updateCellValueFromOriginalValue(String originalValue, Coordinate coord){
 
         //נבדוק אם תא זהקיים במבנה הנתונים אם לא נקצה מקום תא לו נעדכן ערך
         //Cell changeCell =currentSheet.GetCellByCoord(coord);// למצוא אותו במבנה הנתונים
         //ליצור רשימה חדשה של תאים ונבצע השמה ל- רשימת התאים מהם הוא מושפע בנוסף נשמור את הרשימה הישנה במשתנה כלשהו
         List<Cell> dependsOnCellList = new LinkedList<Cell>();
         try {
-            Expression expression = getExpressionOfCell(originalValue, dependsOnCellList);
+            Expression expression = getExpressionOfCellCommand4(originalValue, dependsOnCellList);
             //אם הכל עבר בהצלחה
 
             if(GetCellByCoord(coord) == null){
@@ -172,35 +172,12 @@ public class Sheet {
         }
         //נחשב את הערך
     }
+
     public void setCellValueFromOriginalValueCommand1(String originalValue,Coordinate coord){
-
-        //נבדוק אם תא זהקיים במבנה הנתונים אם לא נקצה מקום תא לו נעדכן ערך
-        //Cell changeCell =currentSheet.GetCellByCoord(coord);// למצוא אותו במבנה הנתונים
-        //ליצור רשימה חדשה של תאים ונבצע השמה ל- רשימת התאים מהם הוא מושפע בנוסף נשמור את הרשימה הישנה במשתנה כלשהו
-        List<Cell> dependsOnCellList = new LinkedList<Cell>();
         try {
-            Expression expression = getExpressionOfCell(originalValue, dependsOnCellList);
-            //אם הכל עבר בהצלחה
-
-            if(GetCellByCoord(coord) == null){
-                CreateNewCell(coord,originalValue);
-            }
             Cell changeCell = GetCellByCoord(coord);
-            changeCell.checkForCircularDependencyWrapper(coord,dependsOnCellList);
+            Expression expression = getExpressionOfCellCommand1(originalValue);
             changeCell.setExpression(expression);
-            List<Cell> tmpList = changeCell.getDependsOn();
-            changeCell.setDependsOn(dependsOnCellList);
-            for (Cell cell : tmpList) {
-                cell.removeCellFromInfluencingOnList(changeCell);
-            }
-            for(Cell cell : dependsOnCellList){
-                cell.AddCellToInfluencingOnList(changeCell);
-            }
-
-//            //לעדכן את הרשימה החדשה של התלויות
-//            upgradeVersion();
-            changeCell.updateCellsVersions(getVersion());
-
         }
         catch (Exception ex){
             //TODO throw new Exception(ex);
@@ -208,7 +185,7 @@ public class Sheet {
         //נחשב את הערך
     }
 
-    public static List<String> parseExpression(String expression) {
+    public static List<String> splitExpressionToStrings(String expression) {
         expression = expression.trim();
         List<String> parsed = new ArrayList<>();
 
@@ -244,7 +221,6 @@ public class Sheet {
             token.append(c);
         }
 
-
         if (token.length() > 0) {
             parsed.add(token.toString().trim());
         }
@@ -266,17 +242,17 @@ public class Sheet {
         }
     }
 
-    public Expression getExpressionOfCell(String OriginalValue,List<Cell> dependsONCellList) throws Exception {//עוד בבדיקה !!!
-        List<String> list = parseExpression(OriginalValue);
+    public Expression getExpressionOfCellCommand1(String OriginalValue) throws Exception {
+        List<String> list = splitExpressionToStrings(OriginalValue);
         Expression arg2 = null;
         Expression res = null;
         if(list.size() == 1){
             res = getSmallArgs(list.get(0));
         }
         else {
-            Expression arg1 = getExpressionOfCell(list.get(1),dependsONCellList);
+            Expression arg1 = getExpressionOfCellCommand1(list.get(1));
             if(list.size() > 2 ){
-                arg2 = getExpressionOfCell(list.get(2),dependsONCellList);
+                arg2 = getExpressionOfCellCommand1(list.get(2));
             }
 
             switch (list.get(0)) {
@@ -306,7 +282,65 @@ public class Sheet {
                     break;
                 case "SUB":
                     if (list.size() > 2) {
-                        Expression arg3 = getExpressionOfCell(list.get(3),dependsONCellList);
+                        Expression arg3 = getExpressionOfCellCommand1(list.get(3));
+                        res = new Sub(arg1,arg2,arg3);
+                    }
+                    break;
+                case "REF":
+                    Coordinate RefCoord = CoordinateImpl.StringToCoord(list.get(1));
+                    Cell refcell = GetCellByCoord(RefCoord);//find Cell in map or 2dim array and cell coord: list.get(1)
+                    res = new Ref(refcell);
+
+//להוסיף תא זה רלשימת המשפעים ומושפעים
+                    break;
+                default:
+                    //EXEPTION
+            }
+        }
+        return res;
+    }
+
+    public Expression getExpressionOfCellCommand4(String OriginalValue,List<Cell> dependsONCellList) throws Exception {//עוד בבדיקה !!!
+        List<String> list = splitExpressionToStrings(OriginalValue);
+        Expression arg2 = null;
+        Expression res = null;
+        if(list.size() == 1){
+            res = getSmallArgs(list.get(0));
+        }
+        else {
+            Expression arg1 = getExpressionOfCellCommand4(list.get(1),dependsONCellList);
+            if(list.size() > 2 ){
+                arg2 = getExpressionOfCellCommand4(list.get(2),dependsONCellList);
+            }
+
+            switch (list.get(0)) {
+                case "PLUS":
+                    res = new Plus(arg1, arg2);
+                    break;
+                case "MINUS":
+                    res = new Minus(arg1, arg2);
+                    break;
+                case "POW":
+                    res = new Pow(arg1, arg2);
+                    break;
+                case "ABS":
+                    res = new Abs(arg1);
+                    break;
+                case "DIVIDE":
+                    res = new Divide(arg1, arg2);
+                    break;
+                case "TIMES":
+                    res = new Times(arg1, arg2);
+                    break;
+                case "MOD":
+                    res = new Mod(arg1, arg2);
+                    break;
+                case "CONCAT":
+                    res = new Concat(arg1, arg2);
+                    break;
+                case "SUB":
+                    if (list.size() > 2) {
+                        Expression arg3 = getExpressionOfCellCommand4(list.get(3),dependsONCellList);
                         res = new Sub(arg1,arg2,arg3);
                     }
                     break;

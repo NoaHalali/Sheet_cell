@@ -145,13 +145,14 @@ public class FileManager {
 
         sheet.setCellsMatrix(cellsMatrix);
 
-
-
-
-
         return sheet;
     }
 
+    //1. set original value V
+    //2. new Expression (Numeric, bool,....) V
+    //3. check types in expressions V
+    //4. evaluete - ref and etc..
+    //5. update dependencies
     private void parseExpressions(Sheet sheet) {
         Cell[][] cellsMatrix = sheet.getCellsMatrix();
         for(Cell[] cells : cellsMatrix){
@@ -162,6 +163,8 @@ public class FileManager {
             }
         }
     }
+
+
 }
 
 

@@ -77,7 +77,7 @@ public class Main {
 
 
 //String  S ="1";
-// List<String> list = parseExpression(S);
+// List<String> list = splitExpressionToStrings(S);
 //list.stream().forEach(System.out::println);
 //        Expression i=new Plus(new Plus(new Number(7),new Number(5)),new Plus(new Number(1),new Number(3)));
 //        String t=   i.evaluate();
