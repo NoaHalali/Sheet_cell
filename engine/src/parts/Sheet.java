@@ -136,6 +136,7 @@ public class Sheet {
         this.cellsMatrix = cellsMatrix;
     }
 
+    //TODO - maybe move to Cell
     public void updateCellValueFromOriginalValue(String originalValue,Coordinate coord){
 
         //נבדוק אם תא זהקיים במבנה הנתונים אם לא נקצה מקום תא לו נעדכן ערך
@@ -160,9 +161,10 @@ public class Sheet {
             for(Cell cell : dependsOnCellList){
                 cell.AddCellToInfluencingOnList(changeCell);
             }
-            //לעדכן את הרשימה החדשה של התלויות
-            upgradeVersion();
-            changeCell.UpdateCellEffectiveValue(getVersion());
+
+//            //לעדכן את הרשימה החדשה של התלויות
+//            upgradeVersion();
+            changeCell.updateCellsVersions(getVersion());
 
         }
         catch (Exception ex){
@@ -170,6 +172,7 @@ public class Sheet {
         }
         //נחשב את הערך
     }
+
     public static List<String> parseExpression(String expression) {
         expression = expression.trim();
         List<String> parsed = new ArrayList<>();
@@ -288,6 +291,10 @@ public class Sheet {
             }
         }
         return res;
+    }
+
+    public Cell[][] getCellsMatrix() {
+        return cellsMatrix;
     }
     // איך לעדכן מידע של תאים בעולם של רפרנס
     // רשימה של תאים המושפעים ישירות מתא זה כלומר בהנחה שמעדכנים תא X נרמה רשימה ל X המקיימת את כל תאי Ref(x)

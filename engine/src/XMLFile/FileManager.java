@@ -39,6 +39,7 @@ public class FileManager {
         validateSheetSize(XMLSheet);
         vaidateCells(XMLSheet);
         Sheet sheet = convertSLTSheetToSheet(XMLSheet);
+        parseExpressions(sheet);
 
         return sheet;
     }
@@ -136,16 +137,42 @@ public class FileManager {
             Cell cell = new Cell(
                     coord,
                     xmlCell.getSTLOriginalValue() // יצירת Expression מערך התא
-
             );
             //sheet.updateCellValueFromOriginalValue(xmlCell.getSTLOriginalValue(),coord);
 
             cellsMatrix[row-1][col-1] = cell;
         }
+
         sheet.setCellsMatrix(cellsMatrix);
+
+        parseExpressions(sheet);
+
+
+
         return sheet;
     }
+
+    private void parseExpressions(Sheet sheet) {
+        Cell[][] cellsMatrix = sheet.getCellsMatrix();
+        for(Cell[] cells : cellsMatrix){
+            for(Cell cell : cells){
+                if(cell!=null){
+                    sheet.updateCellValueFromOriginalValue(cell.getOriginalValue(),cell.getCoordinate());
+                }
+            }
+        }
+    }
 }
+
+
+
+
+
+//private void parseExpressions(Cell[][] cellsMatrix) {
+//    Cell[][] cellsMatrix = sheet.getCellsMatrix();
+//    for()
+
+
 //        public class ValueOutOfRangeException extends RuntimeException {
 //            public ValueOutOfRangeException(String message) {
 //                super(message);

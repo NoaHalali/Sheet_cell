@@ -75,11 +75,10 @@ public class Cell {
         influencingOn.add(cell);
     }
 
-    public void UpdateCellEffectiveValue(int currentVersion){
+    public void updateCellsVersions(int currentVersion){
         lastUpdatedVersion= currentVersion;
-        cellValue.calculateEffectiveValue();
-        for(Cell cell: influencingOn){
-            UpdateCellEffectiveValue(currentVersion);
+        for(Cell cell : influencingOn){
+            updateCellsVersions(currentVersion);
         }
     }
 
