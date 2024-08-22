@@ -15,4 +15,9 @@ public class StringExpression extends AbstractExpression {
             return new EffectiveValueImpl(CellType.STRING, originalValue); // חישוב ערך אפקטיבי, במקרה זה חיתוך רווחים
 
     }
+
+    @Override
+    public CellType getFunctionResultType() {
+        return CellType.STRING;
+    }
 }

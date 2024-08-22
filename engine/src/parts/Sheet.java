@@ -1,15 +1,13 @@
 package parts;
 
-import parts.cell.Cell;
-import parts.cell.Coordinate;
-import parts.cell.CoordinateImpl;
-import parts.cell.Expression;
+import parts.cell.*;
 import parts.cell.impl.BoolExpression;
 import parts.cell.impl.NumberExpression;
 import parts.cell.impl.StringExpression;
 import parts.cell.impl.function.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -24,6 +22,7 @@ public class Sheet {
     private Cell[][] cellsMatrix; // מערך דו-ממדי של תאים
 
     public Sheet(String name, int numberOfRows, int numberOfCols, int columnWidth, int rowHeight) {
+        this.name = name;
         this.numberOfRows = numberOfRows;
         this.numberOfCols = numberOfCols;
         this.columnWidth = columnWidth;
@@ -49,88 +48,95 @@ public class Sheet {
         return cellsMatrix[coord.getRow()][coord.getCol()];
     }
 
-//    public SheetDTO toSheetDTO() {
-//        return new SheetDTO(
-//                version, //"A4"
-//                name,
-//                numberOfRows,
-//                numberOfCols,
-//                columnWidth,
-//                rowHeight,
-//                //ADDCELLDTOMATRIX
-//
-//        );
-//    }
+    public SheetDTO toSheetDTO() {
+        return new SheetDTO(
+                version, //"A4"
+                name,
+                numberOfRows,
+                numberOfCols,
+                columnWidth,
+                rowHeight,
+                getCellsDTOMatrix()
+        );
+    }
+    public CellDTO[][] getCellsDTOMatrix() {
+        return Arrays.stream(cellsMatrix)
+                .map(row -> Arrays.stream(row)
+                        .map(cell -> cell != null ? cell.toCellDTO() : null)
+                        .toArray(CellDTO[]::new))
+                .toArray(CellDTO[][]::new);
+    }
 
 
     public int getVersionNumber() {
         return version;
     }
 
-    //TODO - Move to UI or something
-    public void printSheetData()
-    {
-        System.out.println("Version: " + version);
-        System.out.println("Sheet Name: " + name);
-        System.out.println();
-        printCellsMatrix();
+//    //TODO - Move to UI or something
+//    public void printSheetData()
+//    {
+//        System.out.println("Version: " + version);
+//        System.out.println("Sheet Name: " + name);
+//        System.out.println();
+//        printCellsMatrix();
+//    }
+
+    public void CreateNewCell(Coordinate coord,String originalValue){
+        cellsMatrix[coord.getRow()][coord.getCol()] = new Cell(coord,originalValue);
     }
-    public void CreateNewCell(Coordinate coord){
-        cellsMatrix[coord.getRow()][coord.getCol()] = new Cell(coord);
-    }
 
-    public void printCellsMatrix() {
-        // ריפוד לרוחב השורה עבור מספרי השורות
-        for (int i = 0; i < 3; i++) {
-            System.out.print(" ");
-        }
-
-        // הדפסת שמות העמודות
-        for (int col = 0; col < numberOfCols; col++) {
-            char columnName = (char) ('A' + col);
-            System.out.print("|" + columnName);
-            // הוספת רווחים בהתאם לרוחב העמודה
-            for (int i = 1; i < columnWidth; i++) {
-                System.out.print(" ");
-            }
-        }
-        System.out.println();
-
-        // הדפסת התאים בשורות ובעמודות
-        for (int row = 0; row < numberOfRows; row++) {
-            // הדפסת מספר שורה בפורמט של שתי ספרות
-            String rowNumber = String.format("%02d", row + 1);
-            System.out.print(rowNumber + " ");
-
-            for (int col = 0; col < numberOfCols; col++) {
-                Cell cell = cellsMatrix[row][col];
-                String cellEffectiveValue = cell != null ? String.valueOf(cell.geEffectiveValue().getValue()) : ""; //צריך?
-
-                System.out.print("|");
-                int strIndex = 0;
-                while (strIndex < cellEffectiveValue.length() && strIndex < columnWidth) {
-                    System.out.print(cellEffectiveValue.charAt(strIndex));
-                    strIndex++;
-                }
-
-                while(strIndex < columnWidth)
-                {
-                    System.out.print(" ");
-                    strIndex++;
-                }
-
-                //TODO - in the next missions - add the option of overflow to next line (if possible according to the height of cell)
-
-//                הדפסת ערך התא
-//                System.out.print("|" + cellEffectiveValue);
-//               הוספת רווחים אם התוכן קצר יותר מרוחב העמודה
-//                for (int i = cellEffectiveValue.length(); i < columnWidth; i++) {
-//                    System.out.print(" ");
+//    public void printCellsMatrix() {
+//        // ריפוד לרוחב השורה עבור מספרי השורות
+//        for (int i = 0; i < 3; i++) {
+//            System.out.print(" ");
+//        }
+//
+//        // הדפסת שמות העמודות
+//        for (int col = 0; col < numberOfCols; col++) {
+//            char columnName = (char) ('A' + col);
+//            System.out.print("|" + columnName);
+//            // הוספת רווחים בהתאם לרוחב העמודה
+//            for (int i = 1; i < columnWidth; i++) {
+//                System.out.print(" ");
+//            }
+//        }
+//        System.out.println();
+//
+//        // הדפסת התאים בשורות ובעמודות
+//        for (int row = 0; row < numberOfRows; row++) {
+//            // הדפסת מספר שורה בפורמט של שתי ספרות
+//            String rowNumber = String.format("%02d", row + 1);
+//            System.out.print(rowNumber + " ");
+//
+//            for (int col = 0; col < numberOfCols; col++) {
+//                Cell cell = cellsMatrix[row][col];
+//                String cellEffectiveValue = cell != null ? String.valueOf(cell.geEffectiveValue().getValue()) : ""; //צריך?
+//
+//                System.out.print("|");
+//                int strIndex = 0;
+//                while (strIndex < cellEffectiveValue.length() && strIndex < columnWidth) {
+//                    System.out.print(cellEffectiveValue.charAt(strIndex));
+//                    strIndex++;
 //                }
-            }
-            System.out.println(); // מעבר לשורה הבאה
-        }
-    }
+//
+//                while(strIndex < columnWidth)
+//                {
+//                    System.out.print(" ");
+//                    strIndex++;
+//                }
+//
+//                //TODO - in the next missions - add the option of overflow to next line (if possible according to the height of cell)
+//
+////                הדפסת ערך התא
+////                System.out.print("|" + cellEffectiveValue);
+////               הוספת רווחים אם התוכן קצר יותר מרוחב העמודה
+////                for (int i = cellEffectiveValue.length(); i < columnWidth; i++) {
+////                    System.out.print(" ");
+////                }
+//            }
+//            System.out.println(); // מעבר לשורה הבאה
+//        }
+//    }
 
     public void setCellsMatrix(Cell[][] cellsMatrix) {
         this.cellsMatrix = cellsMatrix;
@@ -147,10 +153,10 @@ public class Sheet {
             //אם הכל עבר בהצלחה
 
             if(GetCellByCoord(coord) == null){
-                CreateNewCell(coord);
+                CreateNewCell(coord,originalValue);
             }
             Cell changeCell = GetCellByCoord(coord);
-            changeCell.checkForCircularDependency(coord,dependsOnCellList);
+            changeCell.checkForCircularDependencyWrapper(coord,dependsOnCellList);
             changeCell.setExpression(expression);
             List<Cell> tmpList = changeCell.getDependsOn();
             changeCell.setDependsOn(dependsOnCellList);

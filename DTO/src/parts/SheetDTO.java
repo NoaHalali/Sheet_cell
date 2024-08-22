@@ -13,14 +13,14 @@ public class SheetDTO {
 
     //TODO - create method in sheet that creates the sheetDTO
     public SheetDTO(int version, String name, int numberOfRows, int numberOfCols,
-                    int columnWidth, int rowHeight) {
+                    int columnWidth, int rowHeight, CellDTO[][] cellsDTOMatrix) {
         this.version = version;
         this.name = name;
         this.numberOfRows = numberOfRows;
         this.numberOfCols = numberOfCols;
         this.columnWidth = columnWidth;
         this.rowHeight = rowHeight;
-        this.cellsMatrix = new CellDTO[numberOfRows][numberOfCols];
+        this.cellsMatrix = cellsDTOMatrix;
     }
 
 

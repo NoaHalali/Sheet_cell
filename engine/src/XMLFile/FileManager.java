@@ -3,12 +3,14 @@ package XMLFile;
 import XMLFile.GeneratedFiles.STLCell;
 import XMLFile.GeneratedFiles.STLLayout;
 import XMLFile.GeneratedFiles.STLSheet;
+import XMLFile.GeneratedFiles.ObjectFactory;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Unmarshaller;
 import parts.Sheet;
 import parts.cell.Cell;
 import parts.cell.Coordinate;
+import parts.cell.CoordinateImpl;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -19,7 +21,7 @@ import java.util.List;
 
 public class FileManager {
 
-    private static final String JAXB_XML_GAME_PACKAGE_NAME = "XMLFile/GeneratedFiles";
+    private static final String JAXB_XML_GAME_PACKAGE_NAME = "XMLFile.GeneratedFiles";
     private final int maxRows = 50;
     private final int minRows = 1;
     private final int maxCols = 20;
@@ -125,23 +127,22 @@ public class FileManager {
             int col = xmlCell.getColumn().charAt(0) - 'A'; // Assuming columns are A, B, C...
 
             // אתחול רשימות לרשימות שמשפיעות ותלויות
-            List<Cell> neighbors = new ArrayList<>();
-            List<Cell> influencingOn = new ArrayList<>();
-            List<Cell> dependsOn = new ArrayList<>();
+//            List<Cell> neighbors = new ArrayList<>();
+//            List<Cell> influencingOn = new ArrayList<>();
+////            List<Cell> dependsOn = new ArrayList<>();
+            Coordinate coord = new CoordinateImpl(row, col);
 
             // אתחול התא בעזרת הקונסטרקטור החדש
             Cell cell = new Cell(
-                    new Coordinate(row, col),
-                    // האתחול של הקואורדינטה
-                    new Expression(xmlCell.getSTLOriginalValue()), // יצירת Expression מערך התא
-                    0,                                          // גרסה ראשונית של 0
-                    neighbors,                                  // שכנים ריקים בהתחלה
-                    influencingOn,                              // רשימת משפיעים ריקה בהתחלה
-                    dependsOn                                   // רשימת תלויות ריקה בהתחלה
+                    coord,
+                    xmlCell.getSTLOriginalValue() // יצירת Expression מערך התא
+
             );
+            //sheet.updateCellValueFromOriginalValue(xmlCell.getSTLOriginalValue(),coord);
 
             cellsMatrix[row][col] = cell;
-
+        }
+        sheet.setCellsMatrix(cellsMatrix);
         return sheet;
     }
 }

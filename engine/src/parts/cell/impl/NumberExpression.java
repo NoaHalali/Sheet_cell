@@ -18,4 +18,9 @@ public class NumberExpression extends AbstractExpression {
 //num =Double.parseDouble(originalValue);?????
     return new EffectiveValueImpl(CellType.NUMERIC,num);
     }
+
+    @Override
+    public CellType getFunctionResultType() {
+        return CellType.NUMERIC;
+    }
 }

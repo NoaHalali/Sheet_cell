@@ -16,4 +16,9 @@ public class BoolExpression extends AbstractExpression {
         //
         return new EffectiveValueImpl(CellType.BOOLEAN,originalValue.toLowerCase()=="true" ); // ערך אפקטיבי עבור ביטויים לוגיים
     }
+
+    @Override
+    public CellType getFunctionResultType() {
+        return CellType.BOOLEAN;
+    }
 }

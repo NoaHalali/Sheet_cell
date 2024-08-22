@@ -16,7 +16,7 @@ public class Ref extends AbstractExpression {
 
     @Override
     public EffectiveValue calculateEffectiveValue() {
-       return refCell.geEffectiveValue();
+       return refCell.getEffectiveValue();
     }
     @Override
     public CellType getFunctionResultType(){

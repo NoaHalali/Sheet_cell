@@ -1,11 +1,30 @@
+import XMLFile.FileManager;
+import parts.EngineImpl;
+import parts.Sheet;
+import parts.SheetDTO;
+import parts.cell.Cell;
+import parts.cell.impl.BoolExpression;
+import parts.cell.impl.NumberExpression;
+import parts.cell.impl.StringExpression;
+
+import java.io.File;
+
 public class Main {
 
-    private final static String JAXB_XML_GAME_PACKAGE_NAME = "XMLFile/GeneratedFiles";
+//    private final static String JAXB_XML_GAME_PACKAGE_NAME = "XMLFile/GeneratedFiles";
     private final static String FILE_PATH = "C:\\Users\\noa40\\OneDrive - The Academic College of Tel-Aviv Jaffa - MTA\\שנה ב\\קורסי בחירה\\פיתוח תוכנה מבוסס גאווה\\מטלות\\Shticell\\engine\\src\\resources\\basic.xml";
 
     public static void main(String[] args) {
+        EngineImpl engine = new EngineImpl();
+        try {
+            //File xmlFile = new File("path/to/your/basic.xml");
+            engine.readFileData(FILE_PATH);
+            SheetDTO sheet = engine.getCurrentSheetDTO();
 
-
+        }
+        catch (Exception e) {
+            System.out.println("ERROR");
+        }
 
 
 //        Sheet sheet = new Sheet(2, 3);
@@ -18,6 +37,7 @@ public class Main {
 //            for (int j = 0; j < 3; j++) {
 //                matrix[i][j] = new Cell();
 //            }
+//
 //            matrix[i][0].updateValue(new NumberExpression(value));
 //            value++;
 //            matrix[i][1].updateValue(new BoolExpression(false));

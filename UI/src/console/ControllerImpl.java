@@ -45,7 +45,7 @@ public class ControllerImpl implements Controller {
             @Override
             public void execute(ControllerImpl controller) {
                 SheetDTO sheet = controller.engine.getCurrentSheetDTO();
-                controller.outputHandler.
+                controller.outputHandler.printSheetData(sheet);
 
             }
             @Override
@@ -59,7 +59,7 @@ public class ControllerImpl implements Controller {
                 System.out.println("Please enter cell coordinate ");
                 Coordinate coordinate = controller.inputHandler.getCoordinateFromUser();
                 CellDTO cell = controller.engine.getCellDTOByCoordinate(coordinate);
-                controller.outputHandler.displayCellState(cell);
+                controller.outputHandler.printCellState(cell);
             }
             @Override
             public String toString() {

@@ -10,30 +10,38 @@ public class Cell {
     //row and col, or coordinate?
     private Coordinate coordinate;
     private int lastUpdatedVersion;
+    private String originalValue;
+    //private EffectiveValue effectiveValue;
     private Expression cellValue;
-    //private String EffectiveValue; //אולי להוסיף intetface במקום ב-string
     private List<Cell> influencingOn ;//משפיע על התאים האלה
     private List<Cell> dependsOn ; //התאים שמושפע מהם
 
-//    public Cell()
-//    {//
-//       // cellValue = new Expression();
-//    }
-    public Cell(Coordinate coordinate) {
+    public Cell(Coordinate coordinate, String originalValue) {
         this.coordinate = coordinate;
-        this.influencingOn = new LinkedList<Cell>();
-        this.dependsOn = new LinkedList<Cell>();
+        this.originalValue = originalValue;
+        lastUpdatedVersion = 0;
+
+//        this.influencingOn = new LinkedList<Cell>();
+//        this.dependsOn = new LinkedList<Cell>();
     }
 
-
-    public void updateValue(Expression newValue) {
-        cellValue = newValue; //בינתיים
-        cellValue.setOriginalValue(newValue);
-    }
-    public EffectiveValue geEffectiveValue()
+    public void setCellValue(String originalValue)
     {
+
+    }
+
+    public EffectiveValue getEffectiveValueNow(){
         return cellValue.evaluate();
     }
+
+//    public void updateValue(Expression newValue) {
+//        cellValue = newValue; //בינתיים
+//        cellValue.setOriginalValue(newValue);
+//    }
+//    public EffectiveValue geEffectiveValue()
+//    {
+//        return cellValue.evaluate();
+//    }
 
 
 //    public void updateEffectiveValue(Expression newValue) {
@@ -44,8 +52,8 @@ public class Cell {
     public CellDTO toCellDTO() {
         return new CellDTO(
                 coordinate, //"A4"
-                cellValue.getOriginalValue(),
-                geEffectiveValue(),
+                originalValue,
+                cellValue.calculateEffectiveValue(),
                 lastUpdatedVersion,
                 getInfluencingOnCoordinates(),
                 getDependsOnCoordinates()

@@ -18,7 +18,7 @@ public class EngineImpl implements Engine{
 
     //maybe static? (Amir, REF function)
     private  Sheet currentSheet = null;
-    private FileManager fileManager = null; ;
+    private FileManager fileManager = new FileManager(); ;
     private static final String SHEET_NOT_LOADED_MESSAGE = "Sheet is not loaded. Please load a sheet before attempting to access it.";
 
     //TODO move all functions to UI,
@@ -27,14 +27,6 @@ public class EngineImpl implements Engine{
     // change names to get and not print/show
     public void readFileData(String filePath) throws FileNotFoundException ,IllegalArgumentException {
           currentSheet = fileManager.processFile(filePath);
-
-//        Scanner scanner = new Scanner(System.in);
-//        System.out.print("Please enter the full path to the XML file: ");
-//        String filePath = scanner.nextLine();
-//
-//        STLSheet sheet = Loader.loadXML(filePath);
-//        Validator.validate()
-
     }
 
 
@@ -47,7 +39,7 @@ public class EngineImpl implements Engine{
         }
 
         //currentSheet.toSheetDTO();
-        return null; //temp
+        return currentSheet.toSheetDTO(); //temp
     }
 
     //3
