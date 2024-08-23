@@ -136,27 +136,32 @@ public class OutputHandler {
         }
     }
 
-    public void printCellState(CellDTO cell){
+    public void printCellState(CellDTO cell, Coordinate coordinate){
+        if(cell == null)
+        {
+            System.out.println("Cell at coordinate: " + coordinate + " is Empty.");
+        }
+        else {
+            Coordinate coord = cell.getCoord();
+            System.out.println("Cell identity: " + coord.toString());
 
-        Coordinate coord = cell.getCoord();
-        System.out.println("Cell identity: " + coord.toString());
+            String originalValue = cell.getOriginalValue();
+            System.out.println("Original Value: " + originalValue);
 
-        String originalValue = cell.getOriginalValue();
-        System.out.println("Original Value: " + originalValue);
+            //TODO - implement the toString()
+            EffectiveValue effectiveValue = cell.getEffectiveValue();
+            System.out.println("Effective Value: " + calcValueToPrint(effectiveValue));
 
-        //TODO - implement the toString()
-        EffectiveValue effectiveValue = cell.getEffectiveValue();
-        System.out.println("Effective Value: " + calcValueToPrint(effectiveValue));
+            int version = cell.getLastUpdatedVersion();
+            System.out.println("Last Updated Version: " + version);
 
-        int version = cell.getLastUpdatedVersion();
-        System.out.println("Last Updated Version: " + version);
+            List<String> dependsOnNames = cell.getDependsOn().stream().map(Coordinate::toString).toList();
+            System.out.println("DependsOn Names: " + dependsOnNames);
 
-        List<String> dependsOnNames = cell.getDependsOn().stream().map(Coordinate::toString).toList();
-        System.out.println("DependsOn Names: " + dependsOnNames);
+            List<String> influencingOn = cell.getInfluencingOn().stream().map(Coordinate::toString).toList();
+            System.out.println("InfluencingOn Names: " + influencingOn);
 
-        List<String> influencingOn = cell.getInfluencingOn().stream().map(Coordinate::toString).toList();
-        System.out.println("InfluencingOn Names: " + influencingOn);
-
-        System.out.println();
+            System.out.println();
+        }
     }
 }

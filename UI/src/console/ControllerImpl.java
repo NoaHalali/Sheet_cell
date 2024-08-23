@@ -84,7 +84,7 @@ public class ControllerImpl implements Controller {
                     System.out.println("Please enter cell coordinate ");
                     Coordinate coordinate = controller.inputHandler.getCoordinateFromUser();
                     CellDTO cell = controller.engine.getCellDTOByCoordinate(coordinate);
-                    controller.outputHandler.printCellState(cell);
+                    controller.outputHandler.printCellState(cell, coordinate);
                 }
 
                 catch (Exception e)
@@ -102,28 +102,31 @@ public class ControllerImpl implements Controller {
         UPDATE_CELL {
             @Override
             public void execute(ControllerImpl controller) {
-                try{
-
-                System.out.println("Please enter cell coordinate ");
-                Coordinate coordinate = controller.inputHandler.getCoordinateFromUser();
                 try {
+
+                    System.out.println("Please enter cell coordinate ");
+                    Coordinate coordinate = controller.inputHandler.getCoordinateFromUser();
+
                     CellDTO cell = controller.engine.getCellDTOByCoordinate(coordinate);
-                    System.out.println(coordinate);
-                    System.out.println(cell.getOriginalValue());
-                    System.out.println(cell.getEffectiveValue());
-                }
-                catch (NullPointerException e) {
-                    System.out.println(e.getMessage());
-                }
-                System.out.println("Please enter value you want: ");//לעשות חפירה שתסביר את הפורמט וקליטה בinput handler חלוקת אחריות על בידקות תקינות וכו,
-                Scanner scanner = new Scanner(System.in);//input handler
-                String input = scanner.nextLine();//input handler
-                controller.engine.updateCellValueFromOriginalValue(input, coordinate);
-                System.out.println("Cell updated successfully!");
-                }
-                catch (Exception e){
-                    System.out.println(e.getMessage());
+                    if (cell != null) {
+                        System.out.println(coordinate);
+                        System.out.println(cell.getOriginalValue());
+                        System.out.println(cell.getEffectiveValue());
+                    }else{
+                        System.out.println("Trying create new cell");
+                    }
+
+//                catch (NullPointerException e) {
+//                    System.out.println(e.getMessage());
+//                }
+                    System.out.println("Please enter value you want: ");//לעשות חפירה שתסביר את הפורמט וקליטה בinput handler חלוקת אחריות על בידקות תקינות וכו,
+                    Scanner scanner = new Scanner(System.in);//input handler
+                    String input = scanner.nextLine();//input handler
+                    controller.engine.updateCellValueFromOriginalValue(input, coordinate);
+                    System.out.println("Cell updated successfully!");
                     DISPLAY_SHEET.execute(controller);
+                } catch (Exception e) {
+                    System.out.println(e.getMessage());
                 }
 
             }

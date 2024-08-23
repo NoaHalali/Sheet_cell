@@ -39,8 +39,12 @@ public class EngineImpl implements Engine {
         if (!sheetLoadad()) {
             throw new IllegalStateException(SHEET_NOT_LOADED_MESSAGE);
         }
+        Cell cell=currentSheet.getCellByCoord(coordinate);
 
-        return currentSheet.getCellByCoord(coordinate).toCellDTO();
+        if(cell!= null){
+            return cell.toCellDTO();
+        }
+        return null;
 
     }
 
