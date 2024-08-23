@@ -13,8 +13,8 @@ public class Divide extends BinaryExpression{
                 (!rightCellType.equals(CellType.NUMERIC) && !rightCellType.equals(CellType.UNKNOWN)) ) {
             throw new IllegalArgumentException("Invalid argument types for DIVIDE function. Expected NUMERIC, but got " + leftCellType + " and " + rightCellType);
         }
-            left = left;
-            right = right;
+            left = expression1;
+            right = expression2;
     }
 
     @Override

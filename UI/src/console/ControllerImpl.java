@@ -76,6 +76,11 @@ public class ControllerImpl implements Controller {
             @Override
             public void execute(ControllerImpl controller) {
                 try {
+                    if (!controller.engine.sheetLoadad())
+                    {
+                        System.out.println("Sheet is not loaded. Please load a sheet before attempting to access it.");
+                        return;
+                    }
                     System.out.println("Please enter cell coordinate ");
                     Coordinate coordinate = controller.inputHandler.getCoordinateFromUser();
                     CellDTO cell = controller.engine.getCellDTOByCoordinate(coordinate);
@@ -84,9 +89,6 @@ public class ControllerImpl implements Controller {
 
                 catch (Exception e)
                 {
-                    //TODO -
-                    // add checking if cell is out of bounds -V
-                    // what if empty?
                     System.out.println(e.getMessage());
                     System.out.println();
                 }
@@ -101,15 +103,27 @@ public class ControllerImpl implements Controller {
             @Override
             public void execute(ControllerImpl controller) {
                 try{
+
                 System.out.println("Please enter cell coordinate ");
                 Coordinate coordinate = controller.inputHandler.getCoordinateFromUser();
-                System.out.println("Please enter value you want ");//לעשות חפירה שתסביר את הפורמט וקליטה בinput handler חלוקת אחריות על בידקות תקינות וכו,
+                try {
+                    CellDTO cell = controller.engine.getCellDTOByCoordinate(coordinate);
+                    System.out.println(coordinate);
+                    System.out.println(cell.getOriginalValue());
+                    System.out.println(cell.getEffectiveValue());
+                }
+                catch (NullPointerException e) {
+                    System.out.println(e.getMessage());
+                }
+                System.out.println("Please enter value you want: ");//לעשות חפירה שתסביר את הפורמט וקליטה בinput handler חלוקת אחריות על בידקות תקינות וכו,
                 Scanner scanner = new Scanner(System.in);//input handler
                 String input = scanner.nextLine();//input handler
                 controller.engine.updateCellValueFromOriginalValue(input, coordinate);
+                System.out.println("Cell updated successfully!");
                 }
                 catch (Exception e){
                     System.out.println(e.getMessage());
+                    DISPLAY_SHEET.execute(controller);
                 }
 
             }

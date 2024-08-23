@@ -91,8 +91,8 @@ public class OutputHandler {
         if(effectiveValue.getCellType() == CellType.NUMERIC) {
             double num = effectiveValue.extractValueWithExpectation(Double.class);
 
-            if (Double.isNaN(num)) {
-                return "NaN"; // החזרה של "NaN" אם הערך הוא NaN
+            if (Double.isNaN(num) || Double.isInfinite(num)) {
+                return "NaN"; // החזר "NaN" אם הערך הוא NaN או Infinity
             }
 
             StringBuilder str = new StringBuilder();

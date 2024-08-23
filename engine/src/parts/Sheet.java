@@ -71,7 +71,6 @@ public class Sheet {
 
     public Cell getCellByCoord(Coordinate coord){
 
-        //TODO - add checking if cell is out of bounds, or empty?
         if (!isCoordinateInBounds(coord)) {
 
 
@@ -86,7 +85,7 @@ public class Sheet {
         Cell cell = cellsMatrix[coord.getRow()-1][coord.getCol()-1];
 
         if (cell == null) {
-            throw new NullPointerException(("There is no existing cell at coordinate: " + coord));
+            throw new NullPointerException(("Cell at coordinate: " + coord + " is Empty."));
         }
         return cell;
     }
@@ -318,8 +317,7 @@ public class Sheet {
 //להוסיף תא זה רלשימת המשפעים ומושפעים
                     break;
                 default:
-                    //EXEPTION
-
+                    throw new IllegalArgumentException("Illegal function name." + list.get(0) + "is not an option.");
             }
         }
         return res;
