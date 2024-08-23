@@ -33,7 +33,8 @@ public class FileManager {
         validateSheetSize(XMLSheet);
         vaidateCells(XMLSheet);
         Sheet sheet = convertSLTSheetToSheet(XMLSheet);
-        parseExpressions(sheet);
+
+        sheet.validateSheetExpressions();
 
         return sheet;
     }
@@ -153,20 +154,17 @@ public class FileManager {
     //3. check types in expressions V
     //4. evaluete - ref and etc..
     //5. update dependencies
-    private void parseExpressions(Sheet sheet) throws Exception {
-        Cell[][] cellsMatrix = sheet.getCellsMatrix();
-        for(Cell[] cells : cellsMatrix){
-            for(Cell cell : cells){
-                if(cell!=null){
-                    sheet.updateCellValueFromOriginalValue(cell.getOriginalValue(),cell.getCoordinate());
-                }
-            }
-        }
-    }
 
-    private void check
-
-
+//    private void parseExpressions(Sheet sheet) throws Exception {
+//        Cell[][] cellsMatrix = sheet.getCellsMatrix();
+//        for(Cell[] cells : cellsMatrix){
+//            for(Cell cell : cells){
+//                if(cell!=null){
+//                    sheet.updateCellValueFromOriginalValue(cell.getOriginalValue(),cell.getCoordinate());
+//                }
+//            }
+//        }
+//    }
 }
 
 

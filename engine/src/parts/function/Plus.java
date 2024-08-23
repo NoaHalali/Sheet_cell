@@ -35,6 +35,7 @@ public class Plus extends BinaryExpression {
              
         }
         catch(ClassCastException e) {
+            //TODO - in the other classes (explicit message)
             throw new ClassCastException(e.getMessage() +"for PLUS function. Expected NUMERIC, but got" +leftValue.getCellType() + " and " + rightValue.getCellType());
         }
     }
