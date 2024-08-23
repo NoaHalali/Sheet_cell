@@ -84,9 +84,9 @@ public class Sheet {
         }
         Cell cell = cellsMatrix[coord.getRow()-1][coord.getCol()-1];
 
-        if (cell == null) {
-            throw new NullPointerException(("Cell at coordinate: " + coord + " is Empty."));
-        }
+//        if (cell == null) {
+//            throw new NullPointerException(("Cell at coordinate: " + coord + " is Empty."));
+//        }
         return cell;
     }
 
