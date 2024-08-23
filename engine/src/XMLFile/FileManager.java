@@ -125,13 +125,9 @@ public class FileManager {
         Cell[][] cellsMatrix = new Cell[rows][columns];
 
         for (STLCell xmlCell : xmlSheet.getSTLCells().getSTLCell()) {
-            int row = xmlCell.getRow() ; // Assuming 1-based indexing in XML
-            int col = xmlCell.getColumn().charAt(0) - 'A'+1; // Assuming columns are A, B, C...
+            int row = xmlCell.getRow(); // Assuming 1-based indexing in XML
+            int col = xmlCell.getColumn().charAt(0) - 'A' + 1; // Assuming columns are A, B, C...
 
-            // אתחול רשימות לרשימות שמשפיעות ותלויות
-//            List<Cell> neighbors = new ArrayList<>();
-//            List<Cell> influencingOn = new ArrayList<>();
-////            List<Cell> dependsOn = new ArrayList<>();
             Coordinate coord = new CoordinateImpl(row, col);
 
             // אתחול התא בעזרת הקונסטרקטור החדש
@@ -139,16 +135,14 @@ public class FileManager {
                     coord,
                     xmlCell.getSTLOriginalValue() // יצירת Expression מערך התא
             );
-            //sheet.updateCellValueFromOriginalValue(xmlCell.getSTLOriginalValue(),coord);
 
-            cellsMatrix[row-1][col-1] = cell;
+            cellsMatrix[row - 1][col - 1] = cell;
         }
-
         sheet.setCellsMatrix(cellsMatrix);
 
         return sheet;
     }
-
+}
     //1. set original value V
     //2. new Expression (Numeric, bool,....) V
     //3. check types in expressions V
@@ -165,7 +159,7 @@ public class FileManager {
 //            }
 //        }
 //    }
-}
+
 
 
 

@@ -105,7 +105,6 @@ public class Sheet {
         evaluteSheetValuesForRefCheck();
     }
 
-    //TODO - maybe move to Cell
     public void updateCellValueFromOriginalValue(String originalValue, Coordinate coord) throws Exception {
 
         //נבדוק אם תא זהקיים במבנה הנתונים אם לא נקצה מקום תא לו נעדכן ערך
