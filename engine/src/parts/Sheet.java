@@ -7,7 +7,7 @@ import parts.cell.expression.Expression;
 import parts.cell.expression.impl.BoolExpression;
 import parts.cell.expression.impl.NumberExpression;
 import parts.cell.expression.impl.StringExpression;
-import parts.cell.expression.impl.function.*;
+import parts.function.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -75,7 +75,7 @@ public class Sheet {
         if (!isCoordinateValid(coord)) {
 
 
-            String errorMessage = String.format("The coordinate is out of bounds. " +
+            String errorMessage = String.format("The coordinate is out of bounds!\n" +
                             "Valid column range: %c to %c, " +
                             "Valid row range: %d to %d. " +
                             "Given coordinate: %s",

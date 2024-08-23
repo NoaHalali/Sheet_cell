@@ -1,4 +1,4 @@
-package parts.cell.expression.impl.function;
+package parts.function;
 
 import parts.cell.expression.effectiveValue.EffectiveValue;
 import parts.cell.expression.effectiveValue.EffectiveValueImpl;
@@ -6,10 +6,10 @@ import parts.cell.expression.Expression;
 import parts.cell.CellType;
 
 public class Sub extends TernaryExpression{
-    public Sub(Expression exp1, Expression exp2, Expression exp3) {
-        CellType exp1CellType = exp1.getFunctionResultType();
-        CellType exp2CellType = exp2.getFunctionResultType();
-        CellType exp3CellType = exp3.getFunctionResultType();
+    public Sub(Expression expression1, Expression expression2, Expression expression3) {
+        CellType exp1CellType = expression1.getFunctionResultType();
+        CellType exp2CellType = expression2.getFunctionResultType();
+        CellType exp3CellType = expression3.getFunctionResultType();
 
         if ( (!exp1CellType.equals(CellType.NUMERIC) && !exp1CellType.equals(CellType.UNKNOWN)) ||
                 (!exp2CellType.equals(CellType.NUMERIC) && !exp2CellType.equals(CellType.UNKNOWN)) ||
@@ -17,17 +17,17 @@ public class Sub extends TernaryExpression{
           {
             throw new IllegalArgumentException("Invalid argument types for POW function. Expected STRING, NUMERIC, NUMERIC, but got " + exp1CellType + " , " + exp2CellType + " and " + exp3CellType);
           }
-        this.exp1 = exp1;
-        this.exp2 = exp2;
-        this.exp3=exp3;
+        this.expression1 = expression1;
+        this.expression2 = expression2;
+        this.expression3 = expression3;
     }
 
     @Override
     public EffectiveValue calculateEffectiveValue() {
         try {
-            EffectiveValue mainValue = exp1.calculateEffectiveValue();
-            EffectiveValue index1Val = exp2.calculateEffectiveValue();
-            EffectiveValue index2Val = exp3.calculateEffectiveValue();
+            EffectiveValue mainValue = expression1.calculateEffectiveValue();
+            EffectiveValue index1Val = expression2.calculateEffectiveValue();
+            EffectiveValue index2Val = expression3.calculateEffectiveValue();
 
             // בדיקה אם הערך של המחרוזת הוא "UNDEFINED"
             String str = mainValue.extractValueWithExpectation(String.class);

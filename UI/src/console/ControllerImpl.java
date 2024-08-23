@@ -81,8 +81,8 @@ public class ControllerImpl implements Controller {
                     // add checking if cell is out of bounds -V
                     // what if empty?
                     System.out.println(e.getMessage());
+                    System.out.println();
                 }
-
             }
             @Override
             public String toString() {

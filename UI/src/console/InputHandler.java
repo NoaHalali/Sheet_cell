@@ -8,30 +8,35 @@ import java.util.Scanner;
 public class InputHandler {
 
 
-    public Coordinate getCoordinateFromUser() {
+    public Coordinate getCoordinateFromUser() throws IllegalArgumentException {
 
         Scanner scanner = new Scanner(System.in);
         String input;
-        boolean validInput = false;
-        Coordinate coordinate = null;
+        //boolean validInput = false;
+        //TODO - if there is time, replace to the loop below with option of exit to menu
+        input = scanner.nextLine();
+        return parseCoordinate(input);
 
-        while (!validInput) {
-            input = scanner.nextLine();
-            try {
-                coordinate = parseCoordinate(input);
-                validInput = true;
-            } catch (IllegalArgumentException e) {
-                System.out.println(e.getMessage());
-                System.out.println("Input must start with a capital letter and end with a number, e.g., A23.");
-            } catch (Exception e) {
-                System.out.println("Unexpected error: " + e.getMessage());
-            }
-        }
+        //This option is with a loop
+//       Scanner scanner = new Scanner(System.in);
+//       String input;
+//       boolean validInput = false;
+//        while (!validInput) {
+//            input = scanner.nextLine();
+//            try {
+//                coordinate = parseCoordinate(input);
+//                validInput = true;
+//            } catch (IllegalArgumentException e) {
+//                System.out.println(e.getMessage());
+//                System.out.println("Input must start with a capital letter and end with a number, e.g., A23.");
+//            } catch (Exception e) {
+//                System.out.println("Unexpected error: " + e.getMessage());
+//            }
+//        }
 
-        return coordinate;
     }
 
-    public Coordinate parseCoordinate(String input) {
+    public Coordinate parseCoordinate(String input) throws IllegalArgumentException {
 
         if (input.matches("^[A-Z]+[0-9]+$")) {
             String columnString = input.replaceAll("[0-9]", "");
@@ -42,7 +47,8 @@ public class InputHandler {
 
             return new CoordinateImpl(row, column);
         } else {
-            throw new IllegalArgumentException("Invalid coordinate format. ");
+            throw new IllegalArgumentException("Invalid coordinate format!\n" +
+                    "Input must start with an upper case capital letter and end with a number, e.g., A23.");
         }
     }
 
@@ -64,14 +70,19 @@ public class InputHandler {
             try {
                 userInput = Integer.parseInt(scanner.nextLine());
                 if (userInput < 1 || userInput > 6) {
-                    throw new IllegalArgumentException("The number must be between 1 and " + MenuOption.values().length + ".");
+                    System.out.println("Invalid option number!\n" +
+                            "Option number must be between 1 and " + MenuOption.values().length + ".\n" +
+                            "Try again:" );
+//                    throw new IllegalArgumentException("Invalid option!\n" +
+//                            "Option number must be between 1 and " + MenuOption.values().length + ".");
                 }
-                selectedOption = MenuOption.values()[userInput - 1];
-                validInput = true;
-            } catch (NumberFormatException e) {
-                System.out.println("Please enter a valid integer between 1 and " + MenuOption.values().length + ".");
-            } catch (IllegalArgumentException e) {
-                System.out.println(e.getMessage());
+                else
+                {
+                    selectedOption = MenuOption.values()[userInput - 1];
+                    validInput = true;
+                }
+            } catch (Exception e) {
+                System.out.println("Invalid input. Please enter a valid integer between 1 and " + MenuOption.values().length + ":");
             }
         }
 
