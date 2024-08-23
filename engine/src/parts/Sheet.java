@@ -115,7 +115,7 @@ public class Sheet {
                 createNewCell(coord,originalValue);
             }
             Cell changeCell = getCellByCoord(coord);
-            changeCell.checkForCircularDependencyWrapper(coord,dependsOnCellList);
+            //changeCell.checkForCircularDependencyWrapper(coord,dependsOnCellList);
             changeCell.setExpression(expression);
             List<Cell> tmpList = changeCell.getDependsOn();
             changeCell.setDependsOn(dependsOnCellList);
