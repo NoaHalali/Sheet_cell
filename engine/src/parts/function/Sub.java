@@ -11,7 +11,7 @@ public class Sub extends TernaryExpression{
         CellType exp2CellType = expression2.getFunctionResultType();
         CellType exp3CellType = expression3.getFunctionResultType();
 
-        if ( (!exp1CellType.equals(CellType.NUMERIC) && !exp1CellType.equals(CellType.UNKNOWN)) ||
+        if ( (!exp1CellType.equals(CellType.STRING) && !exp1CellType.equals(CellType.UNKNOWN)) ||
                 (!exp2CellType.equals(CellType.NUMERIC) && !exp2CellType.equals(CellType.UNKNOWN)) ||
                 (!exp3CellType.equals(CellType.NUMERIC) && !exp3CellType.equals(CellType.UNKNOWN)))
           {

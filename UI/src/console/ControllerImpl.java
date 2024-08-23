@@ -29,6 +29,7 @@ public class ControllerImpl implements Controller {
             }
         }
     }
+
     public enum MenuOption {
 
         //1
@@ -56,8 +57,14 @@ public class ControllerImpl implements Controller {
         DISPLAY_SHEET {
             @Override
             public void execute(ControllerImpl controller) {
-                SheetDTO sheet = controller.engine.getCurrentSheetDTO();
-                controller.outputHandler.printSheetData(sheet);
+                try{
+                    SheetDTO sheet = controller.engine.getCurrentSheetDTO();
+                    controller.outputHandler.printSheetData(sheet);
+                }
+                catch (Exception e) {
+                    System.out.println(e.getMessage());
+                }
+
             }
             @Override
             public String toString() {
@@ -93,12 +100,18 @@ public class ControllerImpl implements Controller {
         UPDATE_CELL {
             @Override
             public void execute(ControllerImpl controller) {
+                try{
                 System.out.println("Please enter cell coordinate ");
                 Coordinate coordinate = controller.inputHandler.getCoordinateFromUser();
                 System.out.println("Please enter value you want ");//לעשות חפירה שתסביר את הפורמט וקליטה בinput handler חלוקת אחריות על בידקות תקינות וכו,
                 Scanner scanner = new Scanner(System.in);//input handler
                 String input = scanner.nextLine();//input handler
                 controller.engine.updateCellValueFromOriginalValue(input, coordinate);
+                }
+                catch (Exception e){
+                    System.out.println(e.getMessage());
+                }
+
             }
             @Override
             public String toString() {

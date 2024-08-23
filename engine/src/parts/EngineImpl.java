@@ -14,8 +14,15 @@ public class EngineImpl implements Engine {
 
 
     //1
-    public void readFileData(String filePath) throws FileNotFoundException, IllegalArgumentException {
-        currentSheet = fileManager.processFile(filePath);
+    public void readFileData(String filePath) throws Exception {
+        try {
+            currentSheet = fileManager.processFile(filePath);
+        }
+        catch (Exception e) {
+            currentSheet = null;
+            throw new Exception(e.getMessage());
+        }
+
     }
 
     //2
@@ -39,7 +46,7 @@ public class EngineImpl implements Engine {
 
 
     //4 , ???
-    public void updateCellValueFromOriginalValue(String originalValue, Coordinate coord) {
+    public void updateCellValueFromOriginalValue(String originalValue, Coordinate coord) throws Exception {
         if (!sheetLoadad()) {
             throw new IllegalStateException(SHEET_NOT_LOADED_MESSAGE);
         }

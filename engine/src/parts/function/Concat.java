@@ -9,8 +9,8 @@ public class Concat extends BinaryExpression{
     public Concat(Expression left, Expression right) {
         CellType leftCellType = left.getFunctionResultType();
         CellType rightCellType = right.getFunctionResultType();
-        if ( (!leftCellType.equals(CellType.NUMERIC) && !leftCellType.equals(CellType.UNKNOWN)) ||
-                (!rightCellType.equals(CellType.NUMERIC) && !rightCellType.equals(CellType.UNKNOWN)) ) {
+        if ( (!leftCellType.equals(CellType.STRING) && !leftCellType.equals(CellType.UNKNOWN)) ||
+                (!rightCellType.equals(CellType.STRING) && !rightCellType.equals(CellType.UNKNOWN)) ) {
             throw new IllegalArgumentException("Invalid argument types for CONCAT function. Expected STRING, but got " + leftCellType + " and " + rightCellType);
         }
       this.left = left;

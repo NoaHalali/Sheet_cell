@@ -72,7 +72,7 @@ public class Sheet {
     public Cell getCellByCoord(Coordinate coord){
 
         //TODO - add checking if cell is out of bounds, or empty?
-        if (!isCoordinateValid(coord)) {
+        if (!isCoordinateInBounds(coord)) {
 
 
             String errorMessage = String.format("The coordinate is out of bounds!\n" +
@@ -83,7 +83,12 @@ public class Sheet {
 
             throw new IllegalArgumentException(errorMessage);
         }
-        return cellsMatrix[coord.getRow()-1][coord.getCol()-1];
+        Cell cell = cellsMatrix[coord.getRow()-1][coord.getCol()-1];
+
+        if (cell == null) {
+            throw new NullPointerException(("There is no existing cell at coordinate: " + coord));
+        }
+        return cell;
     }
 
 
@@ -97,13 +102,13 @@ public class Sheet {
     }
 
     //TODO - maybe move to Cell
-    public void updateCellValueFromOriginalValue(String originalValue, Coordinate coord){
+    public void updateCellValueFromOriginalValue(String originalValue, Coordinate coord) throws Exception {
 
         //נבדוק אם תא זהקיים במבנה הנתונים אם לא נקצה מקום תא לו נעדכן ערך
         //Cell changeCell =currentSheet.getCellByCoord(coord);// למצוא אותו במבנה הנתונים
         //ליצור רשימה חדשה של תאים ונבצע השמה ל- רשימת התאים מהם הוא מושפע בנוסף נשמור את הרשימה הישנה במשתנה כלשהו
         List<Cell> dependsOnCellList = new LinkedList<Cell>();
-        try {
+
             Expression expression = getExpressionOfCellCommand4(originalValue, dependsOnCellList);
             //אם הכל עבר בהצלחה
 
@@ -127,24 +132,21 @@ public class Sheet {
 //            upgradeVersion();
             //changeCell.updateCellsVersions(getVersion());
 
-        }
-        catch (Exception ex){
-            //TODO throw new Exception(ex);
-        }
+
         //נחשב את הערך
     }
 
-    public void setCellValueFromOriginalValueCommand1(String originalValue,Coordinate coord){
-        try {
-            Cell changeCell = getCellByCoord(coord);
-            Expression expression = getExpressionOfCellCommand1(originalValue);
-            changeCell.setExpression(expression);
-        }
-        catch (Exception ex){
-            //TODO throw new Exception(ex);
-        }
-        //נחשב את הערך
-    }
+//    public void setCellValueFromOriginalValueCommand1(String originalValue,Coordinate coord){
+//        try {
+//            Cell changeCell = getCellByCoord(coord);
+//            Expression expression = getExpressionOfCellCommand1(originalValue);
+//            changeCell.setExpression(expression);
+//        }
+//        catch (Exception ex){
+//            //TODO throw new Exception(ex);
+//        }
+//        //נחשב את הערך
+//    }
 
     public static List<String> splitExpressionToStrings(String expression) {
         expression = expression.trim();
@@ -203,63 +205,63 @@ public class Sheet {
         }
     }
 
-    public Expression getExpressionOfCellCommand1(String OriginalValue) throws Exception {
-        List<String> list = splitExpressionToStrings(OriginalValue);
-        Expression arg2 = null;
-        Expression res = null;
-        if(list.size() == 1){
-            res = getSmallArgs(list.get(0));
-        }
-        else {
-            Expression arg1 = getExpressionOfCellCommand1(list.get(1));
-            if(list.size() > 2 ){
-                arg2 = getExpressionOfCellCommand1(list.get(2));
-            }
-
-            switch (list.get(0)) {
-                case "PLUS":
-                    res = new Plus(arg1, arg2);
-                    break;
-                case "MINUS":
-                    res = new Minus(arg1, arg2);
-                    break;
-                case "POW":
-                    res = new Pow(arg1, arg2);
-                    break;
-                case "ABS":
-                    res = new Abs(arg1);
-                    break;
-                case "DIVIDE":
-                    res = new Divide(arg1, arg2);
-                    break;
-                case "TIMES":
-                    res = new Times(arg1, arg2);
-                    break;
-                case "MOD":
-                    res = new Mod(arg1, arg2);
-                    break;
-                case "CONCAT":
-                    res = new Concat(arg1, arg2);
-                    break;
-                case "SUB":
-                    if (list.size() > 2) {
-                        Expression arg3 = getExpressionOfCellCommand1(list.get(3));
-                        res = new Sub(arg1,arg2,arg3);
-                    }
-                    break;
-                case "REF":
-                    Coordinate RefCoord = CoordinateImpl.stringToCoord(list.get(1));
-                    Cell refcell = getCellByCoord(RefCoord);//find Cell in map or 2dim array and cell coord: list.get(1)
-                    res = new Ref(refcell);
-
-//להוסיף תא זה רלשימת המשפעים ומושפעים
-                    break;
-                default:
-                    //EXEPTION
-            }
-        }
-        return res;
-    }
+//    public Expression getExpressionOfCellCommand1(String OriginalValue) throws Exception {
+//        List<String> list = splitExpressionToStrings(OriginalValue);
+//        Expression arg2 = null;
+//        Expression res = null;
+//        if(list.size() == 1){
+//            res = getSmallArgs(list.get(0));
+//        }
+//        else {
+//            Expression arg1 = getExpressionOfCellCommand1(list.get(1));
+//            if(list.size() > 2 ){
+//                arg2 = getExpressionOfCellCommand1(list.get(2));
+//            }
+//
+//            switch (list.get(0)) {
+//                case "PLUS":
+//                    res = new Plus(arg1, arg2);
+//                    break;
+//                case "MINUS":
+//                    res = new Minus(arg1, arg2);
+//                    break;
+//                case "POW":
+//                    res = new Pow(arg1, arg2);
+//                    break;
+//                case "ABS":
+//                    res = new Abs(arg1);
+//                    break;
+//                case "DIVIDE":
+//                    res = new Divide(arg1, arg2);
+//                    break;
+//                case "TIMES":
+//                    res = new Times(arg1, arg2);
+//                    break;
+//                case "MOD":
+//                    res = new Mod(arg1, arg2);
+//                    break;
+//                case "CONCAT":
+//                    res = new Concat(arg1, arg2);
+//                    break;
+//                case "SUB":
+//                    if (list.size() > 2) {
+//                        Expression arg3 = getExpressionOfCellCommand1(list.get(3));
+//                        res = new Sub(arg1,arg2,arg3);
+//                    }
+//                    break;
+//                case "REF":
+//                    Coordinate RefCoord = CoordinateImpl.stringToCoord(list.get(1));
+//                    Cell refcell = getCellByCoord(RefCoord);//find Cell in map or 2dim array and cell coord: list.get(1)
+//                    res = new Ref(refcell);
+//
+////להוסיף תא זה רלשימת המשפעים ומושפעים
+//                    break;
+//                default:
+//                    //EXEPTION
+//            }
+//        }
+//        return res;
+//    }
 
     public Expression getExpressionOfCellCommand4(String OriginalValue,List<Cell> dependsONCellList) throws Exception {//עוד בבדיקה !!!
         List<String> list = splitExpressionToStrings(OriginalValue);
@@ -327,12 +329,13 @@ public class Sheet {
         return cellsMatrix;
     }
 
-    public boolean isCoordinateValid(Coordinate coord) {
+    public boolean isCoordinateInBounds(Coordinate coord) {
         int row = coord.getRow();
         int col = coord.getCol();
 
         // בדיקה שהשורה והעמודה נמצאות בתוך הגבולות של הגיליון
         return row > 0 && row <= numberOfRows && col > 0 && col <= numberOfCols;
+
     }
 }
     // איך לעדכן מידע של תאים בעולם של רפרנס

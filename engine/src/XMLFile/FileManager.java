@@ -26,7 +26,7 @@ public class FileManager {
     private static final char minCol = 'A';
     private static final int minRow = 1;
 
-    public Sheet processFile(String filePath) throws FileNotFoundException, IllegalArgumentException {
+    public Sheet processFile(String filePath) throws Exception {
 
         validatePath(filePath);
         STLSheet XMLSheet = loadXML(filePath);
@@ -153,7 +153,7 @@ public class FileManager {
     //3. check types in expressions V
     //4. evaluete - ref and etc..
     //5. update dependencies
-    private void parseExpressions(Sheet sheet) {
+    private void parseExpressions(Sheet sheet) throws Exception {
         Cell[][] cellsMatrix = sheet.getCellsMatrix();
         for(Cell[] cells : cellsMatrix){
             for(Cell cell : cells){
