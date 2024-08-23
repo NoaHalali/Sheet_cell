@@ -14,6 +14,7 @@ public class CoordinateImpl implements Coordinate {
     public static Coordinate stringToCoord(String Coord){
       if(Coord.length()!=2){
           //error
+          //TODO ADD EXEPTION AND RECHECK
           return null;
       }
       else{

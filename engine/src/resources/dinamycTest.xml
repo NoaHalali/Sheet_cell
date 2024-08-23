@@ -11,7 +11,7 @@
 			<STL-Original-Value>{REF,B1}</STL-Original-Value>
 		</STL-Cell>
 		<STL-Cell row="1" column="D">
-			<STL-Original-Value>{DIVIDE,-4,0}</STL-Original-Value>
+			<STL-Original-Value>4</STL-Original-Value>
 		</STL-Cell>
 	</STL-Cells>
 </STL-Sheet>

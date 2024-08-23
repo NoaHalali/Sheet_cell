@@ -119,6 +119,7 @@ public class Sheet {
             changeCell.setExpression(expression);
             List<Cell> tmpList = changeCell.getDependsOn();
             changeCell.setDependsOn(dependsOnCellList);
+
             for (Cell cell : tmpList) {
                 cell.removeCellFromInfluencingOnList(changeCell);
             }
@@ -262,6 +263,7 @@ public class Sheet {
 //        return res;
 //    }
 
+    //מחזירה אקספרשיון מערך מקור
     public Expression getExpressionOfCellCommand4(String OriginalValue,List<Cell> dependsONCellList) throws Exception {//עוד בבדיקה !!!
         List<String> list = splitExpressionToStrings(OriginalValue);
         Expression arg2 = null;
