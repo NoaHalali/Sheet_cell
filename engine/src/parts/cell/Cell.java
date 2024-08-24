@@ -121,11 +121,34 @@ public class Cell implements Serializable {
     public Coordinate getCoordinate() {
         return coordinate;
     }
-
-    public void checkForCircularDependencyWrapper(Coordinate coordinate ,List<Cell> dependsOn) {
+    public void CheckIfCellCanBeDeleted(){
+        if(!influencingOn.isEmpty()){
+           throw new RuntimeException( "cannot delete cell on coordinate "+coordinate + " because he is influencing other cell with ref" );
+        }
+    }
+    public void CheckIfCellExpressionCanBeExpression(){
         HashSet<Coordinate> Coordset = new HashSet<>();
         Coordset.add(coordinate);
-        checkForCircularDependency(Coordset,dependsOn);
+        CheckIfCellExpressionCanBeUpdated(Coordset);
+
+    }
+    public void CheckIfCellExpressionCanBeUpdated(HashSet<Coordinate> coordSet){
+
+        getEffectiveValue();
+        for(Cell cell : influencingOn){
+            if(coordSet.contains(cell.getCoordinate())){
+                coordSet.remove(cell.getCoordinate());
+                cell.CheckIfCellExpressionCanBeUpdated(coordSet);
+            }
+
+        }
+
+    }
+
+    public void checkForCircularDependencyWrapper(Coordinate coordinate ,List<Cell> dependsOn) {
+        HashSet<Coordinate> coordSet = new HashSet<>();
+        coordSet.add(coordinate);
+        checkForCircularDependency(coordSet,dependsOn);
 
     }
     public void checkForCircularDependency(HashSet<Coordinate> coordSet,List<Cell> dependsOn) {
