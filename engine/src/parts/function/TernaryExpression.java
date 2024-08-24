@@ -4,7 +4,9 @@ import parts.cell.CellType;
 import parts.cell.expression.effectiveValue.EffectiveValue;
 import parts.cell.expression.Expression;
 
-public abstract class TernaryExpression implements Expression {
+import java.io.Serializable;
+
+public abstract class TernaryExpression implements Expression, Serializable {
     protected Expression expression1;
     protected Expression expression2;
     protected Expression expression3;

@@ -4,7 +4,9 @@ import parts.cell.expression.effectiveValue.EffectiveValue;
 import parts.cell.expression.effectiveValue.EffectiveValueImpl;
 import parts.cell.expression.Expression;
 
-public class BoolExpression implements Expression {
+import java.io.Serializable;
+
+public class BoolExpression implements Expression, Serializable {
     private boolean flag;
 
     public BoolExpression(boolean flag) {

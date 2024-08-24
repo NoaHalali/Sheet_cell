@@ -3,8 +3,10 @@ package parts.function;
 import parts.cell.expression.effectiveValue.EffectiveValue;
 import parts.cell.expression.Expression;
 
+import java.io.Serializable;
 
-public abstract class BinaryExpression implements Expression {
+
+public abstract class BinaryExpression implements Expression, Serializable {
     protected Expression left;
     protected Expression right;
 

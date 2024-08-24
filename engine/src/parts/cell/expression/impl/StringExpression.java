@@ -5,7 +5,9 @@ import parts.cell.expression.effectiveValue.EffectiveValue;
 import parts.cell.expression.effectiveValue.EffectiveValueImpl;
 import parts.cell.expression.Expression;
 
-public class StringExpression implements Expression {
+import java.io.Serializable;
+
+public class StringExpression implements Expression, Serializable {
     String value;
     public StringExpression(String value) {
         this.value=value;

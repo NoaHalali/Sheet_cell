@@ -4,7 +4,9 @@ import parts.cell.CellType;
 import parts.cell.expression.effectiveValue.EffectiveValue;
 import parts.cell.expression.Expression;
 
-public  abstract class UnaryExpression implements Expression {
+import java.io.Serializable;
+
+public  abstract class UnaryExpression implements Expression, Serializable {
     protected Expression exp;
 
     //    public UnaryExpression(Expression exp) {

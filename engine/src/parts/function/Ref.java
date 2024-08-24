@@ -5,8 +5,10 @@ import parts.cell.CellType;
 import parts.cell.expression.effectiveValue.EffectiveValue;
 import parts.cell.expression.Expression;
 
+import java.io.Serializable;
 
-public class Ref implements Expression {
+
+public class Ref implements Expression, Serializable {
     Cell refCell;
     public Ref(Cell refCell) throws NullPointerException  {
         if(refCell == null){
