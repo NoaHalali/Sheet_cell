@@ -10,12 +10,12 @@ import java.io.Serializable;
 public class StringExpression implements Expression, Serializable {
     String value;
     public StringExpression(String value) {
-        this.value=value;
+        this.value =value;
     }
 
     @Override
     public EffectiveValue calculateEffectiveValue() {
-        return new EffectiveValueImpl(CellType.STRING, value); // חישוב ערך אפקטיבי, במקרה זה חיתוך רווחים
+        return new EffectiveValueImpl(CellType.STRING, value);
     }
 
     @Override

@@ -45,9 +45,7 @@ public class Sheet implements Serializable {
     public String getSheetName() {
         return name;
     }
-    public void upgradeVersion(){
-        version++;
-    }
+
     public int getVersion() {
         return version;
     }
@@ -69,6 +67,15 @@ public class Sheet implements Serializable {
                         .map(cell -> cell != null ? cell.toCellDTO() : null)
                         .toArray(CellDTO[]::new))
                 .toArray(CellDTO[][]::new);
+    }
+    public void upgradeCellsVersions(){
+            version++;
+            Arrays.stream(cellsMatrix)                          // Stream over rows of cellsMatrix
+                    .flatMap(Arrays::stream)                    // Flatten the stream of rows into a single stream of cells
+                    .filter(cell -> cell != null)                   // Filter out null cells
+                    .filter(Cell::calculateAndCheckIfUpdated)   // Filter cells that have been updated
+                    .forEach(cell -> cell.updateCellsVersions(version));  // Update versions of influencing cells
+
     }
 
     public Cell getCellByCoord(Coordinate coord){
@@ -94,7 +101,7 @@ public class Sheet implements Serializable {
 
 
     public void createNewCell(Coordinate coord, String originalValue){
-        cellsMatrix[coord.getRow()][coord.getCol()] = new Cell(coord,originalValue);
+        cellsMatrix[coord.getRow()-1][coord.getCol()-1] = new Cell(coord,originalValue);
     }
 
     public void setCellsMatrix(Cell[][] cellsMatrix) {
@@ -133,6 +140,10 @@ public class Sheet implements Serializable {
             if (getCellByCoord(coord) == null) {
                 createNewCell(coord, originalValue);
                 changeCell = getCellByCoord(coord);
+                changeCell.setExpression(expression);
+                changeCell.getAndUpdateEffectiveValue();
+                changeCell.updateCellsVersions(version);
+
             }else {
                 changeCell = getCellByCoord(coord);
                 Expression oldExpression = changeCell.getCellValue();
@@ -144,23 +155,22 @@ public class Sheet implements Serializable {
                     changeCell.setExpression(oldExpression);
                     throw new Exception(e.getMessage());
                 }
+                changeCell.setCellOriginalValue(originalValue);
             }
+
             updateDependencies(changeCell, dependsOnCellList);
-            upgradeVersion();
-            changeCell.updateCellsVersions(getVersion());
-        }else{
-            //upgradeVersion();
+
         }
 
     }
 
 
     public static List<String> splitExpressionToStrings(String expression) {
-        expression = expression.trim();
+        expression = expression;
         List<String> parsed = new ArrayList<>();
 
         if (expression.startsWith("{") && expression.endsWith("}")) {
-            expression = expression.substring(1, expression.length() - 1).trim();
+            expression = expression.substring(1, expression.length() - 1);
         }
 
         int bracketDepth = 0;
@@ -169,7 +179,7 @@ public class Sheet implements Serializable {
         for (char c : expression.toCharArray()) {
             if (c == '{') {
                 if (bracketDepth == 0 && token.length() > 0) {
-                    parsed.add(token.toString().trim());
+                    parsed.add(token.toString());
                     token.setLength(0);
                 }
                 bracketDepth++;
@@ -177,13 +187,13 @@ public class Sheet implements Serializable {
                 bracketDepth--;
                 if (bracketDepth == 0) {
                     token.append(c);
-                    parsed.add(token.toString().trim());
+                    parsed.add(token.toString());
                     token.setLength(0);
                     continue;
                 }
             } else if (c == ',' && bracketDepth == 0) {
                 if (token.length() > 0) {
-                    parsed.add(token.toString().trim());
+                    parsed.add(token.toString());
                     token.setLength(0);
                 }
                 continue;
@@ -192,12 +202,12 @@ public class Sheet implements Serializable {
         }
 
         if (token.length() > 0) {
-            parsed.add(token.toString().trim());
+            parsed.add(token.toString());
         }
-        List<String> updatedList = parsed.stream()
-                .filter(str -> str != null && !str.trim().isEmpty())
-                .collect(Collectors.toList());
-        return updatedList;
+//        List<String> updatedList = parsed.stream()
+//                .filter(str -> str != null && !str.trim().isEmpty())
+//                .collect(Collectors.toList());
+        return parsed;
     }
 
     public Expression getSmallArgs(String OriginalValue){
@@ -299,7 +309,7 @@ public class Sheet implements Serializable {
         for(Cell[] cells : cellsMatrix){
             for(Cell cell : cells){
                 if(cell!=null){
-                    cell.getEffectiveValue();
+                    cell.getAndUpdateEffectiveValue();
                 }
             }
         }

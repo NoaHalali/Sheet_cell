@@ -16,7 +16,7 @@ public class Cell implements Serializable {
     private Coordinate coordinate;
     private int lastUpdatedVersion;
     private String originalValue;
-    //private EffectiveValue effectiveValue;
+    private EffectiveValue effectiveValue;
     private Expression cellValue;
     private List<Cell> influencingOn ;//משפיע על התאים האלה
     private List<Cell> dependsOn ; //התאים שמושפע מהם
@@ -30,11 +30,20 @@ public class Cell implements Serializable {
         this.influencingOn = new LinkedList<Cell>();
         this.dependsOn = new LinkedList<Cell>();
     }
-
-    public void setCellValue(String originalValue)
-    {
-
+    public  boolean calculateAndCheckIfUpdated(){
+        EffectiveValue oldEffectiveValue = effectiveValue; //in case the next line changes it
+        EffectiveValue newEffectiveValue = getAndUpdateEffectiveValue();
+        if(oldEffectiveValue.equals(newEffectiveValue)){
+            return false;
+        }
+        effectiveValue = newEffectiveValue;
+        return true;
     }
+    public void setCellOriginalValue(String originalValue){
+    this.originalValue = originalValue;
+    }
+
+
 
 
 //    public void updateValue(Expression newValue) {
@@ -57,13 +66,15 @@ public class Cell implements Serializable {
                 coordinate, //"A4"
                 originalValue,
                 //cellValue.calculateEffectiveValue(),
-                getEffectiveValue(),
+                getAndUpdateEffectiveValue(),
                 lastUpdatedVersion,
                 getInfluencingOnCoordinates(),
                 getDependsOnCoordinates()
         );
     }
-
+    public void upgradeVersion(int newVersion){
+        lastUpdatedVersion = newVersion + 1;
+    }
     public Expression getCellValue() {
         return cellValue;
     }
@@ -80,11 +91,13 @@ public class Cell implements Serializable {
         influencingOn.add(cell);
     }
 
-    public void updateCellsVersions(int currentVersion){
-        lastUpdatedVersion= currentVersion;
-        for(Cell cell : influencingOn){
-            updateCellsVersions(currentVersion);
-        }
+    public void updateCellsVersions(int currentVersion) {
+        lastUpdatedVersion = currentVersion;
+//        for(Cell cell : influencingOn){
+//            if(calculateAndCheckIfUpdated()){
+//                updateCellsVersions(currentVersion);
+//            }
+    //}
     }
 
     public List<Cell> getInfluencingOn() {
@@ -129,21 +142,22 @@ public class Cell implements Serializable {
     public void checkIfCellExpressionCanBeUpdatedWrapper(){
         HashSet<Coordinate> Coordset = new HashSet<>();
         Coordset.add(coordinate);
-        CheckIfCellExpressionCanBeUpdated(Coordset);
+        checkIfCellExpressionCanBeUpdated(Coordset);
 
     }
-    public void CheckIfCellExpressionCanBeUpdated(HashSet<Coordinate> coordSet){
+    public void checkIfCellExpressionCanBeUpdated(HashSet<Coordinate> coordSet){
 
-        getEffectiveValue();
+        cellValue.calculateEffectiveValue();
         for(Cell cell : influencingOn){
             if(coordSet.contains(cell.getCoordinate())){
-                coordSet.remove(cell.getCoordinate());
-                cell.CheckIfCellExpressionCanBeUpdated(coordSet);
+                coordSet.add(cell.getCoordinate());
+                cell.checkIfCellExpressionCanBeUpdated(coordSet);
             }
 
         }
-
     }
+
+
 
     public void checkForCircularDependencyWrapper(Coordinate coordinate ,List<Cell> dependsOn) {
         HashSet<Coordinate> coordSet = new HashSet<>();
@@ -171,10 +185,14 @@ public class Cell implements Serializable {
         return originalValue;
     }
 
-    public EffectiveValue getEffectiveValue() {
-        //return new EffectiveValueImpl(CellType.NUMERIC, 9.0);
-        return cellValue.calculateEffectiveValue();
+    public EffectiveValue getAndUpdateEffectiveValue() {
+
+        effectiveValue = cellValue.calculateEffectiveValue();
+        return effectiveValue;
     }
+     public EffectiveValue getEffectiveValue() {
+        return cellValue.calculateEffectiveValue();
+     }
 
 
     public int getLastUpdatedVersion() {

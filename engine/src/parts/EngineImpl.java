@@ -56,6 +56,7 @@ public class EngineImpl implements Engine {
 
         if (clonedSheet != null) {
             clonedSheet.updateCellValueFromOriginalValue(originalValue, coord);
+            clonedSheet.upgradeCellsVersions();
             currentSheet = clonedSheet;
 
             //TODO: update versions

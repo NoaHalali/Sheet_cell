@@ -5,7 +5,7 @@
 	</STL-Layout>
 	<STL-Cells>
 		<STL-Cell row="2" column="B">
-			<STL-Original-Value>Hello</STL-Original-Value>
+			<STL-Original-Value>Hello </STL-Original-Value>
 		</STL-Cell>
 		<STL-Cell row="2" column="C">
 			<STL-Original-Value>Menash</STL-Original-Value>
