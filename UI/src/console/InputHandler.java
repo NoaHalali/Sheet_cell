@@ -53,6 +53,7 @@ public class InputHandler {
     }
 
     public int columnStringToIndex(String column) {
+
         int index = 0;
         for (int i = 0; i < column.length(); i++) {
             index = index * 26 + (column.charAt(i) - 'A' + 1);
