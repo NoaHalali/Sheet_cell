@@ -55,7 +55,17 @@ public class EngineImpl implements Engine {
             throw new IllegalStateException(SHEET_NOT_LOADED_MESSAGE);
         }
 
-        currentSheet.updateCellValueFromOriginalValue(originalValue, coord);
+        Sheet clonedSheet = currentSheet.cloneSheet();
+        try{
+            if (clonedSheet != null) {
+                clonedSheet.updateCellValueFromOriginalValue(originalValue, coord);
+                currentSheet = clonedSheet;
+            }
+        }
+        catch (Exception e) {
+            throw new Exception(e.getMessage());
+        }
+
     }
 
     //5

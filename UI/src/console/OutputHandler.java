@@ -86,7 +86,7 @@ public class OutputHandler {
         }
     }
 
-    private String calcValueToPrint(EffectiveValue effectiveValue) {
+    public String calcValueToPrint(EffectiveValue effectiveValue) {
         //TODO- maybe add exceptions, try and catch
         if(effectiveValue.getCellType() == CellType.NUMERIC) {
             double num = effectiveValue.extractValueWithExpectation(Double.class);

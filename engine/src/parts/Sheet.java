@@ -9,13 +9,15 @@ import parts.cell.expression.impl.NumberExpression;
 import parts.cell.expression.impl.StringExpression;
 import parts.function.*;
 
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class Sheet {
+public class Sheet implements Serializable {
+    private static final long serialVersionUID = 1L;
     private int  version;
     private final String name;
     private final int numberOfRows;
@@ -105,6 +107,7 @@ public class Sheet {
         evaluteSheetValuesForRefCheck();
     }
 
+
     public void updateCellValueFromOriginalValue(String originalValue, Coordinate coord) throws Exception {
 
         //נבדוק אם תא זהקיים במבנה הנתונים אם לא נקצה מקום תא לו נעדכן ערך
@@ -117,6 +120,7 @@ public class Sheet {
         }
         Cell changeCell = getCellByCoord(coord);
         //changeCell.checkForCircularDependencyWrapper(coord,dependsOnCellList);
+        //
         changeCell.setExpression(expression);
         updateDependencies(changeCell, dependsOnCellList);
 //        List<Cell> oldList = changeCell.getDependsOn();
@@ -311,7 +315,27 @@ public class Sheet {
             cell.AddCellToInfluencingOnList(changeCell);
         }
     }
+    public Sheet cloneSheet() {
+        try {
+            // Serialize the object to a byte array
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            ObjectOutputStream oos = new ObjectOutputStream(bos);
+            oos.writeObject(this);
+            oos.flush();
+            oos.close();
+
+            // Deserialize the byte array to a new object
+            ByteArrayInputStream bis = new ByteArrayInputStream(bos.toByteArray());
+            ObjectInputStream ois = new ObjectInputStream(bis);
+            return (Sheet) ois.readObject();
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 }
+
+
 
 //    public void setCellValueFromOriginalValueCommand1(String originalValue,Coordinate coord){
 //        try {
