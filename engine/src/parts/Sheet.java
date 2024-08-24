@@ -106,38 +106,52 @@ public class Sheet implements Serializable {
         checkForCircularDependencies();
         evaluteSheetValuesForRefCheck();
     }
-
+    public void deleteCell(Coordinate coord){
+        cellsMatrix[coord.getRow()-1][coord.getCol()-1] = null;
+    }
+    private boolean checkToDeleteCell(String originalValue,Coordinate coord)throws Exception{
+        if(originalValue.trim() == ""){
+            Cell deletedCell = getCellByCoord(coord);
+            if(deletedCell == null){
+                throw new Exception("Cell at coordiante "+coord+" was empty before!");
+            }
+            deletedCell.checkIfCellCanBeDeleted();
+            return true;
+        }
+        return false;
+    }
 
     public void updateCellValueFromOriginalValue(String originalValue, Coordinate coord) throws Exception {
 
         //נבדוק אם תא זהקיים במבנה הנתונים אם לא נקצה מקום תא לו נעדכן ערך
         //ליצור רשימה חדשה של תאים ונבצע השמה ל- רשימת התאים מהם הוא מושפע בנוסף נשמור את הרשימה הישנה במשתנה כלשהו
-        List<Cell> dependsOnCellList = new LinkedList<Cell>();
-        Expression expression = getExpressionOfCell(originalValue, dependsOnCellList);
+        if(!checkToDeleteCell(originalValue, coord)) {
+            Cell changeCell;
+            List<Cell> dependsOnCellList = new LinkedList<Cell>();
+            Expression expression = getExpressionOfCell(originalValue, dependsOnCellList);
 
-        if (getCellByCoord(coord) == null) {
-            createNewCell(coord, originalValue);
+            if (getCellByCoord(coord) == null) {
+                createNewCell(coord, originalValue);
+                changeCell = getCellByCoord(coord);
+            }else {
+                changeCell = getCellByCoord(coord);
+                Expression oldExpression = changeCell.getCellValue();
+                changeCell.checkForCircularDependencyWrapper(coord, dependsOnCellList);
+                changeCell.setExpression(expression);
+                try {
+                    changeCell.checkIfCellExpressionCanBeUpdatedWrapper();
+                } catch (Exception e) {
+                    changeCell.setExpression(oldExpression);
+                    throw new Exception(e.getMessage());
+                }
+            }
+            updateDependencies(changeCell, dependsOnCellList);
+            upgradeVersion();
+            changeCell.updateCellsVersions(getVersion());
+        }else{
+            //upgradeVersion();
         }
-        Cell changeCell = getCellByCoord(coord);
-        //changeCell.checkForCircularDependencyWrapper(coord,dependsOnCellList);
-        //
-        changeCell.setExpression(expression);
-        updateDependencies(changeCell, dependsOnCellList);
-//        List<Cell> oldList = changeCell.getDependsOn();
-//        changeCell.setDependsOn(dependsOnCellList);
-//
-//        for (Cell cell : oldList) {
-//            cell.removeCellFromInfluencingOnList(changeCell);
-//        }
-//        for (Cell cell : dependsOnCellList) {
-//            cell.AddCellToInfluencingOnList(changeCell);
-//        }
 
-//            //לעדכן את הרשימה החדשה של התלויות
-//            upgradeVersion();
-        //changeCell.updateCellsVersions(getVersion());
-
-        //נחשב את הערך
     }
 
 

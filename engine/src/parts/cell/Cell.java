@@ -121,12 +121,12 @@ public class Cell implements Serializable {
     public Coordinate getCoordinate() {
         return coordinate;
     }
-    public void CheckIfCellCanBeDeleted(){
+    public void checkIfCellCanBeDeleted(){
         if(!influencingOn.isEmpty()){
            throw new RuntimeException( "cannot delete cell on coordinate "+coordinate + " because he is influencing other cell with ref" );
         }
     }
-    public void CheckIfCellExpressionCanBeExpression(){
+    public void checkIfCellExpressionCanBeUpdatedWrapper(){
         HashSet<Coordinate> Coordset = new HashSet<>();
         Coordset.add(coordinate);
         CheckIfCellExpressionCanBeUpdated(Coordset);
