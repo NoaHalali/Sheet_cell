@@ -364,6 +364,10 @@ public class Sheet implements Serializable {
             cell.AddCellToInfluencingOnList(changeCell);
         }
     }
+    public void updateVersionForSheetAndCreatedCell(Coordinate coord){
+        version++;
+        getCellByCoord(coord).setLastUpdatedVersion(version);
+    }
     public Sheet cloneSheet() {
         try {
             // Serialize the object to a byte array

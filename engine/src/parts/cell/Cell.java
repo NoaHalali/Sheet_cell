@@ -199,6 +199,8 @@ public class Cell implements Serializable {
         return lastUpdatedVersion;
     }
 
-
+     public void setLastUpdatedVersion(int lastUpdatedVersion) {
+        this.lastUpdatedVersion = lastUpdatedVersion;
+     }
 
     }

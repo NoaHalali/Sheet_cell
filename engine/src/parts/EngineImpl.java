@@ -8,6 +8,7 @@ public class EngineImpl implements Engine {
 
     private Sheet currentSheet = null;
     private FileManager fileManager = new FileManager();
+    private Version versions =new Version();
     private static final String SHEET_NOT_LOADED_MESSAGE = "Sheet is not loaded. Please load a sheet before attempting to access it.";
 
 
@@ -16,6 +17,7 @@ public class EngineImpl implements Engine {
         try {
             //Sheet lastSheet = currentSheet;
             currentSheet = fileManager.processFile(filePath);
+            versions.addVersion(currentSheet);
         }
         catch (Exception e) {
             throw new Exception(e.getMessage());
@@ -56,9 +58,16 @@ public class EngineImpl implements Engine {
 
         if (clonedSheet != null) {
             clonedSheet.updateCellValueFromOriginalValue(originalValue, coord);
+            if(clonedSheet.getCellByCoord(coord)!=null){
+                clonedSheet.createNewCellValueFromOriginalValue(originalValue,coord);
+               clonedSheet.updateVersionForSheetAndCreatedCell(coord);
+            }else{
+                clonedSheet.updateCellValueFromOriginalValue(originalValue,coord);
+                clonedSheet.upgradeCellsVersions();
+            }
             clonedSheet.upgradeCellsVersions();
             currentSheet = clonedSheet;
-
+            versions.addVersion(currentSheet);
             //TODO: update versions
         }
         //else - stay as it was before and throw exception
@@ -70,12 +79,12 @@ public class EngineImpl implements Engine {
     }
 
     //5
-    public void showVersions() {
+    public SheetDTO showVersions(int versionNumber) throws Exception {
         if (!sheetLoadad()) {
             throw new IllegalStateException(SHEET_NOT_LOADED_MESSAGE);
         }
 
-        //TODO
+        return versions.getSpecificVersion(versionNumber).toSheetDTO();
 
     }
 
