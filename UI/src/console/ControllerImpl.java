@@ -111,7 +111,7 @@ public class ControllerImpl implements Controller {
                     if (cell != null) {
                         System.out.println(coordinate);
                         System.out.println(cell.getOriginalValue());
-                        System.out.println(cell.getEffectiveValue());
+                        System.out.println(controller.outputHandler.calcValueToPrint(cell.getEffectiveValue()));
                     }else{
                         System.out.println("Trying create new cell");
                     }

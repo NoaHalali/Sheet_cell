@@ -38,21 +38,22 @@ public class InputHandler {
 
     public Coordinate parseCoordinate(String input) throws IllegalArgumentException {
 
-        if (input.matches("^[A-Z]+[0-9]+$")) {
+        if (input.matches("^[A-Za-z]+[0-9]+$")) { // Accepts both uppercase and lowercase letters
             String columnString = input.replaceAll("[0-9]", "");
-            String rowString = input.replaceAll("[A-Z]", "");
+            String rowString = input.replaceAll("[A-Za-z]", ""); // Also removes lowercase letters
 
-            int column = columnStringToIndex(columnString);
+            int column = columnStringToIndex(columnString.toUpperCase()); // Convert to uppercase before processing
             int row = Integer.parseInt(rowString);
 
             return new CoordinateImpl(row, column);
         } else {
             throw new IllegalArgumentException("Invalid coordinate format!\n" +
-                    "Input must start with an upper case capital letter and end with a number, e.g., A23.");
+                    "Input must start with a letter and end with a number, e.g., A23.");
         }
     }
 
     public int columnStringToIndex(String column) {
+
         int index = 0;
         for (int i = 0; i < column.length(); i++) {
             index = index * 26 + (column.charAt(i) - 'A' + 1);

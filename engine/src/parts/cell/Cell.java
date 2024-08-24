@@ -4,12 +4,14 @@ import parts.cell.coordinate.Coordinate;
 import parts.cell.expression.Expression;
 import parts.cell.expression.effectiveValue.EffectiveValue;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class Cell {
+public class Cell implements Serializable {
+    private static final long serialVersionUID = 1L;
     //row and col, or coordinate?
     private Coordinate coordinate;
     private int lastUpdatedVersion;
