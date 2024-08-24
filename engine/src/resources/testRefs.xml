@@ -8,7 +8,7 @@
 			<STL-Original-Value>{PLUS,{REF,C2},5}</STL-Original-Value>
 		</STL-Cell>
 		<STL-Cell row="2" column="C">
-			<STL-Original-Value>{REF,B2}</STL-Original-Value>
+			<STL-Original-Value>3</STL-Original-Value>
 		</STL-Cell>
 		<STL-Cell row="2" column="D">
 			<STL-Original-Value>{PLUS,4,5}</STL-Original-Value>

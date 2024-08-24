@@ -35,8 +35,8 @@ public class Plus extends BinaryExpression {
              
         }
         catch(ClassCastException e) {
-            //TODO - in the other classes (explicit message)
-            throw new ClassCastException(e.getMessage() +"for PLUS function. Expected NUMERIC, but got" +leftValue.getCellType() + " and " + rightValue.getCellType());
+            //TODO - in the other classes (explicit message)//רעיון אפשר לעטוף בתא עליון את התא ששולח שגיאה זו כלומר בבדיקה של החישובים ואז להוציא את קוארדינטת התא הספציפי
+            throw new ClassCastException(e.getMessage() +getFunctionResultType() +" for PLUS function. Expected to recive NUMERIC, but got" +leftValue.getCellType() + " and " + rightValue.getCellType());
         }
     }
     @Override

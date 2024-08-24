@@ -127,6 +127,30 @@ public class Sheet implements Serializable {
         }
         return false;
     }
+    public void createNewCellValueFromOriginalValue(String originalValue,Coordinate coord) throws Exception {
+        Cell changeCell;
+        List<Cell> dependsOnCellList = new LinkedList<Cell>();
+        Expression expression = getExpressionOfCell(originalValue, dependsOnCellList);
+        changeCell = getCellByCoord(coord);
+        if(changeCell == null){
+            createNewCell(coord, originalValue);
+            changeCell = getCellByCoord(coord);
+            changeCell.setExpression(expression);
+            changeCell.setCellOriginalValue(originalValue);
+            try {
+                changeCell.getAndUpdateEffectiveValue();
+            }
+            catch(Exception e){
+                checkToDeleteCell(originalValue, coord);
+                throw new Exception("cell at coordinate "+coord+" cannot be created :" +e.getMessage());
+
+            }
+        }else{
+            changeCell = getCellByCoord(coord);
+            changeCell.setExpression(expression);
+        }
+        updateDependencies(changeCell, dependsOnCellList);
+    }
 
     public void updateCellValueFromOriginalValue(String originalValue, Coordinate coord) throws Exception {
 
@@ -299,7 +323,8 @@ public class Sheet implements Serializable {
         for(Cell[] cells : cellsMatrix){
             for(Cell cell : cells){
                 if(cell!=null){
-                    updateCellValueFromOriginalValue(cell.getOriginalValue(),cell.getCoordinate());
+                    createNewCellValueFromOriginalValue(cell.getOriginalValue(),cell.getCoordinate());
+
                 }
             }
         }
