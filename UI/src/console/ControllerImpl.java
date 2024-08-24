@@ -122,7 +122,7 @@ public class ControllerImpl implements Controller {
                     System.out.println("Please enter value you want: ");//לעשות חפירה שתסביר את הפורמט וקליטה בinput handler חלוקת אחריות על בידקות תקינות וכו,
                     Scanner scanner = new Scanner(System.in);//input handler
                     String input = scanner.nextLine();//input handler
-                    controller.engine.updateCellValueFromOriginalValue(input, coordinate);
+                    controller.engine.updateCellValue(input, coordinate);
                     System.out.println("Cell updated successfully!");
                     DISPLAY_SHEET.execute(controller);
                 } catch (Exception e) {

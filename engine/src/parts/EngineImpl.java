@@ -4,8 +4,6 @@ import XMLFile.FileManager;
 import parts.cell.*;
 import parts.cell.coordinate.Coordinate;
 
-import java.io.FileNotFoundException;
-
 public class EngineImpl implements Engine {
 
     private Sheet currentSheet = null;
@@ -49,22 +47,24 @@ public class EngineImpl implements Engine {
 
 
     //4 , ???
-    public void updateCellValueFromOriginalValue(String originalValue, Coordinate coord) throws Exception {
-        //TODO - לראות מה קורה עם המסמך החדש וההשמה, ובמקרה שקובץ לא תקין
+    public void updateCellValue(String originalValue, Coordinate coord) throws Exception {
         if (!sheetLoadad()) {
             throw new IllegalStateException(SHEET_NOT_LOADED_MESSAGE);
         }
 
         Sheet clonedSheet = currentSheet.cloneSheet();
-        try{
-            if (clonedSheet != null) {
-                clonedSheet.updateCellValueFromOriginalValue(originalValue, coord);
-                currentSheet = clonedSheet;
-            }
+
+        if (clonedSheet != null) {
+            clonedSheet.updateCellValueFromOriginalValue(originalValue, coord);
+            currentSheet = clonedSheet;
+
+            //TODO: update versions
         }
-        catch (Exception e) {
-            throw new Exception(e.getMessage());
-        }
+        //else - stay as it was before and throw exception
+
+//        catch (Exception e) {
+//            throw new Exception(e.getMessage());
+//        }
 
     }
 
