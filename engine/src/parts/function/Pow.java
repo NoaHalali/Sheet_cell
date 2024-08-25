@@ -22,8 +22,13 @@ public class Pow extends BinaryExpression{
     public EffectiveValue calculateEffectiveValue() {
         EffectiveValue leftValue = left.calculateEffectiveValue();
         EffectiveValue rightValue=right.calculateEffectiveValue();
-        double result = Math.pow(leftValue.extractValueWithExpectation(Double.class), rightValue.extractValueWithExpectation(Double.class));
-        return  new EffectiveValueImpl(CellType.NUMERIC, result);
+        try {
+            double result = Math.pow(leftValue.extractValueWithExpectation(Double.class), rightValue.extractValueWithExpectation(Double.class));
+            return new EffectiveValueImpl(CellType.NUMERIC, result);
+        }   catch(ClassCastException e) {
+
+            throw new ClassCastException(e.getMessage() + "POW function expected to receive NUMERIC, but got " +leftValue.getCellType() + " and " + rightValue.getCellType());
+        }
 
     }
     @Override

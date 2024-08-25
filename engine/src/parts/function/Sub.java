@@ -15,7 +15,7 @@ public class Sub extends TernaryExpression{
                 (!exp2CellType.equals(CellType.NUMERIC) && !exp2CellType.equals(CellType.UNKNOWN)) ||
                 (!exp3CellType.equals(CellType.NUMERIC) && !exp3CellType.equals(CellType.UNKNOWN)))
           {
-            throw new IllegalArgumentException("Invalid argument types for POW function. Expected STRING, NUMERIC, NUMERIC, but got " + exp1CellType + " , " + exp2CellType + " and " + exp3CellType);
+            throw new IllegalArgumentException("Invalid argument types for SUB function. Expected STRING, NUMERIC, NUMERIC, but got " + exp1CellType + " , " + exp2CellType + " and " + exp3CellType);
           }
         this.expression1 = expression1;
         this.expression2 = expression2;
@@ -24,12 +24,11 @@ public class Sub extends TernaryExpression{
 
     @Override
     public EffectiveValue calculateEffectiveValue() {
-        try {
-            EffectiveValue mainValue = expression1.calculateEffectiveValue();
-            EffectiveValue index1Val = expression2.calculateEffectiveValue();
-            EffectiveValue index2Val = expression3.calculateEffectiveValue();
+        EffectiveValue mainValue = expression1.calculateEffectiveValue();
+        EffectiveValue index1Val = expression2.calculateEffectiveValue();
+        EffectiveValue index2Val = expression3.calculateEffectiveValue();
 
-            // בדיקה אם הערך של המחרוזת הוא "UNDEFINED"
+        try {
             String str = mainValue.extractValueWithExpectation(String.class);
             if ("UNDEFINED".equals(str)) {
                 return new EffectiveValueImpl(CellType.STRING, "UNDEFINED");
@@ -46,7 +45,10 @@ public class Sub extends TernaryExpression{
             String result = str.substring(firstIndex, secondIndex + 1);
 
             return new EffectiveValueImpl(CellType.STRING, result);
-        } catch (Exception e) {
+        }
+        catch(ClassCastException e) {
+            throw new ClassCastException(e.getMessage() + "SUB function expected to receive STRING, NUMERIC, NUMERIC, but got " +mainValue.getCellType()+", " +index1Val.getCellType()+ " and " + index2Val.getCellType());
+        }catch (Exception e) {
             return new EffectiveValueImpl(CellType.STRING, "UNDEFINED");
         }
     }

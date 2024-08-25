@@ -22,10 +22,6 @@ public class Plus extends BinaryExpression {
 
         EffectiveValue leftValue = left.calculateEffectiveValue();
         EffectiveValue rightValue = right.calculateEffectiveValue();
-        //double result=null;
-
-       /// double leftVal = Double.parseDouble(left.evaluate().replace(",", ""));
-      //  double rightVal = Double.parseDouble(right.evaluate().replace(",", ""));
 
         // do some checking... error handling...
         //double result = (Double) leftValue.getValue() + (Double) rightValue.getValue();
@@ -35,9 +31,8 @@ public class Plus extends BinaryExpression {
              
         }
         catch(ClassCastException e) {
-            //TODO - in the other classes (explicit message)//רעיון אפשר לעטוף בתא עליון את התא ששולח שגיאה זו כלומר בבדיקה של החישובים ואז להוציא את קוארדינטת התא הספציפי
 
-            throw new ClassCastException(e.getMessage() + "PLUS function expected to recive NUMERIC, but got " +leftValue.getCellType() + " and " + rightValue.getCellType());
+            throw new ClassCastException(e.getMessage() + "PLUS function expected to receive NUMERIC, but got " +leftValue.getCellType() + " and " + rightValue.getCellType());
         }
     }
     @Override

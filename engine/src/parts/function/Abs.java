@@ -12,7 +12,7 @@ public class Abs extends UnaryExpression{
         CellType expCellType = exp.getFunctionResultType();
 
         if ( (!expCellType.equals(CellType.NUMERIC) && !expCellType.equals(CellType.UNKNOWN)) ) {
-            throw new IllegalArgumentException("Invalid argument types for MOD function. Expected NUMERIC, but got " + expCellType);
+            throw new IllegalArgumentException("Invalid argument types for ABS function. Expected NUMERIC, but got " + expCellType);
         }
         this.exp=exp;
 
@@ -22,9 +22,12 @@ public class Abs extends UnaryExpression{
     @Override
     public EffectiveValue calculateEffectiveValue() {
         EffectiveValue Value = exp.calculateEffectiveValue();
-
-        double result = Math.abs(Value.extractValueWithExpectation(Double.class) );
-        return  new EffectiveValueImpl(CellType.NUMERIC, result);
+        try {
+            double result = Math.abs(Value.extractValueWithExpectation(Double.class));
+            return new EffectiveValueImpl(CellType.NUMERIC, result);
+        }  catch(ClassCastException e) {
+            throw new ClassCastException(e.getMessage() + "ABS function expected to receive NUMERIC, but got " +Value.getCellType());
+        }
     }
     @Override
     public  CellType getFunctionResultType(){
