@@ -149,9 +149,13 @@ public class Cell implements Serializable {
 
         cellValue.calculateEffectiveValue();
         for(Cell cell : influencingOn){
-            if(coordSet.contains(cell.getCoordinate())){
+            if(!coordSet.contains(cell.getCoordinate())){
                 coordSet.add(cell.getCoordinate());
-                cell.checkIfCellExpressionCanBeUpdated(coordSet);
+                try {
+                    cell.checkIfCellExpressionCanBeUpdated(coordSet);
+                }catch (ClassCastException e){
+                    throw new ClassCastException(cell.getCoordinate()+" "+e.getMessage());
+                }
             }
 
         }

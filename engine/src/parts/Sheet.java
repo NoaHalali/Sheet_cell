@@ -78,19 +78,9 @@ public class Sheet implements Serializable {
 
     }
 
-    public Cell getCellByCoord(Coordinate coord){
+    public Cell getCellByCoord(Coordinate coord)throws IllegalArgumentException{
 
-        if (!isCoordinateInBounds(coord)) {
-
-
-            String errorMessage = String.format("The coordinate is out of bounds!\n" +
-                            "Valid column range: %c to %c, " +
-                            "Valid row range: %d to %d. " +
-                            "Given coordinate: %s",
-                    minCol, maxCol, minRow, maxRow, coord.toString());
-
-            throw new IllegalArgumentException(errorMessage);
-        }
+        validateCoordinateBounds(coord);
         Cell cell = cellsMatrix[coord.getRow()-1][coord.getCol()-1];
 
 //        if (cell == null) {
@@ -113,9 +103,11 @@ public class Sheet implements Serializable {
         checkForCircularDependencies();
         evaluteSheetValuesForRefCheck();
     }
+
     public void deleteCell(Coordinate coord){
         cellsMatrix[coord.getRow()-1][coord.getCol()-1] = null;
     }
+
     private boolean checkToDeleteCell(String originalValue,Coordinate coord)throws Exception{
         if(originalValue.trim() == ""){
             Cell deletedCell = getCellByCoord(coord);
@@ -127,6 +119,7 @@ public class Sheet implements Serializable {
         }
         return false;
     }
+
     public void createNewCellValueFromOriginalValue(String originalValue,Coordinate coord) throws Exception {
         Cell changeCell;
         List<Cell> dependsOnCellList = new LinkedList<Cell>();
@@ -294,7 +287,8 @@ public class Sheet implements Serializable {
                     break;
                 case "REF"://sheet סטטי ?
                     //לבדוק שאין ארגומנט שלישי
-                    Coordinate RefCoord = CoordinateImpl.stringToCoord(list.get(1));
+                    Coordinate RefCoord = createAndValidateCoordinate(list.get(1));
+                    //CoordinateImpl.stringToCoord(list.get(1));
                     Cell refcell = getCellByCoord(RefCoord);//find Cell in map or 2dim array and cell coord: list.get(1)
                     dependsOnCellList.add(refcell); // לתא עליו התבקשנו לעדכן אערך נקצה רשימה חדשה בההתאים המשפיעים על תא זה שהיא תהיה רשימת המושפעים מהתא עליו נבצע עדכון +refcell
                     res = new Ref(refcell);
@@ -307,15 +301,28 @@ public class Sheet implements Serializable {
         return res;
     }
 
+    private  Coordinate createAndValidateCoordinate(String strCoordinate) throws IllegalArgumentException{
+        Coordinate coord = CoordinateImpl.parseCoordinate(strCoordinate);
+        validateCoordinateBounds(coord);
+        return coord;
+    }
+
     public Cell[][] getCellsMatrix() {
         return cellsMatrix;
     }
 
-    public boolean isCoordinateInBounds(Coordinate coord) {
+    public void validateCoordinateBounds(Coordinate coord) throws IllegalArgumentException{
         int row = coord.getRow();
         int col = coord.getCol();
 
-        return row > 0 && row <= numberOfRows && col > 0 && col <= numberOfCols;
+         if(!(row > 0 && row <= numberOfRows && col > 0 && col <= numberOfCols)){
+             String errorMessage = String.format("The %s coordinate is out of bounds!\n" +
+                             "Valid column range: %c to %c, " +
+                             "Valid row range: %d to %d.",
+                     coord.toString(),minCol, maxCol, minRow, maxRow);
+
+             throw new IllegalArgumentException(errorMessage);
+         };
 
     }
 

@@ -8,9 +8,9 @@ public class Version {
 
     public Sheet getSpecificVersion(int version) {
         if(versionsList.size()<version){
-            throw new IllegalArgumentException("Version: "+version+" not Being created yet.");
+            throw new IllegalArgumentException("Version: "+version+" not created yet.");
         }
-        return versionsList.get(version);
+        return versionsList.get(version-1);
     }
     public void addVersion( Sheet sheet) {
         versionsList.addLast(sheet);

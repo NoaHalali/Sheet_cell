@@ -35,7 +35,8 @@ public class Concat extends BinaryExpression{
             // ביצוע הקונקט (שרשור המחרוזות)
             String result = leftStr + rightStr;
             return new EffectiveValueImpl(CellType.STRING, result);
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             // במקרה של חריגה כלשהי, מחזירים "UNDEFINED"
             return new EffectiveValueImpl(CellType.STRING, "UNDEFINED");
         }

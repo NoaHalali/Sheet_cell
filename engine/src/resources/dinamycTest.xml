@@ -4,14 +4,14 @@
 		<STL-Size column-width-units="15" rows-height-units="3"/>
 	</STL-Layout>
 	<STL-Cells>
-		<STL-Cell row="1" column="B">
-			<STL-Original-Value>{PLUS,{REF,D1},5}</STL-Original-Value>
+		<STL-Cell row="2" column="B">
+			<STL-Original-Value>{PLUS,{REF,F2},5}</STL-Original-Value>
 		</STL-Cell>
-		<STL-Cell row="1" column="C">
-			<STL-Original-Value>{REF,B1}</STL-Original-Value>
+		<STL-Cell row="2" column="C">
+			<STL-Original-Value>3</STL-Original-Value>
 		</STL-Cell>
-		<STL-Cell row="1" column="D">
-			<STL-Original-Value>4</STL-Original-Value>
+		<STL-Cell row="2" column="D">
+			<STL-Original-Value>{PLUS,4,5}</STL-Original-Value>
 		</STL-Cell>
 	</STL-Cells>
 </STL-Sheet>
