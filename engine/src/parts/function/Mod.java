@@ -3,7 +3,7 @@ package parts.function;
 import parts.cell.expression.effectiveValue.EffectiveValue;
 import parts.cell.expression.effectiveValue.EffectiveValueImpl;
 import parts.cell.expression.Expression;
-import parts.cell.CellType;
+import parts.cell.expression.effectiveValue.CellType;
 
 public class Mod  extends BinaryExpression{
     public Mod(Expression expression1, Expression expression2) {

@@ -1,7 +1,7 @@
 package parts.function;
 
 import parts.cell.Cell;
-import parts.cell.CellType;
+import parts.cell.expression.effectiveValue.CellType;
 import parts.cell.expression.effectiveValue.EffectiveValue;
 import parts.cell.expression.Expression;
 

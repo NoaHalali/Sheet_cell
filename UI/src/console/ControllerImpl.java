@@ -103,7 +103,6 @@ public class ControllerImpl implements Controller {
             @Override
             public void execute(ControllerImpl controller) {
                 try {
-
                     System.out.println("Please enter cell coordinate ");
                     Coordinate coordinate = controller.inputHandler.getCoordinateFromUser();
 
@@ -116,15 +115,25 @@ public class ControllerImpl implements Controller {
                         System.out.println("Trying create new cell");
                     }
 
-//                catch (NullPointerException e) {
-//                    System.out.println(e.getMessage());
-//                }
-                    System.out.println("Please enter value you want: ");//לעשות חפירה שתסביר את הפורמט וקליטה בinput handler חלוקת אחריות על בידקות תקינות וכו,
-                    Scanner scanner = new Scanner(System.in);//input handler
-                    String input = scanner.nextLine();//input handler
-                    controller.engine.updateCellValue(input, coordinate);
-                    System.out.println("Cell updated successfully!");
-                    DISPLAY_SHEET.execute(controller);
+
+                    //getValueToUpdate(controller, coordinate);
+                    while (gettingInputFromUser) {
+                        System.out.println("Please enter value you want: ");//לעשות חפירה שתסביר את הפורמט וקליטה בinput handler חלוקת אחריות על בידקות תקינות וכו,
+                        Scanner scanner = new Scanner(System.in);//input handler
+                        String input = scanner.nextLine();//input handler
+                        controller.engine.updateCellValue(input, coordinate);
+                        System.out.println("Cell updated successfully!");
+                        DISPLAY_SHEET.execute(controller);
+
+
+                    }
+//
+//                    System.out.println("Please enter value you want: ");//לעשות חפירה שתסביר את הפורמט וקליטה בinput handler חלוקת אחריות על בידקות תקינות וכו,
+//                    Scanner scanner = new Scanner(System.in);//input handler
+//                    String input = scanner.nextLine();//input handler
+//                    controller.engine.updateCellValue(input, coordinate);
+//                    System.out.println("Cell updated successfully!");
+//                    DISPLAY_SHEET.execute(controller);
                 } catch (Exception e) {
                     System.out.println(e.getMessage());
                 }
@@ -162,5 +171,7 @@ public class ControllerImpl implements Controller {
         // Abstract method to be implemented by each enum constant
         public abstract void execute(ControllerImpl controller);
     }
+
+    private getValueToUpdate()
 
 }

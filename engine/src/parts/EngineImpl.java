@@ -48,7 +48,7 @@ public class EngineImpl implements Engine {
     }
 
 
-    //4 , ???
+    //4
     public void updateCellValue(String originalValue, Coordinate coord) throws Exception {
         if (!sheetLoadad()) {
             throw new IllegalStateException(SHEET_NOT_LOADED_MESSAGE);
@@ -68,7 +68,6 @@ public class EngineImpl implements Engine {
             clonedSheet.upgradeCellsVersions();
             currentSheet = clonedSheet;
             versions.addVersion(currentSheet);
-            //TODO: update versions
         }
         //else - stay as it was before and throw exception
 

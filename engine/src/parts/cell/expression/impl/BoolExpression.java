@@ -1,5 +1,5 @@
 package parts.cell.expression.impl;
-import parts.cell.CellType;
+import parts.cell.expression.effectiveValue.CellType;
 import parts.cell.expression.effectiveValue.EffectiveValue;
 import parts.cell.expression.effectiveValue.EffectiveValueImpl;
 import parts.cell.expression.Expression;

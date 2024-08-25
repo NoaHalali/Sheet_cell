@@ -1,7 +1,5 @@
 package parts.cell.expression.effectiveValue;
 
-import parts.cell.CellType;
-
 import java.io.Serializable;
 import java.util.Objects;
 
