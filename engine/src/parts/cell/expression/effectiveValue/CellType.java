@@ -1,4 +1,4 @@
-package parts.cell;
+package parts.cell.expression.effectiveValue;
 
 public enum CellType {
     NUMERIC(Double.class) ,
