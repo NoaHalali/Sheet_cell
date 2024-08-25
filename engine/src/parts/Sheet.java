@@ -162,11 +162,11 @@ public class Sheet implements Serializable {
             Expression expression = getExpressionOfCell(originalValue, dependsOnCellList);
 
             if (getCellByCoord(coord) == null) {
-                createNewCell(coord, originalValue);
+//                createNewCell(coord, originalValue);
                 changeCell = getCellByCoord(coord);
-                changeCell.setExpression(expression);
-                changeCell.getAndUpdateEffectiveValue();
-                changeCell.updateCellsVersions(version);
+//                changeCell.setExpression(expression);
+//                changeCell.getAndUpdateEffectiveValue();
+//                  changeCell.updateCellsVersions(version);
 
             }else {
                 changeCell = getCellByCoord(coord);
