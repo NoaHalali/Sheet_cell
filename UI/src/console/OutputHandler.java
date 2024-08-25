@@ -149,7 +149,6 @@ public class OutputHandler {
             String originalValue = cell.getOriginalValue();
             System.out.println("Original Value: " + originalValue);
 
-            //TODO - implement the toString()
             EffectiveValue effectiveValue = cell.getEffectiveValue();
             System.out.println("Effective Value: " + calcValueToPrint(effectiveValue));
 
@@ -164,5 +163,17 @@ public class OutputHandler {
 
             System.out.println();
         }
+    }
+
+    public void printCellStateBeforeUpdate(CellDTO cell, Coordinate coordinate)
+    {
+        System.out.println("Cell identity: " + coordinate.toString());
+
+        String originalValue = cell.getOriginalValue();
+        System.out.println("Original Value: " + originalValue);
+
+        //TODO - implement the toString()
+        EffectiveValue effectiveValue = cell.getEffectiveValue();
+        System.out.println("Effective Value: " + calcValueToPrint(effectiveValue));
     }
 }

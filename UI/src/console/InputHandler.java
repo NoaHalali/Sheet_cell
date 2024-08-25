@@ -75,4 +75,12 @@ public class InputHandler {
         String path = scanner.nextLine();
         return path;
     }
+
+    public String getInputFromUser(){
+        Scanner scanner = new Scanner(System.in);
+        String originalValue = scanner.nextLine();
+        return originalValue;
+    }
+
+
 }

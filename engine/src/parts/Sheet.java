@@ -109,10 +109,11 @@ public class Sheet implements Serializable {
     }
 
     private boolean checkToDeleteCell(String originalValue,Coordinate coord)throws Exception{
-        if(originalValue.trim() == ""){
+
+        if(originalValue.isBlank()){
             Cell deletedCell = getCellByCoord(coord);
             if(deletedCell == null){
-                throw new Exception("Cell at coordiante "+coord+" was empty before!");
+                throw new Exception("Cell at coordinate "+coord+" is already empty!");
             }
             deletedCell.checkIfCellCanBeDeleted();
             return true;
@@ -177,6 +178,8 @@ public class Sheet implements Serializable {
 
             updateDependencies(changeCell, dependsOnCellList);
 
+        }else{
+            deleteCell(coord);
         }
 
     }
@@ -228,8 +231,8 @@ public class Sheet implements Serializable {
     }
 
     public Expression getSmallArgs(String OriginalValue){
-        if (OriginalValue.trim().toLowerCase() == "false"||OriginalValue.trim().toLowerCase() == "true"){
-            return new BoolExpression(false);
+        if (OriginalValue.trim().equals("FALSE") || OriginalValue.trim().equals("TRUE")){
+            return new BoolExpression(OriginalValue.trim().equals("TRUE"));
         }
         try{
             double num = Double.parseDouble(OriginalValue);

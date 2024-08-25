@@ -25,7 +25,6 @@ public class ControllerImpl implements Controller {
             }
             catch (Exception e) {
                 System.out.println(e.getMessage());
-                e.printStackTrace();
             }
         }
     }
@@ -102,43 +101,44 @@ public class ControllerImpl implements Controller {
         UPDATE_CELL {
             @Override
             public void execute(ControllerImpl controller) {
+                System.out.println("Please enter cell coordinate ");
+                Coordinate coordinate = controller.inputHandler.getCoordinateFromUser();
                 try {
-                    System.out.println("Please enter cell coordinate ");
-                    Coordinate coordinate = controller.inputHandler.getCoordinateFromUser();
-
                     CellDTO cell = controller.engine.getCellDTOByCoordinate(coordinate);
                     if (cell != null) {
-                        System.out.println(coordinate);
-                        System.out.println(cell.getOriginalValue());
-                        System.out.println(controller.outputHandler.calcValueToPrint(cell.getEffectiveValue()));
-                    }else{
+                        controller.outputHandler.printCellStateBeforeUpdate(cell, coordinate);
+                    } else {
                         System.out.println("Trying create new cell");
                     }
-
-
-                    //getValueToUpdate(controller, coordinate);
-                    while (gettingInputFromUser) {
-                        System.out.println("Please enter value you want: ");//לעשות חפירה שתסביר את הפורמט וקליטה בinput handler חלוקת אחריות על בידקות תקינות וכו,
-                        Scanner scanner = new Scanner(System.in);//input handler
-                        String input = scanner.nextLine();//input handler
-                        controller.engine.updateCellValue(input, coordinate);
-                        System.out.println("Cell updated successfully!");
-                        DISPLAY_SHEET.execute(controller);
-
-
-                    }
-//
-//                    System.out.println("Please enter value you want: ");//לעשות חפירה שתסביר את הפורמט וקליטה בinput handler חלוקת אחריות על בידקות תקינות וכו,
-//                    Scanner scanner = new Scanner(System.in);//input handler
-//                    String input = scanner.nextLine();//input handler
-//                    controller.engine.updateCellValue(input, coordinate);
-//                    System.out.println("Cell updated successfully!");
-//                    DISPLAY_SHEET.execute(controller);
                 } catch (Exception e) {
                     System.out.println(e.getMessage());
                 }
 
+                //getValueToUpdate(controller, coordinate);
+                boolean gettingInputFromUser = true;
+                String input;
+                while (gettingInputFromUser) {
+
+                    System.out.println("Please enter value you want: ");//לעשות חפירה שתסביר את הפורמט וקליטה בinput handler חלוקת אחריות על בידקות תקינות וכו,
+                    input = controller.inputHandler.getInputFromUser();
+                    try {
+                        controller.engine.updateCellValue(input, coordinate);
+                        System.out.println("Cell updated successfully!");
+                        DISPLAY_SHEET.execute(controller);
+                        gettingInputFromUser = false;
+                    } catch (Exception e) {
+                        System.out.println(e.getMessage());
+                        System.out.println();
+                        System.out.println("Do you want to try again? " +
+                                "Press 1 to try again, or any other key to return to the main menu.");
+                        input = controller.inputHandler.getInputFromUser();
+                        if (!input.equals("1")) {
+                            gettingInputFromUser = false;
+                        }
+                    }
+                }
             }
+
             @Override
             public String toString() {
                 return "Update cell value";
@@ -172,6 +172,5 @@ public class ControllerImpl implements Controller {
         public abstract void execute(ControllerImpl controller);
     }
 
-    private getValueToUpdate()
 
 }
