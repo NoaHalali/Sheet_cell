@@ -22,10 +22,14 @@ public class Divide extends BinaryExpression{
         try {
             EffectiveValue leftValue = left.calculateEffectiveValue();
             EffectiveValue rightValue = right.calculateEffectiveValue();
+            try{
+
 
             double result = leftValue.extractValueWithExpectation(Double.class) / rightValue.extractValueWithExpectation(Double.class);
-
             return new EffectiveValueImpl(CellType.NUMERIC, result);
+            } catch(ClassCastException e) {
+                throw new ClassCastException(e.getMessage() + "DIVIDE function expected to receive NUMERIC, but got " +leftValue.getCellType() + " and " + rightValue.getCellType());
+            }
         }
         catch (ArithmeticException arithmeticException) {
             return new EffectiveValueImpl(CellType.NUMERIC, Double.NaN);

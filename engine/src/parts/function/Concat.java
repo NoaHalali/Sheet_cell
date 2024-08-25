@@ -20,9 +20,9 @@ public class Concat extends BinaryExpression{
     //TODO FIX IMPLEMENT WAIT FOR AVIAD RESPONSE
     @Override
     public EffectiveValue calculateEffectiveValue() {
+        EffectiveValue leftValue = left.calculateEffectiveValue();
+        EffectiveValue rightValue = right.calculateEffectiveValue();
         try {
-            EffectiveValue leftValue = left.calculateEffectiveValue();
-            EffectiveValue rightValue = right.calculateEffectiveValue();
 
             // בדיקה אם אחת מהמחרוזות היא "UNDEFINED"
             String leftStr = leftValue.extractValueWithExpectation(String.class);
@@ -35,6 +35,9 @@ public class Concat extends BinaryExpression{
             // ביצוע הקונקט (שרשור המחרוזות)
             String result = leftStr + rightStr;
             return new EffectiveValueImpl(CellType.STRING, result);
+        }
+        catch(ClassCastException e) {
+            throw new ClassCastException(e.getMessage() + "CONCAT function expected to receive STRING, but got " +leftValue.getCellType() + " and " + rightValue.getCellType());
         }
         catch (Exception e) {
             // במקרה של חריגה כלשהי, מחזירים "UNDEFINED"
