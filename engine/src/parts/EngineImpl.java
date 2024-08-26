@@ -23,6 +23,7 @@ public class EngineImpl implements Engine {
         try {
             //Sheet lastSheet = currentSheet;
             currentSheet = fileManager.processFile(filePath);
+            versionsList.clear();
             addVersion(currentSheet,0);
         }
         catch (Exception e) {

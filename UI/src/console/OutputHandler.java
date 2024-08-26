@@ -27,21 +27,30 @@ public class OutputHandler {
         System.out.println();
     }
 
-    public  void printVersionsTable(List<Integer> versions) {
-        int columns = versions.size();
+    public void printVersionsTable(List<Integer> versions) {
+        // Define the column width based on the maximum length of the version numbers
+        int columnWidth = Math.max(10, versions.stream()
+                .map(String::valueOf)
+                .mapToInt(String::length)
+                .max()
+                .orElse(0) + 2); // +2 for padding
 
-        // Print the table header with "Version"
-        for (int col = 0; col < columns; col++) {
-            System.out.print("| " + String.format("%-8s", "Version " + (col + 1)));
+        // Print the header row with version labels
+        System.out.print("|");
+        for (int i = 0; i < versions.size(); i++) {
+            String versionLabel = "Version " + (i + 1);
+            System.out.print(String.format("%-" + columnWidth + "s|", versionLabel));
         }
-        System.out.println("|");
+        System.out.println();
 
-        // Print the table row with numbers
-        for (int col = 0; col < columns; col++) {
-            System.out.print("| " + String.format("%-8d", versions.get(col)));
+        // Print the data row with version numbers
+        System.out.print("|");
+        for (Integer version : versions) {
+            System.out.print(String.format("%-" + columnWidth + "d|", version)); // Left-align numbers
         }
-        System.out.println("|");
+        System.out.println();
     }
+
 
     public void printCellsMatrix(SheetDTO sheet) {
         int numberOfCols = sheet.getNumberOfCols();
