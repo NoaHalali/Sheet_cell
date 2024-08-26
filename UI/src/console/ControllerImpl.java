@@ -149,9 +149,16 @@ public class ControllerImpl implements Controller {
             @Override
             public void execute(ControllerImpl controller) {
                // printTable(controller.engine)
-                List<Integer> versions = controller.engine.getVersions();
-                controller.outputHandler.printVersionsTable(versions);
-
+                try {
+                    List<Integer> versions = controller.engine.getVersions();
+                    controller.outputHandler.printVersionsTable(versions);
+                    int version = controller.inputHandler.getVersionNumberFromUser();
+                    SheetDTO sheet = controller.engine.getSheetDTOByVersion(version);
+                    controller.outputHandler.printSheetData(sheet);
+                }
+                catch (Exception e) {
+                    System.out.println(e.getMessage());
+                }
             }
             @Override
             public String toString() {
@@ -162,7 +169,7 @@ public class ControllerImpl implements Controller {
         EXIT {
             @Override
             public void execute(ControllerImpl controller) {
-                controller.systemIsRunning=false;
+                controller.systemIsRunning = false;
             }
             @Override
             public String toString() {
@@ -172,21 +179,6 @@ public class ControllerImpl implements Controller {
 
         // Abstract method to be implemented by each enum constant
         public abstract void execute(ControllerImpl controller);
-    }
-    public  void printTable(List<Integer> numbers) {
-        int columns = numbers.size();
-
-        // Print the table header with "Version"
-        for (int col = 0; col < columns; col++) {
-            System.out.print("| " + String.format("%-8s", "Version " + (col + 1)));
-        }
-        System.out.println("|");
-
-        // Print the table row with numbers
-        for (int col = 0; col < columns; col++) {
-            System.out.print("| " + String.format("%-8d", numbers.get(col)));
-        }
-        System.out.println("|");
     }
 
 

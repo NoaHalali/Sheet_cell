@@ -69,6 +69,21 @@ public class InputHandler {
         return selectedOption;
     }
 
+    public int getVersionNumberFromUser()
+    {
+        System.out.println("Enter the version number:");
+        Scanner scanner = new Scanner(System.in);
+        int userInput = 0;
+
+        try {
+            userInput = Integer.parseInt(scanner.nextLine());
+        }
+        catch (NumberFormatException e){
+            throw new NumberFormatException("version must be Integer ! \ngoing to Main menu");
+        }
+        return userInput;
+    }
+
     public String getFilePathFromUser(){
         System.out.println("Please enter a full path of the XML file you wish to load to the system: ");
         Scanner scanner = new Scanner(System.in);
