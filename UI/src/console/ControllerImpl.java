@@ -6,7 +6,6 @@ import parts.cell.CellDTO;
 import parts.cell.coordinate.Coordinate;
 
 import java.util.List;
-import java.util.Scanner;
 
 public class ControllerImpl implements Controller {
 
@@ -150,6 +149,9 @@ public class ControllerImpl implements Controller {
             @Override
             public void execute(ControllerImpl controller) {
                // printTable(controller.engine)
+                List<Integer> versions = controller.engine.getVersions();
+                controller.outputHandler.printVersionsTable(versions);
+
             }
             @Override
             public String toString() {

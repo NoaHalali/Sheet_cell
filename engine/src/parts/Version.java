@@ -5,23 +5,24 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class Version {
-    private List<Sheet> versionsList= new LinkedList<Sheet>();
-    private List <Integer> numberOfCellsChanged =new LinkedList<Integer>();
 
-    public Sheet getSpecificVersion(int version) {
-        if(versionsList.size()<version){
-            throw new IllegalArgumentException("Version: "+version+" not created yet.");
-        }
-        return versionsList.get(version-1);
-    }
-    public void addVersion( Sheet sheet,int numberOfCellsChanged) {
-        versionsList.addLast(sheet);
-        this.numberOfCellsChanged.add(numberOfCellsChanged);
-    }
-    public List<Integer> getNumberOfCellsChangedListDeepClone() {
-        return numberOfCellsChanged.stream()
-                 .map(Integer::valueOf)
-                     .collect(Collectors.toList());
+    private  Sheet sheet;
+    private int numberOfCellsChanged;
+
+//    private List<Sheet> versionsList= new LinkedList<Sheet>();
+//    private List <Integer> numberOfCellsChanged = new LinkedList<Integer>();
+
+
+    public Version(Sheet sheet, int numberOfCellsChanged) {
+        this.sheet = sheet;
+        this.numberOfCellsChanged = numberOfCellsChanged;
     }
 
+    public Sheet getSheet() {
+        return sheet;
+    }
+
+    public int getNumberOfCellsChanged() {
+        return numberOfCellsChanged;
+    }
 }

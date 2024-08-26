@@ -1,16 +1,20 @@
 package parts;
 
 import XMLFile.FileManager;
-import org.glassfish.jaxb.runtime.v2.schemagen.xmlschema.List;
 import parts.cell.*;
 import parts.cell.coordinate.Coordinate;
+
+import java.util.LinkedList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 public class EngineImpl implements Engine {
 
     private Sheet currentSheet = null;
     private FileManager fileManager = new FileManager();
-    private Version versions =new Version();
+    private List <Version> versionsList = new LinkedList<Version>();
+    //private Version versions =new Version();
     private static final String SHEET_NOT_LOADED_MESSAGE = "Sheet is not loaded. Please load a sheet before attempting to access it.";
 
 
@@ -19,7 +23,7 @@ public class EngineImpl implements Engine {
         try {
             //Sheet lastSheet = currentSheet;
             currentSheet = fileManager.processFile(filePath);
-          //TODO FIX WITH NOA  versions.addVersion(currentSheet);
+            addVersion(currentSheet,0);
         }
         catch (Exception e) {
             throw new Exception(e.getMessage());
@@ -68,7 +72,7 @@ public class EngineImpl implements Engine {
             }
             clonedSheet.upgradeCellsVersions();
             currentSheet = clonedSheet;
-            versions.addVersion(currentSheet,numOfCellsChanged);
+            addVersion(currentSheet,numOfCellsChanged);
 
         }
         //else - stay as it was before and throw exception
@@ -80,31 +84,50 @@ public class EngineImpl implements Engine {
     }
 
     //5
-    public SheetDTO showVersions(int versionNumber) throws Exception {
+    public SheetDTO getSheetDTOByVersion(int versionNumber) throws Exception {
         if (!sheetLoadad()) {
             throw new IllegalStateException(SHEET_NOT_LOADED_MESSAGE);
         }
 
-        return versions.getSpecificVersion(versionNumber).toSheetDTO();
+        return getSheetByVersion(versionNumber).toSheetDTO();
 
     }
-    public List<String>
 
-    public List<Integer> getVersion(){
+    //5
+    public List<Integer> getVersions(){
         if (!sheetLoadad()) {
             throw new IllegalStateException(SHEET_NOT_LOADED_MESSAGE);
         }
-        return versions.getNumberOfCellsChangedListDeepClone();
+        return getNumberOfCellsChangedListDeepClone();
     }
-
+    //6
     public void exit() {
         //אם מממשים שמירה בקובץ אז לשמור ולצאת
         //אחרת פשוט לצאת וזהו?
     }
 
-
     public boolean sheetLoadad() {
         return currentSheet != null;
     }
+
+    public Sheet getSheetByVersion(int version) {
+
+        if(versionsList.size()<version){
+            throw new IllegalArgumentException("Version: "+version+" not created yet.");
+        }
+        return versionsList.get(version-1).getSheet();
+    }
+
+    public void addVersion( Sheet sheet,int numberOfCellsChanged) {
+        versionsList.addLast(new Version(sheet,numberOfCellsChanged));
+
+    }
+
+    public List<Integer> getNumberOfCellsChangedListDeepClone() {
+        return versionsList.stream()
+                .map(Version::getNumberOfCellsChanged)
+                .collect(Collectors.toList());
+    }
+
 
 }

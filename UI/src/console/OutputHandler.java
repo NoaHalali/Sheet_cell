@@ -26,7 +26,7 @@ public class OutputHandler {
         printCellsMatrix(sheet);
         System.out.println();
     }
-    public  void printVersionChangedTable(List<Integer> numbers) {
+    public  void printVersionsTable(List<Integer> numbers) {
         int columns = numbers.size();
 
         // Print the table header with "Version"
