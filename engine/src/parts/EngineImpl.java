@@ -5,6 +5,7 @@ import org.glassfish.jaxb.runtime.v2.schemagen.xmlschema.List;
 import parts.cell.*;
 import parts.cell.coordinate.Coordinate;
 
+
 public class EngineImpl implements Engine {
 
     private Sheet currentSheet = null;
@@ -87,12 +88,14 @@ public class EngineImpl implements Engine {
         return versions.getSpecificVersion(versionNumber).toSheetDTO();
 
     }
-//    public List<Integer> getVersion(){
-//        if (!sheetLoadad()) {
-//            throw new IllegalStateException(SHEET_NOT_LOADED_MESSAGE);
-//        }
-//        return
-//    }
+    public List<String>
+
+    public List<Integer> getVersion(){
+        if (!sheetLoadad()) {
+            throw new IllegalStateException(SHEET_NOT_LOADED_MESSAGE);
+        }
+        return versions.getNumberOfCellsChangedListDeepClone();
+    }
 
     public void exit() {
         //אם מממשים שמירה בקובץ אז לשמור ולצאת
