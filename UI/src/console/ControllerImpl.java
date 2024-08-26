@@ -5,6 +5,7 @@ import parts.SheetDTO;
 import parts.cell.CellDTO;
 import parts.cell.coordinate.Coordinate;
 
+import java.util.List;
 import java.util.Scanner;
 
 public class ControllerImpl implements Controller {
@@ -148,8 +149,7 @@ public class ControllerImpl implements Controller {
         DISPLAY_VERSIONS {
             @Override
             public void execute(ControllerImpl controller) {
-                System.out.println("Deleting item...");
-                // Add delete logic here
+               // printTable(controller.engine)
             }
             @Override
             public String toString() {
@@ -170,6 +170,21 @@ public class ControllerImpl implements Controller {
 
         // Abstract method to be implemented by each enum constant
         public abstract void execute(ControllerImpl controller);
+    }
+    public  void printTable(List<Integer> numbers) {
+        int columns = numbers.size();
+
+        // Print the table header with "Version"
+        for (int col = 0; col < columns; col++) {
+            System.out.print("| " + String.format("%-8s", "Version " + (col + 1)));
+        }
+        System.out.println("|");
+
+        // Print the table row with numbers
+        for (int col = 0; col < columns; col++) {
+            System.out.print("| " + String.format("%-8d", numbers.get(col)));
+        }
+        System.out.println("|");
     }
 
 

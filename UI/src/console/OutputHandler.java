@@ -26,7 +26,21 @@ public class OutputHandler {
         printCellsMatrix(sheet);
         System.out.println();
     }
+    public  void printVersionChangedTable(List<Integer> numbers) {
+        int columns = numbers.size();
 
+        // Print the table header with "Version"
+        for (int col = 0; col < columns; col++) {
+            System.out.print("| " + String.format("%-8s", "Version " + (col + 1)));
+        }
+        System.out.println("|");
+
+        // Print the table row with numbers
+        for (int col = 0; col < columns; col++) {
+            System.out.print("| " + String.format("%-8d", numbers.get(col)));
+        }
+        System.out.println("|");
+    }
     public void printCellsMatrix(SheetDTO sheet) {
         int numberOfCols = sheet.getNumberOfCols();
         int numberOfRows = sheet.getNumberOfRows();
