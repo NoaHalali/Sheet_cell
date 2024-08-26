@@ -26,8 +26,9 @@ public class OutputHandler {
         printCellsMatrix(sheet);
         System.out.println();
     }
-    public  void printVersionsTable(List<Integer> numbers) {
-        int columns = numbers.size();
+
+    public  void printVersionsTable(List<Integer> versions) {
+        int columns = versions.size();
 
         // Print the table header with "Version"
         for (int col = 0; col < columns; col++) {
@@ -37,7 +38,7 @@ public class OutputHandler {
 
         // Print the table row with numbers
         for (int col = 0; col < columns; col++) {
-            System.out.print("| " + String.format("%-8d", numbers.get(col)));
+            System.out.print("| " + String.format("%-8d", versions.get(col)));
         }
         System.out.println("|");
     }
@@ -86,6 +87,7 @@ public class OutputHandler {
                         cellEffectiveValue = "";
                     }
 
+                    //TODO - in the next missions - add the option of overflow to next line (if possible according to the height of cell)
                     int startIndex = line * columnWidth;
                     System.out.print("|");
                     int strIndex = startIndex;
@@ -159,7 +161,7 @@ public class OutputHandler {
 //                    strIndex++;
 //                }
 //
-//                //TODO - in the next missions - add the option of overflow to next line (if possible according to the height of cell)
+//
 //            }
 //            System.out.println(); // מעבר לשורה הבאה
 //        }
@@ -250,7 +252,6 @@ public class OutputHandler {
         String originalValue = cell.getOriginalValue();
         System.out.println("Original Value: " + originalValue);
 
-        //TODO - implement the toString()
         EffectiveValue effectiveValue = cell.getEffectiveValue();
         System.out.println("Effective Value: " + calcValueToPrint(effectiveValue));
     }
