@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class Sheet implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -125,56 +124,54 @@ public class Sheet implements Serializable {
         return false;
     }
 
-    public void createNewCell(Coordinate coord, String originalValue){
+    public void createNewCellInSheet(Coordinate coord, String originalValue){
         cellsMatrix[coord.getRow()-1][coord.getCol()-1] = new Cell(coord,originalValue);
+    }
+    public void createNewCellValueForCommand1(Cell cell) throws Exception {
+
+        List<Cell> dependsOnCellList = new LinkedList<Cell>();
+        Expression expression = getExpressionOfCell(cell.getOriginalValue(), dependsOnCellList);
+        cell.setExpression(expression);
+      updateDependencies(cell, dependsOnCellList);
+
     }
 
 
-
-    public void createNewCellValueFromOriginalValue(String originalValue,Coordinate coord) throws Exception {
+    public void createNewCellForCommand4(String originalValue, Coordinate coord) throws Exception {
+        if(originalValue.isBlank()){
+            throw new Exception("Cell at coordinate "+coord+" is already empty!");
+        }
 
         Cell changeCell;
         List<Cell> dependsOnCellList = new LinkedList<Cell>();
         Expression expression = getExpressionOfCell(originalValue, dependsOnCellList);
+        createNewCellInSheet(coord, originalValue);
         changeCell = getCellByCoord(coord);
-
-        if(changeCell == null){
-            createNewCell(coord, originalValue);
-            changeCell = getCellByCoord(coord);
-            changeCell.setExpression(expression);
-            changeCell.setCellOriginalValue(originalValue);
-            try {
-                changeCell.getAndUpdateEffectiveValue();
-            }
-            catch(Exception e){
-                checkToDeleteCell(originalValue, coord);
-                throw new Exception("cell at coordinate "+coord+" cannot be created :" +e.getMessage());
-
-            }
-        }else{
-            changeCell = getCellByCoord(coord);
-            changeCell.setExpression(expression);
+        changeCell.setExpression(expression);
+        //changeCell.setCellOriginalValue(originalValue);
+        try {
+            changeCell.getAndUpdateEffectiveValue();
+            updateDependencies(changeCell, dependsOnCellList);
         }
-        updateDependencies(changeCell, dependsOnCellList);
+        catch(Exception e){
+            deleteCell(coord);
+            throw new Exception("cell at coordinate "+coord+" cannot be created :" +e.getMessage());
+
+        }
     }
+
 
     public void updateCellValueFromOriginalValue(String originalValue, Coordinate coord) throws Exception {
 
         //נבדוק אם תא זהקיים במבנה הנתונים אם לא נקצה מקום תא לו נעדכן ערך
         //ליצור רשימה חדשה של תאים ונבצע השמה ל- רשימת התאים מהם הוא מושפע בנוסף נשמור את הרשימה הישנה במשתנה כלשהו
+        if((originalValue.isBlank()){
+            checkToDeleteCell
+        }
         if(!checkToDeleteCell(originalValue, coord)) {
             Cell changeCell;
             List<Cell> dependsOnCellList = new LinkedList<Cell>();
             Expression expression = getExpressionOfCell(originalValue, dependsOnCellList);
-
-            if (getCellByCoord(coord) == null) {
-//                createNewCell(coord, originalValue);
-                changeCell = getCellByCoord(coord);
-//                changeCell.setExpression(expression);
-//                changeCell.getAndUpdateEffectiveValue();
-//                  changeCell.updateCellsVersions(version);
-
-            }else {
                 changeCell = getCellByCoord(coord);
                 Expression oldExpression = changeCell.getCellValue();
                 changeCell.checkForCircularDependencyWrapper(coord, dependsOnCellList);
@@ -184,10 +181,7 @@ public class Sheet implements Serializable {
                 } catch (Exception e) {
                     changeCell.setExpression(oldExpression);
                     throw new Exception(e.getMessage());
-                }
-                changeCell.setCellOriginalValue(originalValue);
-            }
-
+                }changeCell.setCellOriginalValue(originalValue);
             updateDependencies(changeCell, dependsOnCellList);
 
         }else{
@@ -345,8 +339,7 @@ public class Sheet implements Serializable {
         for(Cell[] cells : cellsMatrix){
             for(Cell cell : cells){
                 if(cell!=null){
-                    createNewCellValueFromOriginalValue(cell.getOriginalValue(),cell.getCoordinate());
-
+                    createNewCellValueForCommand1(cell);
                 }
             }
         }

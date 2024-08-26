@@ -64,8 +64,9 @@ public class EngineImpl implements Engine {
         Sheet clonedSheet = currentSheet.cloneSheet();
 
         if (clonedSheet != null) {
-            if(clonedSheet.getCellByCoord(coord)==null){
-               clonedSheet.createNewCellValueFromOriginalValue(originalValue,coord);
+            Cell cell=clonedSheet.getCellByCoord(coord);
+            if( cell == null){
+               clonedSheet.createNewCellForCommand4(originalValue,coord);
                clonedSheet.updateVersionForSheetAndCreatedCell(coord);
             }else{
                 clonedSheet.updateCellValueFromOriginalValue(originalValue,coord);
