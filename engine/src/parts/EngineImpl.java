@@ -41,12 +41,12 @@ public class EngineImpl implements Engine {
     }
 
     //3
-    public CellDTO getCellDTOByCoordinate(Coordinate coordinate) {
+    public CellDTO getCellDTOByCoordinate(Coordinate coordinate) throws IllegalArgumentException{
         if (!sheetLoadad()) {
             throw new IllegalStateException(SHEET_NOT_LOADED_MESSAGE);
         }
-        Cell cell=currentSheet.getCellByCoord(coordinate);
 
+        Cell cell=currentSheet.getCellByCoord(coordinate);
         if(cell!= null){
             return cell.toCellDTO();
         }
@@ -60,19 +60,24 @@ public class EngineImpl implements Engine {
         if (!sheetLoadad()) {
             throw new IllegalStateException(SHEET_NOT_LOADED_MESSAGE);
         }
-        int numOfCellsChanged=1;
+
         Sheet clonedSheet = currentSheet.cloneSheet();
+        int numOfCellsChanged;
 
         if (clonedSheet != null) {
             Cell cell=clonedSheet.getCellByCoord(coord);
-            if( cell == null){
-               clonedSheet.createNewCellForCommand4(originalValue,coord);
-               clonedSheet.updateVersionForSheetAndCreatedCell(coord);
-            }else{
-                clonedSheet.updateCellValueFromOriginalValue(originalValue,coord);
-                numOfCellsChanged = clonedSheet.upgradeCellsVersions();
+            clonedSheet.upgradeVersion(); //פה או בתוך התנאים?
+
+            if(cell != null){
+                clonedSheet.updateCellValue(originalValue,coord, cell);
+                numOfCellsChanged = clonedSheet.upgradeCellsVersionsAndGetNumOfChanges();
             }
-            clonedSheet.upgradeCellsVersions();
+            else{
+                cell = clonedSheet.createNewCellForCommand4(originalValue,coord);
+                clonedSheet.upgradeCellVersion(cell);
+                numOfCellsChanged=1;
+            }
+
             currentSheet = clonedSheet;
             addVersion(currentSheet,numOfCellsChanged);
 

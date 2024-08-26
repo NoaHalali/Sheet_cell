@@ -116,66 +116,6 @@ public class OutputHandler {
     }
 
 
-//    public void printCellsMatrix(SheetDTO sheet) {
-//        int numberOfCols = sheet.getNumberOfCols();
-//        int numberOfRows = sheet.getNumberOfRows();
-//        int columnWidth = sheet.getColumnWidth();
-//        int rowHeight = sheet.getRowHeight();
-//        CellDTO[][] cellsMatrix = sheet.getCellsMatrix();
-//
-//        // ריפוד לרוחב השורה עבור מספרי השורות
-//        for (int i = 0; i < 3; i++) {
-//            System.out.print(" ");
-//        }
-//
-//        // הדפסת שמות העמודות
-//        for (int col = 0; col < numberOfCols; col++) {
-//            char columnName = (char) ('A' + col);
-//            System.out.print("|" + columnName);
-//            // הוספת רווחים בהתאם לרוחב העמודה
-//            for (int i = 1; i < columnWidth; i++) {
-//                System.out.print(" ");
-//            }
-//        }
-//        System.out.println();
-//
-//        // הדפסת התאים בשורות ובעמודות
-//        for (int row = 0; row < numberOfRows; row++) {
-//            // הדפסת מספר שורה בפורמט של שתי ספרות
-//            String rowNumber = String.format("%02d", row + 1);
-//            System.out.print(rowNumber + " ");
-//
-//            for (int col = 0; col < numberOfCols; col++) {
-//                CellDTO cell = cellsMatrix[row][col];
-//                String cellEffectiveValue;
-//
-//                if (cell != null) {
-//                    cellEffectiveValue = calcValueToPrint(cell.getEffectiveValue());
-//                }
-//                else
-//                {
-//                    cellEffectiveValue = "";
-//                }
-//
-//                System.out.print("|");
-//                int strIndex = 0;
-//                while (strIndex < cellEffectiveValue.length() && strIndex < columnWidth) {
-//                    System.out.print(cellEffectiveValue.charAt(strIndex));
-//                    strIndex++;
-//                }
-//
-//                while(strIndex < columnWidth)
-//                {
-//                    System.out.print(" ");
-//                    strIndex++;
-//                }
-//
-//
-//            }
-//            System.out.println(); // מעבר לשורה הבאה
-//        }
-//    }
-
     public String calcValueToPrint(EffectiveValue effectiveValue) {
         //TODO- maybe add exceptions, try and catch
         if(effectiveValue.getCellType() == CellType.NUMERIC) {
@@ -218,7 +158,7 @@ public class OutputHandler {
         }
         else if (effectiveValue.getCellType() == CellType.BOOLEAN)
         {
-            return String.valueOf(effectiveValue.extractValueWithExpectation(Boolean.class));
+            return String.valueOf(effectiveValue.extractValueWithExpectation(Boolean.class)).toUpperCase();
         }
         else
         {

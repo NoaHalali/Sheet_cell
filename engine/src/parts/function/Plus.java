@@ -27,7 +27,7 @@ public class Plus extends BinaryExpression {
         //double result = (Double) leftValue.getValue() + (Double) rightValue.getValue();
         try {
             double result = leftValue.extractValueWithExpectation(Double.class) + rightValue.extractValueWithExpectation(Double.class);
-            return  new EffectiveValueImpl(CellType.NUMERIC, result);
+            return new EffectiveValueImpl(CellType.NUMERIC, result);
              
         }
         catch(ClassCastException e) {

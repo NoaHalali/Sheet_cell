@@ -26,6 +26,7 @@ public class ControllerImpl implements Controller {
             catch (Exception e) {
                 System.out.println(e.getMessage());
             }
+
         }
     }
 
@@ -38,11 +39,14 @@ public class ControllerImpl implements Controller {
                 try {
                     String path = controller.inputHandler.getFilePathFromUser();
                     controller.engine.readFileData(path);
-                    System.out.println("File loaded succesfully!\n");
+                    System.out.println("File loaded succesfully!");
                 }
                 catch (Exception e) {
                     System.out.println("File loading failed");
                     System.out.println(e.getMessage());
+                    System.out.println();
+                }
+                finally {
                     System.out.println();
                 }
             }
@@ -89,8 +93,8 @@ public class ControllerImpl implements Controller {
                 catch (Exception e)
                 {
                     System.out.println(e.getMessage());
-                    System.out.println();
                 }
+
             }
             @Override
             public String toString() {
@@ -105,6 +109,7 @@ public class ControllerImpl implements Controller {
                 Coordinate coordinate = controller.inputHandler.getCoordinateFromUser();
                 try {
                     CellDTO cell = controller.engine.getCellDTOByCoordinate(coordinate);
+
                     if (cell != null) {
                         controller.outputHandler.printCellStateBeforeUpdate(cell, coordinate);
                     } else {
@@ -114,7 +119,6 @@ public class ControllerImpl implements Controller {
                     System.out.println(e.getMessage());
                 }
 
-                //getValueToUpdate(controller, coordinate);
                 boolean gettingInputFromUser = true;
                 String input;
                 while (gettingInputFromUser) {

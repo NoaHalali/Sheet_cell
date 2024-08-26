@@ -68,22 +68,8 @@ public class Sheet implements Serializable {
                 .toArray(CellDTO[][]::new);
     }
 
-    public int upgradeCellsVersions(){
-        version++;
-        List<Cell>changedCells = Arrays.stream(cellsMatrix)                          // Stream over rows of cellsMatrix
-                .flatMap(Arrays::stream)                    // Flatten the stream of rows into a single stream of cells
-                .filter(cell -> cell != null)                   // Filter out null cells
-                .filter(Cell::calculateAndCheckIfUpdated)   // Filter cells that have been updated
-                .toList();
-        //  if(changedCells.size() != 0){//תכלס שטום דבר לא השתנה
-
-        changedCells.stream().forEach(cell -> cell.updateCellsVersions(version));
-        if(changedCells.size() == 0){//אף תא לא השתנה לכן רק התא לו שינינו את ערך המקור ולכן קיים שינוי 1 במידה וערך המקור לא השתנה אז זה שגיאה ???
-            return 1;
-        }
-
-        return changedCells.size();  // Filter cells that have been updated
-
+    public void setCellsMatrix(Cell[][] cellsMatrix) {
+        this.cellsMatrix = cellsMatrix;
     }
 
     public Cell getCellByCoord(Coordinate coord)throws IllegalArgumentException{
@@ -91,14 +77,7 @@ public class Sheet implements Serializable {
         validateCoordinateBounds(coord);
         Cell cell = cellsMatrix[coord.getRow()-1][coord.getCol()-1];
 
-//        if (cell == null) {
-//            throw new NullPointerException(("Cell at coordinate: " + coord + " is Empty."));
-//        }
         return cell;
-    }
-
-    public void setCellsMatrix(Cell[][] cellsMatrix) {
-        this.cellsMatrix = cellsMatrix;
     }
 
     public void validateSheetExpressions() throws Exception {
@@ -107,26 +86,36 @@ public class Sheet implements Serializable {
         evaluteSheetValuesForRefCheck();
     }
 
+    public void upgradeVersion(){
+        version++;
+    }
+
+    public int upgradeCellsVersionsAndGetNumOfChanges(){
+        List<Cell>changedCells = Arrays.stream(cellsMatrix)                          // Stream over rows of cellsMatrix
+                .flatMap(Arrays::stream)                    // Flatten the stream of rows into a single stream of cells
+                .filter(cell -> cell != null)                   // Filter out null cells
+                .filter(Cell::calculateAndCheckIfUpdated)   // Filter cells that have been updated
+                .toList();
+        //  if(changedCells.size() != 0){//תכלס שטום דבר לא השתנה
+
+        changedCells.stream().forEach(cell -> cell.setLastUpdatedVersion(version));
+        if(changedCells.size() == 0){//אף תא לא השתנה לכן רק התא לו שינינו את ערך המקור ולכן קיים שינוי 1 במידה וערך המקור לא השתנה אז זה שגיאה ???
+            return 1; //TODO -  לשאול את אמיר
+        }
+
+        return changedCells.size();  // Filter cells that have been updated
+    }
+
+
+
     public void deleteCell(Coordinate coord){
         cellsMatrix[coord.getRow()-1][coord.getCol()-1] = null;
     }
 
-    private boolean checkToDeleteCell(String originalValue,Coordinate coord)throws Exception{
-
-        if(originalValue.isBlank()){
-            Cell deletedCell = getCellByCoord(coord);
-            if(deletedCell == null){
-                throw new Exception("Cell at coordinate "+coord+" is already empty!");
-            }
-            deletedCell.checkIfCellCanBeDeleted();
-            return true;
-        }
-        return false;
+    public void addCell(Coordinate coord, Cell cell){
+        cellsMatrix[coord.getRow()-1][coord.getCol()-1] = cell;
     }
 
-    public void createNewCellInSheet(Coordinate coord, String originalValue){
-        cellsMatrix[coord.getRow()-1][coord.getCol()-1] = new Cell(coord,originalValue);
-    }
     public void createNewCellValueForCommand1(Cell cell) throws Exception {
 
         List<Cell> dependsOnCellList = new LinkedList<Cell>();
@@ -136,58 +125,60 @@ public class Sheet implements Serializable {
 
     }
 
-
-    public void createNewCellForCommand4(String originalValue, Coordinate coord) throws Exception {
-        if(originalValue.isBlank()){
+    //changed that returns cell
+    public Cell createNewCellForCommand4(String originalValue, Coordinate coord) throws Exception {
+        if(originalValue.isEmpty()){
             throw new Exception("Cell at coordinate "+coord+" is already empty!");
         }
 
-        Cell changeCell;
+        Cell cell;
         List<Cell> dependsOnCellList = new LinkedList<Cell>();
         Expression expression = getExpressionOfCell(originalValue, dependsOnCellList);
-        createNewCellInSheet(coord, originalValue);
-        changeCell = getCellByCoord(coord);
-        changeCell.setExpression(expression);
+        Cell newCell = new Cell(coord,originalValue);
+        addCell(coord, newCell);
+        cell = getCellByCoord(coord);
+        cell.setExpression(expression);
         //changeCell.setCellOriginalValue(originalValue);
         try {
-            changeCell.getAndUpdateEffectiveValue();
-            updateDependencies(changeCell, dependsOnCellList);
+            cell.getAndUpdateEffectiveValue();
+            updateDependencies(cell, dependsOnCellList);
+            return cell;
         }
         catch(Exception e){
             deleteCell(coord);
-            throw new Exception("cell at coordinate "+coord+" cannot be created :" +e.getMessage());
+            throw new Exception("Cell at coordinate "+coord+" cannot be created :" +e.getMessage());
 
         }
     }
 
-
-    public void updateCellValueFromOriginalValue(String originalValue, Coordinate coord) throws Exception {
+    public void updateCellValue(String originalValue, Coordinate coord, Cell changeCell) throws Exception {
 
         //נבדוק אם תא זהקיים במבנה הנתונים אם לא נקצה מקום תא לו נעדכן ערך
         //ליצור רשימה חדשה של תאים ונבצע השמה ל- רשימת התאים מהם הוא מושפע בנוסף נשמור את הרשימה הישנה במשתנה כלשהו
-        if((originalValue.isBlank()){
-            checkToDeleteCell
+
+        if (originalValue.isEmpty()) {
+            changeCell.checkIfCellCanBeDeleted();
+            deleteCell(coord);
+            //TODO - אולי לשלוח איכשהו לממשק משתמש שהתא נמחק בהצלחה
         }
-        if(!checkToDeleteCell(originalValue, coord)) {
-            Cell changeCell;
+        else {
             List<Cell> dependsOnCellList = new LinkedList<Cell>();
             Expression expression = getExpressionOfCell(originalValue, dependsOnCellList);
-                changeCell = getCellByCoord(coord);
-                Expression oldExpression = changeCell.getCellValue();
-                changeCell.checkForCircularDependencyWrapper(coord, dependsOnCellList);
-                changeCell.setExpression(expression);
-                try {
-                    changeCell.checkIfCellExpressionCanBeUpdatedWrapper();
-                } catch (Exception e) {
-                    changeCell.setExpression(oldExpression);
-                    throw new Exception(e.getMessage());
-                }changeCell.setCellOriginalValue(originalValue);
+            //changeCell = getCellByCoord(coord);
+            Expression oldExpression = changeCell.getCellValue();
+            changeCell.checkForCircularDependencyWrapper(coord, dependsOnCellList);
+            changeCell.setExpression(expression);
+
+            try {
+                changeCell.checkIfCellExpressionCanBeUpdatedWrapper();
+            } catch (Exception e) {
+                changeCell.setExpression(oldExpression);
+                throw new Exception(e.getMessage());
+            }
+            changeCell.setCellOriginalValue(originalValue);
             updateDependencies(changeCell, dependsOnCellList);
 
-        }else{
-            deleteCell(coord);
         }
-
     }
 
 
@@ -296,9 +287,9 @@ public class Sheet implements Serializable {
                     break;
                 case "REF"://sheet סטטי ?
                     //לבדוק שאין ארגומנט שלישי
-                    Coordinate RefCoord = createAndValidateCoordinate(list.get(1));
-                    //CoordinateImpl.stringToCoord(list.get(1));
-                    Cell refcell = getCellByCoord(RefCoord);//find Cell in map or 2dim array and cell coord: list.get(1)
+                    Coordinate refCoord = CoordinateImpl.parseCoordinate(list.get(1));
+                    validateCoordinateBounds(refCoord);
+                    Cell refcell = getCellByCoord(refCoord);//find Cell in map or 2dim array and cell coord: list.get(1)
                     dependsOnCellList.add(refcell); // לתא עליו התבקשנו לעדכן אערך נקצה רשימה חדשה בההתאים המשפיעים על תא זה שהיא תהיה רשימת המושפעים מהתא עליו נבצע עדכון +refcell
                     res = new Ref(refcell);
 
@@ -308,12 +299,6 @@ public class Sheet implements Serializable {
             }
         }
         return res;
-    }
-
-    private  Coordinate createAndValidateCoordinate(String strCoordinate) throws IllegalArgumentException{
-        Coordinate coord = CoordinateImpl.parseCoordinate(strCoordinate);
-        validateCoordinateBounds(coord);
-        return coord;
     }
 
     public Cell[][] getCellsMatrix() {
@@ -380,7 +365,6 @@ public class Sheet implements Serializable {
         }
     }
     public void updateVersionForSheetAndCreatedCell(Coordinate coord){
-        version++;
         getCellByCoord(coord).setLastUpdatedVersion(version);
     }
     public Sheet cloneSheet() {
@@ -400,6 +384,10 @@ public class Sheet implements Serializable {
             e.printStackTrace();
             return null;
         }
+    }
+
+    public void upgradeCellVersion(Cell cell) {
+        cell.setLastUpdatedVersion(version);
     }
 }
 

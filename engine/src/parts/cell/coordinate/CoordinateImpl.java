@@ -13,12 +13,6 @@ public class CoordinateImpl implements Coordinate, Serializable {
 
     }
 
-//    public static Coordinate stringToCoord(String Coord) throws IllegalArgumentException  {
-//       Coordinate coord = parseCoordinate(Coord);
-//
-//
-//    }
-
     @Override
     public int getRow() {
         return row;

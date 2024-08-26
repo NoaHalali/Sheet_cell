@@ -18,8 +18,8 @@ public class Cell implements Serializable {
     private String originalValue;
     private EffectiveValue effectiveValue;
     private Expression cellValue;
-    private List<Cell> influencingOn ;//משפיע על התאים האלה
-    private List<Cell> dependsOn ; //התאים שמושפע מהם
+    private List<Cell> influencingOn;//משפיע על התאים האלה
+    private List<Cell> dependsOn; //התאים שמושפע מהם
 
     //TODO - maybe send version of sheet
     public Cell(Coordinate coordinate, String originalValue) {
@@ -30,20 +30,21 @@ public class Cell implements Serializable {
         this.influencingOn = new LinkedList<Cell>();
         this.dependsOn = new LinkedList<Cell>();
     }
-    public  boolean calculateAndCheckIfUpdated(){
+
+    public boolean calculateAndCheckIfUpdated() {
         EffectiveValue oldEffectiveValue = effectiveValue; //in case the next line changes it
         EffectiveValue newEffectiveValue = getAndUpdateEffectiveValue();
-        if(oldEffectiveValue.equals(newEffectiveValue)){
+        if (oldEffectiveValue.equals(newEffectiveValue)) {
             return false;
         }
         effectiveValue = newEffectiveValue;
         return true;
     }
-    public void setCellOriginalValue(String originalValue){
-    this.originalValue = originalValue;
+
+
+    public void setCellOriginalValue(String originalValue) {
+        this.originalValue = originalValue;
     }
-
-
 
 
 //    public void updateValue(Expression newValue) {
@@ -72,32 +73,26 @@ public class Cell implements Serializable {
                 getDependsOnCoordinates()
         );
     }
-    public void upgradeVersion(int newVersion){
-        lastUpdatedVersion = newVersion + 1;
-    }
+
+
     public Expression getCellValue() {
         return cellValue;
     }
 
     public void setExpression(Expression cellValue) {
-       this.cellValue = cellValue;
+        this.cellValue = cellValue;
     }
 
-    public void removeCellFromInfluencingOnList(Cell cell){
+    public void setLastUpdatedVersion(int newVerion) {
+        lastUpdatedVersion = newVerion;
+    }
+
+    public void removeCellFromInfluencingOnList(Cell cell) {
         influencingOn.remove(cell);
     }
 
-    public void AddCellToInfluencingOnList(Cell cell){
+    public void AddCellToInfluencingOnList(Cell cell) {
         influencingOn.add(cell);
-    }
-
-    public void updateCellsVersions(int currentVersion) {
-        lastUpdatedVersion = currentVersion;
-//        for(Cell cell : influencingOn){
-//            if(calculateAndCheckIfUpdated()){
-//                updateCellsVersions(currentVersion);
-//            }
-    //}
     }
 
     public List<Cell> getInfluencingOn() {
@@ -107,18 +102,20 @@ public class Cell implements Serializable {
     public List<Cell> getDependsOn() {
         return dependsOn;
     }
+
     public void setDependsOn(List<Cell> dependsOn) {
         this.dependsOn = dependsOn;
     }
 
-    //TODO- Move to UI
-    public List<String> getDependsOnNames() {
-        return dependsOn.stream().map(Cell::getCoordinateString).collect(Collectors.toList());
-
-    }
-    public List<String> getInfluencingOnNames() {
-        return influencingOn.stream().map(Cell::getCoordinateString).collect(Collectors.toList());
-    }
+//    //TODO- Move to UI
+//    public List<String> getDependsOnNames() {
+//        return dependsOn.stream().map(Cell::getCoordinateString).collect(Collectors.toList());
+//
+//    }
+//
+//    public List<String> getInfluencingOnNames() {
+//        return influencingOn.stream().map(Cell::getCoordinateString).collect(Collectors.toList());
+//    }
 
 
     public List<Coordinate> getDependsOnCoordinates() {
@@ -134,27 +131,30 @@ public class Cell implements Serializable {
     public Coordinate getCoordinate() {
         return coordinate;
     }
-    public void checkIfCellCanBeDeleted(){
-        if(!influencingOn.isEmpty()){
-           throw new RuntimeException( "cannot delete cell on coordinate "+coordinate + " because he is influencing other cell with ref" );
+
+    public void checkIfCellCanBeDeleted() {
+        if (!influencingOn.isEmpty()) {
+            throw new RuntimeException("cannot delete cell on coordinate " + coordinate + " because he is influencing other cell with ref");
         }
     }
-    public void checkIfCellExpressionCanBeUpdatedWrapper(){
+
+    public void checkIfCellExpressionCanBeUpdatedWrapper() {
         HashSet<Coordinate> Coordset = new HashSet<>();
         Coordset.add(coordinate);
         checkIfCellExpressionCanBeUpdated(Coordset);
 
     }
-    public void checkIfCellExpressionCanBeUpdated(HashSet<Coordinate> coordSet){
+
+    public void checkIfCellExpressionCanBeUpdated(HashSet<Coordinate> coordSet) {
 
         cellValue.calculateEffectiveValue();
-        for(Cell cell : influencingOn){
-            if(!coordSet.contains(cell.getCoordinate())){
+        for (Cell cell : influencingOn) {
+            if (!coordSet.contains(cell.getCoordinate())) {
                 coordSet.add(cell.getCoordinate());
                 try {
                     cell.checkIfCellExpressionCanBeUpdated(coordSet);
-                }catch (ClassCastException e){
-                    throw new ClassCastException(cell.getCoordinate()+" "+e.getMessage());
+                } catch (ClassCastException e) {
+                    throw new ClassCastException(cell.getCoordinate() + " " + e.getMessage());
                 }
             }
 
@@ -162,20 +162,20 @@ public class Cell implements Serializable {
     }
 
 
-
-    public void checkForCircularDependencyWrapper(Coordinate coordinate ,List<Cell> dependsOn) {
+    public void checkForCircularDependencyWrapper(Coordinate coordinate, List<Cell> dependsOn) {
         HashSet<Coordinate> coordSet = new HashSet<>();
         coordSet.add(coordinate);
-        checkForCircularDependency(coordSet,dependsOn);
+        checkForCircularDependency(coordSet, dependsOn);
 
     }
-    public void checkForCircularDependency(HashSet<Coordinate> coordSet,List<Cell> dependsOn) {
-        for(Cell cell: dependsOn){
-            if(coordSet.contains(cell.getCoordinate())){
+
+    public void checkForCircularDependency(HashSet<Coordinate> coordSet, List<Cell> dependsOn) {
+        for (Cell cell : dependsOn) {
+            if (coordSet.contains(cell.getCoordinate())) {
                 throw new RuntimeException("Circular dependency found");//לחפור וזה
             }
             coordSet.add(cell.getCoordinate());
-            cell.checkForCircularDependency(coordSet,cell.getDependsOn());
+            cell.checkForCircularDependency(coordSet, cell.getDependsOn());
         }
 
     }
@@ -194,17 +194,8 @@ public class Cell implements Serializable {
         effectiveValue = cellValue.calculateEffectiveValue();
         return effectiveValue;
     }
-     public EffectiveValue getEffectiveValue() {
+
+    public EffectiveValue getEffectiveValue() {
         return cellValue.calculateEffectiveValue();
-     }
-
-
-    public int getLastUpdatedVersion() {
-        return lastUpdatedVersion;
     }
-
-     public void setLastUpdatedVersion(int lastUpdatedVersion) {
-        this.lastUpdatedVersion = lastUpdatedVersion;
-     }
-
-    }
+}
