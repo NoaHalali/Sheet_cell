@@ -17,7 +17,7 @@ public class EngineImpl implements Engine {
         try {
             //Sheet lastSheet = currentSheet;
             currentSheet = fileManager.processFile(filePath);
-            versions.addVersion(currentSheet);
+          //TODO FIX WITH NOA  versions.addVersion(currentSheet);
         }
         catch (Exception e) {
             throw new Exception(e.getMessage());
@@ -53,7 +53,7 @@ public class EngineImpl implements Engine {
         if (!sheetLoadad()) {
             throw new IllegalStateException(SHEET_NOT_LOADED_MESSAGE);
         }
-
+        int numOfCellsChanged=1;
         Sheet clonedSheet = currentSheet.cloneSheet();
 
         if (clonedSheet != null) {
@@ -62,11 +62,11 @@ public class EngineImpl implements Engine {
                clonedSheet.updateVersionForSheetAndCreatedCell(coord);
             }else{
                 clonedSheet.updateCellValueFromOriginalValue(originalValue,coord);
-                clonedSheet.upgradeCellsVersions();
+                numOfCellsChanged = clonedSheet.upgradeCellsVersions();
             }
             clonedSheet.upgradeCellsVersions();
             currentSheet = clonedSheet;
-            versions.addVersion(currentSheet);
+            versions.addVersion(currentSheet,numOfCellsChanged);
 
         }
         //else - stay as it was before and throw exception

@@ -68,13 +68,22 @@ public class Sheet implements Serializable {
                         .toArray(CellDTO[]::new))
                 .toArray(CellDTO[][]::new);
     }
-    public void upgradeCellsVersions(){
-            version++;
-            Arrays.stream(cellsMatrix)                          // Stream over rows of cellsMatrix
-                    .flatMap(Arrays::stream)                    // Flatten the stream of rows into a single stream of cells
-                    .filter(cell -> cell != null)                   // Filter out null cells
-                    .filter(Cell::calculateAndCheckIfUpdated)   // Filter cells that have been updated
-                    .forEach(cell -> cell.updateCellsVersions(version));  // Update versions of influencing cells
+    public int upgradeCellsVersions(){
+        version++;
+        List<Cell>changedCells = Arrays.stream(cellsMatrix)                          // Stream over rows of cellsMatrix
+                .flatMap(Arrays::stream)                    // Flatten the stream of rows into a single stream of cells
+                .filter(cell -> cell != null)                   // Filter out null cells
+                .filter(Cell::calculateAndCheckIfUpdated)   // Filter cells that have been updated
+                .toList();
+        //  if(changedCells.size() != 0){//תכלס שטום דבר לא השתנה
+
+        changedCells.stream().forEach(cell -> cell.updateCellsVersions(version));
+        if(changedCells.size() == 0){//אף תא לא השתנה לכן רק התא לו שינינו את ערך המקור ולכן קיים שינוי 1 במידה וערך המקור לא השתנה אז זה שגיאה ???
+            return 1;
+        }
+
+        return changedCells.size();  // Filter cells that have been updated
+
 
     }
 
