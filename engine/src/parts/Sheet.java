@@ -68,6 +68,7 @@ public class Sheet implements Serializable {
                         .toArray(CellDTO[]::new))
                 .toArray(CellDTO[][]::new);
     }
+
     public int upgradeCellsVersions(){
         version++;
         List<Cell>changedCells = Arrays.stream(cellsMatrix)                          // Stream over rows of cellsMatrix
@@ -84,7 +85,6 @@ public class Sheet implements Serializable {
 
         return changedCells.size();  // Filter cells that have been updated
 
-
     }
 
     public Cell getCellByCoord(Coordinate coord)throws IllegalArgumentException{
@@ -96,11 +96,6 @@ public class Sheet implements Serializable {
 //            throw new NullPointerException(("Cell at coordinate: " + coord + " is Empty."));
 //        }
         return cell;
-    }
-
-
-    public void createNewCell(Coordinate coord, String originalValue){
-        cellsMatrix[coord.getRow()-1][coord.getCol()-1] = new Cell(coord,originalValue);
     }
 
     public void setCellsMatrix(Cell[][] cellsMatrix) {
@@ -130,11 +125,19 @@ public class Sheet implements Serializable {
         return false;
     }
 
+    public void createNewCell(Coordinate coord, String originalValue){
+        cellsMatrix[coord.getRow()-1][coord.getCol()-1] = new Cell(coord,originalValue);
+    }
+
+
+
     public void createNewCellValueFromOriginalValue(String originalValue,Coordinate coord) throws Exception {
+
         Cell changeCell;
         List<Cell> dependsOnCellList = new LinkedList<Cell>();
         Expression expression = getExpressionOfCell(originalValue, dependsOnCellList);
         changeCell = getCellByCoord(coord);
+
         if(changeCell == null){
             createNewCell(coord, originalValue);
             changeCell = getCellByCoord(coord);
@@ -240,8 +243,8 @@ public class Sheet implements Serializable {
     }
 
     public Expression getSmallArgs(String OriginalValue){
-        if (OriginalValue.trim().equals("FALSE") || OriginalValue.trim().equals("TRUE")){
-            return new BoolExpression(OriginalValue.trim().equals("TRUE"));
+        if (OriginalValue.trim().equalsIgnoreCase("FALSE") || OriginalValue.trim().equalsIgnoreCase("TRUE")){
+            return new BoolExpression(OriginalValue.trim().equalsIgnoreCase("TRUE"));
         }
         try{
             double num = Double.parseDouble(OriginalValue);
@@ -266,7 +269,7 @@ public class Sheet implements Serializable {
                 arg2 = getExpressionOfCell(list.get(2), dependsOnCellList);
             }
 
-            switch (list.get(0)) {
+            switch (list.get(0).toUpperCase()) {
                 case "PLUS":
                     res = new Plus(arg1, arg2);
                     break;

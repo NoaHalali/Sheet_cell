@@ -111,7 +111,6 @@ public class FileManager {
     }
 
 
-
     private Sheet convertSLTSheetToSheet(STLSheet xmlSheet) {
         STLLayout layout = xmlSheet.getSTLLayout();
         int rows = layout.getRows();
@@ -127,7 +126,7 @@ public class FileManager {
 
         for (STLCell xmlCell : xmlSheet.getSTLCells().getSTLCell()) {
             int row = xmlCell.getRow(); // Assuming 1-based indexing in XML
-            int col = xmlCell.getColumn().charAt(0) - 'A' + 1; // Assuming columns are A, B, C...
+            int col = xmlCell.getColumn().toUpperCase().charAt(0) - 'A' + 1; // Assuming columns are A, B, C...
 
             Coordinate coord = new CoordinateImpl(row, col);
 
