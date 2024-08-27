@@ -17,6 +17,7 @@ public class ControllerImpl implements Controller {
     @Override
     public void runSystem()
     {
+        System.out.println("Welcome to the Shticell!");
         while (systemIsRunning) {
             outputHandler.printMenu();
             MenuOption option =inputHandler.getMenuOptionFromUser();
@@ -31,6 +32,8 @@ public class ControllerImpl implements Controller {
             }
 
         }
+        System.out.println("Bye Bye!");
+
     }
 
     public enum MenuOption {
