@@ -1,5 +1,6 @@
 package parts.cell;
 
+import parts.CellDTO;
 import parts.cell.coordinate.Coordinate;
 import parts.cell.expression.Expression;
 import parts.cell.expression.effectiveValue.EffectiveValue;
@@ -62,8 +63,8 @@ public class Cell implements Serializable {
 //        EffectiveValue = newValue.evaluate();
 //    }in
 
-    public NonEmptyCellDTO toCellDTO() {
-        return new NonEmptyCellDTO(
+    public CellDTO toCellDTO() {
+        return new CellDTO(
                 coordinate, //"A4"
                 originalValue,
                 //cellValue.calculateEffectiveValue(),

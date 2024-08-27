@@ -1,6 +1,6 @@
 package parts;
 
-import parts.cell.NonEmptyCellDTO;
+
 
 public class SheetDTO {
     private int version;
@@ -9,11 +9,11 @@ public class SheetDTO {
     private int numberOfCols;
     private int columnWidth;
     private int rowHeight;
-    private NonEmptyCellDTO[][] cellsMatrix; // מערך דו-ממדי של תאים
+    private CellDTO[][] cellsMatrix; // מערך דו-ממדי של תאים
 
     //TODO - create method in sheet that creates the sheetDTO
     public SheetDTO(int version, String name, int numberOfRows, int numberOfCols,
-                    int columnWidth, int rowHeight, NonEmptyCellDTO[][] cellsDTOMatrix) {
+                    int columnWidth, int rowHeight, CellDTO[][] cellsDTOMatrix) {
         this.version = version;
         this.name = name;
         this.numberOfRows = numberOfRows;
@@ -48,7 +48,7 @@ public class SheetDTO {
         return rowHeight;
     }
 
-    public NonEmptyCellDTO[][] getCellsMatrix() {
+    public CellDTO[][] getCellsMatrix() {
         return cellsMatrix;
     }
 }
