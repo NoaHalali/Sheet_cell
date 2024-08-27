@@ -148,6 +148,7 @@ public class Sheet implements Serializable {
         }
 
 
+
         Cell cell;
         List<Cell> dependsOnCellList = new LinkedList<Cell>();
         Expression expression = getExpressionOfCell(originalValue, dependsOnCellList);
