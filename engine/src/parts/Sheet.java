@@ -132,7 +132,6 @@ public class Sheet implements Serializable {
         Expression expression = getExpressionOfCell(cell.getOriginalValue(), dependsOnCellList);
         cell.setExpression(expression);
       updateDependencies(cell, dependsOnCellList);
-
     }
 
     //changed that returns cell
