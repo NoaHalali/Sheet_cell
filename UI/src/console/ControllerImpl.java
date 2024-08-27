@@ -2,7 +2,9 @@ package console;
 
 import parts.EngineImpl;
 import parts.SheetDTO;
-import parts.CellDTO;
+import parts.cell.CellDTO;
+import parts.cell.EmptyCellDTO;
+import parts.cell.NonEmptyCellDTO;
 import parts.cell.coordinate.Coordinate;
 
 import java.util.List;
@@ -84,15 +86,11 @@ public class ControllerImpl implements Controller {
                         System.out.println("Sheet is not loaded. Please load a sheet before attempting to access it.");
                         return;
                     }
+
                     System.out.println("Please enter cell coordinate ");
                     Coordinate coordinate = controller.inputHandler.getCoordinateFromUser();
                     CellDTO cell = controller.engine.getCellDTOByCoordinate(coordinate);
-                    if(cell != null) {
-                        controller.outputHandler.printCellState(cell, coordinate);
-                    }else{
-
-                    }
-
+                    controller.outputHandler.printCellState(cell, coordinate);
                 }
 
                 catch (Exception e)
@@ -115,8 +113,9 @@ public class ControllerImpl implements Controller {
                 try {
                     CellDTO cell = controller.engine.getCellDTOByCoordinate(coordinate);
 
-                    if (cell != null) {
-                        controller.outputHandler.printCellStateBeforeUpdate(cell);
+                    if (cell instanceof NonEmptyCellDTO) {
+                        NonEmptyCellDTO nonEmptyCell = (NonEmptyCellDTO) cell;
+                        controller.outputHandler.printCellStateBeforeUpdate(nonEmptyCell);
                     } else {
                         System.out.println("Trying create new cell");
                     }
