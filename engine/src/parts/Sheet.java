@@ -132,6 +132,7 @@ public class Sheet implements Serializable {
         cellsMatrix[coord.getRow()-1][coord.getCol()-1] = cell;
     }
 
+
     public void createNewCellValueForCommand1(Cell cell) throws Exception {
 
         List<Cell> dependsOnCellList = new LinkedList<Cell>();
