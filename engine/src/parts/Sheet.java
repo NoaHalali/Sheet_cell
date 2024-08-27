@@ -141,6 +141,7 @@ public class Sheet implements Serializable {
             throw new Exception("Cell at coordinate "+coord+" is already empty!");
         }
 
+
         Cell cell;
         List<Cell> dependsOnCellList = new LinkedList<Cell>();
         Expression expression = getExpressionOfCell(originalValue, dependsOnCellList);
