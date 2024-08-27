@@ -90,7 +90,15 @@ public class ControllerImpl implements Controller {
                     if(cell != null) {
                         controller.outputHandler.printCellState(cell, coordinate);
                     }else{
-
+                     int lastVersion=controller.engine.getLastVersionOfEmptyCell(coordinate) ;
+                     System.out.println("Cell at coordinate: " + coordinate + " is empty");
+                     if(lastVersion==0)
+                     {
+                         System.out.println("Cell was never updated");
+                     }
+                     else{
+                         System.out.println("Cell was deleted in version "+lastVersion);
+                     }
                     }
 
                 }

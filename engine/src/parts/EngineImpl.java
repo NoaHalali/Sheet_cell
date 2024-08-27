@@ -55,8 +55,8 @@ public class EngineImpl implements Engine {
 
     }
     //3
-    public void getLastDeletedVersion(){
-
+    public int getLastVersionOfEmptyCell(Coordinate coordinate){
+        return currentSheet.getEmptyCellVersion(coordinate);
     }
 
 

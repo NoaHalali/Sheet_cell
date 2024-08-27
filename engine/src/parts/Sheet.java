@@ -21,7 +21,7 @@ public class Sheet implements Serializable {
     private final int columnWidth;
     private final int rowHeight;
     private Cell[][] cellsMatrix; // מערך דו-ממדי של תאים
-    private Map<Coordinate,Integer> deletedCells= new HashMap<Coordinate,Integer>();
+    private Map<String,Integer> deletedCells= new HashMap<String,Integer>();
     private static final char minCol = 'A';
     private static final int minRow = 1;
     private final char maxCol;
@@ -115,11 +115,17 @@ public class Sheet implements Serializable {
 
     public void deleteCell(Coordinate coord){
         cellsMatrix[coord.getRow()-1][coord.getCol()-1] = null;
-        if(deletedCells.containsKey(coord)){
-            deletedCells.remove(coord);
+        if(deletedCells.containsKey(coord.toString())){
+            deletedCells.remove(coord.toString());
         }
-        deletedCells.put(coord,version);
+        deletedCells.put(coord.toString(),version);
 
+    }
+    public int getEmptyCellVersion(Coordinate coord){
+        if(deletedCells.containsKey(coord.toString())){
+            return deletedCells.get(coord.toString());
+        }
+        return 0;
     }
 
     public void addCell(Coordinate coord, Cell cell){
@@ -262,43 +268,67 @@ public class Sheet implements Serializable {
             Expression arg1 = getExpressionOfCell(list.get(1), dependsOnCellList);
             if(list.size() > 2 ){
                 arg2 = getExpressionOfCell(list.get(2), dependsOnCellList);
-            }else{
-                if(list.size() == 2){}
             }
-
             switch (list.get(0).toUpperCase()) {
                 case "PLUS":
+                    if(list.size() != 3){
+                        throw new IllegalArgumentException("PLUS function expected to get 2 arguments") ;
+                    }
                     res = new Plus(arg1, arg2);
                     break;
                 case "MINUS":
+                    if(list.size() != 3){
+                        throw new IllegalArgumentException("MINUS function expected to get 2 arguments") ;
+                    }
                     res = new Minus(arg1, arg2);
                     break;
                 case "POW":
+                    if(list.size() != 3){
+                        throw new IllegalArgumentException("POW function expected to get 2 arguments") ;
+                    }
                     res = new Pow(arg1, arg2);
                     break;
                 case "ABS":
+                    if(list.size() != 2){
+                        throw new IllegalArgumentException("ABS function expected to get 1 arguments") ;
+                    }
                     res = new Abs(arg1);
                     break;
                 case "DIVIDE":
+                    if(list.size() != 3){
+                        throw new IllegalArgumentException("DIVIDE function expected to get 2 arguments") ;
+                    }
                     res = new Divide(arg1, arg2);
                     break;
                 case "TIMES":
+                    if(list.size() != 3){
+                        throw new IllegalArgumentException("TIMES function expected to get 2 arguments") ;
+                    }
                     res = new Times(arg1, arg2);
                     break;
                 case "MOD":
+                    if(list.size() != 3){
+                        throw new IllegalArgumentException("MOD function expected to get 2 arguments") ;
+                    }
                     res = new Mod(arg1, arg2);
                     break;
                 case "CONCAT":
+                    if(list.size() != 3){
+                        throw new IllegalArgumentException("CONCAT function expected to get 2 arguments") ;
+                    }
                     res = new Concat(arg1, arg2);
                     break;
                 case "SUB":
-                    if (list.size() > 2) {
-                        Expression arg3 = getExpressionOfCell(list.get(3), dependsOnCellList);
-                        res = new Sub(arg1,arg2,arg3);
+                    if(list.size() != 4){
+                        throw new IllegalArgumentException("SUB function expected to get 3 arguments") ;
                     }
+                    Expression arg3 = getExpressionOfCell(list.get(3), dependsOnCellList);
+                    res = new Sub(arg1,arg2,arg3);
                     break;
                 case "REF"://sheet סטטי ?
-                    //לבדוק שאין ארגומנט שלישי
+                    if(list.size() != 2){
+                        throw new IllegalArgumentException("REF function expected to get 1 arguments") ;
+                    }
                     Coordinate refCoord = CoordinateImpl.parseCoordinate(list.get(1));
                     validateCoordinateBounds(refCoord);
                     Cell refcell = getCellByCoord(refCoord);//find Cell in map or 2dim array and cell coord: list.get(1)

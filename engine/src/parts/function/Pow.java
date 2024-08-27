@@ -34,6 +34,7 @@ public class Pow extends BinaryExpression{
             return new EffectiveValueImpl(CellType.NUMERIC, Double.NaN);
         }
 
+
     }
     @Override
     public  CellType getFunctionResultType(){

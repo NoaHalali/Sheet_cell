@@ -28,6 +28,9 @@ public class Abs extends UnaryExpression{
         }  catch(ClassCastException e) {
             throw new ClassCastException(e.getMessage() + "ABS function expected to get one arguments from type NUMERIC, but got " +Value.getCellType());
         }
+        catch (ArithmeticException arithmeticException) {
+            return new EffectiveValueImpl(CellType.NUMERIC, Double.NaN);
+        }
     }
     @Override
     public  CellType getFunctionResultType(){

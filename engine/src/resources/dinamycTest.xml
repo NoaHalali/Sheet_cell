@@ -4,11 +4,17 @@
 		<STL-Size column-width-units="15" rows-height-units="3"/>
 	</STL-Layout>
 	<STL-Cells>
+		<STL-Cell row="1" column="B">
+			<STL-Original-Value>{minus,{TIMES,4,2},5}</STL-Original-Value>
+		</STL-Cell>
 		<STL-Cell row="2" column="B">
-			<STL-Original-Value>{PLUS,{ReF,c2},5}</STL-Original-Value>
+			<STL-Original-Value>{MOD,{ReF,B1},5}</STL-Original-Value>
 		</STL-Cell>
 		<STL-Cell row="2" column="C">
-			<STL-Original-Value>Hello</STL-Original-Value>
+			<STL-Original-Value>{sub,banananana,{ref,b1},5}</STL-Original-Value>
+		</STL-Cell>
+		<STL-Cell row="1" column="C">
+			<STL-Original-Value>{REF,C2}</STL-Original-Value>
 		</STL-Cell>
 		<STL-Cell row="2" column="D">
 			<STL-Original-Value>{PLUS,4,5}</STL-Original-Value>

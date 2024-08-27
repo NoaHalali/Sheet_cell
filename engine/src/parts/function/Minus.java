@@ -15,8 +15,8 @@ public class Minus extends BinaryExpression {
         if ((!rightCellType.equals(CellType.NUMERIC) && !rightCellType.equals(CellType.UNKNOWN)) ) {
             throw new IllegalArgumentException("Invalid argument types for MINUS function. Expected to get two arguments from type NUMERIC, but the second argument is " + rightCellType);
         }
-        left = left;
-        right = right;
+        left = expression1;
+        right = expression2;
     }
 
     @Override
@@ -28,6 +28,9 @@ public class Minus extends BinaryExpression {
             return new EffectiveValueImpl(CellType.NUMERIC, result);
         }   catch(ClassCastException e) {
             throw new ClassCastException(e.getMessage() + "MINUS function expected to get two arguments from type NUMERIC, but got " +leftValue.getCellType() + " and " + rightValue.getCellType());
+        }
+        catch (ArithmeticException arithmeticException) {
+            return new EffectiveValueImpl(CellType.NUMERIC, Double.NaN);
         }
     }
     @Override

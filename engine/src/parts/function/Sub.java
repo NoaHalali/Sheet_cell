@@ -13,10 +13,10 @@ public class Sub extends TernaryExpression{
         if ((!exp1CellType.equals(CellType.STRING) && !exp1CellType.equals(CellType.UNKNOWN))){
             throw new IllegalArgumentException("Invalid argument types for SUB function. expected to get three arguments, the first argument should be from type STRING, and the other two arguments should be from type NUMERIC, but the first argument is " + exp1CellType);
         }
-        if ((!exp1CellType.equals(CellType.NUMERIC) && !exp1CellType.equals(CellType.UNKNOWN))){
+        if ((!exp2CellType.equals(CellType.NUMERIC) && !exp2CellType.equals(CellType.UNKNOWN))){
             throw new IllegalArgumentException("Invalid argument types for SUB function. expected to get three arguments, the first argument should be from type STRING, and the other two arguments should be from type NUMERIC, but the second argument is " + exp2CellType);
         }
-        if ((!exp1CellType.equals(CellType.NUMERIC) && !exp1CellType.equals(CellType.UNKNOWN))){
+        if ((!exp3CellType.equals(CellType.NUMERIC) && !exp3CellType.equals(CellType.UNKNOWN))){
             throw new IllegalArgumentException("Invalid argument types for SUB function. expected to get three arguments, the first argument should be from type STRING, and the other two arguments should be from type NUMERIC, but the third argument is " + exp3CellType);
         }
         this.expression1 = expression1;

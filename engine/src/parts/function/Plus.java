@@ -36,6 +36,9 @@ public class Plus extends BinaryExpression {
 
             throw new ClassCastException(e.getMessage() + "PLUS function expected to get two arguments from type NUMERIC, but got " +leftValue.getCellType() + " and " + rightValue.getCellType());
         }
+        catch (ArithmeticException arithmeticException) {
+            return new EffectiveValueImpl(CellType.NUMERIC, Double.NaN);
+        }
     }
     @Override
     public  CellType getFunctionResultType(){

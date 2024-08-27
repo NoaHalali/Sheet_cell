@@ -27,8 +27,10 @@ public class Times extends BinaryExpression{
             double result = leftValue.extractValueWithExpectation(Double.class) * rightValue.extractValueWithExpectation(Double.class);
             return new EffectiveValueImpl(CellType.NUMERIC, result);
         }   catch(ClassCastException e) {
-
             throw new ClassCastException(e.getMessage() + "TIMES function expected to get two arguments from type NUMERIC, but got " +leftValue.getCellType() + " and " + rightValue.getCellType());
+        }
+        catch (ArithmeticException arithmeticException) {
+            return new EffectiveValueImpl(CellType.NUMERIC, Double.NaN);
         }
     }
     @Override
