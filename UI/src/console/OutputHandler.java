@@ -1,6 +1,8 @@
 package console;
 
-import parts.CellDTO;
+import parts.cell.CellDTO;
+import parts.cell.EmptyCellDTO;
+import parts.cell.NonEmptyCellDTO;
 import parts.SheetDTO;
 import parts.cell.coordinate.Coordinate;
 import parts.cell.expression.effectiveValue.CellType;
@@ -57,7 +59,7 @@ public class OutputHandler {
         int numberOfRows = sheet.getNumberOfRows();
         int columnWidth = sheet.getColumnWidth();
         int rowHeight = sheet.getRowHeight(); // גובה השורה שנקבע לכל הגיליון
-        CellDTO[][] cellsMatrix = sheet.getCellsMatrix();
+        NonEmptyCellDTO[][] cellsMatrix = sheet.getCellsMatrix();
 
         // ריפוד לרוחב השורה עבור מספרי השורות
         for (int i = 0; i < 3; i++) {
@@ -87,7 +89,7 @@ public class OutputHandler {
                     System.out.print("   "); // רווח עבור מספרי השורות
                 }
                 for (int col = 0; col < numberOfCols; col++) {
-                    CellDTO cell = cellsMatrix[row][col];
+                    NonEmptyCellDTO cell = cellsMatrix[row][col];
                     String cellEffectiveValue;
 
                     if (cell != null) {
@@ -167,34 +169,43 @@ public class OutputHandler {
     }
 
     public void printCellState(CellDTO cell, Coordinate coordinate){
-        if(cell == null)
+        if(cell instanceof EmptyCellDTO)
         {
+            EmptyCellDTO emptyCell = (EmptyCellDTO) cell;
             System.out.println("Cell at coordinate: " + coordinate + " is Empty.");
+            if(emptyCell.getLastUpdatedVersion() == 0)
+            {
+                System.out.println("Cell was never updated.");
+                return;
+            }
+            System.out.println("Last updated version: " + emptyCell.getLastUpdatedVersion());
+
         }
         else {
-            Coordinate coord = cell.getCoord();
+            NonEmptyCellDTO nonEmptyCell = (NonEmptyCellDTO) cell;
+            Coordinate coord = nonEmptyCell.getCoord();
             System.out.println("Cell identity: " + coord.toString());
 
-            String originalValue = cell.getOriginalValue();
+            String originalValue = nonEmptyCell.getOriginalValue();
             System.out.println("Original Value: " + originalValue);
 
-            EffectiveValue effectiveValue = cell.getEffectiveValue();
+            EffectiveValue effectiveValue = nonEmptyCell.getEffectiveValue();
             System.out.println("Effective Value: " + calcValueToPrint(effectiveValue));
 
-            int version = cell.getLastUpdatedVersion();
+            int version = nonEmptyCell.getLastUpdatedVersion();
             System.out.println("Last Updated Version: " + version);
 
-            List<String> dependsOnNames = cell.getDependsOn().stream().map(Coordinate::toString).toList();
+            List<String> dependsOnNames = nonEmptyCell.getDependsOn().stream().map(Coordinate::toString).toList();
             System.out.println("DependsOn Names: " + dependsOnNames);
 
-            List<String> influencingOn = cell.getInfluencingOn().stream().map(Coordinate::toString).toList();
+            List<String> influencingOn = nonEmptyCell.getInfluencingOn().stream().map(Coordinate::toString).toList();
             System.out.println("InfluencingOn Names: " + influencingOn);
 
             System.out.println();
         }
     }
 
-    public void printCellStateBeforeUpdate(CellDTO cell)
+    public void printCellStateBeforeUpdate(NonEmptyCellDTO cell)
     {
         System.out.println("Cell identity: " + cell.getCoord());
 

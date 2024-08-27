@@ -57,12 +57,12 @@ public class Sheet implements Serializable {
                 getCellsDTOMatrix()
         );
     }
-    public CellDTO[][] getCellsDTOMatrix() {
+    public NonEmptyCellDTO[][] getCellsDTOMatrix() {
         return Arrays.stream(cellsMatrix)
                 .map(row -> Arrays.stream(row)
                         .map(cell -> cell != null ? cell.toCellDTO() : null)
-                        .toArray(CellDTO[]::new))
-                .toArray(CellDTO[][]::new);
+                        .toArray(NonEmptyCellDTO[]::new))
+                .toArray(NonEmptyCellDTO[][]::new);
     }
 
     public void setCellsMatrix(Cell[][] cellsMatrix) {
@@ -111,7 +111,13 @@ public class Sheet implements Serializable {
         return changedCells.size();  // Filter cells that have been updated
     }
 
+    public int getLastUpdateVersionOfEmptyCell(Coordinate coord){
 
+        if (deletedCells.containsKey(coord)){
+            return deletedCells.get(coord);
+        }
+        return 0;
+    }
 
     public void deleteCell(Coordinate coord){
         cellsMatrix[coord.getRow()-1][coord.getCol()-1] = null;

@@ -1,4 +1,4 @@
-package parts;
+package parts.cell;
 //import engine.parts.Version;
 
 import parts.cell.coordinate.Coordinate;
@@ -6,7 +6,7 @@ import parts.cell.expression.effectiveValue.EffectiveValue;
 
 import java.util.List;
 
-public class CellDTO {
+public class NonEmptyCellDTO implements CellDTO {
     private final Coordinate coordinate; // "A4"
     private final String originalValue;
     private final EffectiveValue effectiveValue;
@@ -14,8 +14,8 @@ public class CellDTO {
     private final List<Coordinate> influencingOn;
     private final List<Coordinate> dependsOn;
 
-    public CellDTO(Coordinate coordinate, String originalValue,
-                   EffectiveValue effectiveValue, int lastUpdatedVersion, List<Coordinate> influencingOn, List<Coordinate>  dependsOn) {
+    public NonEmptyCellDTO(Coordinate coordinate, String originalValue,
+                           EffectiveValue effectiveValue, int lastUpdatedVersion, List<Coordinate> influencingOn, List<Coordinate>  dependsOn) {
         this.coordinate = coordinate;
         this.originalValue = originalValue;
         this.lastUpdatedVersion = lastUpdatedVersion;
