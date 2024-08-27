@@ -128,26 +128,26 @@ public class OutputHandler {
             StringBuilder str = new StringBuilder();
 
             // המרת double ל-int והשוואה
-            int intValue = (int) num;
-            if (num == intValue) {
-                // במקרה שה-double שווה לערך int, נמשיך את העיבוד
-                while (num > 1000) {
-                    num = num / 1000;
-                    double mod = num % 1000;
-                    str.insert(0, "," + (int)mod);  // כאן נשמור רק את החלק השלם של התוצאה
-                }
-                double mod = num % 1000;
-                str.insert(0, (int)mod);  // המרה ל-int כדי לשמור את החלק השלם בלבד
-            } else {
-                // במקרה שה-double אינו שווה לערך int, נעבד את המספר כ-double
-                while (num > 1000) {
-                    num = num / 1000;
-                    double mod = num % 1000;
-                    str.insert(0, "," + String.format("%.2f", mod));  // שמירה של המספר עם שלוש ספרות אחרי הנקודה
-                }
-                double mod = num % 1000;
-                str.insert(0, String.format("%.2f", mod));  // שמירה של המספר עם שלוש ספרות אחרי הנקודה
-            }
+//            int intValue = (int) num;
+//            if (num == intValue) {
+//                // במקרה שה-double שווה לערך int, נמשיך את העיבוד
+//                while (num > 1000) {
+//                    double mod = num % 1000;
+//                    num = num / 1000;
+//                    str.insert(0, "," + (int)mod);  // כאן נשמור רק את החלק השלם של התוצאה
+//                }
+//                double mod = num % 1000;
+//                str.insert(0, (int)mod);  // המרה ל-int כדי לשמור את החלק השלם בלבד
+//            } else {
+//                // במקרה שה-double אינו שווה לערך int, נעבד את המספר כ-double
+//                while (num > 1000) {
+//                    num = num / 1000;
+//                    double mod = num % 1000;
+//                    str.insert(0, "," + String.format("%.2f", mod));  // שמירה של המספר עם שלוש ספרות אחרי הנקודה
+//                }
+//                double mod = num % 1000;
+//                str.insert(0, String.format("%.2f", mod));  // שמירה של המספר עם שלוש ספרות אחרי הנקודה
+//            }
 
             return str.toString();  // מחזירים את התוצאה כמחרוזת
         }
