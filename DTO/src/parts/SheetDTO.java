@@ -11,7 +11,6 @@ public class SheetDTO {
     private int rowHeight;
     private CellDTO[][] cellsMatrix; // מערך דו-ממדי של תאים
 
-    //TODO - create method in sheet that creates the sheetDTO
     public SheetDTO(int version, String name, int numberOfRows, int numberOfCols,
                     int columnWidth, int rowHeight, CellDTO[][] cellsDTOMatrix) {
         this.version = version;

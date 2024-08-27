@@ -120,7 +120,7 @@ public class ControllerImpl implements Controller {
             public void execute(ControllerImpl controller) {
                 System.out.println("Please enter cell coordinate ");
                 Coordinate coordinate = controller.inputHandler.getCoordinateFromUser();
-                try {
+
                     CellDTO cell = controller.engine.getCellDTOByCoordinate(coordinate);
 
                     if (cell != null) {
@@ -128,9 +128,7 @@ public class ControllerImpl implements Controller {
                     } else {
                         System.out.println("Trying create new cell");
                     }
-                } catch (Exception e) {
-                    System.out.println(e.getMessage());
-                }
+
 
                 boolean gettingInputFromUser = true;
                 String input;

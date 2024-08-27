@@ -36,10 +36,6 @@ public class InputHandler {
 
     }
 
-
-
-
-
     public MenuOption getMenuOptionFromUser() {
         Scanner scanner = new Scanner(System.in);
         int userInput = 0;

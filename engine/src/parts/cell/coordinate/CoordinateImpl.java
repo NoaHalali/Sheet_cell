@@ -27,7 +27,7 @@ public class CoordinateImpl implements Coordinate, Serializable {
     public String toString() {
         char char1= (char) ('A'+ column -1);
         char char2= (char) ('1'+row-1);
-        return ""+char1+char2;
+        return indexToColumnString(column)+char2;
     }
 
     public static Coordinate parseCoordinate(String input) throws IllegalArgumentException {
@@ -52,5 +52,18 @@ public class CoordinateImpl implements Coordinate, Serializable {
             index = index * 26 + (column.charAt(i) - 'A' + 1);
         }
         return index ;
+    }
+    public static String indexToColumnString(int index) {
+        StringBuilder column = new StringBuilder();
+
+        while (index > 0) {
+            index--; // מפחיתים 1 כדי להתאים את האינדקס לשימוש נכון (1-based ל-0-based)
+            int remainder = index % 26;
+            char letter = (char) (remainder + 'A');
+            column.insert(0, letter); // מוסיפים את האות הנכונה להתחלה
+            index = index / 26;
+        }
+
+        return column.toString();
     }
 }

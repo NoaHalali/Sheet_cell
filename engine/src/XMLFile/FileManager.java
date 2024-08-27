@@ -78,6 +78,12 @@ public class FileManager {
         if (cols < minCols || cols > maxCols) {
             throw new IllegalArgumentException(String.format("Columns number must be between %d and %d. Given: %d", minCols, maxCols, cols));
         }
+        if(sheet.getSTLLayout().getSTLSize().getRowsHeightUnits()<=0){
+            throw new IllegalArgumentException("Rows height units must be a positive integer");
+        }
+        if(sheet.getSTLLayout().getSTLSize().getColumnWidthUnits()<=0){
+            throw new IllegalArgumentException("Columns width units must be a positive integer");
+        }
     }
 
     private void vaidateCells(STLSheet xmlSheet) {

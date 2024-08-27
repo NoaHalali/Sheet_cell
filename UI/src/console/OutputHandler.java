@@ -126,7 +126,11 @@ public class OutputHandler {
             }
 
             StringBuilder str = new StringBuilder();
-
+            if (num == (int) num) {
+                return String.format("%,d", (int) num); // Format as integer with commas
+            } else {
+                return String.format("%,.2f", num); // Format as floating point with commas and two decimal places
+            }
             // המרת double ל-int והשוואה
 //            int intValue = (int) num;
 //            if (num == intValue) {
@@ -149,9 +153,8 @@ public class OutputHandler {
 //                str.insert(0, String.format("%.2f", mod));  // שמירה של המספר עם שלוש ספרות אחרי הנקודה
 //            }
 
-            return str.toString();  // מחזירים את התוצאה כמחרוזת
+           // מחזירים את התוצאה כמחרוזת
         }
-
         else if(effectiveValue.getCellType() == CellType.STRING)
         {
             return effectiveValue.extractValueWithExpectation(String.class).trim();

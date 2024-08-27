@@ -112,11 +112,7 @@ public class EngineImpl implements Engine {
         }
         return getNumberOfCellsChangedListDeepClone();
     }
-    //6
-    public void exit() {
-        //אם מממשים שמירה בקובץ אז לשמור ולצאת
-        //אחרת פשוט לצאת וזהו?
-    }
+
 
     public boolean sheetLoadad() {
         return currentSheet != null;
