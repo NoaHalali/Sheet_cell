@@ -1,4 +1,4 @@
-package parts.cell;
+package parts;
 //import engine.parts.Version;
 
 import parts.cell.coordinate.Coordinate;

@@ -1,7 +1,5 @@
 package parts;
 
-import parts.cell.CellDTO;
-
 public class SheetDTO {
     private int version;
     private String name;
