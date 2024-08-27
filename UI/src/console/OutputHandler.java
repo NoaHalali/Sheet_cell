@@ -11,6 +11,7 @@ import java.util.List;
 public class OutputHandler {
 
     public void printMenu(){
+        System.out.println("-------------------------------------");
         System.out.println("Choose a number of action to preform:");
         for( ControllerImpl.MenuOption option: ControllerImpl.MenuOption.values() ){
             System.out.println(option.ordinal() + 1 + ". " + option);
