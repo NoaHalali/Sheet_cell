@@ -194,9 +194,9 @@ public class OutputHandler {
         }
     }
 
-    public void printCellStateBeforeUpdate(CellDTO cell, Coordinate coordinate)
+    public void printCellStateBeforeUpdate(CellDTO cell)
     {
-        System.out.println("Cell identity: " + coordinate.toString());
+        System.out.println("Cell identity: " + cell.getCoord());
 
         String originalValue = cell.getOriginalValue();
         System.out.println("Original Value: " + originalValue);

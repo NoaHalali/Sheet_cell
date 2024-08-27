@@ -9,9 +9,11 @@ public class Concat extends BinaryExpression{
     public Concat(Expression left, Expression right) {
         CellType leftCellType = left.getFunctionResultType();
         CellType rightCellType = right.getFunctionResultType();
-        if ( (!leftCellType.equals(CellType.STRING) && !leftCellType.equals(CellType.UNKNOWN)) ||
-                (!rightCellType.equals(CellType.STRING) && !rightCellType.equals(CellType.UNKNOWN)) ) {
-            throw new IllegalArgumentException("Invalid argument types for CONCAT function. Expected STRING, but got " + leftCellType + " and " + rightCellType);
+        if ((!leftCellType.equals(CellType.STRING) && !leftCellType.equals(CellType.UNKNOWN))){
+            throw new IllegalArgumentException("Invalid argument types for CONCAT function. Expected to get two arguments from type STRING, but the first argument is " + leftCellType);
+        }
+        if ((!rightCellType.equals(CellType.STRING) && !rightCellType.equals(CellType.UNKNOWN)) ) {
+            throw new IllegalArgumentException("Invalid argument types for CONCAT function. Expected to get two arguments from type STRING, but the second argument is " + rightCellType);
         }
       this.left = left;
       this.right = right;
@@ -37,7 +39,7 @@ public class Concat extends BinaryExpression{
             return new EffectiveValueImpl(CellType.STRING, result);
         }
         catch(ClassCastException e) {
-            throw new ClassCastException(e.getMessage() + "CONCAT function expected to receive STRING, but got " +leftValue.getCellType() + " and " + rightValue.getCellType());
+            throw new ClassCastException(e.getMessage() + "CONCAT function expected to get two arguments from type STRING, but got " +leftValue.getCellType() + " and " + rightValue.getCellType());
         }
         catch (Exception e) {
             // במקרה של חריגה כלשהי, מחזירים "UNDEFINED"

@@ -10,13 +10,15 @@ public class Sub extends TernaryExpression{
         CellType exp1CellType = expression1.getFunctionResultType();
         CellType exp2CellType = expression2.getFunctionResultType();
         CellType exp3CellType = expression3.getFunctionResultType();
-
-        if ( (!exp1CellType.equals(CellType.STRING) && !exp1CellType.equals(CellType.UNKNOWN)) ||
-                (!exp2CellType.equals(CellType.NUMERIC) && !exp2CellType.equals(CellType.UNKNOWN)) ||
-                (!exp3CellType.equals(CellType.NUMERIC) && !exp3CellType.equals(CellType.UNKNOWN)))
-          {
-            throw new IllegalArgumentException("Invalid argument types for SUB function. Expected STRING, NUMERIC, NUMERIC, but got " + exp1CellType + " , " + exp2CellType + " and " + exp3CellType);
-          }
+        if ((!exp1CellType.equals(CellType.STRING) && !exp1CellType.equals(CellType.UNKNOWN))){
+            throw new IllegalArgumentException("Invalid argument types for SUB function. expected to get three arguments, the first argument should be from type STRING, and the other two arguments should be from type NUMERIC, but the first argument is " + exp1CellType);
+        }
+        if ((!exp1CellType.equals(CellType.NUMERIC) && !exp1CellType.equals(CellType.UNKNOWN))){
+            throw new IllegalArgumentException("Invalid argument types for SUB function. expected to get three arguments, the first argument should be from type STRING, and the other two arguments should be from type NUMERIC, but the second argument is " + exp2CellType);
+        }
+        if ((!exp1CellType.equals(CellType.NUMERIC) && !exp1CellType.equals(CellType.UNKNOWN))){
+            throw new IllegalArgumentException("Invalid argument types for SUB function. expected to get three arguments, the first argument should be from type STRING, and the other two arguments should be from type NUMERIC, but the third argument is " + exp3CellType);
+        }
         this.expression1 = expression1;
         this.expression2 = expression2;
         this.expression3 = expression3;

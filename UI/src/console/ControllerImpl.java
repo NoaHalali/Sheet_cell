@@ -111,7 +111,7 @@ public class ControllerImpl implements Controller {
                     CellDTO cell = controller.engine.getCellDTOByCoordinate(coordinate);
 
                     if (cell != null) {
-                        controller.outputHandler.printCellStateBeforeUpdate(cell, coordinate);
+                        controller.outputHandler.printCellStateBeforeUpdate(cell);
                     } else {
                         System.out.println("Trying create new cell");
                     }

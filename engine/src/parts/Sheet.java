@@ -79,11 +79,19 @@ public class Sheet implements Serializable {
 
         return cell;
     }
+    public int howManyActiveCellsInSheet(){
+        return Arrays.stream(cellsMatrix)
+                .flatMap(Arrays::stream)
+                .filter(cell -> cell != null)
+                .mapToInt(cell -> 1)
+                .sum();
+    }
+
 
     public void validateSheetExpressions() throws Exception {
         parseExpressions();
         checkForCircularDependencies();
-        evaluteSheetValuesForRefCheck();
+        evaluateSheetValuesForRefCheck();
     }
 
     public void upgradeVersion(){
@@ -151,14 +159,14 @@ public class Sheet implements Serializable {
         }
     }
 
-    public void updateCellValue(String originalValue, Coordinate coord, Cell changeCell) throws Exception {
+    public void updateCellValue(String originalValue,Cell changeCell) throws Exception {
 
         //נבדוק אם תא זהקיים במבנה הנתונים אם לא נקצה מקום תא לו נעדכן ערך
         //ליצור רשימה חדשה של תאים ונבצע השמה ל- רשימת התאים מהם הוא מושפע בנוסף נשמור את הרשימה הישנה במשתנה כלשהו
 
         if (originalValue.isEmpty()) {
             changeCell.checkIfCellCanBeDeleted();
-            deleteCell(coord);
+            deleteCell(changeCell.getCoordinate());
             //TODO - אולי לשלוח איכשהו לממשק משתמש שהתא נמחק בהצלחה
         }
         else {
@@ -166,7 +174,7 @@ public class Sheet implements Serializable {
             Expression expression = getExpressionOfCell(originalValue, dependsOnCellList);
             //changeCell = getCellByCoord(coord);
             Expression oldExpression = changeCell.getCellValue();
-            changeCell.checkForCircularDependencyWrapper(coord, dependsOnCellList);
+            changeCell.checkForCircularDependencyWrapper(changeCell.getCoordinate(), dependsOnCellList);
             changeCell.setExpression(expression);
 
             try {
@@ -252,6 +260,8 @@ public class Sheet implements Serializable {
             Expression arg1 = getExpressionOfCell(list.get(1), dependsOnCellList);
             if(list.size() > 2 ){
                 arg2 = getExpressionOfCell(list.get(2), dependsOnCellList);
+            }else{
+                if(list.size() == 2){}
             }
 
             switch (list.get(0).toUpperCase()) {
@@ -330,7 +340,7 @@ public class Sheet implements Serializable {
         }
     }
 
-    public void evaluteSheetValuesForRefCheck(){
+    public void evaluateSheetValuesForRefCheck(){
         for(Cell[] cells : cellsMatrix){
             for(Cell cell : cells){
                 if(cell!=null){

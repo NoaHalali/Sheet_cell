@@ -24,12 +24,13 @@ public class EngineImpl implements Engine {
             //Sheet lastSheet = currentSheet;
             currentSheet = fileManager.processFile(filePath);
             versionsList.clear();
-            addVersion(currentSheet,0);
+            addVersion(currentSheet, currentSheet.howManyActiveCellsInSheet());
         }
         catch (Exception e) {
             throw new Exception(e.getMessage());
         }
     }
+
 
     //2
     public SheetDTO getCurrentSheetDTO() {
@@ -69,7 +70,7 @@ public class EngineImpl implements Engine {
             clonedSheet.upgradeVersion(); //פה או בתוך התנאים?
 
             if(cell != null){
-                clonedSheet.updateCellValue(originalValue,coord, cell);
+                clonedSheet.updateCellValue(originalValue,cell);
                 numOfCellsChanged = clonedSheet.upgradeCellsVersionsAndGetNumOfChanges();
             }
             else{
