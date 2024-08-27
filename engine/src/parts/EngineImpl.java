@@ -47,12 +47,11 @@ public class EngineImpl implements Engine {
             throw new IllegalStateException(SHEET_NOT_LOADED_MESSAGE);
         }
 
-        Cell cell=currentSheet.getCellByCoord(coordinate);
+        Cell cell= currentSheet.getCellByCoord(coordinate);
         if(cell!= null){
             return cell.toCellDTO();
         }
-        return null;
-
+        return new EmptyCellDTO(currentSheet.getLastUpdateVersionOfEmptyCell(coordinate));
     }
     //3
     public void getLastDeletedVersion(){
