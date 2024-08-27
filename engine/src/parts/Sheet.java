@@ -154,6 +154,7 @@ public class Sheet implements Serializable {
             updateDependencies(cell, dependsOnCellList);
             return cell;
         }
+
         catch(Exception e){
             deleteCell(coord);
             throw new Exception("Cell at coordinate "+coord+" cannot be created :" +e.getMessage());
