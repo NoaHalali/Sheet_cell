@@ -57,12 +57,12 @@ public class Sheet implements Serializable {
                 getCellsDTOMatrix()
         );
     }
-    public CellDTO[][] getCellsDTOMatrix() {
+    public NonEmptyCellDTO[][] getCellsDTOMatrix() {
         return Arrays.stream(cellsMatrix)
                 .map(row -> Arrays.stream(row)
                         .map(cell -> cell != null ? cell.toCellDTO() : null)
-                        .toArray(CellDTO[]::new))
-                .toArray(CellDTO[][]::new);
+                        .toArray(NonEmptyCellDTO[]::new))
+                .toArray(NonEmptyCellDTO[][]::new);
     }
 
     public void setCellsMatrix(Cell[][] cellsMatrix) {
@@ -111,7 +111,13 @@ public class Sheet implements Serializable {
         return changedCells.size();  // Filter cells that have been updated
     }
 
+    public int getLastUpdateVersionOfEmptyCell(Coordinate coord){
 
+        if (deletedCells.containsKey(coord)){
+            return deletedCells.get(coord);
+        }
+        return 0;
+    }
 
     public void deleteCell(Coordinate coord){
         cellsMatrix[coord.getRow()-1][coord.getCol()-1] = null;
@@ -140,6 +146,7 @@ public class Sheet implements Serializable {
         if(originalValue.isEmpty()){
             throw new Exception("Cell at coordinate "+coord+" is already empty!");
         }
+
 
         Cell cell;
         List<Cell> dependsOnCellList = new LinkedList<Cell>();
@@ -269,37 +276,64 @@ public class Sheet implements Serializable {
 
             switch (list.get(0).toUpperCase()) {
                 case "PLUS":
+                    if(list.size() != 3){
+                       throw new IllegalArgumentException("PLUS function expected to get only 2 arguments") ;
+                    }
                     res = new Plus(arg1, arg2);
                     break;
                 case "MINUS":
+                    if(list.size() != 3){
+                        throw new IllegalArgumentException("MINUS function expected to get only 2 arguments") ;
+                    }
                     res = new Minus(arg1, arg2);
                     break;
                 case "POW":
+                    if(list.size() != 3){
+                        throw new IllegalArgumentException("POW function expected to get only 2 arguments") ;
+                    }
                     res = new Pow(arg1, arg2);
                     break;
                 case "ABS":
+                    if(list.size() != 2){
+                        throw new IllegalArgumentException("ABS function expected to get only 1 arguments") ;
+                    }
                     res = new Abs(arg1);
                     break;
                 case "DIVIDE":
+                    if(list.size() != 3){
+                        throw new IllegalArgumentException("DIVIDE function expected to get only 2 arguments") ;
+                    }
                     res = new Divide(arg1, arg2);
                     break;
                 case "TIMES":
+                    if(list.size() != 3){
+                        throw new IllegalArgumentException("TIMES function expected to get only 2 arguments") ;
+                    }
                     res = new Times(arg1, arg2);
                     break;
                 case "MOD":
+                    if(list.size() != 3){
+                        throw new IllegalArgumentException("MOD function expected to get only 2 arguments") ;
+                    }
                     res = new Mod(arg1, arg2);
                     break;
                 case "CONCAT":
+                    if(list.size() != 3){
+                        throw new IllegalArgumentException("CONCAT function expected to get only 2 arguments") ;
+                    }
                     res = new Concat(arg1, arg2);
                     break;
                 case "SUB":
-                    if (list.size() > 2) {
+                    if(list.size() != 4){
+                        throw new IllegalArgumentException("SUB function expected to get only 3 arguments") ;
+                    }
                         Expression arg3 = getExpressionOfCell(list.get(3), dependsOnCellList);
                         res = new Sub(arg1,arg2,arg3);
-                    }
                     break;
                 case "REF"://sheet סטטי ?
-                    //לבדוק שאין ארגומנט שלישי
+                    if(list.size() != 2){
+                        throw new IllegalArgumentException("REF function expected to get only 1 arguments") ;
+                    }
                     Coordinate refCoord = CoordinateImpl.parseCoordinate(list.get(1));
                     validateCoordinateBounds(refCoord);
                     Cell refcell = getCellByCoord(refCoord);//find Cell in map or 2dim array and cell coord: list.get(1)
@@ -313,6 +347,38 @@ public class Sheet implements Serializable {
         }
         return res;
     }
+//    public Expression getBinaryExpressionOfCell(String OriginalValue,String funcName,Expression arg1,Expression arg2) throws Exception {
+//        Expression res = null;
+//
+//        switch (funcName) {
+//            case "PLUS":
+//                res = new Plus(arg1, arg2);
+//                break;
+//            case "MINUS":
+//                res = new Minus(arg1, arg2);
+//                break;
+//            case "POW":
+//                res = new Pow(arg1, arg2);
+//                break;
+//            case "ABS":
+//                res = new Abs(arg1);
+//                break;
+//            case "DIVIDE":
+//                res = new Divide(arg1, arg2);
+//                break;
+//            case "TIMES":
+//                res = new Times(arg1, arg2);
+//                break;
+//            case "MOD":
+//                res = new Mod(arg1, arg2);
+//                break;
+//            case "CONCAT":
+//                res = new Concat(arg1, arg2);
+//                break;
+//
+//        }
+//        return res;
+//    }
 
     public Cell[][] getCellsMatrix() {
         return cellsMatrix;
