@@ -141,7 +141,6 @@ public class Sheet implements Serializable {
 
     }
 
-    //changed that returns cell
     public Cell createNewCellForCommand4(String originalValue, Coordinate coord) throws Exception {
         if(originalValue.isEmpty()){
             throw new Exception("Cell at coordinate "+coord+" is already empty!");
@@ -168,9 +167,6 @@ public class Sheet implements Serializable {
     }
 
     public void updateCellValue(String originalValue,Cell changeCell) throws Exception {
-
-        //נבדוק אם תא זהקיים במבנה הנתונים אם לא נקצה מקום תא לו נעדכן ערך
-        //ליצור רשימה חדשה של תאים ונבצע השמה ל- רשימת התאים מהם הוא מושפע בנוסף נשמור את הרשימה הישנה במשתנה כלשהו
 
         if (originalValue.isEmpty()) {
             changeCell.checkIfCellCanBeDeleted();
@@ -257,7 +253,7 @@ public class Sheet implements Serializable {
 
 
     //מחזירה אקספרשיון מערך מקור
-    public Expression getExpressionOfCell(String OriginalValue, List<Cell> dependsOnCellList) throws Exception {//עוד בבדיקה !!!
+    public Expression getExpressionOfCell(String OriginalValue, List<Cell> dependsOnCellList) throws Exception {
         List<String> list = splitExpressionToStrings(OriginalValue);
         Expression arg2 = null;
         Expression res = null;
@@ -432,76 +428,3 @@ public class Sheet implements Serializable {
         cell.setLastUpdatedVersion(version);
     }
 }
-
-
-
-//    public void setCellValueFromOriginalValueCommand1(String originalValue,Coordinate coord){
-//        try {
-//            Cell changeCell = getCellByCoord(coord);
-//            Expression expression = getExpressionOfCellCommand1(originalValue);
-//            changeCell.setExpression(expression);
-//        }
-//        catch (Exception ex){
-//            //TODO throw new Exception(ex);
-//        }
-//        //נחשב את הערך
-//    }
-
-
-//    public Expression getExpressionOfCellCommand1(String OriginalValue) throws Exception {
-//        List<String> list = splitExpressionToStrings(OriginalValue);
-//        Expression arg2 = null;
-//        Expression res = null;
-//        if(list.size() == 1){
-//            res = getSmallArgs(list.get(0));
-//        }
-//        else {
-//            Expression arg1 = getExpressionOfCellCommand1(list.get(1));
-//            if(list.size() > 2 ){
-//                arg2 = getExpressionOfCellCommand1(list.get(2));
-//            }
-//
-//            switch (list.get(0)) {
-//                case "PLUS":
-//                    res = new Plus(arg1, arg2);
-//                    break;
-//                case "MINUS":
-//                    res = new Minus(arg1, arg2);
-//                    break;
-//                case "POW":
-//                    res = new Pow(arg1, arg2);
-//                    break;
-//                case "ABS":
-//                    res = new Abs(arg1);
-//                    break;
-//                case "DIVIDE":
-//                    res = new Divide(arg1, arg2);
-//                    break;
-//                case "TIMES":
-//                    res = new Times(arg1, arg2);
-//                    break;
-//                case "MOD":
-//                    res = new Mod(arg1, arg2);
-//                    break;
-//                case "CONCAT":
-//                    res = new Concat(arg1, arg2);
-//                    break;
-//                case "SUB":
-//                    if (list.size() > 2) {
-//                        Expression arg3 = getExpressionOfCellCommand1(list.get(3));
-//                        res = new Sub(arg1,arg2,arg3);
-//                    }
-//                    break;
-//                case "REF":
-//                    Coordinate RefCoord = CoordinateImpl.stringToCoord(list.get(1));
-//                    Cell refcell = getCellByCoord(RefCoord);//find Cell in map or 2dim array and cell coord: list.get(1)
-//                    res = new Ref(refcell);
-//
-////להוסיף תא זה רלשימת המשפעים ומושפעים
-//                    break;
-//                default:
-//                    //EXEPTION
-//            }
-//        }
-//        return res;
-//    }

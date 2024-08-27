@@ -14,7 +14,6 @@ public class EngineImpl implements Engine {
     private Sheet currentSheet = null;
     private FileManager fileManager = new FileManager();
     private List <Version> versionsList = new LinkedList<Version>();
-    //private Version versions =new Version();
     private static final String SHEET_NOT_LOADED_MESSAGE = "Sheet is not loaded. Please load a sheet before attempting to access it.";
 
 
@@ -96,13 +95,12 @@ public class EngineImpl implements Engine {
     }
 
     //5
-    public SheetDTO getSheetDTOByVersion(int versionNumber) throws Exception {
+    public SheetDTO getSheetDTOByVersion(int versionNumber) throws IllegalArgumentException, IllegalStateException {
         if (!sheetLoadad()) {
             throw new IllegalStateException(SHEET_NOT_LOADED_MESSAGE);
         }
 
         return getSheetByVersion(versionNumber).toSheetDTO();
-
     }
 
     //5
@@ -118,10 +116,12 @@ public class EngineImpl implements Engine {
         return currentSheet != null;
     }
 
-    public Sheet getSheetByVersion(int version) {
+    public Sheet getSheetByVersion(int version) throws IllegalArgumentException {
 
         if(versionsList.size()<version){
             throw new IllegalArgumentException("Version: "+version+" not created yet.");
+        } else if (version<1){
+            throw new IllegalArgumentException("Version: "+version+" is not valid. Version number must be a positive integer from 1 to "+versionsList.size()+".");
         }
         return versionsList.get(version-1).getSheet();
     }

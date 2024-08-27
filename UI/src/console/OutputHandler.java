@@ -24,7 +24,6 @@ public class OutputHandler {
         System.out.println("Sheet Name: " + sheet.getName());
         System.out.println();
         printCellsMatrix(sheet);
-        System.out.println();
     }
 
     public void printVersionsTable(List<Integer> versions) {
@@ -48,7 +47,8 @@ public class OutputHandler {
         for (Integer version : versions) {
             System.out.print(String.format("%-" + columnWidth + "d|", version)); // Left-align numbers
         }
-        System.out.println();
+        System.out.println("\n");
+
     }
 
 
@@ -179,21 +179,19 @@ public class OutputHandler {
             System.out.println("Cell identity: " + coord.toString());
 
             String originalValue = cell.getOriginalValue();
-            System.out.println("Original Value: " + originalValue);
+            System.out.println("Original value: " + originalValue);
 
             EffectiveValue effectiveValue = cell.getEffectiveValue();
-            System.out.println("Effective Value: " + calcValueToPrint(effectiveValue));
+            System.out.println("Effective value: " + calcValueToPrint(effectiveValue));
 
             int version = cell.getLastUpdatedVersion();
-            System.out.println("Last Updated Version: " + version);
+            System.out.println("Last updated version: " + version);
 
             List<String> dependsOnNames = cell.getDependsOn().stream().map(Coordinate::toString).toList();
-            System.out.println("DependsOn Names: " + dependsOnNames);
+            System.out.println("Depends on the cells: " + dependsOnNames);
 
             List<String> influencingOn = cell.getInfluencingOn().stream().map(Coordinate::toString).toList();
-            System.out.println("InfluencingOn Names: " + influencingOn);
-
-            System.out.println();
+            System.out.println("Influencing on the cells: " + influencingOn);
         }
     }
 
@@ -202,9 +200,9 @@ public class OutputHandler {
         System.out.println("Cell identity: " + cell.getCoord());
 
         String originalValue = cell.getOriginalValue();
-        System.out.println("Original Value: " + originalValue);
+        System.out.println("Original value: " + originalValue);
 
         EffectiveValue effectiveValue = cell.getEffectiveValue();
-        System.out.println("Effective Value: " + calcValueToPrint(effectiveValue));
+        System.out.println("Effective value: " + calcValueToPrint(effectiveValue));
     }
 }

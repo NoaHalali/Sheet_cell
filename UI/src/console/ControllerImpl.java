@@ -26,6 +26,9 @@ public class ControllerImpl implements Controller {
             catch (Exception e) {
                 System.out.println(e.getMessage());
             }
+            finally {
+                System.out.println();
+            }
 
         }
     }
@@ -44,11 +47,11 @@ public class ControllerImpl implements Controller {
                 catch (Exception e) {
                     System.out.println("File loading failed");
                     System.out.println(e.getMessage());
-                    System.out.println();
+                    //System.out.println();
                 }
-                finally {
-                    System.out.println();
-                }
+//                finally {
+//                    System.out.println();
+//                }
             }
             @Override
             public String toString() {
