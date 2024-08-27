@@ -87,7 +87,12 @@ public class ControllerImpl implements Controller {
                     System.out.println("Please enter cell coordinate ");
                     Coordinate coordinate = controller.inputHandler.getCoordinateFromUser();
                     CellDTO cell = controller.engine.getCellDTOByCoordinate(coordinate);
-                    controller.outputHandler.printCellState(cell, coordinate);
+                    if(cell != null) {
+                        controller.outputHandler.printCellState(cell, coordinate);
+                    }else{
+
+                    }
+
                 }
 
                 catch (Exception e)
@@ -136,7 +141,7 @@ public class ControllerImpl implements Controller {
                         System.out.println("Do you want to try again? " +
                                 "Press 1 to try again, or any other key to return to the main menu.");
                         input = controller.inputHandler.getInputFromUser();
-                        if (!input.equals("1")) {
+                        if (!input.trim().equals("1")) {
                             gettingInputFromUser = false;
                         }
                     }

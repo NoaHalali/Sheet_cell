@@ -54,6 +54,10 @@ public class EngineImpl implements Engine {
         return null;
 
     }
+    //3
+    public void getLastDeletedVersion(){
+
+    }
 
 
     //4

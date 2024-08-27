@@ -10,10 +10,7 @@ import parts.cell.expression.impl.StringExpression;
 import parts.function.*;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 public class Sheet implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -24,7 +21,7 @@ public class Sheet implements Serializable {
     private final int columnWidth;
     private final int rowHeight;
     private Cell[][] cellsMatrix; // מערך דו-ממדי של תאים
-
+    private Map<Coordinate,Integer> deletedCells= new HashMap<Coordinate,Integer>();
     private static final char minCol = 'A';
     private static final int minRow = 1;
     private final char maxCol;
@@ -118,6 +115,11 @@ public class Sheet implements Serializable {
 
     public void deleteCell(Coordinate coord){
         cellsMatrix[coord.getRow()-1][coord.getCol()-1] = null;
+        if(deletedCells.containsKey(coord)){
+            deletedCells.remove(coord);
+        }
+        deletedCells.put(coord,version);
+
     }
 
     public void addCell(Coordinate coord, Cell cell){
@@ -305,7 +307,7 @@ public class Sheet implements Serializable {
 
                     break;
                 default:
-                    throw new IllegalArgumentException("Illegal function name." + list.get(0) + "is not an option.");
+                    throw new IllegalArgumentException("Illegal function name. " + list.get(0) + " is not an option.");
             }
         }
         return res;
