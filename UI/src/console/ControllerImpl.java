@@ -171,17 +171,22 @@ public class ControllerImpl implements Controller {
         DISPLAY_VERSIONS {
             @Override
             public void execute(ControllerImpl controller) {
-                // printTable(controller.engine)
-                try {
-                    List<Integer> versions = controller.engine.getVersions();
-                    controller.inputOutputHandler.printVersionsTable(versions);
-                    int version = controller.inputOutputHandler.getVersionNumberFromUser();
-                    SheetDTO sheet = controller.engine.getSheetDTOByVersion(version);
-                    controller.inputOutputHandler.printSheetData(sheet);
+                boolean gettingInputFromUser = true;
+                String input;
+                while(gettingInputFromUser)
+                {
+                    try {
+                        List<Integer> versions = controller.engine.getVersions();
+                        controller.inputOutputHandler.printVersionsTable(versions);
+                        int version = controller.inputOutputHandler.getVersionNumberFromUser();
+                        SheetDTO sheet = controller.engine.getSheetDTOByVersion(version);
+                        controller.inputOutputHandler.printSheetData(sheet);
+                    }
+                    catch (Exception e) {
+                        System.out.println(e.getMessage());
+                    }
                 }
-                catch (Exception e) {
-                    System.out.println(e.getMessage());
-                }
+
             }
             @Override
             public String toString() {

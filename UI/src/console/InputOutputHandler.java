@@ -190,7 +190,6 @@ public class InputOutputHandler {
 
         Scanner scanner = new Scanner(System.in);
         String input;
-        //boolean validInput = false;
         //TODO - if there is time, replace to the loop below with option of exit to menu
         input = scanner.nextLine();
         return CoordinateImpl.parseCoordinate(input);
