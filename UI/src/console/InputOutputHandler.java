@@ -115,34 +115,29 @@ public class InputOutputHandler {
 
 
     public String calcValueToPrint(EffectiveValue effectiveValue) {
-        if(effectiveValue.getCellType() == CellType.NUMERIC) {
+        if (effectiveValue.getCellType() == CellType.NUMERIC) {
             double num = effectiveValue.extractValueWithExpectation(Double.class);
 
             if (Double.isNaN(num) || Double.isInfinite(num)) {
                 return "NaN"; // החזר "NaN" אם הערך הוא NaN או Infinity
             }
 
-            StringBuilder str = new StringBuilder();
-            if (num == (int) num) {
-                return String.format("%,d", (int) num); // Format as integer with commas
+            if (num == Math.floor(num)) {
+                // אם המספר הוא שלם, הדפס אותו ללא נקודות עשרוניות
+                return String.format("%,d", (long) num);
             } else {
-                return String.format("%,.2f", num); // Format as floating point with commas and two decimal places
+                // אם יש נקודה עשרונית, הדפס עם שתי ספרות אחרי הנקודה
+                return String.format("%,.2f", num);
             }
-
-        }
-        else if(effectiveValue.getCellType() == CellType.STRING)
-        {
+        } else if (effectiveValue.getCellType() == CellType.STRING) {
             return effectiveValue.extractValueWithExpectation(String.class).trim();
-        }
-        else if (effectiveValue.getCellType() == CellType.BOOLEAN)
-        {
+        } else if (effectiveValue.getCellType() == CellType.BOOLEAN) {
             return String.valueOf(effectiveValue.extractValueWithExpectation(Boolean.class)).toUpperCase();
-        }
-        else
-        {
-            throw new IllegalArgumentException(); //TODO - temporary
+        } else {
+            throw new IllegalArgumentException(); // TODO - פתרון זמני
         }
     }
+
 
     public void printCellState(CellDTO cell, Coordinate coordinate){
         if(cell == null)

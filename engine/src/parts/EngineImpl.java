@@ -142,29 +142,31 @@ public class EngineImpl implements Engine {
 
 
     //6
-    public void saveSystemState(String filePath) throws Exception{
+    public void saveSystemState(String filePath) throws Exception {
         if (!sheetLoadad()) {
             throw new IllegalStateException(SHEET_NOT_LOADED_MESSAGE);
         }
         String filePathWithEnding = filePath + ".dat";
+
         try (FileOutputStream fileOut = new FileOutputStream(filePathWithEnding);
              ObjectOutputStream oos = new ObjectOutputStream(fileOut)) {
             oos.writeObject(currentSheet);
-            //System.out.println("System state saved to " + filePath);
+            oos.writeObject(versionsList);
         } catch (IOException e) {
             throw new RuntimeException("Failed to save system state to file: " + filePath, e);
         }
     }
 
+
     //7
     public void loadSystemState(String filePath) throws FileNotFoundException, IOException, ClassNotFoundException {
+
         String filePathWithEnding = filePath + ".dat";
+
         try (FileInputStream fileIn = new FileInputStream(filePathWithEnding);
              ObjectInputStream ois = new ObjectInputStream(fileIn)) {
             currentSheet = (Sheet) ois.readObject();
-            resetVersions();  // אפס את הגרסאות לאחר טעינה
-            addVersion(currentSheet, currentSheet.howManyActiveCellsInSheet());
-
+            versionsList = (List<Version>) ois.readObject();
         } catch (FileNotFoundException e) {
             throw new FileNotFoundException("File not found: " + filePath);
         } catch (IOException e) {
@@ -173,12 +175,4 @@ public class EngineImpl implements Engine {
             throw new ClassNotFoundException("Class not found while loading the system state", e);
         }
     }
-
-    public void resetVersions() {
-        versionsList.clear();  // אפס את רשימת הגרסאות
-        if (currentSheet != null) {
-            currentSheet.setVersion(1);  // עדכן את הגרסה של הגיליון ל-1
-        }
-    }
-
 }
