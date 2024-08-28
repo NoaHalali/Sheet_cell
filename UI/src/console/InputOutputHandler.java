@@ -120,7 +120,6 @@ public class InputOutputHandler {
 
 
     public String calcValueToPrint(EffectiveValue effectiveValue) {
-        //TODO- maybe add exceptions, try and catch
         if(effectiveValue.getCellType() == CellType.NUMERIC) {
             double num = effectiveValue.extractValueWithExpectation(Double.class);
 
@@ -224,12 +223,10 @@ public class InputOutputHandler {
         while (!validInput) {
             try {
                 userInput = Integer.parseInt(scanner.nextLine());
-                if (userInput < 1 || userInput > 6) {
+                if (userInput < 1 || userInput > 8) {
                     System.out.println("Invalid option number!\n" +
                             "Option number must be between 1 and " + ControllerImpl.MenuOption.values().length + ".\n" +
                             "Try again:" );
-//                    throw new IllegalArgumentException("Invalid option!\n" +
-//                            "Option number must be between 1 and " + MenuOption.values().length + ".");
                 }
                 else
                 {
@@ -260,7 +257,6 @@ public class InputOutputHandler {
     }
 
     public String getFilePathFromUser(){
-        System.out.println("Please enter a full path of the XML file you wish to load to the system: ");
         Scanner scanner = new Scanner(System.in);
         String path = scanner.nextLine();
         return path;

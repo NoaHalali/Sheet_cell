@@ -10,8 +10,6 @@ import java.util.List;
 public class ControllerImpl implements Controller {
 
     private EngineImpl engine = new EngineImpl();
-    //private InputHandler inputHandler = new InputHandler();
-    //private OutputHandler outputHandler = new OutputHandler();
     private InputOutputHandler inputOutputHandler = new InputOutputHandler();
     private boolean systemIsRunning = true;
 
@@ -44,6 +42,7 @@ public class ControllerImpl implements Controller {
             @Override
             public void execute(ControllerImpl controller) {
                 try {
+                    System.out.println("Please enter a full path of the XML file you wish to load to the system: ");
                     String path = controller.inputOutputHandler.getFilePathFromUser();
                     controller.engine.readFileData(path);
                     System.out.println("File loaded succesfully!");
@@ -51,11 +50,8 @@ public class ControllerImpl implements Controller {
                 catch (Exception e) {
                     System.out.println("File loading failed");
                     System.out.println(e.getMessage());
-                    //System.out.println();
                 }
-//                finally {
-//                    System.out.println();
-//                }
+//
             }
             @Override
             public String toString() {
@@ -125,6 +121,11 @@ public class ControllerImpl implements Controller {
         UPDATE_CELL {
             @Override
             public void execute(ControllerImpl controller) {
+                if (!controller.engine.sheetLoadad())
+                {
+                    System.out.println("Sheet is not loaded. Please load a sheet before attempting to access it.");
+                    return;
+                }
                 System.out.println("Please enter cell coordinate ");
                 Coordinate coordinate = controller.inputOutputHandler.getCoordinateFromUser();
 
@@ -187,7 +188,53 @@ public class ControllerImpl implements Controller {
                 return "Display system versions";
             }
         },
+
         //6
+        SAVE_SYSTEM_STATE {
+            @Override
+            public void execute(ControllerImpl controller) {
+                try {
+                    if (!controller.engine.sheetLoadad())
+                    {
+                        System.out.println("Sheet is not loaded. Please load a sheet before attempting to access it.");
+                        return;
+                    }
+                    System.out.println("Please enter a full path of the file you wish to save the system state to: ");
+                    String path = controller.inputOutputHandler.getFilePathFromUser();
+                    controller.engine.saveSystemState(path);
+                    System.out.println("System state saved successfully!");
+                }
+                catch (Exception e) {
+                    System.out.println("System state saving failed");
+                    System.out.println(e.getMessage());
+                }
+            }
+            @Override
+            public String toString() {
+                return "Save system state to a file";
+            }
+        },
+        //7
+        LOAD_SYSTEM_STATE {
+            @Override
+            public void execute(ControllerImpl controller) {
+                try {
+                    System.out.println("Please enter a full path of the file you wish to load the system state from: ");
+                    String path = controller.inputOutputHandler.getFilePathFromUser();
+                    controller.engine.loadSystemState(path);
+                    System.out.println("System state loaded successfully!");
+                }
+                catch (Exception e) {
+                    System.out.println("System state loading failed");
+                    System.out.println(e.getMessage());
+                }
+            }
+            @Override
+            public String toString() {
+                return "Load system state from a file";
+            }
+        },
+        //8
         EXIT {
             @Override
             public void execute(ControllerImpl controller) {

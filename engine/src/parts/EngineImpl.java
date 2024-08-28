@@ -4,9 +4,16 @@ import XMLFile.FileManager;
 import parts.cell.*;
 import parts.cell.coordinate.Coordinate;
 
+import java.io.*;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.io.FileInputStream;
+import java.io.ObjectInputStream;
+import java.io.IOException;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+
 
 
 public class EngineImpl implements Engine {
@@ -16,6 +23,9 @@ public class EngineImpl implements Engine {
     private List <Version> versionsList = new LinkedList<Version>();
     private static final String SHEET_NOT_LOADED_MESSAGE = "Sheet is not loaded. Please load a sheet before attempting to access it.";
 
+    public boolean sheetLoadad() {
+        return currentSheet != null;
+    }
 
     //1
     public void readFileData(String filePath) throws Exception {
@@ -76,6 +86,7 @@ public class EngineImpl implements Engine {
                 clonedSheet.updateCellValue(originalValue,cell);
                 numOfCellsChanged = clonedSheet.upgradeCellsVersionsAndGetNumOfChanges();
             }
+
             else{
                 cell = clonedSheet.createNewCellForCommand4(originalValue,coord);
                 clonedSheet.upgradeCellVersion(cell);
@@ -86,12 +97,6 @@ public class EngineImpl implements Engine {
             addVersion(currentSheet,numOfCellsChanged);
 
         }
-        //else - stay as it was before and throw exception
-
-//        catch (Exception e) {
-//            throw new Exception(e.getMessage());
-//        }
-
     }
 
     //5
@@ -111,11 +116,7 @@ public class EngineImpl implements Engine {
         return getNumberOfCellsChangedListDeepClone();
     }
 
-
-    public boolean sheetLoadad() {
-        return currentSheet != null;
-    }
-
+    //5
     public Sheet getSheetByVersion(int version) throws IllegalArgumentException {
 
         if(versionsList.size()<version){
@@ -126,16 +127,58 @@ public class EngineImpl implements Engine {
         return versionsList.get(version-1).getSheet();
     }
 
+    //4
     public void addVersion( Sheet sheet,int numberOfCellsChanged) {
         versionsList.addLast(new Version(sheet,numberOfCellsChanged));
 
     }
 
+    //5
     public List<Integer> getNumberOfCellsChangedListDeepClone() {
         return versionsList.stream()
                 .map(Version::getNumberOfCellsChanged)
                 .collect(Collectors.toList());
     }
 
+
+    //6
+    public void saveSystemState(String filePath) throws Exception{
+        if (!sheetLoadad()) {
+            throw new IllegalStateException(SHEET_NOT_LOADED_MESSAGE);
+        }
+        String filePathWithEnding = filePath + ".dat";
+        try (FileOutputStream fileOut = new FileOutputStream(filePathWithEnding);
+             ObjectOutputStream oos = new ObjectOutputStream(fileOut)) {
+            oos.writeObject(currentSheet);
+            //System.out.println("System state saved to " + filePath);
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to save system state to file: " + filePath, e);
+        }
+    }
+
+    //7
+    public void loadSystemState(String filePath) throws FileNotFoundException, IOException, ClassNotFoundException {
+        String filePathWithEnding = filePath + ".dat";
+        try (FileInputStream fileIn = new FileInputStream(filePathWithEnding);
+             ObjectInputStream ois = new ObjectInputStream(fileIn)) {
+            currentSheet = (Sheet) ois.readObject();
+            resetVersions();  // אפס את הגרסאות לאחר טעינה
+            addVersion(currentSheet, currentSheet.howManyActiveCellsInSheet());
+
+        } catch (FileNotFoundException e) {
+            throw new FileNotFoundException("File not found: " + filePath);
+        } catch (IOException e) {
+            throw new IOException("Error reading the file: " + filePath, e);
+        } catch (ClassNotFoundException e) {
+            throw new ClassNotFoundException("Class not found while loading the system state", e);
+        }
+    }
+
+    public void resetVersions() {
+        versionsList.clear();  // אפס את רשימת הגרסאות
+        if (currentSheet != null) {
+            currentSheet.setVersion(1);  // עדכן את הגרסה של הגיליון ל-1
+        }
+    }
 
 }

@@ -91,6 +91,14 @@ public class Sheet implements Serializable {
         evaluateSheetValuesForRefCheck();
     }
 
+    public void setVersion(int version) {
+        this.version = version;
+        Arrays.stream(cellsMatrix)                          // Stream over rows of cellsMatrix
+                .flatMap(Arrays::stream)                    // Flatten the stream of rows into a single stream of cells
+                .filter(cell -> cell != null).forEach(cell -> cell.setLastUpdatedVersion(version));
+
+    }
+
     public void upgradeVersion(){
         version++;
     }
