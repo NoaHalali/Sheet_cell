@@ -29,31 +29,26 @@ public class InputOutputHandler {
         printCellsMatrix(sheet);
     }
 
-    public void printVersionsTable(List<Integer> versions) {
-        // Define the column width based on the maximum length of the version numbers
-        int columnWidth = Math.max(10, versions.stream()
+    public void printVersionsTable(List<Integer> changedCells) {
+        // Define the column widths based on the maximum length of the version numbers and changed cells count
+        int versionColumnWidth = 10; // Minimum width for "Version"
+        int changesColumnWidth = Math.max(15, changedCells.stream()
                 .map(String::valueOf)
                 .mapToInt(String::length)
                 .max()
                 .orElse(0) + 2); // +2 for padding
 
-        // Print the header row with version labels
-        System.out.print("|");
-        for (int i = 0; i < versions.size(); i++) {
-            String versionLabel = "Version " + (i + 1);
-            System.out.print(String.format("%-" + columnWidth + "s|", versionLabel));
+        // Print the header row
+        System.out.printf("|%-" + versionColumnWidth + "s|%-" + changesColumnWidth + "s|\n", "Version", "Changed Cells");
+        System.out.println("-".repeat(versionColumnWidth + changesColumnWidth + 3)); // Separator
+
+        // Print the data rows
+        for (int i = 0; i < changedCells.size(); i++) {
+            System.out.printf("|%-" + versionColumnWidth + "d|%-" + changesColumnWidth + "d|\n", i + 1, changedCells.get(i));
         }
+
         System.out.println();
-
-        // Print the data row with version numbers
-        System.out.print("|");
-        for (Integer version : versions) {
-            System.out.print(String.format("%-" + columnWidth + "d|", version)); // Left-align numbers
-        }
-        System.out.println("\n");
-
     }
-
 
     public void printCellsMatrix(SheetDTO sheet) {
         int numberOfCols = sheet.getNumberOfCols();

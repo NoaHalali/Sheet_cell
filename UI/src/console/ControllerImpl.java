@@ -45,7 +45,7 @@ public class ControllerImpl implements Controller {
                     System.out.println("Please enter a full path of the XML file you wish to load to the system: ");
                     String path = controller.inputOutputHandler.getFilePathFromUser();
                     controller.engine.readFileData(path);
-                    System.out.println("File loaded succesfully!");
+                    System.out.println("File loaded successfully!");
                 }
                 catch (Exception e) {
                     System.out.println("File loading failed");
@@ -181,9 +181,17 @@ public class ControllerImpl implements Controller {
                         int version = controller.inputOutputHandler.getVersionNumberFromUser();
                         SheetDTO sheet = controller.engine.getSheetDTOByVersion(version);
                         controller.inputOutputHandler.printSheetData(sheet);
+                        gettingInputFromUser = false;
                     }
                     catch (Exception e) {
                         System.out.println(e.getMessage());
+                        System.out.println();
+                        System.out.println("Do you want to try again? " +
+                                "Press 1 to try again, or any other key to return to the main menu.");
+                        input = controller.inputOutputHandler.getInputFromUser();
+                        if (!input.trim().equals("1")) {
+                            gettingInputFromUser = false;
+                        }
                     }
                 }
 
