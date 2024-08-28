@@ -42,26 +42,9 @@ public class Cell implements Serializable {
         return true;
     }
 
-
     public void setCellOriginalValue(String originalValue) {
         this.originalValue = originalValue;
     }
-
-
-//    public void updateValue(Expression newValue) {
-//        cellValue = newValue; //בינתיים
-//        cellValue.setOriginalValue(newValue);
-//    }
-//    public EffectiveValue geEffectiveValue()
-//    {
-//        return cellValue.evaluate();
-//    }
-
-
-//    public void updateEffectiveValue(Expression newValue) {
-//        //בדיקת תקינות
-//        EffectiveValue = newValue.evaluate();
-//    }in
 
     public CellDTO toCellDTO() {
         return new CellDTO(
@@ -107,17 +90,6 @@ public class Cell implements Serializable {
     public void setDependsOn(List<Cell> dependsOn) {
         this.dependsOn = dependsOn;
     }
-
-//    //TODO- Move to UI
-//    public List<String> getDependsOnNames() {
-//        return dependsOn.stream().map(Cell::getCoordinateString).collect(Collectors.toList());
-//
-//    }
-//
-//    public List<String> getInfluencingOnNames() {
-//        return influencingOn.stream().map(Cell::getCoordinateString).collect(Collectors.toList());
-//    }
-
 
     public List<Coordinate> getDependsOnCoordinates() {
         return dependsOn.stream().map(Cell::getCoordinate).collect(Collectors.toList());
@@ -179,11 +151,6 @@ public class Cell implements Serializable {
             cell.checkForCircularDependency(coordSet, cell.getDependsOn());
         }
 
-    }
-
-
-    public String getCoordinateString() {
-        return coordinate.toString();
     }
 
     public String getOriginalValue() {

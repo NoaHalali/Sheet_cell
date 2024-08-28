@@ -10,8 +10,9 @@ import java.util.List;
 public class ControllerImpl implements Controller {
 
     private EngineImpl engine = new EngineImpl();
-    private InputHandler inputHandler = new InputHandler();
-    private OutputHandler outputHandler = new OutputHandler();
+    //private InputHandler inputHandler = new InputHandler();
+    //private OutputHandler outputHandler = new OutputHandler();
+    private InputOutputHandler inputOutputHandler = new InputOutputHandler();
     private boolean systemIsRunning = true;
 
     @Override
@@ -19,8 +20,8 @@ public class ControllerImpl implements Controller {
     {
         System.out.println("Welcome to the Shticell!");
         while (systemIsRunning) {
-            outputHandler.printMenu();
-            MenuOption option =inputHandler.getMenuOptionFromUser();
+            inputOutputHandler.printMenu();
+            MenuOption option =inputOutputHandler.getMenuOptionFromUser();
             try {
                 option.execute(this);
             }
@@ -43,7 +44,7 @@ public class ControllerImpl implements Controller {
             @Override
             public void execute(ControllerImpl controller) {
                 try {
-                    String path = controller.inputHandler.getFilePathFromUser();
+                    String path = controller.inputOutputHandler.getFilePathFromUser();
                     controller.engine.readFileData(path);
                     System.out.println("File loaded succesfully!");
                 }
@@ -68,7 +69,7 @@ public class ControllerImpl implements Controller {
             public void execute(ControllerImpl controller) {
                 try{
                     SheetDTO sheet = controller.engine.getCurrentSheetDTO();
-                    controller.outputHandler.printSheetData(sheet);
+                    controller.inputOutputHandler.printSheetData(sheet);
                 }
                 catch (Exception e) {
                     System.out.println(e.getMessage());
@@ -91,10 +92,10 @@ public class ControllerImpl implements Controller {
                         return;
                     }
                     System.out.println("Please enter cell coordinate ");
-                    Coordinate coordinate = controller.inputHandler.getCoordinateFromUser();
+                    Coordinate coordinate = controller.inputOutputHandler.getCoordinateFromUser();
                     CellDTO cell = controller.engine.getCellDTOByCoordinate(coordinate);
                     if(cell != null) {
-                        controller.outputHandler.printCellState(cell, coordinate);
+                        controller.inputOutputHandler.printCellState(cell, coordinate);
                     }else{
                      int lastVersion=controller.engine.getLastVersionOfEmptyCell(coordinate) ;
                      System.out.println("Cell at coordinate: " + coordinate + " is empty");
@@ -125,12 +126,12 @@ public class ControllerImpl implements Controller {
             @Override
             public void execute(ControllerImpl controller) {
                 System.out.println("Please enter cell coordinate ");
-                Coordinate coordinate = controller.inputHandler.getCoordinateFromUser();
+                Coordinate coordinate = controller.inputOutputHandler.getCoordinateFromUser();
 
                     CellDTO cell = controller.engine.getCellDTOByCoordinate(coordinate);
 
                     if (cell != null) {
-                        controller.outputHandler.printCellStateBeforeUpdate(cell);
+                        controller.inputOutputHandler.printCellStateBeforeUpdate(cell);
                     } else {
                         System.out.println("Trying create new cell");
                     }
@@ -141,7 +142,7 @@ public class ControllerImpl implements Controller {
                 while (gettingInputFromUser) {
 
                     System.out.println("Please enter value you want: ");//לעשות חפירה שתסביר את הפורמט וקליטה בinput handler חלוקת אחריות על בידקות תקינות וכו,
-                    input = controller.inputHandler.getInputFromUser();
+                    input = controller.inputOutputHandler.getInputFromUser();
                     try {
                         controller.engine.updateCellValue(input, coordinate);
                         System.out.println("Cell updated successfully!");
@@ -152,7 +153,7 @@ public class ControllerImpl implements Controller {
                         System.out.println();
                         System.out.println("Do you want to try again? " +
                                 "Press 1 to try again, or any other key to return to the main menu.");
-                        input = controller.inputHandler.getInputFromUser();
+                        input = controller.inputOutputHandler.getInputFromUser();
                         if (!input.trim().equals("1")) {
                             gettingInputFromUser = false;
                         }
@@ -172,10 +173,10 @@ public class ControllerImpl implements Controller {
                 // printTable(controller.engine)
                 try {
                     List<Integer> versions = controller.engine.getVersions();
-                    controller.outputHandler.printVersionsTable(versions);
-                    int version = controller.inputHandler.getVersionNumberFromUser();
+                    controller.inputOutputHandler.printVersionsTable(versions);
+                    int version = controller.inputOutputHandler.getVersionNumberFromUser();
                     SheetDTO sheet = controller.engine.getSheetDTOByVersion(version);
-                    controller.outputHandler.printSheetData(sheet);
+                    controller.inputOutputHandler.printSheetData(sheet);
                 }
                 catch (Exception e) {
                     System.out.println(e.getMessage());
@@ -201,6 +202,5 @@ public class ControllerImpl implements Controller {
         // Abstract method to be implemented by each enum constant
         public abstract void execute(ControllerImpl controller);
     }
-
 
 }
