@@ -9,5 +9,7 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" exported="" name="javaFXAmir" level="project" />
     <orderEntry type="library" exported="" name="javafx-sdk-22.0" level="project" />
+    <orderEntry type="module" module-name="engine" exported="" />
+    <orderEntry type="module" module-name="DTO" exported="" />
   </component>
 </module>

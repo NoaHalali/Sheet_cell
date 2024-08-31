@@ -1,22 +1,19 @@
 import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 public class Main extends Application {
 
     @Override
-    public void start(Stage primaryStage) {
-        Button btn = new Button("Say 'Hello JavaFX'");
-        btn.setOnAction(event -> System.out.println("Hello JavaFX!"));
+    public void start(Stage primaryStage) throws Exception {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("test.fxml"));
+        HBox root = loader.load();
+        Scene scene = new Scene(root, 600, 400); // Adjust size as necessary
 
-        StackPane root = new StackPane();
-        root.getChildren().add(btn);
-
-        Scene scene = new Scene(root, 300, 250);
-
-        primaryStage.setTitle("Simple JavaFX App");
+        primaryStage.setTitle("JavaFX App with Scene Builder");
         primaryStage.setScene(scene);
         primaryStage.show();
     }
