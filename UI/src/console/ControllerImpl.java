@@ -212,7 +212,7 @@ public class ControllerImpl implements Controller {
                         System.out.println("Sheet is not loaded. Please load a sheet before attempting to access it.");
                         return;
                     }
-                    System.out.println("Please enter a full path of the file you wish to save the system state to: ");
+                    System.out.println("Please enter a full path of the file you wish to save the system data to: ");
                     String path = controller.inputOutputHandler.getFilePathFromUser();
                     controller.engine.saveSystemState(path);
                     System.out.println("System state saved successfully!");
