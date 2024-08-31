@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="JavaFX">
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/../../../מצגות הקורס + חומרים רלוונטים/ספריות צד שלישי/Java FX/openjfx-22.0.2_windows-x64_bin-sdk/javafx-sdk-22.0.2/lib" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+    <jarDirectory url="file://$PROJECT_DIR$/../../../מצגות הקורס + חומרים רלוונטים/ספריות צד שלישי/Java FX/openjfx-22.0.2_windows-x64_bin-sdk/javafx-sdk-22.0.2/lib" recursive="false" />
+  </library>
+</component>
