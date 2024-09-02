@@ -5,12 +5,12 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.HBox?>
 
-<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="69.0" prefWidth="454.0" fx:controller="ActionLineController" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1">
+<fx:root maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="69.0" prefWidth="454.0" type="HBox" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" >
    <children>
       <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
          <children>
-            <Label fx:id="cell_id" text="Cell ID" />
-            <Label fx:id="cell_original_value" text="Original value" />
+            <Label id="cell_id"  text="Cell ID" />
+            <Label id="cell_original_value"  text="Original value" />
          </children>
          <padding>
             <Insets left="10.0" />
@@ -18,9 +18,9 @@
       </HBox>
       <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
          <children>
-            <Button fx:id="update_cell" mnemonicParsing="false" text="update" textFill="#36bf74" />
-            <Label fx:id="cell_last_update_version" text="last update version" />
+            <Button id="update_cell"  mnemonicParsing="false" text="update" textFill="#36bf74" />
+            <Label id="cell_last_update_version" text="last update version" />
          </children>
       </HBox>
    </children>
-</HBox>
+</fx:root>

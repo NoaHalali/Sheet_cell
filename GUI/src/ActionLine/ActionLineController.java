@@ -1,3 +1,6 @@
+package ActionLine;
+
+import MainComponent.AppController;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -7,14 +10,17 @@ import parts.cell.coordinate.Coordinate;
 import parts.cell.coordinate.CoordinateImpl;
 
 public class ActionLineController {
+
+    private AppController mainController;
+
     @FXML
-    private Label cell_id;
+    private Label cellId;
     @FXML
-    private Label cell_original_value;
+    private Label cellOriginalValue;
     @FXML
-    private Button update_cell;
+    private Button updateCell;
     @FXML
-    private Label cell_last_update_version;
+    private Label cellLastUpdateVersion;
     private EngineImpl engine;
     @FXML
     private void initialize() {
@@ -29,16 +35,20 @@ public class ActionLineController {
         CellDTO cell = engine.getCellDTOByCoordinate(coordinate);
 
         if (cell != null) {
-            cell_id.setText(cell.getCoord().toString());
-            cell_original_value.setText(cell.getOriginalValue());
-            cell_last_update_version.setText(String.valueOf(cell.getLastUpdatedVersion()));
+            cellId.setText(cell.getCoord().toString());
+            cellOriginalValue.setText(cell.getOriginalValue());
+            cellLastUpdateVersion.setText(String.valueOf(cell.getLastUpdatedVersion()));
         }
 
+
         // Add action handler for the update button if needed
-        update_cell.setOnAction(event -> {
+        updateCell.setOnAction(event -> {
             // Handle the update action here
             System.out.println("Update button clicked!");
         });
+    }
+    public void setMainController(AppController mainController) {
+        this.mainController = mainController;
     }
 
     }
