@@ -37,15 +37,15 @@ public class TableController {
             rowConst.setPrefHeight(30);  // Set preferred height for each row
             dynamicGridPane.getRowConstraints().add(rowConst);
         }
-        for (int row = 0; row < rows; row++) {
-            Label label = new Label(String.valueOf(row));
-            dynamicGridPane.add(label, 0, row);
-        }
+//        for (int row = 0; row < rows; row++) {
+//            Label label = new Label(String.valueOf(row));
+//            dynamicGridPane.add(label, 0, row);
+//        }
               //java fx show grid line
         // Populate the grid with labels
-        for (int row = 1; row < rows; row++) {
-            for (int col = 1; col < cols; col++) {
-                Label label = new Label();
+        for (int row = 0; row < rows; row++) {
+            for (int col = 0; col < cols; col++) {
+                Label label = new Label("Row " + row + " Col " + col);
                 label.setStyle("-fx-background-color: white; -fx-alignment: center;");
                 dynamicGridPane.add(label, col, row);
                 cellMap.put(row + ":" + col, label);
