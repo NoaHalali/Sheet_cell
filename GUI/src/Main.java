@@ -31,5 +31,6 @@ public class Main extends Application {
     public static void main(String[] args) {
         Thread.currentThread().setName("main");
         launch(args);
+        //noa
     }
 }
