@@ -1,3 +1,4 @@
+import CellsTable.TableController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -26,6 +27,16 @@ public class Main extends Application {
         Scene scene = new Scene(root, 500, 550);
         primaryStage.setScene(scene);
         primaryStage.show();
+//        FXMLLoader loader = new FXMLLoader(getClass().getResource("CellsTable/table.fxml"));
+//        Parent root = loader.load();
+//        TableController controller = loader.getController();
+//
+//        // Initialize the grid with dynamic rows and columns
+//        controller.initializeGrid(5, 5); // Example with 4 rows and 4 columns
+//
+//        primaryStage.setTitle("Dynamic GridPane");
+//        primaryStage.setScene(new Scene(root, 600, 400));
+//        primaryStage.show();
     }
 
     public static void main(String[] args) {

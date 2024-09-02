@@ -7,4 +7,7 @@
    <top>
       <fx:include fx:id="actionLine" source="../ActionLine/actionLine.fxml" />
    </top>
+   <center>
+      <fx:include fx:id="table" source="../CellsTable/table.fxml" />
+   </center>
 </BorderPane>

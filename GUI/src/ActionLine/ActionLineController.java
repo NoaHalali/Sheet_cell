@@ -25,12 +25,12 @@ public class ActionLineController {
     public void setActionLine(CellDTO cell) {
         if (cell != null) {
             cellId.setText(cell.getCoord().toString());
-            cellOriginalValue.setText(cell.getOriginalValue());
+            cellOriginalValue.setText( cell.getOriginalValue());
             cellLastUpdateVersion.setText(String.valueOf(cell.getLastUpdatedVersion()));
             updateCell.setOnAction(event -> {
            System.out.println("Update button clicked!");
        });
-        }
+       }
     }
 //    @FXML
 //    private void initialize() {
