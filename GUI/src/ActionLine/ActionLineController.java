@@ -22,31 +22,41 @@ public class ActionLineController {
     @FXML
     private Label cellLastUpdateVersion;
     private EngineImpl engine;
-    @FXML
-    private void initialize() {
-        engine = new EngineImpl();
-        try {
-            engine.readFileData("C:\\Users\\amir\\IdeaProjects\\Sheet_cell\\engine\\src\\XMLFile\\GeneratedFiles\\dinamycTest.xml");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        Coordinate coordinate = new CoordinateImpl(2, 2);
-        CellDTO cell = engine.getCellDTOByCoordinate(coordinate);
-
+    public void setActionLine(CellDTO cell) {
         if (cell != null) {
             cellId.setText(cell.getCoord().toString());
             cellOriginalValue.setText(cell.getOriginalValue());
             cellLastUpdateVersion.setText(String.valueOf(cell.getLastUpdatedVersion()));
+            updateCell.setOnAction(event -> {
+           System.out.println("Update button clicked!");
+       });
         }
-
-
-        // Add action handler for the update button if needed
-        updateCell.setOnAction(event -> {
-            // Handle the update action here
-            System.out.println("Update button clicked!");
-        });
     }
+//    @FXML
+//    private void initialize() {
+//        engine = new EngineImpl();
+//        try {
+//            engine.readFileData("C:\\Users\\amir\\IdeaProjects\\Sheet_cell\\engine\\src\\XMLFile\\GeneratedFiles\\dinamycTest.xml");
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//
+//        Coordinate coordinate = new CoordinateImpl(2, 2);
+//        CellDTO cell = engine.getCellDTOByCoordinate(coordinate);
+//
+//        if (cell != null) {
+//            cellId.setText(cell.getCoord().toString());
+//            cellOriginalValue.setText(cell.getOriginalValue());
+//            cellLastUpdateVersion.setText(String.valueOf(cell.getLastUpdatedVersion()));
+//        }
+//
+//
+//        // Add action handler for the update button if needed
+//        updateCell.setOnAction(event -> {
+//            // Handle the update action here
+//            System.out.println("Update button clicked!");
+//        });
+//    }
     public void setMainController(AppController mainController) {
         this.mainController = mainController;
     }

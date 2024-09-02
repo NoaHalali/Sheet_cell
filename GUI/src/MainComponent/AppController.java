@@ -14,13 +14,15 @@ public class AppController {
     private int count;
     private EngineImpl engine;
 
+    @FXML
+    private HBox actionLine;
+    @FXML
+    private ActionLineController actionLineController;
 
     @FXML
     private Button myButton=new Button();
     @FXML
     private Label myLabel ;
-    @FXML
-    private ActionLineController actionLineController;
 
     @FXML
     private void initialize() {
@@ -35,9 +37,10 @@ public class AppController {
             e.printStackTrace();
         }
         Coordinate coordinate =new CoordinateImpl(2,2);
-
         CellDTO cell=engine.getCellDTOByCoordinate(coordinate);
-        myLabel.setText(cell.getCoord().toString());
+
+        //myLabel.setText(cell.getCoord().toString());
+        actionLineController.setActionLine(cell);
 
     }
 }
