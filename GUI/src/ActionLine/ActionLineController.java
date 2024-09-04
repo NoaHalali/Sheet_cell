@@ -30,7 +30,11 @@ public class ActionLineController {
             updateCell.setOnAction(event -> {
            System.out.println("Update button clicked!");
        });
-       }
+       }else{
+            cellId.setText("");
+            cellOriginalValue.setText("");
+            cellLastUpdateVersion.setText("");
+        }
     }
 //    @FXML
 //    private void initialize() {

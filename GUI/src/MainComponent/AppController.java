@@ -14,6 +14,7 @@ import parts.cell.coordinate.CoordinateImpl;
 
 public class AppController {
     private int count;
+    private Coordinate coordinate;
     private EngineImpl engine;
 
     @FXML
@@ -39,7 +40,7 @@ public class AppController {
             tableController.setMainController(this);
         }
 
-        tableController.initializeGrid(6,5);
+
 
 
 
@@ -51,12 +52,23 @@ public class AppController {
         catch (Exception e) {
             e.printStackTrace();
         }
+        tableController.initializeGrid(engine.getCurrentSheetDTO());
         Coordinate coordinate =new CoordinateImpl(2,2);
         CellDTO cell=engine.getCellDTOByCoordinate(coordinate);
 
         //myLabel.setText(cell.getCoord().toString());
         actionLineController.setActionLine(cell);
 
+    }
+    public void updateActionLine(String coord) {
+        if(coordinate != null){
+            tableController.RemoveFocusingOfCell(coordinate.toString());
+        }
+        if(actionLineController != null) {
+            coordinate = CoordinateImpl.parseCoordinate(coord);
+            CellDTO cell = engine.getCellDTOByCoordinate(coordinate);
+            actionLineController.setActionLine(cell);
+        }
     }
 }
 

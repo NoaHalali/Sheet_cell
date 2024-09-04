@@ -1,6 +1,7 @@
 package parts;
 
 
+import parts.cell.coordinate.Coordinate;
 
 public class SheetDTO {
     private int version;
@@ -49,5 +50,8 @@ public class SheetDTO {
 
     public CellDTO[][] getCellsMatrix() {
         return cellsMatrix;
+    }
+    public CellDTO getCell(Coordinate coordinate) {
+        return cellsMatrix[coordinate.getRow()-1][coordinate.getCol()-1];
     }
 }

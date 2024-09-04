@@ -9,6 +9,12 @@ import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.RowConstraints;
+import parts.CellDTO;
+import parts.SheetDTO;
+import parts.cell.coordinate.Coordinate;
+import parts.cell.coordinate.CoordinateImpl;
+import parts.cell.expression.effectiveValue.CellType;
+import parts.cell.expression.effectiveValue.EffectiveValue;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -18,9 +24,16 @@ public class TableController {
     private AppController mainController;
     @FXML
     private GridPane dynamicGridPane;
+
     private Map<String, Label> cellMap=new HashMap<>();
 
-    public void initializeGrid(int rows, int cols) {
+
+    public void initializeGrid(SheetDTO sheet) {
+
+        int rows = sheet.getNumberOfRows();
+        int cols = sheet.getNumberOfCols();
+
+        CoordinateImpl coord ;
         // Clear existing constraints and children
         dynamicGridPane.getColumnConstraints().clear();
         dynamicGridPane.getRowConstraints().clear();
@@ -43,13 +56,24 @@ public class TableController {
         // Populate the grid with empty labels
         for (int row = 1; row <= rows; row++) {
             for (int col = 1; col <= cols; col++) {
-                Label label = new Label("");  // Start with empty labels
+                coord = new CoordinateImpl(row, col);
+                CellDTO cell = sheet.getCell(coord);
+                Label label = new Label(cell == null ? "": calcValueToPrint(cell.getEffectiveValue()));  // Start with empty labels
                 label.setStyle("-fx-background-color: #f0f0f0; -fx-alignment: center; -fx-border-color: blue; -fx-border-width: 0.5px;");
                 dynamicGridPane.add(label, col, row);
                 label.setMaxWidth(Double.MAX_VALUE);
                 label.setMaxHeight(Double.MAX_VALUE);
-                //label.setOnMouseClicked(E);נפעיל מתודה שתקרא לאבא וישלח את הקוארדינטת שורה
-                cellMap.put(row + ":" + col, label);
+
+                String coordStr = coord.toString();
+                label.setOnMouseClicked(event -> {
+                    label.setStyle("-fx-background-color: #f0f0f0; -fx-alignment: center; -fx-border-color: red; -fx-border-width: 0.5px;");
+
+                    mainController.updateActionLine(coordStr);
+
+                // Call the method in the main controller with the key
+                });
+
+                cellMap.put(coordStr, label);
             }
         }
         for (int row = 1; row <=rows; row++) {
@@ -72,7 +96,7 @@ public class TableController {
             label.setMaxHeight(Double.MAX_VALUE);
             dynamicGridPane.add(label, col, 0);
         }
-        updateCellContent(2,2,"noa");
+       // updateCellContent(2,2,"noa");
         paintCell(2,2,"green");
     }
     public void paintCell(int row, int col, String color) {
@@ -90,12 +114,38 @@ public class TableController {
 //        mainController.updateHbox()
 //    }
 
-    public void updateCellContent(int row, int col, String newText) {
-        String key = row + ":" + col;
-        Label label = cellMap.get(key);
+    public void updateCellContent(Coordinate coord , String newText) {
+      //  String key = row + ":" + col;
+        Label label = cellMap.get(coord.toString());
         if (label != null) {
             label.setText(newText);
         }
+    }
+    public String calcValueToPrint(EffectiveValue effectiveValue) {
+        if (effectiveValue.getCellType() == CellType.NUMERIC) {
+            double num = effectiveValue.extractValueWithExpectation(Double.class);
+
+            if (Double.isNaN(num) || Double.isInfinite(num)) {
+                return "NaN"; // החזר "NaN" אם הערך הוא NaN או Infinity
+            }
+
+            if (num == Math.floor(num)) {
+                // אם המספר הוא שלם, הדפס אותו ללא נקודות עשרוניות
+                return String.format("%,d", (long) num);
+            } else {
+                // אם יש נקודה עשרונית, הדפס עם שתי ספרות אחרי הנקודה
+                return String.format("%,.2f", num);
+            }
+        } else if (effectiveValue.getCellType() == CellType.STRING) {
+            return effectiveValue.extractValueWithExpectation(String.class).trim();
+        } else if (effectiveValue.getCellType() == CellType.BOOLEAN) {
+            return String.valueOf(effectiveValue.extractValueWithExpectation(Boolean.class)).toUpperCase();
+        } else {
+            throw new IllegalArgumentException(); // TODO - פתרון זמני
+        }
+    }
+    public void RemoveFocusingOfCell(String cellCoordinate) {
+        cellMap.get(cellCoordinate).setStyle( "-fx-background-color: #f0f0f0; -fx-alignment: center; -fx-border-color: blue; -fx-border-width: 0.5px;");
     }
     public void setMainController(AppController mainController) {
         this.mainController = mainController;
