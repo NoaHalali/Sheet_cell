@@ -1,4 +1,5 @@
 import CellsTable.TableController;
+import MainComponent.AppController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -23,7 +24,8 @@ public class Main extends Application {
         URL url = getClass().getResource("/MainComponent/app.fxml");
         fxmlLoader.setLocation(url);
         Parent root = fxmlLoader.load(url.openStream());
-        histogramController.setPrimaryStage(primaryStage);
+        AppController controller = fxmlLoader.getController();
+        controller.setPrimaryStage(primaryStage);
 
         Scene scene = new Scene(root, 500, 550);
         primaryStage.setScene(scene);

@@ -10,28 +10,28 @@ import java.io.File;
 
 public class FileChooserController {
 
-    private AppController appController;
+    private AppController mainController;
+
     @FXML
     private Label filePathLabel;
     @FXML
     private Button loadFileButton;
 
-    public void setMainController(AppController appController) {
-        this.appController = appController;
+
+    public void setMainController(AppController mainController) {
+        this.mainController = mainController;
     }
     @FXML
-    public void openFileButtonAction() {
+    public void openFileButtonAction() throws Exception {
         FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Select words file");
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("text files", "*.txt"));
-        File selectedFile = fileChooser.showOpenDialog(primaryStage);
+        fileChooser.setTitle("Select shticell file");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("xml files", "*.xml"));
+        File selectedFile = mainController.showFileSelector(fileChooser);
         if (selectedFile == null) {
             return;
         }
-
         String absolutePath = selectedFile.getAbsolutePath();
-        selectedFileProperty.set(absolutePath);
-        isFileSelected.set(true);
+        filePathLabel.setText(absolutePath);
+        mainController.loadFile(absolutePath);
     }
-
 }

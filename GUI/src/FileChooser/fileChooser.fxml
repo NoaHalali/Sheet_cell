@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.HBox?>
 
 <HBox alignment="CENTER_LEFT" spacing="10" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="FileChooser.FileChooserController">
-    <Button fx:id="loadFileButton" style="-fx-background-color: #32CD32; -fx-text-fill: white;" text="Load File Button" />
+    <Button fx:id="loadFileButton" onAction="#openFileButtonAction" style="-fx-background-color: #32CD32; -fx-text-fill: white;" text="Load File " />
     <Label text="Currently Loaded File path:" />
 
     <!-- Label להצגת הנתיב שנבחר -->

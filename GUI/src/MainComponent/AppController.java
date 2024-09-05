@@ -3,21 +3,27 @@ package MainComponent;
 import ActionLine.ActionLineController;
 import CellsTable.TableController;
 import FileChooser.FileChooserController;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.HBox;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import parts.CellDTO;
 import parts.EngineImpl;
+import parts.SheetDTO;
 import parts.cell.coordinate.Coordinate;
 import parts.cell.coordinate.CoordinateImpl;
+
+import java.io.File;
 
 public class AppController {
     private int count;
     private Coordinate coordinate;
     private EngineImpl engine;
-
+    private SimpleBooleanProperty isFileSelected;
     @FXML
     private HBox actionLine;
     @FXML
@@ -35,7 +41,7 @@ public class AppController {
     private Button myButton=new Button();
     @FXML
     private Label myLabel ;
-
+    private Stage primaryStage;
 
 
     @FXML
@@ -44,28 +50,32 @@ public class AppController {
             actionLineController.setMainController(this);
             tableController.setMainController(this);
             fileChooserController.setMainController(this);
+            isFileSelected = new SimpleBooleanProperty(false);
+            table.disableProperty().bind(isFileSelected.not());
+            actionLine.disableProperty().bind(isFileSelected.not());
+
         }
 
 
 
 
 
-
-        String amirfile = "C:\\Users\\amir\\IdeaProjects\\Sheet_cell\\engine\\src\\XMLFile\\GeneratedFiles\\dinamycTest.xml";
-        String noafile = "C:\\Users\\noa40\\OneDrive - The Academic College of Tel-Aviv Jaffa - MTA\\שנה ב\\קורסי בחירה\\פיתוח תוכנה מבוסס גאווה\\מטלות\\שטיסל\\shticell\\engine\\src\\XMLFile\\GeneratedFiles\\dinamycTest.xml";
         engine = new EngineImpl();
-        try {
-            engine.readFileData(noafile);
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
-        tableController.initializeGrid(engine.getCurrentSheetDTO());
-        Coordinate coordinate =new CoordinateImpl(2,2);
-        CellDTO cell=engine.getCellDTOByCoordinate(coordinate);
-
-        //myLabel.setText(cell.getCoord().toString());
-        actionLineController.setActionLine(cell);
+//        String amirfile = "C:\\Users\\amir\\IdeaProjects\\Sheet_cell\\engine\\src\\XMLFile\\GeneratedFiles\\dinamycTest.xml";
+//        String noafile = "C:\\Users\\noa40\\OneDrive - The Academic College of Tel-Aviv Jaffa - MTA\\שנה ב\\קורסי בחירה\\פיתוח תוכנה מבוסס גאווה\\מטלות\\שטיסל\\shticell\\engine\\src\\XMLFile\\GeneratedFiles\\dinamycTest.xml";
+//
+//        try {
+//            engine.readFileData(amirfile);
+//        }
+//        catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        tableController.initializeGrid(engine.getCurrentSheetDTO());
+//        Coordinate coordinate =new CoordinateImpl(2,2);
+//        CellDTO cell=engine.getCellDTOByCoordinate(coordinate);
+//
+//        //myLabel.setText(cell.getCoord().toString());
+//        actionLineController.setActionLine(cell);
 
     }
     public void updateActionLine(String coord) {
@@ -78,6 +88,24 @@ public class AppController {
             actionLineController.setActionLine(cell);
         }
     }
+    public void SetFileSelected() {
+        isFileSelected.set(true);
+    }
+    public void setPrimaryStage(Stage primaryStage) {
+        this.primaryStage = primaryStage;
+    }
+    public File showFileSelector(FileChooser fileChooser) {
+        return fileChooser.showOpenDialog(primaryStage);
+    }
+    public void loadFile(String absolutePath) throws Exception {
+        engine.readFileData(absolutePath);
+        isFileSelected.set(true);
+        SheetDTO sheet = engine.getCurrentSheetDTO();
+        tableController.initializeGrid(sheet);
+
+    }
+
+
 }
 
 

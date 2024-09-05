@@ -8,7 +8,7 @@
     <top>
         <VBox spacing="10">
             <!-- הכללת קובץ ה-FXML של הרכיב העליון -->
-            <fx:include fx:id="topSection" source="../FileChooser/fileChooser.fxml" />
+            <fx:include fx:id="fileChooser" source="../FileChooser/fileChooser.fxml" />
 
             <!-- הכללת קובץ ה-FXML של Action Line -->
             <HBox alignment="CENTER_LEFT" spacing="10" HBox.hgrow="ALWAYS">
