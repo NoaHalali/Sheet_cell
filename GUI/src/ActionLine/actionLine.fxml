@@ -5,13 +5,16 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.HBox?>
 
-<HBox alignment="CENTER_LEFT" spacing="10" style="-fx-background-color: #E0E0E0;" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ActionLine.ActionLineController">
-    <Label text="Cell ID:" />
+<HBox alignment="CENTER_LEFT" spacing="10" style="-fx-background-color: #E0E0E0; -fx-padding: 10;" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ActionLine.ActionLineController">
+    <!-- תווית עבור Cell ID עם רקע אפור כהה וריווח פנימי -->
+    <Label text="Cell ID:" style="-fx-background-color: #777777; -fx-text-fill: white; -fx-padding: 5;" />
     <Label fx:id="cellId" text="A1" />
 
-    <Label text="Original value:" />
+    <!-- תווית עבור Original Value עם רקע אפור כהה וריווח פנימי -->
+    <Label text="Original value:" style="-fx-background-color: #777777; -fx-text-fill: white; -fx-padding: 5;" />
     <Label fx:id="cellOriginalValue" text="123" />
 
+    <!-- שדה טקסט לעדכון ערך התא -->
     <TextField fx:id="updateCellValueField" promptText="Enter new value" HBox.hgrow="ALWAYS" />
     <Button fx:id="updateCell" style="-fx-background-color: #32CD32; -fx-text-fill: white;" text="Update value" />
 

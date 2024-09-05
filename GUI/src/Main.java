@@ -23,6 +23,7 @@ public class Main extends Application {
         URL url = getClass().getResource("/MainComponent/app.fxml");
         fxmlLoader.setLocation(url);
         Parent root = fxmlLoader.load(url.openStream());
+        histogramController.setPrimaryStage(primaryStage);
 
         Scene scene = new Scene(root, 500, 550);
         primaryStage.setScene(scene);

@@ -2,6 +2,7 @@ package MainComponent;
 
 import ActionLine.ActionLineController;
 import CellsTable.TableController;
+import FileChooser.FileChooserController;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -22,6 +23,10 @@ public class AppController {
     @FXML
     private ActionLineController actionLineController;
     @FXML
+    private HBox fileChooser;
+    @FXML
+    private FileChooserController fileChooserController;
+    @FXML
     private ScrollPane table;
     @FXML
     private TableController tableController;
@@ -31,13 +36,14 @@ public class AppController {
     @FXML
     private Label myLabel ;
 
+
+
     @FXML
     private void initialize() {
-        if(actionLineController!=null) {
+        if(actionLineController!=null && tableController!=null && fileChooserController!=null) {
             actionLineController.setMainController(this);
-        }
-        if(tableController!=null) {
             tableController.setMainController(this);
+            fileChooserController.setMainController(this);
         }
 
 
