@@ -4,6 +4,7 @@ import MainComponent.AppController;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import parts.CellDTO;
 import parts.EngineImpl;
 import parts.cell.coordinate.Coordinate;
@@ -21,6 +22,9 @@ public class ActionLineController {
     private Button updateCell;
     @FXML
     private Label cellLastUpdateVersion;
+    @FXML
+    private TextField updateCellValueField;
+
     private EngineImpl engine;
     public void setActionLine(CellDTO cell) {
         if (cell != null) {
@@ -28,7 +32,8 @@ public class ActionLineController {
             cellOriginalValue.setText( cell.getOriginalValue());
             cellLastUpdateVersion.setText(String.valueOf(cell.getLastUpdatedVersion()));
             updateCell.setOnAction(event -> {
-           System.out.println("Update button clicked!");
+            String cellValue = updateCellValueField.getText();
+
        });
        }else{
             cellId.setText("");
