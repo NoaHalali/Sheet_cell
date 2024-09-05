@@ -12,17 +12,14 @@ public class FileChooserController {
 
     private AppController mainController;
 
-    @FXML
-    private Label filePathLabel;
-    @FXML
-    private Button loadFileButton;
-
+    @FXML private Label filePathLabel;
+    @FXML private Button loadFileButton;
 
     public void setMainController(AppController mainController) {
         this.mainController = mainController;
     }
-    @FXML
-    public void openFileButtonAction() throws Exception {
+
+    @FXML public void openFileButtonAction() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Select shticell file");
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("xml files", "*.xml"));
@@ -30,8 +27,16 @@ public class FileChooserController {
         if (selectedFile == null) {
             return;
         }
+
         String absolutePath = selectedFile.getAbsolutePath();
         filePathLabel.setText(absolutePath);
-        mainController.loadFile(absolutePath);
+
+        // קריאה ל-loadFile
+        try {
+            mainController.loadFile(absolutePath);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
