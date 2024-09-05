@@ -4,6 +4,7 @@ import ActionLine.ActionLineController;
 import CellsTable.TableController;
 import FileChooser.FileChooserController;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -97,17 +98,35 @@ public class AppController {
     public File showFileSelector(FileChooser fileChooser) {
         return fileChooser.showOpenDialog(primaryStage);
     }
+
     public void loadFile(String absolutePath) throws Exception {
-        engine.readFileData(absolutePath);
-        isFileSelected.set(true);
-        SheetDTO sheet = engine.getCurrentSheetDTO();
-        tableController.initializeGrid(sheet);
+        // יצירת משימה לטעינת הקובץ ברקע
+        Task<Void> loadFileTask = new Task<Void>() {
+            @Override
+            protected Void call() throws Exception {
+                // קריאת נתוני הקובץ
+                engine.readFileData(absolutePath);
+                return null;
+            }
 
+            @Override
+            protected void succeeded() {
+                super.succeeded();
+                // עדכון ה-UI במקרה של הצלחה
+                isFileSelected.set(true);
+                SheetDTO sheet = engine.getCurrentSheetDTO();
+                tableController.initializeGrid(sheet);
+            }
+
+            @Override
+            protected void failed() {
+                super.failed();
+                // טיפול בשגיאה במקרה של כשל בטעינת הקובץ
+                System.out.println("Failed to load file: " + getException().getMessage());
+            }
+        };
+
+        // הפעלת המשימה ב-Thread נפרד
+        new Thread(loadFileTask).start();
     }
-
-
 }
-
-
-
-
