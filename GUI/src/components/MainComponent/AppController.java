@@ -88,11 +88,11 @@ public class AppController {
         if(coordinate != null){
             tableController.RemoveFocusingOfCell(coordinate.toString());
         }
-        if(actionLineController != null) {
+
             coordinate = CoordinateImpl.parseCoordinate(coord);
             CellDTO cell = engine.getCellDTOByCoordinate(coordinate);
             actionLineController.setActionLine(cell);
-        }
+
     }
     public void SetFileSelected() {
         isFileSelected.set(true);
