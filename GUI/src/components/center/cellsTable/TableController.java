@@ -1,13 +1,10 @@
-package CellsTable;
+package components.center.cellsTable;
 
-import MainComponent.AppController;
+import components.MainComponent.AppController;
 import javafx.fxml.FXML;
-import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Priority;
 import javafx.scene.layout.RowConstraints;
 import parts.CellDTO;
 import parts.SheetDTO;
@@ -22,9 +19,7 @@ import java.util.Map;
 public class TableController {
 
     private AppController mainController;
-    @FXML
-    private GridPane dynamicGridPane;
-
+    @FXML private GridPane dynamicGridPane;
     private Map<String, Label> cellMap=new HashMap<>();
 
 
@@ -114,11 +109,11 @@ public class TableController {
 //        mainController.updateHbox()
 //    }
 
-    public void updateCellContent(Coordinate coord , String newText) {
+    public void updateCellContent(Coordinate coord , EffectiveValue newText) {
       //  String key = row + ":" + col;
         Label label = cellMap.get(coord.toString());
         if (label != null) {
-            label.setText(newText);
+            label.setText(calcValueToPrint(newText));
         }
     }
     public String calcValueToPrint(EffectiveValue effectiveValue) {

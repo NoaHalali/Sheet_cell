@@ -1,4 +1,4 @@
-package CellComponent;
+package components.center.cell;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="components.MainComponent.AppController">
+
+    <top>
+        <VBox spacing="10">
+            <!-- הכללת קובץ ה-FXML של הרכיב העליון -->
+            <fx:include fx:id="fileChooser" source="../top/fileChooser/fileChooser.fxml" />
+
+            <!-- הכללת קובץ ה-FXML של Action Line -->
+            <HBox alignment="CENTER_LEFT" spacing="10" HBox.hgrow="ALWAYS">
+                <fx:include fx:id="actionLine" source="../top/actionLine/actionLine.fxml" HBox.hgrow="ALWAYS" />
+                <fx:include fx:id="versionSelector" source="../top/versions/versions.fxml" />
+            </HBox>
+        </VBox>
+    </top>
+
+    <left>
+        <VBox spacing="10">
+            <!-- הכללת קובץ ה-FXML של Commands -->
+            <fx:include fx:id="commandsSection" source="../left/commands/commands.fxml" />
+
+            <!-- הכללת קובץ ה-FXML של Ranges -->
+            <fx:include fx:id="rangesSection" source="../left/ranges/ranges.fxml" />
+        </VBox>
+    </left>
+
+    <center>
+        <!-- הכללת רכיב ה-Cells Table -->
+        <fx:include fx:id="table" source="../center/cellsTable/table.fxml" />
+    </center>
+</BorderPane>

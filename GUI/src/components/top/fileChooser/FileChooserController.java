@@ -1,6 +1,6 @@
-package FileChooser;
+package components.top.fileChooser;
 
-import MainComponent.AppController;
+import components.MainComponent.AppController;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;

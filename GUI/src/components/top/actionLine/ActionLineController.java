@@ -1,29 +1,22 @@
-package ActionLine;
+package components.top.actionLine;
 
-import MainComponent.AppController;
+import components.MainComponent.AppController;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import parts.CellDTO;
 import parts.EngineImpl;
-import parts.cell.coordinate.Coordinate;
-import parts.cell.coordinate.CoordinateImpl;
 
 public class ActionLineController {
 
     private AppController mainController;
 
-    @FXML
-    private Label cellId;
-    @FXML
-    private Label cellOriginalValue;
-    @FXML
-    private Button updateCell;
-    @FXML
-    private Label cellLastUpdateVersion;
-    @FXML
-    private TextField updateCellValueField;
+    @FXML private Label cellId;
+    @FXML private Label cellOriginalValue;
+    @FXML private Button updateCell;
+    @FXML private Label cellLastUpdateVersion;
+    @FXML private TextField updateCellValueField;
 
     private EngineImpl engine;
     public void setActionLine(CellDTO cell) {
@@ -32,15 +25,26 @@ public class ActionLineController {
             cellOriginalValue.setText( cell.getOriginalValue());
             cellLastUpdateVersion.setText(String.valueOf(cell.getLastUpdatedVersion()));
             updateCell.setOnAction(event -> {
-            String cellValue = updateCellValueField.getText();
+                try {
+                    mainController.updateCellValue( updateCellValueField.getText());
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
 
-       });
-       }else{
+            });
+           }else{
             cellId.setText("");
             cellOriginalValue.setText("");
             cellLastUpdateVersion.setText("");
         }
     }
+
+    public void setMainController(AppController mainController) {
+        this.mainController = mainController;
+    }
+
+}
+
 //    @FXML
 //    private void initialize() {
 //        engine = new EngineImpl();
@@ -66,9 +70,5 @@ public class ActionLineController {
 //            System.out.println("Update button clicked!");
 //        });
 //    }
-    public void setMainController(AppController mainController) {
-        this.mainController = mainController;
-    }
 
-    }
 

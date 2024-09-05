@@ -1,8 +1,10 @@
-package MainComponent;
+package components.MainComponent;
 
-import ActionLine.ActionLineController;
-import CellsTable.TableController;
-import FileChooser.FileChooserController;
+import components.left.commands.CommandsController;
+import components.left.ranges.RangesController;
+import components.top.actionLine.ActionLineController;
+import components.center.cellsTable.TableController;
+import components.top.fileChooser.FileChooserController;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
@@ -10,6 +12,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import parts.CellDTO;
@@ -19,31 +22,35 @@ import parts.cell.coordinate.Coordinate;
 import parts.cell.coordinate.CoordinateImpl;
 
 import java.io.File;
+import java.util.Arrays;
 
 public class AppController {
+
+    //Properties
+    private SimpleBooleanProperty isFileSelected;
+
+    //Components
+    @FXML private HBox actionLine;
+    @FXML private HBox fileChooser;
+    @FXML private ScrollPane table;
+    @FXML private Button myButton=new Button();
+    @FXML private Label myLabel ;
+    @FXML private VBox commands;
+    @FXML private VBox ranges;
+
+
+    //Controllers
+    @FXML private ActionLineController actionLineController;
+    @FXML private TableController tableController;
+    @FXML private FileChooserController fileChooserController;
+    @FXML private CommandsController commandsController;
+    @FXML private RangesController rangesController;
+
+
+    private Stage primaryStage;
     private int count;
     private Coordinate coordinate;
     private EngineImpl engine;
-    private SimpleBooleanProperty isFileSelected;
-    @FXML
-    private HBox actionLine;
-    @FXML
-    private ActionLineController actionLineController;
-    @FXML
-    private HBox fileChooser;
-    @FXML
-    private FileChooserController fileChooserController;
-    @FXML
-    private ScrollPane table;
-    @FXML
-    private TableController tableController;
-
-    @FXML
-    private Button myButton=new Button();
-    @FXML
-    private Label myLabel ;
-    private Stage primaryStage;
-
 
     @FXML
     private void initialize() {
@@ -56,8 +63,6 @@ public class AppController {
             actionLine.disableProperty().bind(isFileSelected.not());
 
         }
-
-
 
 
 
@@ -98,6 +103,18 @@ public class AppController {
     public File showFileSelector(FileChooser fileChooser) {
         return fileChooser.showOpenDialog(primaryStage);
     }
+    public void updateCellValue(String value) throws Exception {
+        engine.updateCellValue(value, coordinate);
+        SheetDTO sheet = engine.getCurrentSheetDTO();
+        CellDTO[][] cells = sheet.getCellsMatrix();
+        Arrays.stream(cells).flatMap(Arrays::stream).forEach(cell -> {
+            if(cell!=null) {
+                tableController.updateCellContent(cell.getCoord(), cell.getEffectiveValue());
+            }
+
+        });
+    }
+    //public void
 
     public void loadFile(String absolutePath) throws Exception {
         // יצירת משימה לטעינת הקובץ ברקע

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox spacing="10" style="-fx-background-color: #5a9ad3;" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="components.left.commands.CommandsController">
+    <!-- כפתור להגדרת רוחב עמודות/שורות -->
+    <Button fx:id="setColumnRowWidthButton" onAction="#setColumnRowWidthAction" text="Set Column/Row Width" />
+
+    <!-- כפתור לבחירת יישור של התוכן בעמודה -->
+    <Button fx:id="setColumnAlignmentButton" onAction="#setColumnAlignmentAction" text="Set Column Alignment" />
+
+    <!-- כפתור לבחירת עיצוב של תא מסוים -->
+    <Button fx:id="setCellStyleButton" onAction="#setCellStyleAction" text="Set Cell Style" />
+
+    <!-- כפתור לביטול העיצוב של תא מסוים -->
+    <Button fx:id="resetCellStyleButton" onAction="#resetCellStyleAction" text="Reset Cell Style" />
+</VBox>
