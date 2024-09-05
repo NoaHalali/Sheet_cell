@@ -7,10 +7,10 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module" module-name="DTO" />
+    <orderEntry type="module" module-name="DTO" exported="" />
     <orderEntry type="library" name="download" level="project" />
-    <orderEntry type="library" name="mod" level="project" />
-    <orderEntry type="library" name="modAmir" level="project" />
+    <orderEntry type="library" exported="" name="JAXB - Noa" level="project" />
+    <orderEntry type="library" exported="" name="modAmir" level="project" />
     <orderEntry type="library" name="mod1" level="project" />
   </component>
 </module>

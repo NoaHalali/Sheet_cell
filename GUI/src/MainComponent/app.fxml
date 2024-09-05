@@ -1,13 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.layout.BorderPane?>
-
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="MainComponent.AppController">
-   <top>
-      <fx:include fx:id="actionLine" source="../ActionLine/actionLine.fxml" />
-   </top>
-   <center>
-      <fx:include fx:id="table" source="../CellsTable/table.fxml" />
-   </center>
+    <top>
+        <VBox spacing="10">
+            <!-- הכללת קובץ ה-FXML של הרכיב העליון -->
+            <fx:include fx:id="topSection" source="../FileChooser/fileChooser.fxml" />
+
+            <!-- הכללת קובץ ה-FXML של Action Line -->
+            <HBox alignment="CENTER_LEFT" spacing="10" HBox.hgrow="ALWAYS">
+                <fx:include fx:id="actionLine" source="../ActionLine/actionLine.fxml" HBox.hgrow="ALWAYS" />
+                <fx:include fx:id="versionSelector" source="../Versions/versions.fxml" />
+            </HBox>
+        </VBox>
+    </top>
+
+    <center>
+        <!-- הכללת רכיב ה-Cells Table -->
+        <fx:include fx:id="table" source="../CellsTable/table.fxml" />
+    </center>
 </BorderPane>
