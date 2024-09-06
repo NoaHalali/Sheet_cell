@@ -22,10 +22,10 @@
     <left>
         <VBox spacing="10">
             <!-- הכללת קובץ ה-FXML של Commands -->
-            <fx:include fx:id="commandsSection" source="../left/commands/commands.fxml" />
+            <fx:include fx:id="commands" source="../left/commands/commands.fxml" />
 
             <!-- הכללת קובץ ה-FXML של Ranges -->
-            <fx:include fx:id="rangesSection" source="../left/ranges/ranges.fxml" />
+            <fx:include fx:id="ranges" source="../left/ranges/ranges.fxml" />
         </VBox>
     </left>
 
