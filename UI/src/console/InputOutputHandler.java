@@ -1,6 +1,6 @@
 package console;
 
-import parts.CellDTO;
+import parts.cell.CellDTO;
 import parts.SheetDTO;
 import parts.cell.coordinate.Coordinate;
 import parts.cell.coordinate.CoordinateImpl;

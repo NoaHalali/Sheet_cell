@@ -1,6 +1,8 @@
 package parts;
 
 
+import parts.cell.CellDTO;
+import parts.cell.EmptyCellDTO;
 import parts.cell.coordinate.Coordinate;
 
 public class SheetDTO {

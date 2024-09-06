@@ -1,4 +1,4 @@
-package parts;
+package parts.cell;
 
 import parts.cell.coordinate.Coordinate;
 import parts.cell.expression.effectiveValue.EffectiveValue;

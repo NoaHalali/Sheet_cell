@@ -1,9 +1,8 @@
-package parts;
+package parts.cell;
 
 import parts.cell.coordinate.Coordinate;
 import parts.cell.expression.effectiveValue.EffectiveValue;
 
-import java.io.Serializable;
 import java.util.List;
 
 public class EmptyCellDTO implements CellDTO {

@@ -5,7 +5,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import parts.CellDTO;
+import parts.cell.CellDTO;
 import parts.EngineImpl;
 
 public class ActionLineController {

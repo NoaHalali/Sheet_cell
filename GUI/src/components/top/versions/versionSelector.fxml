@@ -4,7 +4,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.HBox?>
 
-<HBox alignment="CENTER_LEFT" spacing="10" style="-fx-background-color: #7c9d7c; -fx-padding: 5;" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1">
+<HBox alignment="CENTER_LEFT" spacing="10" style="-fx-background-color: #7c9d7c; -fx-padding: 5;" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="components.top.versions.VersionSelectorController">
     <Label style="-fx-text-fill: white;" text="Version Selector:" />
     <ComboBox fx:id="versionSelector" promptText="Select Version" />
 </HBox>

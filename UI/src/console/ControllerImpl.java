@@ -2,7 +2,7 @@ package console;
 
 import parts.EngineImpl;
 import parts.SheetDTO;
-import parts.CellDTO;
+import parts.cell.CellDTO;
 import parts.cell.coordinate.Coordinate;
 
 import java.util.List;

@@ -14,7 +14,7 @@
             <!-- הכללת קובץ ה-FXML של Action Line -->
             <HBox alignment="CENTER_LEFT" spacing="10" HBox.hgrow="ALWAYS">
                 <fx:include fx:id="actionLine" source="../top/actionLine/actionLine.fxml" HBox.hgrow="ALWAYS" />
-                <fx:include fx:id="versionSelector" source="../top/versions/versions.fxml" />
+                <fx:include fx:id="versionSelector" source="../top/versions/versionSelector.fxml" />
             </HBox>
         </VBox>
     </top>

@@ -9,19 +9,23 @@ import components.top.versions.VersionSelectorController;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import parts.CellDTO;
+import parts.cell.CellDTO;
 import parts.EngineImpl;
 import parts.SheetDTO;
 import parts.cell.coordinate.Coordinate;
 import parts.cell.coordinate.CoordinateImpl;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Arrays;
+import java.util.List;
 
 public class AppController {
 
@@ -55,38 +59,64 @@ public class AppController {
 
     @FXML
     private void initialize() {
-        if (actionLineController != null && tableController != null && fileChooserController != null && versionSelector != null) {
+        if (actionLineController != null && tableController != null && fileChooserController != null && versionSelectorController != null) {
             actionLineController.setMainController(this);
             tableController.setMainController(this);
+            versionSelectorController.setMainController(this);
             fileChooserController.setMainController(this);
+
             isFileSelected = new SimpleBooleanProperty(false);
             table.disableProperty().bind(isFileSelected.not());
             actionLine.disableProperty().bind(isFileSelected.not());
-
-            // הגדרת ה-ComboBox מרכיב הגרסאות
-            ComboBox<String> versionSelector = versionSelectorController.getVersionSelector();
-            versionSelector.getItems().addAll("Version 1.0", "Version 1.1", "Version 2.0");
-
-            // הוספת מאזין לערך הנבחר
-            versionSelector.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-                if (newValue != null) {
-                    handleVersionSelection(newValue); // קריאה למתודה שמטפלת באירוע
-                }
-            });
+            versionSelector.disableProperty().bind(isFileSelected.not());
 
             engine = new EngineImpl();
+
+            // טוען את רכיב ה-Version ומקשר את הקונטרולר שלו
+//            try {
+//                FXMLLoader loader = new FXMLLoader(getClass().getResource("/components/top/versions/versionSelector.fxml"));
+//                Parent versionRoot = loader.load();
+//                versionSelectorController = loader.getController(); // חילוץ הקונטרולר של הרכיב הקטן
+//                versionSelector.getChildren().add(versionRoot); // הוספת הרכיב למיכל המתאים
+//                versionSelectorController.initializeDefaultState();
+//
+////                // טוען את רשימת הגרסאות
+////                loadVersions();
+//
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+
+//            // הגדרת ה-ComboBox מרכיב הגרסאות
+//            ComboBox<String> versionSelector = versionSelectorController.getVersionSelector();
+//            versionSelector.getItems().addAll("Version 1");
+//
+//            // הוספת מאזין לערך הנבחר
+//            versionSelector.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+//                if (newValue != null) {
+//                    handleVersionSelection(newValue); // קריאה למתודה שמטפלת באירוע
+//                }
+//            });
+
         }
     }
-        // פעולה לטיפול באירוע הבחירה בגרסה
 
-    private void handleVersionSelection(String version) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Version Information");
-        alert.setHeaderText("Selected Version: " + version);
-        alert.setContentText("Details about " + version + " will appear here.");
-        alert.showAndWait();
+    private void loadVersions() {
+        // טוען את ה-DTO ומעדכן את הגרסאות בקונטרולר של הרכיב הקטן
+//        VersionDTO versionDTO = new VersionDTO();
+//        List<String> versions = versionDTO.getVersions();
 
+        versionSelectorController.setVersions(engine.getVersions()); // קריאה למתודה שמעדכנת את הגרסאות ברכיב הקטן
     }
+
+//    private void handleVersionSelection(String version) {
+//        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+//        alert.setTitle("Version Information");
+//        alert.setHeaderText("Selected Version: " + version);
+//        alert.setContentText("Details about " + version + " will appear here.");
+//        alert.showAndWait();
+//
+//    }
 //        String amirfile = "C:\\Users\\amir\\IdeaProjects\\Sheet_cell\\engine\\src\\XMLFile\\GeneratedFiles\\dinamycTest.xml";
 //        String noafile = "C:\\Users\\noa40\\OneDrive - The Academic College of Tel-Aviv Jaffa - MTA\\שנה ב\\קורסי בחירה\\פיתוח תוכנה מבוסס גאווה\\מטלות\\שטיסל\\shticell\\engine\\src\\XMLFile\\GeneratedFiles\\dinamycTest.xml";
 //
@@ -153,6 +183,9 @@ public class AppController {
                 isFileSelected.set(true);
                 SheetDTO sheet = engine.getCurrentSheetDTO();
                 tableController.initializeGrid(sheet);
+                versionSelectorController.initializeVersionSelector();
+
+                loadVersions();
             }
 
             @Override

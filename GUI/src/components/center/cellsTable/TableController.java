@@ -6,7 +6,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
-import parts.CellDTO;
+import parts.cell.CellDTO;
 import parts.SheetDTO;
 import parts.cell.coordinate.Coordinate;
 import parts.cell.coordinate.CoordinateImpl;

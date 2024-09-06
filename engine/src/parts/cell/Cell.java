@@ -1,8 +1,5 @@
 package parts.cell;
 
-import parts.CellDTO;
-import parts.EmptyCellDTO;
-import parts.NonEmptyCellDTO;
 import parts.cell.coordinate.Coordinate;
 import parts.cell.expression.Expression;
 import parts.cell.expression.effectiveValue.EffectiveValue;
