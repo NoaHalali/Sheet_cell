@@ -52,6 +52,11 @@ public class SheetDTO {
         return cellsMatrix;
     }
     public CellDTO getCell(Coordinate coordinate) {
-        return cellsMatrix[coordinate.getRow()-1][coordinate.getCol()-1];
+        CellDTO cell= cellsMatrix[coordinate.getRow()-1][coordinate.getCol()-1];
+        if(cell != null){
+            return cell;
+        }else{
+           return new EmptyCellDTO(coordinate, 0, null);
+        }
     }
 }

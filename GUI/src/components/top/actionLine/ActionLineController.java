@@ -20,23 +20,29 @@ public class ActionLineController {
 
     private EngineImpl engine;
     public void setActionLine(CellDTO cell) {
-        if (cell != null) {
+//        if (cell != null) {
             cellId.setText(cell.getCoord().toString());
             cellOriginalValue.setText( cell.getOriginalValue());
-            cellLastUpdateVersion.setText(String.valueOf(cell.getLastUpdatedVersion()));
-            updateCell.setOnAction(event -> {
+            if(cell.getLastUpdatedVersion()!=0){
+                cellLastUpdateVersion.setText(String.valueOf(cell.getLastUpdatedVersion()));
+            }else {
+                cellLastUpdateVersion.setText("");
+            }
+
+            updateCell.setOnAction(event -> { //TODO - seperate to another method so when finish to update sell we can call the setActionLine
                 try {
                     mainController.updateCellValue( updateCellValueField.getText());
+
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
 
             });
-           }else{
-            cellId.setText("");
-            cellOriginalValue.setText("");
-            cellLastUpdateVersion.setText("");
-        }
+//           }else{
+//            cellId.setText("");
+//            cellOriginalValue.setText("");
+//            cellLastUpdateVersion.setText("");
+//        }
     }
 
     public void setMainController(AppController mainController) {

@@ -117,6 +117,9 @@ public class TableController {
         }
     }
     public String calcValueToPrint(EffectiveValue effectiveValue) {
+        if(effectiveValue == null) {
+            return "";
+        }
         if (effectiveValue.getCellType() == CellType.NUMERIC) {
             double num = effectiveValue.extractValueWithExpectation(Double.class);
 

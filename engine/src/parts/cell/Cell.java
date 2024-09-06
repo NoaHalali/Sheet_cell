@@ -1,6 +1,8 @@
 package parts.cell;
 
 import parts.CellDTO;
+import parts.EmptyCellDTO;
+import parts.NonEmptyCellDTO;
 import parts.cell.coordinate.Coordinate;
 import parts.cell.expression.Expression;
 import parts.cell.expression.effectiveValue.EffectiveValue;
@@ -18,6 +20,7 @@ public class Cell implements Serializable {
     private int lastUpdatedVersion;
     private String originalValue;
     private EffectiveValue effectiveValue;
+    private boolean isExist;
     private Expression cellValue;
     private List<Cell> influencingOn;//משפיע על התאים האלה
     private List<Cell> dependsOn; //התאים שמושפע מהם
@@ -27,7 +30,7 @@ public class Cell implements Serializable {
         this.coordinate = coordinate;
         this.originalValue = originalValue;
         lastUpdatedVersion = 1;
-
+        isExist=true;
         this.influencingOn = new LinkedList<Cell>();
         this.dependsOn = new LinkedList<Cell>();
     }
@@ -46,16 +49,39 @@ public class Cell implements Serializable {
         this.originalValue = originalValue;
     }
 
+//    public NonEmptyCellDTO toNonEmptyCellDTO() {
+//        return new NonEmptyCellDTO(
+//                coordinate, //"A4"
+//                originalValue,
+//                getAndUpdateEffectiveValue(),
+//                lastUpdatedVersion,
+//                getInfluencingOnCoordinates(),
+//                getDependsOnCoordinates()
+//        );
+//    }
+//    public EmptyCellDTO toEmptyCellDTO() {
+//
+//    }
     public CellDTO toCellDTO() {
-        return new CellDTO(
-                coordinate, //"A4"
-                originalValue,
-                //cellValue.calculateEffectiveValue(),
-                getAndUpdateEffectiveValue(),
-                lastUpdatedVersion,
-                getInfluencingOnCoordinates(),
-                getDependsOnCoordinates()
-        );
+        if (isExist)
+        {
+            return new NonEmptyCellDTO(
+                    coordinate, //"A4"
+                    originalValue,
+                    getAndUpdateEffectiveValue(),
+                    lastUpdatedVersion,
+                    getInfluencingOnCoordinates(),
+                    getDependsOnCoordinates()
+            );
+        }
+        else {
+            return new EmptyCellDTO(
+                    coordinate, //"A4"
+                    lastUpdatedVersion,
+                    getInfluencingOnCoordinates()
+            );
+        }
+
     }
 
 
@@ -109,6 +135,14 @@ public class Cell implements Serializable {
         if (!influencingOn.isEmpty()) {
             throw new RuntimeException("cannot delete cell on coordinate " + coordinate + " because he is influencing other cell with ref");
         }
+    }
+    public void resetCell() {
+        originalValue = "";
+        effectiveValue = null;
+        isExist = false;
+        cellValue = null;
+        dependsOn = null;
+        //influencing ??
     }
 
     public void checkIfCellExpressionCanBeUpdatedWrapper() {
@@ -165,5 +199,10 @@ public class Cell implements Serializable {
 
     public EffectiveValue getEffectiveValue() {
         return cellValue.calculateEffectiveValue();
+    }
+
+
+    public boolean getIsExist() {
+        return isExist;
     }
 }

@@ -8,7 +8,6 @@ import parts.cell.expression.impl.BoolExpression;
 import parts.cell.expression.impl.NumberExpression;
 import parts.cell.expression.impl.StringExpression;
 import parts.function.*;
-
 import java.io.*;
 import java.util.*;
 
@@ -21,7 +20,7 @@ public class Sheet implements Serializable {
     private final int columnWidth;
     private final int rowHeight;
     private Cell[][] cellsMatrix; // מערך דו-ממדי של תאים
-    private Map<String,Integer> deletedCells= new HashMap<String,Integer>();
+    //private Map<String,Integer> deletedCells= new HashMap<String,Integer>();
     private static final char minCol = 'A';
     private static final int minRow = 1;
     private final char maxCol;
@@ -106,35 +105,40 @@ public class Sheet implements Serializable {
     public int upgradeCellsVersionsAndGetNumOfChanges(){
         List<Cell>changedCells = Arrays.stream(cellsMatrix)                          // Stream over rows of cellsMatrix
                 .flatMap(Arrays::stream)                    // Flatten the stream of rows into a single stream of cells
-                .filter(cell -> cell != null)                   // Filter out null cells
+                .filter(cell -> cell != null)
+                .filter(cell-> cell.getIsExist())
+                // Filter out null cells
                 .filter(Cell::calculateAndCheckIfUpdated)   // Filter cells that have been updated
                 .toList();
         //  if(changedCells.size() != 0){//תכלס שטום דבר לא השתנה
 
         changedCells.stream().forEach(cell -> cell.setLastUpdatedVersion(version));
         if(changedCells.size() == 0){//אף תא לא השתנה לכן רק התא לו שינינו את ערך המקור ולכן קיים שינוי 1 במידה וערך המקור לא השתנה אז זה שגיאה ???
-            return 1; //TODO -  לשאול את אמיר
+            return 0; //TODO -  לשאול את אמיר
         }
-
+        version++;
+        changedCells.stream().forEach(cell -> cell.setLastUpdatedVersion(version));
         return changedCells.size();  // Filter cells that have been updated
     }
 
-
-
     public void deleteCell(Coordinate coord){
-        cellsMatrix[coord.getRow()-1][coord.getCol()-1] = null;
-        if(deletedCells.containsKey(coord.toString())){
-            deletedCells.remove(coord.toString());
-        }
-        deletedCells.put(coord.toString(),version);
+        cellsMatrix[coord.getRow()-1][coord.getCol()-1].resetCell();
+    }
 
-    }
-    public int getEmptyCellVersion(Coordinate coord){
-        if(deletedCells.containsKey(coord.toString())){
-            return deletedCells.get(coord.toString());
-        }
-        return 0;
-    }
+//    public void deleteCell(Coordinate coord){
+//        cellsMatrix[coord.getRow()-1][coord.getCol()-1] = null;
+//        if(deletedCells.containsKey(coord.toString())){
+//            deletedCells.remove(coord.toString());
+//        }
+//        deletedCells.put(coord.toString(),version);
+//
+//    }
+//    public int getEmptyCellVersion(Coordinate coord){
+//        if(deletedCells.containsKey(coord.toString())){
+//            return deletedCells.get(coord.toString());
+//        }
+//        return 0;
+//    }
 
     public void addCell(Coordinate coord, Cell cell){
         cellsMatrix[coord.getRow()-1][coord.getCol()-1] = cell;
@@ -174,14 +178,15 @@ public class Sheet implements Serializable {
         }
     }
 
-    public void updateCellValue(String originalValue,Cell changeCell) throws Exception {
-
+    public boolean updateCellValue(String originalValue,Cell changeCell) throws Exception {
+        boolean isDeleted;
         if (originalValue.isEmpty()) {
             changeCell.checkIfCellCanBeDeleted();
             deleteCell(changeCell.getCoordinate());
-            //TODO - אולי לשלוח איכשהו לממשק משתמש שהתא נמחק בהצלחה
+            isDeleted = true;
         }
         else {
+            isDeleted = false;
             List<Cell> dependsOnCellList = new LinkedList<Cell>();
             Expression expression = getExpressionOfCell(originalValue, dependsOnCellList);
             //changeCell = getCellByCoord(coord);
@@ -199,6 +204,7 @@ public class Sheet implements Serializable {
             updateDependencies(changeCell, dependsOnCellList);
 
         }
+        return isDeleted;
     }
 
 
@@ -433,6 +439,7 @@ public class Sheet implements Serializable {
     }
 
     public void upgradeCellVersion(Cell cell) {
+        version++;
         cell.setLastUpdatedVersion(version);
     }
 }
