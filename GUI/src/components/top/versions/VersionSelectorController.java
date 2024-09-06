@@ -8,6 +8,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 
 import java.util.List;
+import java.util.stream.IntStream;
 
 public class VersionSelectorController {
 
@@ -33,15 +34,23 @@ public class VersionSelectorController {
         });
     }
 
-    public void setVersions(List<Integer> versions) {
-        List<String> newList = versions.stream()
-                .map(version -> "Version " + version)
+    public void setVersionSelectorOptions(int numOfVersions) {
+        // יצירת רשימה של מספרי גרסאות לפי מספר הגרסאות
+        List<String> newList = IntStream.rangeClosed(1, numOfVersions)
+                .mapToObj(version -> "Version " + version)
                 .toList();
+
         versionList.setAll(newList);
         versionSelector.setDisable(false); // אפשר את ה-ComboBox לאחר טעינת הגרסאות
     }
 
     private void handleVersionSelection(String version) {
+        //TODO - move to app controller
+        // check if alerts are pop up, if it is so move it to the app controller
+        // or maybe just bring it here?
+        //mainController.handleVersionSelection(version);
+
+
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Version Information");
         alert.setHeaderText("Selected Version: " + version);

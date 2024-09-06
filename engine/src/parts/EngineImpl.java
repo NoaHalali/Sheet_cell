@@ -115,12 +115,19 @@ public class EngineImpl implements Engine {
         return getSheetByVersion(versionNumber).toSheetDTO();
     }
 
-    //5
+    //5 - לא באמת מחזיר גרסאות, יותר רשימה של מספרי תאים שהשתנו
     public List<Integer> getVersions(){
         if (!sheetLoadad()) {
             throw new IllegalStateException(SHEET_NOT_LOADED_MESSAGE);
         }
         return getNumberOfCellsChangedListDeepClone();
+    }
+
+    public int getNumOfVersions(){
+        if (!sheetLoadad()) {
+            throw new IllegalStateException(SHEET_NOT_LOADED_MESSAGE);
+        }
+        return versionsList.size();
     }
 
     //5

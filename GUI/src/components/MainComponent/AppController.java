@@ -9,9 +9,8 @@ import components.top.versions.VersionSelectorController;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.control.*;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
@@ -23,9 +22,7 @@ import parts.cell.coordinate.Coordinate;
 import parts.cell.coordinate.CoordinateImpl;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.Arrays;
-import java.util.List;
 
 public class AppController {
 
@@ -33,7 +30,7 @@ public class AppController {
     private SimpleBooleanProperty isFileSelected;
 
     //Components
-    @FXML private HBox actionLine;
+    @FXML private GridPane actionLine;
     @FXML private HBox fileChooser;
     @FXML private ScrollPane table;
     @FXML private Button myButton=new Button();
@@ -81,7 +78,7 @@ public class AppController {
 //                versionSelectorController.initializeDefaultState();
 //
 ////                // טוען את רשימת הגרסאות
-////                loadVersions();
+////                setVersionSelectorOptions();
 //
 //            } catch (IOException e) {
 //                e.printStackTrace();
@@ -101,12 +98,14 @@ public class AppController {
         }
     }
 
-    private void loadVersions() {
+    private void setVersionSelectorOptions() {
         // טוען את ה-DTO ומעדכן את הגרסאות בקונטרולר של הרכיב הקטן
 //        VersionDTO versionDTO = new VersionDTO();
 //        List<String> versions = versionDTO.getVersions();
 
-        versionSelectorController.setVersions(engine.getVersions()); // קריאה למתודה שמעדכנת את הגרסאות ברכיב הקטן
+        int numOfVersions = engine.getNumOfVersions();
+        versionSelectorController.setVersionSelectorOptions(5);
+        //versionSelectorController.setVersions(versions); // קריאה למתודה שמעדכנת את הגרסאות ברכיב הקטן
     }
 
 //    private void handleVersionSelection(String version) {
@@ -185,7 +184,7 @@ public class AppController {
                 tableController.initializeGrid(sheet);
                 versionSelectorController.initializeVersionSelector();
 
-                loadVersions();
+                setVersionSelectorOptions();
             }
 
             @Override
