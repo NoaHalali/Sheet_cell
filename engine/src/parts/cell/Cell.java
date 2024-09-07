@@ -1,5 +1,6 @@
 package parts.cell;
 
+import com.sun.tools.xjc.reader.xmlschema.bindinfo.BIConversion;
 import parts.cell.coordinate.Coordinate;
 import parts.cell.expression.Expression;
 import parts.cell.expression.effectiveValue.EffectiveValue;
@@ -27,19 +28,50 @@ public class Cell implements Serializable {
         this.coordinate = coordinate;
         this.originalValue = originalValue;
         lastUpdatedVersion = 1;
-        isExist=true;
+        isExist = true;
         this.influencingOn = new LinkedList<Cell>();
         this.dependsOn = new LinkedList<Cell>();
     }
+    public static Cell createEmptyCell(Coordinate coordinate) {
+        Cell cell= new Cell(coordinate, "");
+        cell.lastUpdatedVersion = 0;
+        cell.isExist = false;
+        return cell;
+    }
+    public void setIsExist(boolean isExist) {
+        this.isExist = isExist;
+    }
+//    public void setLastUpdatedVersion(int  lastUpdatedVersion) {
+//        lastUpdatedVersion=0;
+//    }
+
 
     public boolean calculateAndCheckIfUpdated() {
         EffectiveValue oldEffectiveValue = effectiveValue; //in case the next line changes it
         EffectiveValue newEffectiveValue = getAndUpdateEffectiveValue();
-        if (oldEffectiveValue.equals(newEffectiveValue)) {
+
+        if(oldEffectiveValue == null ) {
+            if (newEffectiveValue == null) {
+                return false;
+            } else {
+                return true;
+            }
+        }
+        else if(newEffectiveValue == null ) {
+            if (oldEffectiveValue == null) {
+                return false;
+            } else {
+                return true;
+            }
+        }
+
+        else if (oldEffectiveValue.equals(newEffectiveValue)) {
             return false;
         }
-        effectiveValue = newEffectiveValue;
-        return true;
+        else { //changed
+            effectiveValue = newEffectiveValue;
+            return true;
+        }
     }
 
     public void setCellOriginalValue(String originalValue) {
@@ -128,17 +160,17 @@ public class Cell implements Serializable {
         return coordinate;
     }
 
-    public void checkIfCellCanBeDeleted() {
-        if (!influencingOn.isEmpty()) {
-            throw new RuntimeException("cannot delete cell on coordinate " + coordinate + " because he is influencing other cell with ref");
-        }
-    }
+//    public void checkIfCellCanBeDeleted() {
+//        if (!influencingOn.isEmpty()) {
+//            throw new RuntimeException("cannot delete cell on coordinate " + coordinate + " because he is influencing other cell with ref");
+//        }
+//    }
     public void resetCell() {
         originalValue = "";
         effectiveValue = null;
         isExist = false;
         cellValue = null;
-        dependsOn = null;
+        dependsOn.clear();
         //influencing ??
     }
 
@@ -195,7 +227,10 @@ public class Cell implements Serializable {
     }
 
     public EffectiveValue getEffectiveValue() {
-        return cellValue.calculateEffectiveValue();
+        if(isExist) {
+            return cellValue.calculateEffectiveValue();
+        }
+        return null;
     }
 
 

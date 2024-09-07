@@ -11,9 +11,9 @@ import java.io.Serializable;
 public class Ref implements Expression, Serializable {
     Cell refCell;
     public Ref(Cell refCell) throws NullPointerException  {
-        if(refCell == null){
-            throw new NullPointerException("cannot reference an empty cell" );
-        }
+//        if(refCell == null){
+//           // throw new NullPointerException("cannot reference an empty cell" );
+//        }
         this.refCell = refCell;
     }
 

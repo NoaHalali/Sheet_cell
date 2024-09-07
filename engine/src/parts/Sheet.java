@@ -181,7 +181,7 @@ public class Sheet implements Serializable {
     public boolean updateCellValue(String originalValue,Cell changeCell) throws Exception {
         boolean isDeleted;
         if (originalValue.isEmpty()) {
-            changeCell.checkIfCellCanBeDeleted();
+            //changeCell.checkIfCellCanBeDeleted();
             deleteCell(changeCell.getCoordinate());
             isDeleted = true;
         }
@@ -202,7 +202,7 @@ public class Sheet implements Serializable {
             }
             changeCell.setCellOriginalValue(originalValue);
             updateDependencies(changeCell, dependsOnCellList);
-
+            changeCell.setIsExist(true);
         }
         return isDeleted;
     }
@@ -342,6 +342,10 @@ public class Sheet implements Serializable {
                     Coordinate refCoord = CoordinateImpl.parseCoordinate(list.get(1));
                     validateCoordinateBounds(refCoord);
                     Cell refcell = getCellByCoord(refCoord);//find Cell in map or 2dim array and cell coord: list.get(1)
+                    if(refcell == null){
+                        CreateNewEmptyCell(refCoord);
+                        refcell = getCellByCoord(refCoord);
+                    }
                     dependsOnCellList.add(refcell); // לתא עליו התבקשנו לעדכן אערך נקצה רשימה חדשה בההתאים המשפיעים על תא זה שהיא תהיה רשימת המושפעים מהתא עליו נבצע עדכון +refcell
                     res = new Ref(refcell);
 
@@ -392,12 +396,11 @@ public class Sheet implements Serializable {
         }
     }
 
-    public void checkForCircularDependencies()
-    {
-        for(Cell[] cells : cellsMatrix){
-            for(Cell cell : cells){
-                if(cell!=null){
-                    cell.checkForCircularDependencyWrapper(cell.getCoordinate(),cell.getDependsOn());
+    public void checkForCircularDependencies() {
+        for (Cell[] cells : cellsMatrix) {
+            for (Cell cell : cells) {
+                if (cell != null) {
+                    cell.checkForCircularDependencyWrapper(cell.getCoordinate(), cell.getDependsOn());
 
                 }
             }
@@ -441,5 +444,9 @@ public class Sheet implements Serializable {
     public void upgradeCellVersion(Cell cell) {
         version++;
         cell.setLastUpdatedVersion(version);
+    }
+    public void CreateNewEmptyCell(Coordinate coord){
+        Cell emptyCell=Cell.createEmptyCell(coord);
+        cellsMatrix[coord.getRow()-1][coord.getCol()-1] = emptyCell;
     }
 }
