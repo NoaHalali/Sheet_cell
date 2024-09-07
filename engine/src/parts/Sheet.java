@@ -20,6 +20,7 @@ public class Sheet implements Serializable {
     private final int columnWidth;
     private final int rowHeight;
     private Cell[][] cellsMatrix; // מערך דו-ממדי של תאים
+    private Map<String,Range> ranges = new HashMap<String,Range>();
     //private Map<String,Integer> deletedCells= new HashMap<String,Integer>();
     private static final char minCol = 'A';
     private static final int minRow = 1;
@@ -445,8 +446,32 @@ public class Sheet implements Serializable {
         version++;
         cell.setLastUpdatedVersion(version);
     }
+
     public void CreateNewEmptyCell(Coordinate coord){
         Cell emptyCell=Cell.createEmptyCell(coord);
         cellsMatrix[coord.getRow()-1][coord.getCol()-1] = emptyCell;
     }
+
+    public void addRange(String rangeName, Range range) throws IllegalArgumentException{
+        if(ranges.containsKey(rangeName)){
+            throw new IllegalArgumentException("Range with the name " + rangeName + " already exists.");
+        }
+        ranges.put(rangeName, range);
+    }
+
+    //TODO - add check if range is usued for function, maybe with boolean field
+    public void deleteRange(String rangeName) throws IllegalArgumentException{
+        if(!ranges.containsKey(rangeName)){
+            throw new IllegalArgumentException("Range with the name " + rangeName + " does not exist.");
+        }
+        ranges.remove(rangeName);
+    }
+
+    public Range getRange(String rangeName) throws IllegalArgumentException{
+        if(!ranges.containsKey(rangeName)){
+            throw new IllegalArgumentException("Range with the name " + rangeName + " does not exist.");
+        }
+        return ranges.get(rangeName);
+    }
+
 }
