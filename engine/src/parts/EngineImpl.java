@@ -90,7 +90,7 @@ public class EngineImpl implements Engine {
                 isDeleted = clonedSheet.updateCellValue(originalValue, cell);
 
                 numOfCellsChanged = clonedSheet.upgradeCellsVersionsAndGetNumOfChanges();
-                if(numOfCellsChanged == 0 && !lastOriginalValue.equals( cell.getOriginalValue())||isDeleted){
+                if(numOfCellsChanged == 0 && !lastOriginalValue.equals( cell.getOriginalValue())){
                     clonedSheet.upgradeCellVersion(cell);
                 }
             } else {

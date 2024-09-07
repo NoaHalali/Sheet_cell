@@ -63,7 +63,7 @@ public class TableController {
                 label.setOnMouseClicked(event -> {
                     label.setStyle("-fx-background-color: #f0f0f0; -fx-alignment: center; -fx-border-color: red; -fx-border-width: 0.5px;");
 
-                    mainController.updateActionLine(coordStr);
+                    mainController.onClickedCell(coordStr);
 
                 // Call the method in the main controller with the key
                 });
@@ -144,6 +144,10 @@ public class TableController {
     }
     public void RemoveFocusingOfCell(String cellCoordinate) {
         cellMap.get(cellCoordinate).setStyle( "-fx-background-color: #f0f0f0; -fx-alignment: center; -fx-border-color: blue; -fx-border-width: 0.5px;");
+    }
+    public void paintCellsInfluencingAndDependsOnBorders(){
+
+
     }
     public void setMainController(AppController mainController) {
         this.mainController = mainController;

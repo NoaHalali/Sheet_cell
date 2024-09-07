@@ -132,13 +132,14 @@ public class AppController {
 //        actionLineController.setActionLine(cell);
 
 
-    public void updateActionLine(String coord) {
+    public void onClickedCell(String coord) {
         if(coordinate != null){
             tableController.RemoveFocusingOfCell(coordinate.toString());
         }
 
             coordinate = CoordinateImpl.parseCoordinate(coord);
             CellDTO cell = engine.getCellDTOByCoordinate(coordinate);
+
             actionLineController.setActionLine(cell);
 
     }

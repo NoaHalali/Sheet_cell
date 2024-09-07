@@ -167,7 +167,7 @@ public class Cell implements Serializable {
 //    }
     public void resetCell() {
         originalValue = "";
-        effectiveValue = null;
+        //effectiveValue = null;
         isExist = false;
         cellValue = null;
         dependsOn.clear();
@@ -221,8 +221,11 @@ public class Cell implements Serializable {
     }
 
     public EffectiveValue getAndUpdateEffectiveValue() {
-
-        effectiveValue = cellValue.calculateEffectiveValue();
+        if(isExist) {
+            effectiveValue = cellValue.calculateEffectiveValue();
+        }else{
+            effectiveValue = null;
+        }
         return effectiveValue;
     }
 

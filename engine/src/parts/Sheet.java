@@ -107,7 +107,7 @@ public class Sheet implements Serializable {
         List<Cell>changedCells = Arrays.stream(cellsMatrix)                          // Stream over rows of cellsMatrix
                 .flatMap(Arrays::stream)                    // Flatten the stream of rows into a single stream of cells
                 .filter(cell -> cell != null)
-                .filter(cell-> cell.getIsExist())
+                //.filter(cell-> cell.getIsExist())
                 // Filter out null cells
                 .filter(Cell::calculateAndCheckIfUpdated)   // Filter cells that have been updated
                 .toList();
