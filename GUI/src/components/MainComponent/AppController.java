@@ -104,7 +104,7 @@ public class AppController {
 //        List<String> versions = versionDTO.getVersions();
 
         int numOfVersions = engine.getNumOfVersions();
-        versionSelectorController.setVersionSelectorOptions(5);
+        versionSelectorController.setVersionSelectorOptions(numOfVersions);
         //versionSelectorController.setVersions(versions); // קריאה למתודה שמעדכנת את הגרסאות ברכיב הקטן
     }
 

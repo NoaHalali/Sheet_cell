@@ -123,6 +123,7 @@ public class EngineImpl implements Engine {
         return getNumberOfCellsChangedListDeepClone();
     }
 
+    //5
     public int getNumOfVersions(){
         if (!sheetLoadad()) {
             throw new IllegalStateException(SHEET_NOT_LOADED_MESSAGE);
