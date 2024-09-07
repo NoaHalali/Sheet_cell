@@ -29,20 +29,23 @@ public class ActionLineController {
                 cellLastUpdateVersion.setText("");
             }
 
-            updateCell.setOnAction(event -> { //TODO - seperate to another method so when finish to update sell we can call the setActionLine
-                try {
-                    mainController.updateCellValue( updateCellValueField.getText());
 
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
-
-            });
 //           }else{
 //            cellId.setText("");
 //            cellOriginalValue.setText("");
 //            cellLastUpdateVersion.setText("");
 //        }
+    }
+    public void initializeActionLine(){
+        updateCell.setOnAction(event -> {
+            try {
+                mainController.updateCellValue( updateCellValueField.getText());
+
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+
+        });
     }
 
     public void setMainController(AppController mainController) {

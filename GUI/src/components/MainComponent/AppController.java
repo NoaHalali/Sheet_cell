@@ -66,7 +66,6 @@ public class AppController {
             table.disableProperty().bind(isFileSelected.not());
             actionLine.disableProperty().bind(isFileSelected.not());
             versionSelector.disableProperty().bind(isFileSelected.not());
-
             engine = new EngineImpl();
 
             // טוען את רכיב ה-Version ומקשר את הקונטרולר שלו
@@ -152,18 +151,50 @@ public class AppController {
     public File showFileSelector(FileChooser fileChooser) {
         return fileChooser.showOpenDialog(primaryStage);
     }
-    public void updateCellValue(String value) throws Exception {
-        engine.updateCellValue(value, coordinate);
-        SheetDTO sheet = engine.getCurrentSheetDTO();
-        CellDTO[][] cells = sheet.getCellsMatrix();
-        Arrays.stream(cells).flatMap(Arrays::stream).forEach(cell -> {
-            if(cell!=null) {
-                tableController.updateCellContent(cell.getCoord(), cell.getEffectiveValue());
+
+    public void updateCellValue(String value) {
+        // יצירת משימה לעדכון ערך התא ברקע
+        Task<Void> updateCellTask = new Task<Void>() {
+            @Override
+            protected Void call() throws Exception {
+                // עדכון ערך התא במנוע
+                engine.updateCellValue(value, coordinate);
+
+                // קריאת המידע החדש לאחר העדכון
+                SheetDTO sheet = engine.getCurrentSheetDTO();
+                CellDTO[][] cells = sheet.getCellsMatrix();
+
+                // החזרת ערכים ברקע, ללא עדכון UI
+                return null;
             }
 
-        });
+            @Override
+            protected void succeeded() {
+                super.succeeded();
+                // עדכון ה-UI במקרה של הצלחה
+                SheetDTO sheet = engine.getCurrentSheetDTO();
+                CellDTO[][] cells = sheet.getCellsMatrix();
+
+                Arrays.stream(cells).flatMap(Arrays::stream).forEach(cell -> {
+                    if (cell != null) {
+                        tableController.updateCellContent(cell.getCoord(), cell.getEffectiveValue());
+                    }
+                });
+
+                actionLineController.setActionLine(engine.getCellDTOByCoordinate(coordinate));
+            }
+
+            @Override
+            protected void failed() {
+                super.failed();
+                // טיפול בשגיאה במקרה של כשל בעדכון הערך
+                System.out.println("Failed to update cell: " + getException().getMessage());
+            }
+        };
+
+        // הפעלת המשימה ב-Thread נפרד
+        new Thread(updateCellTask).start();
     }
-    //public void
 
     public void loadFile(String absolutePath) throws Exception {
         // יצירת משימה לטעינת הקובץ ברקע
@@ -183,6 +214,8 @@ public class AppController {
                 SheetDTO sheet = engine.getCurrentSheetDTO();
                 tableController.initializeGrid(sheet);
                 versionSelectorController.initializeVersionSelector();
+                actionLineController.initializeActionLine();
+
 
                 setVersionSelectorOptions();
             }
