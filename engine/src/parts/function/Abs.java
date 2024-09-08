@@ -11,9 +11,9 @@ public class Abs extends UnaryExpression{
 
         CellType expCellType = exp.getFunctionResultType();
 
-        if ( (!expCellType.equals(CellType.NUMERIC) && !expCellType.equals(CellType.UNKNOWN)) ) {
-            throw new IllegalArgumentException("Invalid argument types for ABS function. Expected to get one arguments from type NUMERIC, but got " + expCellType);
-        }
+//        if ( (!expCellType.equals(CellType.NUMERIC) && !expCellType.equals(CellType.UNKNOWN)) ) {
+//            throw new IllegalArgumentException("Invalid argument types for ABS function. Expected to get one arguments from type NUMERIC, but got " + expCellType);
+//        }
         this.exp = exp;
 
 
@@ -25,10 +25,11 @@ public class Abs extends UnaryExpression{
         try {
             double result = Math.abs(Value.extractValueWithExpectation(Double.class));
             return new EffectiveValueImpl(CellType.NUMERIC, result);
-        }  catch(ClassCastException e) {
-            throw new ClassCastException(e.getMessage() + "ABS function expected to get one arguments from type NUMERIC, but got " +Value.getCellType());
         }
-        catch (ArithmeticException arithmeticException) {
+//        catch(ClassCastException e) {
+//            throw new ClassCastException(e.getMessage() + "ABS function expected to get one arguments from type NUMERIC, but got " +Value.getCellType());
+//        }
+        catch (Exception e) {
             return new EffectiveValueImpl(CellType.NUMERIC, Double.NaN);
         }
     }
