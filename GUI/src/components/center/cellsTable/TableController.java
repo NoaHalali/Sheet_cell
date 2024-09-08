@@ -25,6 +25,7 @@ public class TableController {
     private AppController mainController;
     @FXML private GridPane dynamicGridPane;
     private Map<String, CellController> cellMap = new HashMap<>();
+    private Coordinate currentlyFocusedCell; // משתנה לשמירת המיקום של התא הממוקד כרגע
 
     public void initializeGrid(SheetDTO sheet) {
 
@@ -61,13 +62,11 @@ public class TableController {
                     cellController.setText(cellText);
                     cellController.setBackgroundColor("#f0f0f0");
                     cellController.setAlignment("center");
+                    cellController.setBorderColor("blue");
 
                     String coordStr = coord.toString();
                     cellPane.setOnMouseClicked(event -> {
-                        cellController.setBackgroundColor("#f0f0f0");
-                        cellController.setAlignment("center");
-                        cellController.setBorderColor("red");  // Set border color on click
-                        mainController.onClickedCell(coordStr);
+                        handleCellClick(coordStr); // קריאה למתודה שמטפלת בלחיצה על תא
                     });
 
                     dynamicGridPane.add(cellPane, col, row);
@@ -144,5 +143,24 @@ public class TableController {
 
     public void setMainController(AppController mainController) {
         this.mainController = mainController;
+    }
+
+    private void handleCellClick(String coord) {
+        if (currentlyFocusedCell != null && currentlyFocusedCell.toString().equals(coord)) {
+            // אם זהו התא הממוקד כרגע, הסר את המיקוד ועדכן את השורה לריקה
+            removeFocusingOfCell(currentlyFocusedCell.toString());
+            currentlyFocusedCell = null;
+            mainController.updateActionLine(null); // עדכן את ה-action line
+        } else {
+            // אם זה תא חדש, הסר מיקוד מהתא הקודם
+            if (currentlyFocusedCell != null) {
+                removeFocusingOfCell(currentlyFocusedCell.toString());
+            }
+            // עדכן תא ממוקד חדש
+            currentlyFocusedCell = CoordinateImpl.parseCoordinate(coord);
+            CellController cellController = cellMap.get(coord.toString());
+            cellController.setBorderColor("red");
+            mainController.updateActionLine(currentlyFocusedCell); // עדכן את ה-action line
+        }
     }
 }

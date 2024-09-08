@@ -20,22 +20,25 @@ public class ActionLineController {
 
     private EngineImpl engine;
     public void setActionLine(CellDTO cell) {
-//        if (cell != null) {
+        if (cell != null) {
+            // עדכון השדות בשורת הפעולה לפי פרטי התא
             cellId.setText(cell.getCoord().toString());
-            cellOriginalValue.setText( cell.getOriginalValue());
-            if(cell.getLastUpdatedVersion()!=0){
+            cellOriginalValue.setText(cell.getOriginalValue());
+            if (cell.getLastUpdatedVersion() != 0) {
                 cellLastUpdateVersion.setText(String.valueOf(cell.getLastUpdatedVersion()));
-            }else {
+            } else {
                 cellLastUpdateVersion.setText("");
             }
+        } else {
+            // איפוס השדות בשורת הפעולה אם אין תא ממוקד
+            cellId.setText("");
+            cellOriginalValue.setText("");
+            cellLastUpdateVersion.setText("");
 
 
-//           }else{
-//            cellId.setText("");
-//            cellOriginalValue.setText("");
-//            cellLastUpdateVersion.setText("");
-//        }
+        }
     }
+
     public void initializeActionLine(){
         updateCell.setOnAction(event -> {
             try {

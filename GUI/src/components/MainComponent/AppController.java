@@ -133,22 +133,34 @@ public class AppController {
 
 
     public void onClickedCell(String coord) {
-        if(coordinate != null){
+        if (coordinate != null) {
             tableController.removeFocusingOfCell(coordinate.toString());
         }
 
-            coordinate = CoordinateImpl.parseCoordinate(coord);
-            CellDTO cell = engine.getCellDTOByCoordinate(coordinate);
+        coordinate = CoordinateImpl.parseCoordinate(coord);
+        CellDTO cell = engine.getCellDTOByCoordinate(coordinate);
 
-            actionLineController.setActionLine(cell);
+        actionLineController.setActionLine(cell);
 
     }
+
+    public void updateActionLine(Coordinate coord) {
+        if (coord == null) {
+            actionLineController.setActionLine(null); // איפוס השורה
+        } else {
+            CellDTO cell = engine.getCellDTOByCoordinate(coord);
+            actionLineController.setActionLine(cell); // עדכון השורה עם התא החדש
+        }
+    }
+
     public void SetFileSelected() {
         isFileSelected.set(true);
     }
+
     public void setPrimaryStage(Stage primaryStage) {
         this.primaryStage = primaryStage;
     }
+
     public File showFileSelector(FileChooser fileChooser) {
         return fileChooser.showOpenDialog(primaryStage);
     }

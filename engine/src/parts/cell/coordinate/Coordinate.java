@@ -6,4 +6,5 @@ public interface Coordinate {
 
      @Override
     public String toString();
+
 }
