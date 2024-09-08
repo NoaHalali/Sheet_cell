@@ -37,14 +37,14 @@ public class TableController {
         // Set column constraints
         for (int col = 0; col <=cols; col++) {
             ColumnConstraints colConst = new ColumnConstraints();
-            colConst.setPrefWidth(100);  // Set preferred width for each column
+            colConst.setPrefWidth(sheet.getColumnWidth());  // Set preferred width for each column
             dynamicGridPane.getColumnConstraints().add(colConst);
         }
 
         // Set row constraints
         for (int row = 0; row <=rows; row++) {
             RowConstraints rowConst = new RowConstraints();
-            rowConst.setPrefHeight(30);  // Set preferred height for each row
+            rowConst.setPrefHeight(sheet.getRowHeight());  // Set preferred height for each row
             dynamicGridPane.getRowConstraints().add(rowConst);
         }
 
