@@ -28,6 +28,8 @@ public class AppController {
 
     //Properties
     private SimpleBooleanProperty isFileSelected;
+    private SimpleBooleanProperty isCellSelected;
+
 
     //Components
     @FXML private GridPane actionLine;
@@ -38,6 +40,7 @@ public class AppController {
     @FXML private VBox commands;
     @FXML private VBox ranges;
     @FXML private HBox versionSelector;
+    @FXML private Button updateCell;
 
 
     //Controllers
@@ -63,9 +66,11 @@ public class AppController {
             fileChooserController.setMainController(this);
 
             isFileSelected = new SimpleBooleanProperty(false);
+            isCellSelected = new SimpleBooleanProperty(false);
             table.disableProperty().bind(isFileSelected.not());
             actionLine.disableProperty().bind(isFileSelected.not());
             versionSelector.disableProperty().bind(isFileSelected.not());
+
             engine = new EngineImpl();
 
             // טוען את רכיב ה-Version ומקשר את הקונטרולר שלו
@@ -146,16 +151,19 @@ public class AppController {
 
     public void updateActionLine(Coordinate coord) {
         if (coord == null) {
+            isCellSelected.set(false);
             actionLineController.setActionLine(null); // איפוס השורה
         } else {
+            isCellSelected.set(true);
             CellDTO cell = engine.getCellDTOByCoordinate(coord);
             actionLineController.setActionLine(cell); // עדכון השורה עם התא החדש
+
         }
     }
 
-    public void SetFileSelected() {
-        isFileSelected.set(true);
-    }
+//    public void SetFileSelected() {
+//        isFileSelected.set(true);
+//    }
 
     public void setPrimaryStage(Stage primaryStage) {
         this.primaryStage = primaryStage;
@@ -165,7 +173,9 @@ public class AppController {
         return fileChooser.showOpenDialog(primaryStage);
     }
 
-    public void updateCellValue(String value) {
+    public void updateCellValue(String value) { //לא צריך לבדוק אם נבחר כי אחרת היה מדוסבל
+        Coordinate coordinate = tableController.getCurrentlyFocusedCoord();
+
         // יצירת משימה לעדכון ערך התא ברקע
         Task<Void> updateCellTask = new Task<Void>() {
             @Override
@@ -227,7 +237,7 @@ public class AppController {
                 SheetDTO sheet = engine.getCurrentSheetDTO();
                 tableController.initializeGrid(sheet);
                 versionSelectorController.initializeVersionSelector();
-                actionLineController.initializeActionLine();
+                actionLineController.initializeActionLine(isCellSelected);
 
 
                 setVersionSelectorOptions();

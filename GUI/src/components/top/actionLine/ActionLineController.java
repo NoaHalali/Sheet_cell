@@ -1,6 +1,7 @@
 package components.top.actionLine;
 
 import components.MainComponent.AppController;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -12,13 +13,19 @@ public class ActionLineController {
 
     private AppController mainController;
 
-    @FXML private Label cellId;
-    @FXML private Label cellOriginalValue;
-    @FXML private Button updateCell;
-    @FXML private Label cellLastUpdateVersion;
-    @FXML private TextField updateCellValueField;
+    @FXML
+    private Label cellId;
+    @FXML
+    private Label cellOriginalValue;
+    @FXML
+    private Button updateCell;
+    @FXML
+    private Label cellLastUpdateVersion;
+    @FXML
+    private TextField updateCellValueField;
 
     private EngineImpl engine;
+
     public void setActionLine(CellDTO cell) {
         if (cell != null) {
             // עדכון השדות בשורת הפעולה לפי פרטי התא
@@ -39,16 +46,39 @@ public class ActionLineController {
         }
     }
 
-    public void initializeActionLine(){
-        updateCell.setOnAction(event -> {
-            try {
-                mainController.updateCellValue( updateCellValueField.getText());
+    public void updateCellButtonAction() {
+        try {
+            mainController.updateCellValue(updateCellValueField.getText());
 
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 
-        });
+
+    //    public void initializeActionLine(){
+//        updateCell.setOnAction(event -> {
+//            try {
+//                mainController.updateCellValue( updateCellValueField.getText());
+//
+//            } catch (Exception e) {
+//                throw new RuntimeException(e);
+//            }
+//
+//        });
+//    }
+    public void initializeActionLine(SimpleBooleanProperty isCellSelected) {
+//        updateCell.setOnAction(event -> {
+//            try {
+//                mainController.updateCellValue(updateCellValueField.getText());
+//
+//            } catch (Exception e) {
+//                throw new RuntimeException(e);
+//            }
+//
+//        });
+        updateCell.disableProperty().bind(isCellSelected.not());
+        updateCellValueField.disableProperty().bind(isCellSelected.not());
     }
 
     public void setMainController(AppController mainController) {

@@ -25,7 +25,7 @@ public class TableController {
     private AppController mainController;
     @FXML private GridPane dynamicGridPane;
     private Map<String, CellController> cellMap = new HashMap<>();
-    private Coordinate currentlyFocusedCell; // משתנה לשמירת המיקום של התא הממוקד כרגע
+    private Coordinate currentlyFocusedCoord; // משתנה לשמירת המיקום של התא הממוקד כרגע
 
     public void initializeGrid(SheetDTO sheet) {
 
@@ -146,21 +146,27 @@ public class TableController {
     }
 
     private void handleCellClick(String coord) {
-        if (currentlyFocusedCell != null && currentlyFocusedCell.toString().equals(coord)) {
+        if (currentlyFocusedCoord != null && currentlyFocusedCoord.toString().equals(coord)) {
             // אם זהו התא הממוקד כרגע, הסר את המיקוד ועדכן את השורה לריקה
-            removeFocusingOfCell(currentlyFocusedCell.toString());
-            currentlyFocusedCell = null;
+            removeFocusingOfCell(currentlyFocusedCoord.toString());
+            currentlyFocusedCoord = null;
             mainController.updateActionLine(null); // עדכן את ה-action line
         } else {
             // אם זה תא חדש, הסר מיקוד מהתא הקודם
-            if (currentlyFocusedCell != null) {
-                removeFocusingOfCell(currentlyFocusedCell.toString());
+            if (currentlyFocusedCoord != null) {
+                removeFocusingOfCell(currentlyFocusedCoord.toString());
             }
             // עדכן תא ממוקד חדש
-            currentlyFocusedCell = CoordinateImpl.parseCoordinate(coord);
+            currentlyFocusedCoord = CoordinateImpl.parseCoordinate(coord);
             CellController cellController = cellMap.get(coord.toString());
             cellController.setBorderColor("red");
-            mainController.updateActionLine(currentlyFocusedCell); // עדכן את ה-action line
+            mainController.updateActionLine(currentlyFocusedCoord); // עדכן את ה-action line
+
         }
+
+    }
+
+    public Coordinate getCurrentlyFocusedCoord() {
+        return currentlyFocusedCoord;
     }
 }

@@ -39,7 +39,7 @@
     <TextField fx:id="updateCellValueField" promptText="Enter new value" GridPane.columnIndex="4" GridPane.hgrow="ALWAYS" />
 
     <!-- כפתור עדכון ערך -->
-    <Button fx:id="updateCell" minWidth="-Infinity" prefHeight="25.0" prefWidth="92.0" style="-fx-background-color: #0b540b; -fx-text-fill: white;" text="Update value" GridPane.columnIndex="5" />
+    <Button fx:id="updateCell" minWidth="-Infinity" onMouseClicked="#updateCellButtonAction" prefHeight="25.0" prefWidth="92.0" style="-fx-background-color: #0b540b; -fx-text-fill: white;" text="Update value" GridPane.columnIndex="5" />
 
     <!-- תווית עבור Last Update Version -->
     <Label maxWidth="112.0" minWidth="50" prefHeight="17.0" prefWidth="112.0" style="-fx-text-overrun: ellipsis;" text="Last update version:" GridPane.columnIndex="6" />
