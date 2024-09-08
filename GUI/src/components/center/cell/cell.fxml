@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.BorderPane?>
 
-
-<HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="52.0" prefWidth="97.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cell.CellController">
-   <children>
-      <Label fx:id="effectiveValue" alignment="CENTER" text="effective value" />
-   </children>
-</HBox>
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/22" fx:controller="components.center.cell.CellController">
+   <center>
+      <Label fx:id="cellLabel" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="" />
+   </center>
+</BorderPane>

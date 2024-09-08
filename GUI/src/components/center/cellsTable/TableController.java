@@ -1,8 +1,11 @@
 package components.center.cellsTable;
 
 import components.MainComponent.AppController;
+import components.center.cell.CellController;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
@@ -13,6 +16,7 @@ import parts.cell.coordinate.CoordinateImpl;
 import parts.cell.expression.effectiveValue.CellType;
 import parts.cell.expression.effectiveValue.EffectiveValue;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,118 +24,100 @@ public class TableController {
 
     private AppController mainController;
     @FXML private GridPane dynamicGridPane;
-    private Map<String, Label> cellMap=new HashMap<>();
-
+    private Map<String, CellController> cellMap = new HashMap<>();
 
     public void initializeGrid(SheetDTO sheet) {
 
         int rows = sheet.getNumberOfRows();
         int cols = sheet.getNumberOfCols();
 
-        CoordinateImpl coord ;
-        // Clear existing constraints and children
+        CoordinateImpl coord;
         dynamicGridPane.getColumnConstraints().clear();
         dynamicGridPane.getRowConstraints().clear();
         dynamicGridPane.getChildren().clear();
 
-        // Set column constraints
-        for (int col = 0; col <=cols; col++) {
+        for (int col = 0; col <= cols; col++) {
             ColumnConstraints colConst = new ColumnConstraints();
-            colConst.setPrefWidth(sheet.getColumnWidth());  // Set preferred width for each column
+            colConst.setPrefWidth(sheet.getColumnWidth());
             dynamicGridPane.getColumnConstraints().add(colConst);
         }
 
-        // Set row constraints
-        for (int row = 0; row <=rows; row++) {
+        for (int row = 0; row <= rows; row++) {
             RowConstraints rowConst = new RowConstraints();
-            rowConst.setPrefHeight(sheet.getRowHeight());  // Set preferred height for each row
+            rowConst.setPrefHeight(sheet.getRowHeight());
             dynamicGridPane.getRowConstraints().add(rowConst);
         }
 
-        // Populate the grid with empty labels
         for (int row = 1; row <= rows; row++) {
             for (int col = 1; col <= cols; col++) {
                 coord = new CoordinateImpl(row, col);
-                CellDTO cell = sheet.getCell(coord);
-                Label label = new Label(cell == null ? "": calcValueToPrint(cell.getEffectiveValue()));  // Start with empty labels
-                label.setStyle("-fx-background-color: #f0f0f0; -fx-alignment: center; -fx-border-color: blue; -fx-border-width: 0.5px;");
-                dynamicGridPane.add(label, col, row);
-                label.setMaxWidth(Double.MAX_VALUE);
-                label.setMaxHeight(Double.MAX_VALUE);
+                try {
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/components/center/cell/cell.fxml"));
+                    BorderPane cellPane = loader.load();
+                    CellController cellController = loader.getController();
 
-                String coordStr = coord.toString();
-                label.setOnMouseClicked(event -> {
-                    label.setStyle("-fx-background-color: #f0f0f0; -fx-alignment: center; -fx-border-color: red; -fx-border-width: 0.5px;");
+                    CellDTO cell = sheet.getCell(coord);
+                    String cellText = cell == null ? "" : calcValueToPrint(cell.getEffectiveValue());
+                    cellController.setText(cellText);
+                    cellController.setBackgroundColor("#f0f0f0");
+                    cellController.setAlignment("center");
 
-                    mainController.onClickedCell(coordStr);
+                    String coordStr = coord.toString();
+                    cellPane.setOnMouseClicked(event -> {
+                        cellController.setBackgroundColor("#f0f0f0");
+                        cellController.setAlignment("center");
+                        cellController.setBorderColor("red");  // Set border color on click
+                        mainController.onClickedCell(coordStr);
+                    });
 
-                // Call the method in the main controller with the key
-                });
-
-                cellMap.put(coordStr, label);
+                    dynamicGridPane.add(cellPane, col, row);
+                    cellMap.put(coordStr, cellController);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }
-        for (int row = 1; row <=rows; row++) {
+        addRowAndColumnLabels(rows, cols);
+    }
 
-            String labelText = String.valueOf((char) ('1' + row-1));
-            Label label = new Label(labelText);  // Create label with the letter
-            label.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);  // Ensure the label fills the cell
+    private void addRowAndColumnLabels(int rows, int cols) {
+        for (int row = 1; row <= rows; row++) {
+            String labelText = String.valueOf((char) ('1' + row - 1));
+            Label label = new Label(labelText);
+            label.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
             label.setStyle("-fx-background-color: #f0f0f0; -fx-alignment: center; -fx-border-color: black; -fx-border-width: 0.5px;");
-            label.setMaxWidth(Double.MAX_VALUE);
-            label.setMaxHeight(Double.MAX_VALUE);
-            dynamicGridPane.add(label, 0, row);  // Add label to the first column
+            dynamicGridPane.add(label, 0, row);
         }
-        for (int col = 1; col <=cols; col++) {
-
-            String labelText = String.valueOf((char) ('A' + col-1));
-            Label label = new Label(labelText);  // Create label with the letter
-            label.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);  // Ensure the label fills the cell
+        for (int col = 1; col <= cols; col++) {
+            String labelText = String.valueOf((char) ('A' + col - 1));
+            Label label = new Label(labelText);
+            label.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
             label.setStyle("-fx-background-color: #f0f0f0; -fx-alignment: center; -fx-border-color: black; -fx-border-width: 0.5px;");
-            label.setMaxWidth(Double.MAX_VALUE);
-            label.setMaxHeight(Double.MAX_VALUE);
             dynamicGridPane.add(label, col, 0);
         }
-       // updateCellContent(2,2,"noa");
-        paintCell(2,2,"green");
     }
-    public void paintCell(int row, int col, String color) {
-        // Retrieve the label from the cellMap using the row and column indices
-        Label label = cellMap.get(row + ":" + col);
 
-        // If the label exists, change its background color
-        if (label != null) {
-            label.setStyle("-fx-background-color: " + color + "; -fx-border-color: black; -fx-alignment: center;");
-        } else {
-            System.out.println("Cell at row " + row + " and column " + col + " does not exist.");
+    public void updateCellContent(Coordinate coord, EffectiveValue newText) {
+        CellController cellController = cellMap.get(coord.toString());
+        if (cellController != null) {
+            cellController.setText(calcValueToPrint(newText));
         }
     }
-//    public void updateData(){
-//        mainController.updateHbox()
-//    }
 
-    public void updateCellContent(Coordinate coord , EffectiveValue newText) {
-      //  String key = row + ":" + col;
-        Label label = cellMap.get(coord.toString());
-        if (label != null) {
-            label.setText(calcValueToPrint(newText));
-        }
-    }
     public String calcValueToPrint(EffectiveValue effectiveValue) {
-        if(effectiveValue == null) {
+        if (effectiveValue == null) {
             return "";
         }
         if (effectiveValue.getCellType() == CellType.NUMERIC) {
             double num = effectiveValue.extractValueWithExpectation(Double.class);
 
             if (Double.isNaN(num) || Double.isInfinite(num)) {
-                return "NaN"; // החזר "NaN" אם הערך הוא NaN או Infinity
+                return "NaN";
             }
 
             if (num == Math.floor(num)) {
-                // אם המספר הוא שלם, הדפס אותו ללא נקודות עשרוניות
                 return String.format("%,d", (long) num);
             } else {
-                // אם יש נקודה עשרונית, הדפס עם שתי ספרות אחרי הנקודה
                 return String.format("%,.2f", num);
             }
         } else if (effectiveValue.getCellType() == CellType.STRING) {
@@ -139,18 +125,24 @@ public class TableController {
         } else if (effectiveValue.getCellType() == CellType.BOOLEAN) {
             return String.valueOf(effectiveValue.extractValueWithExpectation(Boolean.class)).toUpperCase();
         } else {
-            throw new IllegalArgumentException(); // TODO - פתרון זמני
+            throw new IllegalArgumentException();
         }
     }
-    public void RemoveFocusingOfCell(String cellCoordinate) {
-        cellMap.get(cellCoordinate).setStyle( "-fx-background-color: #f0f0f0; -fx-alignment: center; -fx-border-color: blue; -fx-border-width: 0.5px;");
-    }
-    public void paintCellsInfluencingAndDependsOnBorders(){
 
-
+    public void removeFocusingOfCell(String cellCoordinate) {
+        CellController cellController = cellMap.get(cellCoordinate);
+        if (cellController != null) {
+            cellController.setBackgroundColor("#f0f0f0");
+            cellController.setAlignment("center");
+            cellController.setBorderColor("blue");
+        }
     }
+
+    public void paintCellsInfluencingAndDependsOnBorders() {
+        // Implement this method if needed
+    }
+
     public void setMainController(AppController mainController) {
         this.mainController = mainController;
     }
 }
-

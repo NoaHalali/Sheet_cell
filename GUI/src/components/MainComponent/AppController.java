@@ -134,7 +134,7 @@ public class AppController {
 
     public void onClickedCell(String coord) {
         if(coordinate != null){
-            tableController.RemoveFocusingOfCell(coordinate.toString());
+            tableController.removeFocusingOfCell(coordinate.toString());
         }
 
             coordinate = CoordinateImpl.parseCoordinate(coord);
