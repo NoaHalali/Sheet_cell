@@ -33,6 +33,10 @@ public class Concat extends BinaryExpression{
             if ("UNDEFINED".equals(leftStr) || "UNDEFINED".equals(rightStr)) {
                 return new EffectiveValueImpl(CellType.STRING, "UNDEFINED");
             }
+            if ("UNKNOWN".equals(leftStr) || "UNKNOWN".equals(rightStr)) {
+                return new EffectiveValueImpl(CellType.STRING, "UNDEFINED");
+            }
+
 
             // ביצוע הקונקט (שרשור המחרוזות)
             String result = leftStr + rightStr;

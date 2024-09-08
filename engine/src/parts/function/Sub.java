@@ -35,6 +35,9 @@ public class Sub extends TernaryExpression{
             if ("UNDEFINED".equals(str)) {
                 return new EffectiveValueImpl(CellType.STRING, "UNDEFINED");
             }
+            if ("UNKNOWN".equals(str)) {
+                return new EffectiveValueImpl(CellType.STRING, "UNDEFINED");
+            }
 
             // חישוב האינדקסים
             int firstIndex = index1Val.extractValueWithExpectation(Double.class).intValue();

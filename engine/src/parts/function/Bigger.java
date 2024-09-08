@@ -23,7 +23,7 @@ public class Bigger extends BinaryExpression{
 //            }
         }
         catch (Exception e) {
-           // return new EffectiveValueImpl(CellType.NUMERIC, Boolean.);//TODO איך לייצג בוליאן ?
+            return new EffectiveValueImpl(CellType.STRING,"UNKNOWN");//TODO איך לייצג בוליאן ?
         }
     }
 
