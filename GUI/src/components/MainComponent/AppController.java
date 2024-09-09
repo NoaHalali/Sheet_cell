@@ -269,4 +269,5 @@ public class AppController {
         Coordinate coordinate = CoordinateImpl.parseCoordinate(coord);
         return engine.getCellDTOByCoordinate(coordinate);
     }
+    public SheetDTO getSheetDTOFromVersion(String version) {}
 }

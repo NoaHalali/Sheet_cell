@@ -1,11 +1,16 @@
 package components.top.versions;
 
 import components.MainComponent.AppController;
+import components.center.cellsTable.TableController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
+import javafx.stage.Stage;
 
 import java.util.List;
 import java.util.stream.IntStream;
@@ -54,11 +59,33 @@ public class VersionSelectorController {
         //mainController.handleVersionSelection(version);
 
 
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Version Information");
-        alert.setHeaderText("Selected Version: " + version);
-        alert.setContentText("Details about " + version + " will appear here.");
-        alert.showAndWait();
+        try {
+            // Create a new stage for the popup
+            Stage popupStage = new Stage();
+            popupStage.setTitle("Version Preview: " + version);
+
+            // Load the FXML or create a layout dynamically
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/components/center/cellsTable/yourTable.fxml")); // Adjust the path
+            Parent root = loader.load();
+
+            // Get the TableController and initialize it with the selected version of the sheet
+            TableController tableController = loader.getController();
+            tableController.initializeGrid(sheetDTO);
+
+            // Set the scene and show the popup
+            Scene scene = new Scene(root);
+            popupStage.setScene(scene);
+
+            // Set the popup to block the main window (modality)
+            popupStage.initModality(Modality.APPLICATION_MODAL);
+
+            // Show the popup and wait for it to be closed before returning to the main window
+            popupStage.showAndWait();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            // Handle exception if FXML loading fails
+        }
     }
 
     public void setMainController(AppController mainController) {
