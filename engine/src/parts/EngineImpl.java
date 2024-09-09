@@ -28,6 +28,7 @@ public class EngineImpl implements Engine {
     }
 
     //1
+    @Override
     public void readFileData(String filePath) throws Exception {
         try {
             //Sheet lastSheet = currentSheet;
@@ -42,6 +43,7 @@ public class EngineImpl implements Engine {
 
 
     //2
+    @Override
     public SheetDTO getCurrentSheetDTO() {
         if (!sheetLoadad()) {
             throw new IllegalStateException(SHEET_NOT_LOADED_MESSAGE);
@@ -51,6 +53,7 @@ public class EngineImpl implements Engine {
     }
 
     //3
+    @Override
     public CellDTO getCellDTOByCoordinate(Coordinate coordinate) throws IllegalArgumentException {
         if (!sheetLoadad()) {
             throw new IllegalStateException(SHEET_NOT_LOADED_MESSAGE);
@@ -64,13 +67,10 @@ public class EngineImpl implements Engine {
         return new EmptyCellDTO(coordinate, 0, null);
 
     }
-    //3
-//    public int getLastVersionOfEmptyCell(Coordinate coordinate){
-//        return currentSheet.getEmptyCellVersion(coordinate);
-//    }
 
 
     //4
+    @Override
     public void updateCellValue(String originalValue, Coordinate coord) throws Exception {
         if (!sheetLoadad()) {
             throw new IllegalStateException(SHEET_NOT_LOADED_MESSAGE);
@@ -107,6 +107,7 @@ public class EngineImpl implements Engine {
     }
 
     //5
+    @Override
     public SheetDTO getSheetDTOByVersion(int versionNumber) throws IllegalArgumentException, IllegalStateException {
         if (!sheetLoadad()) {
             throw new IllegalStateException(SHEET_NOT_LOADED_MESSAGE);
@@ -116,6 +117,7 @@ public class EngineImpl implements Engine {
     }
 
     //5 - לא באמת מחזיר גרסאות, יותר רשימה של מספרי תאים שהשתנו
+    @Override
     public List<Integer> getVersions(){
         if (!sheetLoadad()) {
             throw new IllegalStateException(SHEET_NOT_LOADED_MESSAGE);
@@ -124,6 +126,7 @@ public class EngineImpl implements Engine {
     }
 
     //5
+    @Override
     public int getNumOfVersions(){
         if (!sheetLoadad()) {
             throw new IllegalStateException(SHEET_NOT_LOADED_MESSAGE);
@@ -132,6 +135,7 @@ public class EngineImpl implements Engine {
     }
 
     //5
+    @Override
     public Sheet getSheetByVersion(int version) throws IllegalArgumentException {
 
         if(versionsList.size()<version){
@@ -143,12 +147,14 @@ public class EngineImpl implements Engine {
     }
 
     //4
+    @Override
     public void addVersion( Sheet sheet,int numberOfCellsChanged) {
         versionsList.addLast(new Version(sheet,numberOfCellsChanged));
 
     }
 
     //5
+    @Override
     public List<Integer> getNumberOfCellsChangedListDeepClone() {
         return versionsList.stream()
                 .map(Version::getNumberOfCellsChanged)
@@ -157,6 +163,7 @@ public class EngineImpl implements Engine {
 
 
     //6
+    @Override
     public void saveSystemState(String filePath) throws Exception {
         if (!sheetLoadad()) {
             throw new IllegalStateException(SHEET_NOT_LOADED_MESSAGE);
@@ -174,6 +181,7 @@ public class EngineImpl implements Engine {
 
 
     //7
+    @Override
     public void loadSystemState(String filePath) throws FileNotFoundException, IOException, ClassNotFoundException {
 
         String filePathWithEnding = filePath + ".dat";

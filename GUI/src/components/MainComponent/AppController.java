@@ -17,6 +17,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import parts.Engine;
 import parts.cell.CellDTO;
 import parts.EngineImpl;
 import parts.SheetDTO;
@@ -59,7 +60,7 @@ public class AppController {
     private Stage primaryStage;
     private int count;
     private Coordinate coordinate;
-    private EngineImpl engine;
+    private Engine engine;
 
     @FXML
     private void initialize() {
