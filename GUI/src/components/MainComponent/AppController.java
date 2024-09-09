@@ -36,7 +36,7 @@ public class AppController {
 
     //Components
     @FXML private GridPane actionLine;
-    @FXML private HBox fileChooser;
+    @FXML private GridPane fileChooser;
     @FXML private ScrollPane table;
     @FXML private Button myButton=new Button();
     @FXML private Label myLabel ;
@@ -78,33 +78,6 @@ public class AppController {
             currentVersionLabel.textProperty().bind(versionProperty.asString());
 
             engine = new EngineImpl();
-
-            // טוען את רכיב ה-Version ומקשר את הקונטרולר שלו
-//            try {
-//                FXMLLoader loader = new FXMLLoader(getClass().getResource("/components/top/versions/versionSelector.fxml"));
-//                Parent versionRoot = loader.load();
-//                versionSelectorController = loader.getController(); // חילוץ הקונטרולר של הרכיב הקטן
-//                versionSelector.getChildren().add(versionRoot); // הוספת הרכיב למיכל המתאים
-//                versionSelectorController.initializeDefaultState();
-//
-////                // טוען את רשימת הגרסאות
-////                setVersionSelectorOptions();
-//
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-
-//            // הגדרת ה-ComboBox מרכיב הגרסאות
-//            ComboBox<String> versionSelector = versionSelectorController.getVersionSelector();
-//            versionSelector.getItems().addAll("Version 1");
-//
-//            // הוספת מאזין לערך הנבחר
-//            versionSelector.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-//                if (newValue != null) {
-//                    handleVersionSelection(newValue); // קריאה למתודה שמטפלת באירוע
-//                }
-//            });
-
         }
     }
 
@@ -180,40 +153,58 @@ public class AppController {
     }
 
 
-    public void loadFile(String absolutePath) throws Exception {
-        // יצירת משימה לטעינת הקובץ ברקע
-        Task<Void> loadFileTask = new Task<Void>() {
-            @Override
-            protected Void call() throws Exception {
-                // קריאת נתוני הקובץ
-                engine.readFileData(absolutePath);
-                return null;
-            }
+//    public void loadFile(String absolutePath, ProgressIndicator progressIndicator) throws Exception {
+//        // יצירת משימה לטעינת הקובץ ברקע
+//        Task<Void> loadFileTask = new Task<Void>() {
+//            @Override
+//            protected Void call() throws Exception {
+//                // סימולציה של התקדמות ההורדה
+//                updateProgress(0, 100); // התחלת התקדמות ב-0%
+//
+//                // קריאת נתוני הקובץ (כאן אפשר להוסיף לולאה אם רוצים לסמלץ התקדמות)
+//                engine.readFileData(absolutePath);
+//
+//                // ניתן להוסיף השהיה קטנה כדי לסמלץ התקדמות
+//                for (int i = 0; i <= 100; i++) {
+//                    Thread.sleep(30); // השהיה קצרה
+//                    updateProgress(i, 100); // עדכון התקדמות
+//                }
+//
+//                updateProgress(100, 100); // סיום התקדמות
+//                return null;
+//            }
+//
+//            @Override
+//            protected void succeeded() {
+//                super.succeeded();
+//                // עדכון ה-UI במקרה של הצלחה
+//                isFileSelectedProperty.set(true);
+//                SheetDTO sheet = engine.getCurrentSheetDTO();
+//                tableController.initializeGrid(sheet);
+//
+//                versionSelectorController.initializeVersionSelector(sheet.getVersion());
+//                actionLineController.initializeActionLine(isCellSelectedProperty);
+//
+//                progressIndicator.setVisible(false); // הסתרת ProgressIndicator
+//            }
+//
+//            @Override
+//            protected void failed() {
+//                super.failed();
+//                // טיפול בשגיאה במקרה של כשל בטעינת הקובץ
+//                System.out.println("Failed to load file: " + getException().getMessage());
+//                progressIndicator.setVisible(false); // הסתרת ProgressIndicator
+//            }
+//        };
+//
+//        // קישור ה-ProgressIndicator להתקדמות המשימה
+//        progressIndicator.progressProperty().bind(loadFileTask.progressProperty());
+//        progressIndicator.setVisible(true);  // הצגת ה-ProgressIndicator
+//
+//        // הפעלת המשימה ב-Thread נפרד
+//        new Thread(loadFileTask).start();
+//    }
 
-            @Override
-            protected void succeeded() {
-                super.succeeded();
-                // עדכון ה-UI במקרה של הצלחה
-                isFileSelectedProperty.set(true);
-                SheetDTO sheet = engine.getCurrentSheetDTO();
-                tableController.initializeGrid(sheet);
-
-                versionSelectorController.initializeVersionSelector(sheet.getVersion());
-                actionLineController.initializeActionLine(isCellSelectedProperty);
-
-            }
-
-            @Override
-            protected void failed() {
-                super.failed();
-                // טיפול בשגיאה במקרה של כשל בטעינת הקובץ
-                System.out.println("Failed to load file: " + getException().getMessage());
-            }
-        };
-
-        // הפעלת המשימה ב-Thread נפרד
-        new Thread(loadFileTask).start();
-    }
 
     public void updateCellValue(String value) { //לא צריך לבדוק אם נבחר כי אחרת היה מדוסבל
         Coordinate coordinate = tableController.getCurrentlyFocusedCoord();
@@ -272,5 +263,25 @@ public class AppController {
 
     public SheetDTO getSheetDTOByVersion(String version) {
         return engine.getSheetDTOByVersion(Integer.parseInt(version));
+    }
+    public void loadFileToSystem(String absolutePath) {
+        try {
+            engine.readFileData(absolutePath);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void initializeComponentsAfterLoad() {
+
+        isFileSelectedProperty.set(true);
+        // עדכון ה-UI במקרה של הצלחה
+        isFileSelectedProperty.set(true);
+        SheetDTO sheet = engine.getCurrentSheetDTO();
+        tableController.initializeGrid(sheet);
+
+        versionSelectorController.initializeVersionSelector(sheet.getVersion());
+        actionLineController.initializeActionLine(isCellSelectedProperty);
+
     }
 }

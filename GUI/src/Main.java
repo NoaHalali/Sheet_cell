@@ -19,7 +19,7 @@ public class Main extends Application {
         controller.setPrimaryStage(primaryStage);
 
         // קביעת גודל התחלתי לחלון
-        Scene scene = new Scene(root, 800, 600); // שינוי רוחב וגובה התחלתיים
+        Scene scene = new Scene(root, 1500, 700); // שינוי רוחב וגובה התחלתיים
         primaryStage.setScene(scene);
 
         primaryStage.setTitle("Shticell");
