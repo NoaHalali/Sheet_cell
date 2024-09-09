@@ -1,5 +1,6 @@
 package console;
 
+import parts.Engine;
 import parts.EngineImpl;
 import parts.SheetDTO;
 import parts.cell.CellDTO;
@@ -9,7 +10,7 @@ import java.util.List;
 
 public class ControllerImpl implements Controller {
 
-    private EngineImpl engine = new EngineImpl();
+    private Engine engine = new EngineImpl();
     private InputOutputHandler inputOutputHandler = new InputOutputHandler();
     private boolean systemIsRunning = true;
 
@@ -93,7 +94,8 @@ public class ControllerImpl implements Controller {
                     if(cell != null) {
                         controller.inputOutputHandler.printCellState(cell, coordinate);
                     }else{
-                     int lastVersion=controller.engine.getLastVersionOfEmptyCell(coordinate) ;
+                    // int lastVersion=controller.engine.getLastVersionOfEmptyCell(coordinate) ;
+                     int lastVersion= 0; //temporary because doesn't work with the java fx version of code
                      System.out.println("Cell at coordinate: " + coordinate + " is empty");
                      if(lastVersion==0)
                      {

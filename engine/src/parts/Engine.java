@@ -9,6 +9,8 @@ import java.util.List;
 
 public interface Engine {
 
+    public boolean sheetLoadad();
+
     public void readFileData(String filePath) throws Exception;
 
     public SheetDTO getCurrentSheetDTO();
