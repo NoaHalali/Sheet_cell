@@ -60,7 +60,8 @@ public class CellController {
         applyStyles();
     }
 
-    private void applyStyles() {
+    // מתודה פרטית לבניית מחרוזת הסגנונות
+    private String buildStyleString() {
         StringBuilder style = new StringBuilder();
 
         if (backgroundColor != null) {
@@ -79,9 +80,13 @@ public class CellController {
             style.append(borderWidth);
         }
 
-        cellLabel.setStyle(style.toString());
+        return style.toString();
     }
 
+    private void applyStyles() {
+        // שימוש במחרוזת הבנויה ליישום הסגנון
+        cellLabel.setStyle(buildStyleString());
+    }
 
     public void applyHoverEffectListeners() {
         // מאזין לאירוע ריחוף עם העכבר
@@ -94,29 +99,11 @@ public class CellController {
     private void applyHoverEffect() {
         cellLabel.setEffect(hoverShadow); // הוספת אפקט הצל
 
-        // בניית מחרוזת זמנית עם הסגנון הנוכחי של התא
-        StringBuilder style = new StringBuilder();
-
-        // שמירה על הסגנונות הקיימים על ידי הוספתם למחרוזת הזמנית
-        if (backgroundColor != null) {
-            style.append(backgroundColor);
-        }
-        if (alignment != null) {
-            style.append(alignment);
-        }
-        if (borderColor != null) {
-            style.append(borderColor);
-        }
-        if (borderWidth != null) {
-            style.append(borderWidth);
-        }
-
         // הוספת הסגנונות החדשים למחרוזת הזמנית
-        //למרות שכל שדה יופיע פעמיים, לוקח את השדה האחרון שכתוב (כלומר את הזמני של הhover)
-        style.append("-fx-border-color: blue; -fx-border-width: 2px; -fx-background-color: #f0f8ff;");
+        String style = buildStyleString() + "-fx-border-color: blue; -fx-border-width: 2px; -fx-background-color: #f0f8ff;";
 
         // הגדרת הסגנון החדש עם כל השינויים
-        cellLabel.setStyle(style.toString());
+        cellLabel.setStyle(style);
     }
 
     private void removeHoverEffect() {
@@ -125,6 +112,4 @@ public class CellController {
         // חזרה לעיצוב המקורי על ידי יישום הסגנונות הקיימים בלבד
         applyStyles();
     }
-
-
 }

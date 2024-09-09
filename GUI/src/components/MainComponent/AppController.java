@@ -206,28 +206,19 @@ public class AppController {
 //    }
 
 
-    public void updateCellValue(String value) { //לא צריך לבדוק אם נבחר כי אחרת היה מדוסבל
+    public void updateCellValue(String value) {
         Coordinate coordinate = tableController.getCurrentlyFocusedCoord();
 
-        // יצירת משימה לעדכון ערך התא ברקע
         Task<Void> updateCellTask = new Task<Void>() {
             @Override
             protected Void call() throws Exception {
-                // עדכון ערך התא במנוע
                 engine.updateCellValue(value, coordinate);
-
-                // קריאת המידע החדש לאחר העדכון
-                SheetDTO sheet = engine.getCurrentSheetDTO();
-                CellDTO[][] cells = sheet.getCellsMatrix();
-
-                // החזרת ערכים ברקע, ללא עדכון UI
                 return null;
             }
 
             @Override
             protected void succeeded() {
                 super.succeeded();
-                // עדכון ה-UI במקרה של הצלחה
                 SheetDTO sheet = engine.getCurrentSheetDTO();
                 CellDTO[][] cells = sheet.getCellsMatrix();
 
@@ -236,25 +227,25 @@ public class AppController {
                         tableController.updateCellContent(cell.getCoord(), cell.getEffectiveValue());
                     }
                 });
+
                 tableController.addFocusingToCell(coordinate);
                 actionLineController.setActionLine(engine.getCellDTOByCoordinate(coordinate));
+
+                // עדכון אפשרויות הגרסה בצורה בטוחה
                 versionProperty.set(sheet.getVersion());
                 versionSelectorController.setVersionSelectorOptions(sheet.getVersion());
-               // currentVersionLabel.setText(String.valueOf(sheet.getVersion()));
-
             }
 
             @Override
             protected void failed() {
                 super.failed();
-                // טיפול בשגיאה במקרה של כשל בעדכון הערך
                 System.out.println("Failed to update cell: " + getException().getMessage());
             }
         };
 
-        // הפעלת המשימה ב-Thread נפרד
         new Thread(updateCellTask).start();
     }
+
 
     public CellDTO getCellDTO(String coord) {
         Coordinate coordinate = CoordinateImpl.parseCoordinate(coord);

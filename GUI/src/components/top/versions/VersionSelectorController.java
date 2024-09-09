@@ -23,6 +23,7 @@ public class VersionSelectorController {
     @FXML private ComboBox<String> versionSelector;
     private ObservableList<String> versionList = FXCollections.observableArrayList();
     private AppController mainController;
+    private boolean isUpdating = false; // Flag לוגי שמסמן אם אנחנו בעדכון
 
     public ComboBox<String> getVersionSelector() {
         return versionSelector;
@@ -39,13 +40,17 @@ public class VersionSelectorController {
 
         // הוספת מאזין לערך הנבחר ב-ComboBox
         versionSelector.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue != null) {
+            if (!isUpdating && newValue != null && !versionList.isEmpty()) {
                 handleVersionSelection(newValue);
             }
         });
     }
 
     public void setVersionSelectorOptions(int numOfVersions) {
+        // הגדרת מצב "נעול" לוגי לפני עדכון
+        //
+        isUpdating = true;
+
         // יצירת רשימה של מספרי גרסאות לפי מספר הגרסאות
         List<String> newList = IntStream.rangeClosed(1, numOfVersions)
                 .mapToObj(version -> "Version " + version)
@@ -53,14 +58,12 @@ public class VersionSelectorController {
 
         versionList.setAll(newList);
         versionSelector.setDisable(false); // אפשר את ה-ComboBox לאחר טעינת הגרסאות
+
+        // סיום מצב "נעול" לוגי לאחר עדכון
+        isUpdating = false;
     }
 
     private void handleVersionSelection(String versionString) {
-        //TODO - move to app controller
-        // check if alerts are pop up, if it is so move it to the app controller
-        // or maybe just bring it here?
-        //mainController.handleVersionSelection(version);
-
 
         try {
             // Create a new stage for the popup
@@ -100,63 +103,3 @@ public class VersionSelectorController {
     }
 }
 
-
-
-//public class VersionSelectorController {
-//
-//    @FXML private ComboBox<String> versionSelector; // הגדרה של ה-ComboBox
-//    private ObservableList<String> versionList = FXCollections.observableArrayList(); // רשימת הגרסאות ב-ObservableList
-//    private AppController mainController;
-//
-//    public ComboBox<String> getVersionSelector() {
-//        return versionSelector;
-//    }
-//
-//    @FXML
-//    private void initialize() {
-//        // הגדרת רשימת הגרסאות ל-ComboBox
-//        versionSelector.setItems(versionList);
-//
-//        // הגדרת מצב דיפולטי של ComboBox ו-disable
-//        initializeDefaultState();
-//
-//        // הוספת מאזין לערך הנבחר ב-ComboBox
-//        versionSelector.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-//            if (newValue != null) {
-//                handleVersionSelection(newValue); // קריאה למתודה שמטפלת באירוע
-//            }
-//        });
-//    }
-//
-//    // אתחול מצב דיפולטי של ה-ComboBox
-//    public void initializeDefaultState() {
-//        versionList.setAll("No versions available"); // ערך דיפולטי
-//        versionSelector.setDisable(true); // הגדרת Disable ל-ComboBox
-//    }
-//
-//    // פעולה להפיכת ה-ComboBox ל-enable
-//    public void enableVersionSelection() {
-//        versionSelector.setDisable(false); // הפיכת ה-ComboBox ל-enable
-//    }
-//
-//    public void setVersions(List<Integer> versions) {
-//        // המרה לרשימת מחרוזות עם הפורמט המתאים
-//        List<String> newList = versions.stream()
-//                .map(version -> "Version " + version)
-//                .toList(); // עבור Java 16 ומעלה, או collect(Collectors.toList()) לגרסאות קודמות
-//        versionList.setAll(newList); // עדכון הרשימה של ה-ComboBox
-//    }
-//
-//    // פעולה לטיפול באירוע הבחירה בגרסה
-//    private void handleVersionSelection(String version) {
-//        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-//        alert.setTitle("Version Information");
-//        alert.setHeaderText("Selected Version: " + version);
-//        alert.setContentText("Details about " + version + " will appear here.");
-//        alert.showAndWait();
-//    }
-//
-//    public void setMainController(AppController mainController) {
-//        this.mainController = mainController;
-//    }
-//}
