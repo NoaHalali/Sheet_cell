@@ -166,7 +166,7 @@ public class TableController {
         }
     }
 
-    private void addFocusingToCell(Coordinate newFocusedCoord) {
+    public void addFocusingToCell(Coordinate newFocusedCoord) {
         CellController cellController = coordToCellControllerMap.get(newFocusedCoord.toString());
         cellController.setBorderColor("red");
         cellController.setBorderWidth("3px");

@@ -203,7 +203,7 @@ public class AppController {
                         tableController.updateCellContent(cell.getCoord(), cell.getEffectiveValue());
                     }
                 });
-
+                tableController.addFocusingToCell(coordinate);
                 actionLineController.setActionLine(engine.getCellDTOByCoordinate(coordinate));
             }
 
