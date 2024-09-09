@@ -77,7 +77,7 @@ public class VersionSelectorController {
             // Get the TableController and initialize it with the selected version of the sheet
             TableController tableController = loader.getController();
             SheetDTO sheet = mainController.getSheetDTOByVersion(versionNumberStr);
-            tableController.initializeGrid(sheet);
+            tableController.showSheetPreview(sheet);
 
             // Set the scene and show the popup
             Scene scene = new Scene(root);
