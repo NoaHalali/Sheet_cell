@@ -18,13 +18,14 @@ import parts.cell.expression.effectiveValue.EffectiveValue;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class TableController {
 
     private AppController mainController;
     @FXML private GridPane dynamicGridPane;
-    private Map<String, CellController> cellMap = new HashMap<>();
+    private Map<String, CellController> coordToCellControllerMap = new HashMap<>();
     private Coordinate currentlyFocusedCoord; // משתנה לשמירת המיקום של התא הממוקד כרגע
 
     public void initializeGrid(SheetDTO sheet) {
@@ -62,7 +63,8 @@ public class TableController {
                     cellController.setText(cellText);
                     cellController.setBackgroundColor("#f0f0f0");
                     cellController.setAlignment("center");
-                    cellController.setBorderColor("blue");
+                    cellController.setBorderColor("black");
+                    cellController.setBorderWidth("0.5px");
 
                     String coordStr = coord.toString();
                     cellPane.setOnMouseClicked(event -> {
@@ -70,13 +72,18 @@ public class TableController {
                     });
 
                     dynamicGridPane.add(cellPane, col, row);
-                    cellMap.put(coordStr, cellController);
+                    coordToCellControllerMap.put(coordStr, cellController);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
         }
         addRowAndColumnLabels(rows, cols);
+
+//        currentlyFocusedCoord.valueProperty().addListener((observable, oldValue, newValue) -> {
+//            counterLabel.setText("Count: " + newValue.intValue());
+//        });
+
     }
 
     private void addRowAndColumnLabels(int rows, int cols) {
@@ -97,7 +104,7 @@ public class TableController {
     }
 
     public void updateCellContent(Coordinate coord, EffectiveValue newText) {
-        CellController cellController = cellMap.get(coord.toString());
+        CellController cellController = coordToCellControllerMap.get(coord.toString());
         if (cellController != null) {
             cellController.setText(calcValueToPrint(newText));
         }
@@ -128,14 +135,7 @@ public class TableController {
         }
     }
 
-    public void removeFocusingOfCell(String cellCoordinate) {
-        CellController cellController = cellMap.get(cellCoordinate);
-        if (cellController != null) {
-            cellController.setBackgroundColor("#f0f0f0");
-            cellController.setAlignment("center");
-            cellController.setBorderColor("blue");
-        }
-    }
+
 
     public void paintCellsInfluencingAndDependsOnBorders() {
         // Implement this method if needed
@@ -145,9 +145,12 @@ public class TableController {
         this.mainController = mainController;
     }
 
-    private void handleCellClick(String coord) {
-        if (currentlyFocusedCoord != null && currentlyFocusedCoord.toString().equals(coord)) {
+    private void handleCellClick(String newCoord) {
+        //CellDTO newCell = mainController.getCellDTO(newCoord);
+
+        if (currentlyFocusedCoord != null && currentlyFocusedCoord.toString().equals(newCoord)) {
             // אם זהו התא הממוקד כרגע, הסר את המיקוד ועדכן את השורה לריקה
+
             removeFocusingOfCell(currentlyFocusedCoord.toString());
             currentlyFocusedCoord = null;
             mainController.updateActionLine(null); // עדכן את ה-action line
@@ -157,11 +160,53 @@ public class TableController {
                 removeFocusingOfCell(currentlyFocusedCoord.toString());
             }
             // עדכן תא ממוקד חדש
-            currentlyFocusedCoord = CoordinateImpl.parseCoordinate(coord);
-            CellController cellController = cellMap.get(coord.toString());
-            cellController.setBorderColor("red");
+            currentlyFocusedCoord = CoordinateImpl.parseCoordinate(newCoord);
+            addFocusingToCell(currentlyFocusedCoord);
             mainController.updateActionLine(currentlyFocusedCoord); // עדכן את ה-action line
+        }
+    }
 
+    private void addFocusingToCell(Coordinate newFocusedCoord) {
+        CellController cellController = coordToCellControllerMap.get(newFocusedCoord.toString());
+        cellController.setBorderColor("red");
+        cellController.setBorderWidth("3px");
+
+        //Adding dependencies colors
+        CellDTO cell = mainController.getCellDTO(newFocusedCoord.toString());
+        List<Coordinate> dependsOn = cell.getDependsOn();
+        for(Coordinate coord : dependsOn){
+            coordToCellControllerMap.get(coord.toString()).setBorderColor("blue");
+            cellController.setBorderWidth("2px");
+        }
+
+        List<Coordinate> influencingOn = cell.getInfluencingOn();
+        for(Coordinate coord : influencingOn){
+            coordToCellControllerMap.get(coord.toString()).setBorderColor("green");
+            cellController.setBorderWidth("2px");
+        }
+    }
+
+    public void removeFocusingOfCell(String oldCellCoordinate) {
+        CellController cellController = coordToCellControllerMap.get(oldCellCoordinate);
+        if (cellController != null) {
+//            cellController.setBackgroundColor("#f0f0f0");
+//            cellController.setAlignment("center");
+            cellController.setBorderColor("black");
+            cellController.setBorderWidth("0.5px");
+
+            //Remove dependencies color
+            CellDTO cell = mainController.getCellDTO(oldCellCoordinate);
+            List<Coordinate> dependsOn = cell.getDependsOn();
+            for(Coordinate coord : dependsOn){
+                coordToCellControllerMap.get(coord.toString()).setBorderColor("black");
+                cellController.setBorderWidth("0.5px");
+            }
+            List<Coordinate> influencingOn = cell.getInfluencingOn();
+            for(Coordinate coord : influencingOn){
+                coordToCellControllerMap.get(coord.toString()).setBorderColor("black");
+                cellController.setBorderWidth("0.5px");
+
+            }
         }
 
     }

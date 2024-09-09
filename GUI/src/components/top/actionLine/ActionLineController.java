@@ -41,8 +41,6 @@ public class ActionLineController {
             cellId.setText("");
             cellOriginalValue.setText("");
             cellLastUpdateVersion.setText("");
-
-
         }
     }
 
@@ -67,6 +65,7 @@ public class ActionLineController {
 //
 //        });
 //    }
+
     public void initializeActionLine(SimpleBooleanProperty isCellSelected) {
 //        updateCell.setOnAction(event -> {
 //            try {

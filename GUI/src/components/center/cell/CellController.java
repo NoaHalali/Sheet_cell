@@ -11,6 +11,7 @@ public class CellController {
     private String backgroundColor;
     private String alignment;
     private String borderColor;
+    private String borderWidth; // משתנה חדש לשמירת רוחב המסגרת
 
     // כאן ניתן להוסיף לוגיקה לשינוי התא
     public void setText(String text) {
@@ -42,6 +43,12 @@ public class CellController {
         applyStyles();
     }
 
+    // מתודה חדשה להגדרת רוחב המסגרת
+    public void setBorderWidth(String width) {
+        this.borderWidth = "-fx-border-width: " + width + ";";
+        applyStyles();
+    }
+
     private void applyStyles() {
         StringBuilder style = new StringBuilder();
 
@@ -55,7 +62,10 @@ public class CellController {
 
         if (borderColor != null) {
             style.append(borderColor);
-            style.append("-fx-border-width: 0.5px;");
+        }
+
+        if (borderWidth != null) {
+            style.append(borderWidth);
         }
 
         cellLabel.setStyle(style.toString());

@@ -137,17 +137,17 @@ public class AppController {
 //        actionLineController.setActionLine(cell);
 
 
-    public void onClickedCell(String coord) {
-        if (coordinate != null) {
-            tableController.removeFocusingOfCell(coordinate.toString());
-        }
-
-        coordinate = CoordinateImpl.parseCoordinate(coord);
-        CellDTO cell = engine.getCellDTOByCoordinate(coordinate);
-
-        actionLineController.setActionLine(cell);
-
-    }
+//    public void onClickedCell(String coord) {
+//        if (coordinate != null) {
+//            tableController.removeFocusingOfCell(coordinate.toString());
+//        }
+//
+//        coordinate = CoordinateImpl.parseCoordinate(coord);
+//        CellDTO cell = engine.getCellDTOByCoordinate(coordinate);
+//
+//        actionLineController.setActionLine(cell);
+//
+//    }
 
     public void updateActionLine(Coordinate coord) {
         if (coord == null) {
@@ -253,5 +253,10 @@ public class AppController {
 
         // הפעלת המשימה ב-Thread נפרד
         new Thread(loadFileTask).start();
+    }
+
+    public CellDTO getCellDTO(String coord) {
+        Coordinate coordinate = CoordinateImpl.parseCoordinate(coord);
+        return engine.getCellDTOByCoordinate(coordinate);
     }
 }
