@@ -6,7 +6,9 @@ import components.top.actionLine.ActionLineController;
 import components.center.cellsTable.TableController;
 import components.top.fileChooser.FileChooserController;
 import components.top.versions.VersionSelectorController;
+import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -27,8 +29,9 @@ import java.util.Arrays;
 public class AppController {
 
     //Properties
-    private SimpleBooleanProperty isFileSelected;
-    private SimpleBooleanProperty isCellSelected;
+    private SimpleBooleanProperty isFileSelectedProperty;
+    private SimpleBooleanProperty isCellSelectedProperty;
+    private IntegerProperty versionProperty;
 
 
     //Components
@@ -41,6 +44,7 @@ public class AppController {
     @FXML private VBox ranges;
     @FXML private HBox versionSelector;
     @FXML private Button updateCell;
+    @FXML private Label currentVersionLabel;
 
 
     //Controllers
@@ -65,11 +69,13 @@ public class AppController {
             versionSelectorController.setMainController(this);
             fileChooserController.setMainController(this);
 
-            isFileSelected = new SimpleBooleanProperty(false);
-            isCellSelected = new SimpleBooleanProperty(false);
-            table.disableProperty().bind(isFileSelected.not());
-            actionLine.disableProperty().bind(isFileSelected.not());
-            versionSelector.disableProperty().bind(isFileSelected.not());
+            isFileSelectedProperty = new SimpleBooleanProperty(false);
+            isCellSelectedProperty = new SimpleBooleanProperty(false);
+            versionProperty = new SimpleIntegerProperty(1);
+            table.disableProperty().bind(isFileSelectedProperty.not());
+            actionLine.disableProperty().bind(isFileSelectedProperty.not());
+            versionSelector.disableProperty().bind(isFileSelectedProperty.not());
+            currentVersionLabel.textProperty().bind(versionProperty.asString());
 
             engine = new EngineImpl();
 
@@ -102,21 +108,21 @@ public class AppController {
         }
     }
 
-    private void setVersionSelectorOptions() {
-        // טוען את ה-DTO ומעדכן את הגרסאות בקונטרולר של הרכיב הקטן
-//        VersionDTO versionDTO = new VersionDTO();
-//        List<String> versions = versionDTO.getVersions();
+//    private void setVersionSelectorOptions() {
+//        // טוען את ה-DTO ומעדכן את הגרסאות בקונטרולר של הרכיב הקטן
+////        VersionDTO versionDTO = new VersionDTO();
+////        List<String> versions = versionDTO.getVersions();
+//
+//        int numOfVersions = engine.getNumOfVersions();
+//        versionSelectorController.setVersionSelectorOptions(numOfVersions);
+//        //versionSelectorController.setVersions(versions); // קריאה למתודה שמעדכנת את הגרסאות ברכיב הקטן
+//    }
 
-        int numOfVersions = engine.getNumOfVersions();
-        versionSelectorController.setVersionSelectorOptions(numOfVersions);
-        //versionSelectorController.setVersions(versions); // קריאה למתודה שמעדכנת את הגרסאות ברכיב הקטן
-    }
-
-//    private void handleVersionSelection(String version) {
+//    private void handleVersionSelection(String versionProperty) {
 //        Alert alert = new Alert(Alert.AlertType.INFORMATION);
 //        alert.setTitle("Version Information");
-//        alert.setHeaderText("Selected Version: " + version);
-//        alert.setContentText("Details about " + version + " will appear here.");
+//        alert.setHeaderText("Selected Version: " + versionProperty);
+//        alert.setContentText("Details about " + versionProperty + " will appear here.");
 //        alert.showAndWait();
 //
 //    }
@@ -151,10 +157,10 @@ public class AppController {
 
     public void updateActionLine(Coordinate coord) {
         if (coord == null) {
-            isCellSelected.set(false);
+            isCellSelectedProperty.set(false);
             actionLineController.setActionLine(null); // איפוס השורה
         } else {
-            isCellSelected.set(true);
+            isCellSelectedProperty.set(true);
             CellDTO cell = engine.getCellDTOByCoordinate(coord);
             actionLineController.setActionLine(cell); // עדכון השורה עם התא החדש
 
@@ -162,7 +168,7 @@ public class AppController {
     }
 
 //    public void SetFileSelected() {
-//        isFileSelected.set(true);
+//        isFileSelectedProperty.set(true);
 //    }
 
     public void setPrimaryStage(Stage primaryStage) {
@@ -171,6 +177,42 @@ public class AppController {
 
     public File showFileSelector(FileChooser fileChooser) {
         return fileChooser.showOpenDialog(primaryStage);
+    }
+
+
+    public void loadFile(String absolutePath) throws Exception {
+        // יצירת משימה לטעינת הקובץ ברקע
+        Task<Void> loadFileTask = new Task<Void>() {
+            @Override
+            protected Void call() throws Exception {
+                // קריאת נתוני הקובץ
+                engine.readFileData(absolutePath);
+                return null;
+            }
+
+            @Override
+            protected void succeeded() {
+                super.succeeded();
+                // עדכון ה-UI במקרה של הצלחה
+                isFileSelectedProperty.set(true);
+                SheetDTO sheet = engine.getCurrentSheetDTO();
+                tableController.initializeGrid(sheet);
+
+                versionSelectorController.initializeVersionSelector(sheet.getVersion());
+                actionLineController.initializeActionLine(isCellSelectedProperty);
+
+            }
+
+            @Override
+            protected void failed() {
+                super.failed();
+                // טיפול בשגיאה במקרה של כשל בטעינת הקובץ
+                System.out.println("Failed to load file: " + getException().getMessage());
+            }
+        };
+
+        // הפעלת המשימה ב-Thread נפרד
+        new Thread(loadFileTask).start();
     }
 
     public void updateCellValue(String value) { //לא צריך לבדוק אם נבחר כי אחרת היה מדוסבל
@@ -205,6 +247,10 @@ public class AppController {
                 });
                 tableController.addFocusingToCell(coordinate);
                 actionLineController.setActionLine(engine.getCellDTOByCoordinate(coordinate));
+                versionProperty.set(sheet.getVersion());
+                versionSelectorController.setVersionSelectorOptions(sheet.getVersion());
+               // currentVersionLabel.setText(String.valueOf(sheet.getVersion()));
+
             }
 
             @Override
@@ -217,42 +263,6 @@ public class AppController {
 
         // הפעלת המשימה ב-Thread נפרד
         new Thread(updateCellTask).start();
-    }
-
-    public void loadFile(String absolutePath) throws Exception {
-        // יצירת משימה לטעינת הקובץ ברקע
-        Task<Void> loadFileTask = new Task<Void>() {
-            @Override
-            protected Void call() throws Exception {
-                // קריאת נתוני הקובץ
-                engine.readFileData(absolutePath);
-                return null;
-            }
-
-            @Override
-            protected void succeeded() {
-                super.succeeded();
-                // עדכון ה-UI במקרה של הצלחה
-                isFileSelected.set(true);
-                SheetDTO sheet = engine.getCurrentSheetDTO();
-                tableController.initializeGrid(sheet);
-                versionSelectorController.initializeVersionSelector();
-                actionLineController.initializeActionLine(isCellSelected);
-
-
-                setVersionSelectorOptions();
-            }
-
-            @Override
-            protected void failed() {
-                super.failed();
-                // טיפול בשגיאה במקרה של כשל בטעינת הקובץ
-                System.out.println("Failed to load file: " + getException().getMessage());
-            }
-        };
-
-        // הפעלת המשימה ב-Thread נפרד
-        new Thread(loadFileTask).start();
     }
 
     public CellDTO getCellDTO(String coord) {

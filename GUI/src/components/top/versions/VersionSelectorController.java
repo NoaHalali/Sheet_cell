@@ -21,10 +21,13 @@ public class VersionSelectorController {
     }
 
     // במקום initialize
-    public void initializeVersionSelector() {
+    public void initializeVersionSelector(int numOfVersions) {
+
         // הגדרת רשימת הגרסאות ל-ComboBox
         versionSelector.setItems(versionList);
         versionSelector.setDisable(true); // הגדרת Disable דיפולטי
+        setVersionSelectorOptions(numOfVersions);
+
 
         // הוספת מאזין לערך הנבחר ב-ComboBox
         versionSelector.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {

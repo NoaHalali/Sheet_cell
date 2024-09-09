@@ -31,7 +31,7 @@
                <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="10.0" GridPane.columnIndex="2">
                   <children>
                      <Label text="Current version:" />
-                     <Label text="1.0" />
+                     <Label fx:id="currentVersionLabel" text="1.0" />
                   </children>
                </HBox>
             </children>
