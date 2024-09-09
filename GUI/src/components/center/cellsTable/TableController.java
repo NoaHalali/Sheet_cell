@@ -78,6 +78,8 @@ public class TableController {
                     if (enableClick) {
                         String coordStr = coord.toString();
                         cellPane.setOnMouseClicked(event -> handleCellClick(coordStr));
+
+                        cellController.applyHoverEffectListeners();
                     }
 
                     dynamicGridPane.add(cellPane, col, row);

@@ -2,6 +2,9 @@ package components.center.cell;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.scene.effect.DropShadow;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.paint.Color;
 
 public class CellController {
 
@@ -12,6 +15,14 @@ public class CellController {
     private String alignment;
     private String borderColor;
     private String borderWidth; // משתנה חדש לשמירת רוחב המסגרת
+    // הגדרת הצל עבור אפקט hover
+    private final DropShadow hoverShadow = new DropShadow();
+
+    public CellController() {
+        // הגדרת הצל להוספה ב-hover
+        hoverShadow.setColor(Color.LIGHTBLUE);
+        hoverShadow.setRadius(10);
+    }
 
     // כאן ניתן להוסיף לוגיקה לשינוי התא
     public void setText(String text) {
@@ -70,4 +81,50 @@ public class CellController {
 
         cellLabel.setStyle(style.toString());
     }
+
+
+    public void applyHoverEffectListeners() {
+        // מאזין לאירוע ריחוף עם העכבר
+        cellLabel.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> applyHoverEffect());
+
+        // מאזין לאירוע יציאה עם העכבר
+        cellLabel.addEventHandler(MouseEvent.MOUSE_EXITED, event -> removeHoverEffect());
+    }
+
+    private void applyHoverEffect() {
+        cellLabel.setEffect(hoverShadow); // הוספת אפקט הצל
+
+        // בניית מחרוזת זמנית עם הסגנון הנוכחי של התא
+        StringBuilder style = new StringBuilder();
+
+        // שמירה על הסגנונות הקיימים על ידי הוספתם למחרוזת הזמנית
+        if (backgroundColor != null) {
+            style.append(backgroundColor);
+        }
+        if (alignment != null) {
+            style.append(alignment);
+        }
+        if (borderColor != null) {
+            style.append(borderColor);
+        }
+        if (borderWidth != null) {
+            style.append(borderWidth);
+        }
+
+        // הוספת הסגנונות החדשים למחרוזת הזמנית
+        //למרות שכל שדה יופיע פעמיים, לוקח את השדה האחרון שכתוב (כלומר את הזמני של הhover)
+        style.append("-fx-border-color: blue; -fx-border-width: 2px; -fx-background-color: #f0f8ff;");
+
+        // הגדרת הסגנון החדש עם כל השינויים
+        cellLabel.setStyle(style.toString());
+    }
+
+    private void removeHoverEffect() {
+        cellLabel.setEffect(null); // הסרת אפקט הצל
+
+        // חזרה לעיצוב המקורי על ידי יישום הסגנונות הקיימים בלבד
+        applyStyles();
+    }
+
+
 }
