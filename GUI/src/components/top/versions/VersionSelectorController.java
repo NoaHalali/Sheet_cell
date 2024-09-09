@@ -10,8 +10,11 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+import parts.SheetDTO;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.IntStream;
 
@@ -52,7 +55,7 @@ public class VersionSelectorController {
         versionSelector.setDisable(false); // אפשר את ה-ComboBox לאחר טעינת הגרסאות
     }
 
-    private void handleVersionSelection(String version) {
+    private void handleVersionSelection(String versionString) {
         //TODO - move to app controller
         // check if alerts are pop up, if it is so move it to the app controller
         // or maybe just bring it here?
@@ -61,16 +64,20 @@ public class VersionSelectorController {
 
         try {
             // Create a new stage for the popup
+            String[] parts = versionString.split(" "); // מחלק את המחרוזת לפי רווח
+            String versionNumberStr = parts[1]; // החלק השני של המערך הוא המספר
+
             Stage popupStage = new Stage();
-            popupStage.setTitle("Version Preview: " + version);
+            popupStage.setTitle("Version Preview: " + versionNumberStr);
 
             // Load the FXML or create a layout dynamically
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/components/center/cellsTable/yourTable.fxml")); // Adjust the path
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/components/center/cellsTable/table.fxml")); // Adjust the path
             Parent root = loader.load();
 
             // Get the TableController and initialize it with the selected version of the sheet
             TableController tableController = loader.getController();
-            tableController.initializeGrid(sheetDTO);
+            SheetDTO sheet = mainController.getSheetDTOByVersion(versionNumberStr);
+            tableController.initializeGrid(sheet);
 
             // Set the scene and show the popup
             Scene scene = new Scene(root);
