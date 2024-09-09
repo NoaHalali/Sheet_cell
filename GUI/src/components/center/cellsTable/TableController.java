@@ -171,44 +171,45 @@ public class TableController {
         cellController.setBorderColor("red");
         cellController.setBorderWidth("3px");
 
-        //Adding dependencies colors
+        // Adding dependencies colors
         CellDTO cell = mainController.getCellDTO(newFocusedCoord.toString());
         List<Coordinate> dependsOn = cell.getDependsOn();
-        for(Coordinate coord : dependsOn){
-            coordToCellControllerMap.get(coord.toString()).setBorderColor("blue");
-            cellController.setBorderWidth("2px");
+        for (Coordinate coord : dependsOn) {
+            CellController depCellController = coordToCellControllerMap.get(coord.toString());
+            depCellController.setBorderColor("blue");
+            depCellController.setBorderWidth("2px");  // עדכון של התא המושפע בלבד
         }
 
         List<Coordinate> influencingOn = cell.getInfluencingOn();
-        for(Coordinate coord : influencingOn){
-            coordToCellControllerMap.get(coord.toString()).setBorderColor("green");
-            cellController.setBorderWidth("2px");
+        for (Coordinate coord : influencingOn) {
+            CellController infCellController = coordToCellControllerMap.get(coord.toString());
+            infCellController.setBorderColor("green");
+            infCellController.setBorderWidth("2px");  // עדכון של התא המשפיע בלבד
         }
     }
+
 
     public void removeFocusingOfCell(String oldCellCoordinate) {
         CellController cellController = coordToCellControllerMap.get(oldCellCoordinate);
         if (cellController != null) {
-//            cellController.setBackgroundColor("#f0f0f0");
-//            cellController.setAlignment("center");
             cellController.setBorderColor("black");
             cellController.setBorderWidth("0.5px");
 
-            //Remove dependencies color
+            // Remove dependencies color
             CellDTO cell = mainController.getCellDTO(oldCellCoordinate);
             List<Coordinate> dependsOn = cell.getDependsOn();
-            for(Coordinate coord : dependsOn){
-                coordToCellControllerMap.get(coord.toString()).setBorderColor("black");
-                cellController.setBorderWidth("0.5px");
+            for (Coordinate coord : dependsOn) {
+                CellController depCellController = coordToCellControllerMap.get(coord.toString());
+                depCellController.setBorderColor("black");
+                depCellController.setBorderWidth("0.5px");
             }
             List<Coordinate> influencingOn = cell.getInfluencingOn();
-            for(Coordinate coord : influencingOn){
-                coordToCellControllerMap.get(coord.toString()).setBorderColor("black");
-                cellController.setBorderWidth("0.5px");
-
+            for (Coordinate coord : influencingOn) {
+                CellController infCellController = coordToCellControllerMap.get(coord.toString());
+                infCellController.setBorderColor("black");
+                infCellController.setBorderWidth("0.5px");
             }
         }
-
     }
 
     public Coordinate getCurrentlyFocusedCoord() {
