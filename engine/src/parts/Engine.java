@@ -35,4 +35,6 @@ public interface Engine {
     public void loadSystemState(String filePath) throws FileNotFoundException, IOException, ClassNotFoundException;
 
     public void addRange(String rangeName, String rangeDefinition) throws Exception;
+
+    public List<Coordinate> getRangeCoordinates(String rangeName);
 }

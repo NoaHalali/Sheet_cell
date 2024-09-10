@@ -26,6 +26,7 @@ import parts.cell.coordinate.CoordinateImpl;
 
 import java.io.File;
 import java.util.Arrays;
+import java.util.List;
 
 public class AppController {
 
@@ -287,5 +288,10 @@ public class AppController {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public void highlightRange(String rangeName) {
+        List<Coordinate> rangeCoordinates = engine.getRangeCoordinates(rangeName);
+        tableController.highlightRange(rangeCoordinates);
     }
 }

@@ -527,7 +527,7 @@ public class Sheet implements Serializable {
             throw new IllegalArgumentException("Range with the name " + rangeName + " already exists.");
         }
 
-        String[] parts = rangeDefinition.split(".."); // מחלק את המחרוזת לפי רווח
+        String[] parts = rangeDefinition.split("\\.\\."); // מחלק את המחרוזת לפי ".."
         Coordinate leftBottomCoord = CoordinateImpl.parseCoordinate(parts[0]);
         Coordinate rightTopCoord = CoordinateImpl.parseCoordinate(parts[1]);
 
@@ -552,4 +552,5 @@ public class Sheet implements Serializable {
         }
         return ranges.get(rangeName);
     }
+
 }

@@ -210,4 +210,9 @@ public class EngineImpl implements Engine {
         currentSheet.addRange(rangeName, rangeDefinition);
     }
 
+    @Override
+    public List<Coordinate> getRangeCoordinates(String rangeName) {
+        return currentSheet.getRangeCoordinates(rangeName);
+    }
+
 }

@@ -19,6 +19,7 @@ public class RangesController {
     @FXML private Button viewRangeButton;
     @FXML private ListView<String> rangeListView;
 
+
     // מפה לשמירת הטווחים
     private Map<String, String> ranges = new HashMap<>();
     private AppController mainController;
@@ -48,10 +49,10 @@ public class RangesController {
 
     @FXML
     public void viewRangeAction() {
-        String selectedRange = rangeListView.getSelectionModel().getSelectedItem();
-        if (selectedRange != null && ranges.containsKey(selectedRange)) {
-            String rangeDefinition = ranges.get(selectedRange);
-            highlightRange(rangeDefinition); // פונקציה להדגשת הטווח בתצוגה
+        String selectedRangeName = rangeListView.getSelectionModel().getSelectedItem();
+        if (selectedRangeName != null /*&& ranges.containsKey(selectedRange)*/) {
+            //String rangeDefinition = ranges.get(selectedRange);
+            highlightRange(selectedRangeName); // פונקציה להדגשת הטווח בתצוגה
         } else {
             showAlert("Error", "No range selected or range does not exist!");
         }
@@ -69,7 +70,7 @@ public class RangesController {
         alert.showAndWait();
     }
 
-    private void highlightRange(String rangeDefinition) {
-        // לוגיקה להדגשת הטווח בתצוגה
+    private void highlightRange(String rangeName) {
+        mainController.highlightRange(rangeName);
     }
 }
