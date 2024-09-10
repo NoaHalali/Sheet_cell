@@ -17,12 +17,14 @@ public class Range implements Serializable {
     private Coordinate bottomRightCellID;
     private boolean isUsed;//todo - check if needed
     private List<Cell> cells;
+    private List<Coordinate> InfluencingOnCoordinates;//התאים שמשתמשים בטווח \ה
 
     public Range(Coordinate topLeftCellID, Coordinate bottomRightCellID,List<Cell> cells ) {
         this.topLeftCellID = topLeftCellID;
         this.bottomRightCellID = bottomRightCellID;
         isUsed = false;
         this.cells = cells;
+        InfluencingOnCoordinates = new ArrayList<>();
     }
     public double calculateCellsSum () {
         double sum = 0 ,num;
@@ -63,6 +65,17 @@ public class Range implements Serializable {
     public List<Coordinate> getRangeCoordinates() {
         return cells.stream().map(Cell::getCoordinate).collect(Collectors.toList());
     }
+    public void removeCoordinateFromInfluencingOnCoordinates(Coordinate coordinate) {
+        InfluencingOnCoordinates.remove(coordinate);
+    }
+    public void addCoordinateFromInfluencingOnCoordinates(Coordinate coordinate) {
+        InfluencingOnCoordinates.add(coordinate);
+    }
+    public boolean isBeingUsed() {
+        return InfluencingOnCoordinates.size() > 0;
+    }
+
+
 
 
 }
