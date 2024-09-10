@@ -29,10 +29,13 @@ public class RangesController {
         String rangeName = rangeNameField.getText();
         String rangeDefinition = rangeDefinitionField.getText();
 
-        mainController.addRange(rangeName, rangeDefinition);
-
-        ranges.put(rangeName, rangeDefinition);
-        rangeListView.getItems().add(rangeName);
+        try {
+            mainController.addRange(rangeName, rangeDefinition);
+            ranges.put(rangeName, rangeDefinition);
+            rangeListView.getItems().add(rangeName);
+        } catch (Exception e) {
+            showAlert("Error", e.getMessage());
+        }
     }
 
     @FXML
