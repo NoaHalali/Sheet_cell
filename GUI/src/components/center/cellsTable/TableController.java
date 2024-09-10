@@ -77,7 +77,7 @@ public class TableController {
 
                     if (enableClick) {
                         String coordStr = coord.toString();
-                        cellPane.setOnMouseClicked(event -> handleCellClick(coordStr));
+                        cellPane.setOnMouseClicked(event ->  handleCellClick(coordStr));
 
                         cellController.applyHoverEffectListeners();
                     }
@@ -202,6 +202,14 @@ public class TableController {
         for (Coordinate coord : rangeCoordinates) {
             CellController cellController = coordToCellControllerMap.get(coord.toString());
             cellController.setBackgroundColor("red");
+        }
+    }
+
+    @FXML
+    public void clearHighlighting(List<Coordinate> rangeCoordinates) {
+        for (Coordinate coord : rangeCoordinates) {
+            CellController cellController = coordToCellControllerMap.get(coord.toString());
+            cellController.setBackgroundColor("#f0f0f0");
         }
     }
 }

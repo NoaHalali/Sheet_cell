@@ -1,12 +1,12 @@
 package components.left.ranges;
 
-
 import components.MainComponent.AppController;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -19,10 +19,32 @@ public class RangesController {
     @FXML private Button viewRangeButton;
     @FXML private ListView<String> rangeListView;
 
-
     // מפה לשמירת הטווחים
     private Map<String, String> ranges = new HashMap<>();
     private AppController mainController;
+    private String lastSelectedRange; // משתנה לשמירת הבחירה האחרונה
+
+    public void initializeRangesController() {
+        rangeListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                // נקה את הסימון של ה-range הקודם
+                if (lastSelectedRange != null && !lastSelectedRange.equals(newValue)) {
+                    clearRangeHighlight();
+                }
+
+                //todo -לא עובד בינתיים
+                // אם נבחר אותו פריט שוב, הסתר את ה-highlight
+                if (newValue.equals(lastSelectedRange)) {
+                    clearRangeHighlight();
+                    lastSelectedRange = null; // נקה את הבחירה האחרונה
+                } else {
+                    // עדכון הבחירה והצגת highlight
+                    lastSelectedRange = newValue;
+                    viewRangeAction();
+                }
+            }
+        });
+    }
 
     @FXML
     public void addRangeButtonAction() {
@@ -42,7 +64,6 @@ public class RangesController {
     public void deleteRangeAction() {
         String selectedRange = rangeListView.getSelectionModel().getSelectedItem();
         if (selectedRange != null && ranges.containsKey(selectedRange)) {
-            // לוגיקה למניעת מחיקה אם יש שימוש ב-range
             ranges.remove(selectedRange);
             rangeListView.getItems().remove(selectedRange);
         } else {
@@ -53,9 +74,8 @@ public class RangesController {
     @FXML
     public void viewRangeAction() {
         String selectedRangeName = rangeListView.getSelectionModel().getSelectedItem();
-        if (selectedRangeName != null /*&& ranges.containsKey(selectedRange)*/) {
-            //String rangeDefinition = ranges.get(selectedRange);
-            highlightRange(selectedRangeName); // פונקציה להדגשת הטווח בתצוגה
+        if (selectedRangeName != null) {
+            highlightRange(selectedRangeName);
         } else {
             showAlert("Error", "No range selected or range does not exist!");
         }
@@ -75,5 +95,9 @@ public class RangesController {
 
     private void highlightRange(String rangeName) {
         mainController.highlightRange(rangeName);
+    }
+
+    private void clearRangeHighlight() {
+        mainController.clearRangeHighlight(lastSelectedRange); // פונקציה להסרת ההדגשה ב-AppController
     }
 }

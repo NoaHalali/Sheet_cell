@@ -79,59 +79,16 @@ public class AppController {
             table.disableProperty().bind(isFileSelectedProperty.not());
             actionLine.disableProperty().bind(isFileSelectedProperty.not());
             versionSelector.disableProperty().bind(isFileSelectedProperty.not());
+            commands.disableProperty().bind(isFileSelectedProperty.not());
+            ranges.disableProperty().bind(isFileSelectedProperty.not());
+
             currentVersionLabel.textProperty().bind(versionProperty.asString());
+
 
             engine = new EngineImpl();
 
         }
     }
-
-//    private void setVersionSelectorOptions() {
-//        // טוען את ה-DTO ומעדכן את הגרסאות בקונטרולר של הרכיב הקטן
-////        VersionDTO versionDTO = new VersionDTO();
-////        List<String> versions = versionDTO.getVersions();
-//
-//        int numOfVersions = engine.getNumOfVersions();
-//        versionSelectorController.setVersionSelectorOptions(numOfVersions);
-//        //versionSelectorController.setVersions(versions); // קריאה למתודה שמעדכנת את הגרסאות ברכיב הקטן
-//    }
-
-//    private void handleVersionSelection(String versionProperty) {
-//        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-//        alert.setTitle("Version Information");
-//        alert.setHeaderText("Selected Version: " + versionProperty);
-//        alert.setContentText("Details about " + versionProperty + " will appear here.");
-//        alert.showAndWait();
-//
-//    }
-//        String amirfile = "C:\\Users\\amir\\IdeaProjects\\Sheet_cell\\engine\\src\\XMLFile\\GeneratedFiles\\dinamycTest.xml";
-//        String noafile = "C:\\Users\\noa40\\OneDrive - The Academic College of Tel-Aviv Jaffa - MTA\\שנה ב\\קורסי בחירה\\פיתוח תוכנה מבוסס גאווה\\מטלות\\שטיסל\\shticell\\engine\\src\\XMLFile\\GeneratedFiles\\dinamycTest.xml";
-//
-//        try {
-//            engine.readFileData(amirfile);
-//        }
-//        catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//        tableController.initializeGrid(engine.getCurrentSheetDTO());
-//        Coordinate coordinate =new CoordinateImpl(2,2);
-//        CellDTO cell=engine.getCellDTOByCoordinate(coordinate);
-//
-//        //myLabel.setText(cell.getCoord().toString());
-//        actionLineController.setActionLine(cell);
-
-
-//    public void onClickedCell(String coord) {
-//        if (coordinate != null) {
-//            tableController.removeFocusingOfCell(coordinate.toString());
-//        }
-//
-//        coordinate = CoordinateImpl.parseCoordinate(coord);
-//        CellDTO cell = engine.getCellDTOByCoordinate(coordinate);
-//
-//        actionLineController.setActionLine(cell);
-//
-//    }
 
     public void updateActionLine(Coordinate coord) {
         if (coord == null) {
@@ -145,10 +102,6 @@ public class AppController {
         }
     }
 
-//    public void SetFileSelected() {
-//        isFileSelectedProperty.set(true);
-//    }
-
     public void setPrimaryStage(Stage primaryStage) {
         this.primaryStage = primaryStage;
     }
@@ -156,7 +109,6 @@ public class AppController {
     public File showFileSelector(FileChooser fileChooser) {
         return fileChooser.showOpenDialog(primaryStage);
     }
-
 
 //    public void loadFile(String absolutePath, ProgressIndicator progressIndicator) throws Exception {
 //        // יצירת משימה לטעינת הקובץ ברקע
@@ -279,6 +231,7 @@ public class AppController {
         versionSelectorController.initializeVersionSelector(sheet.getVersion());
         actionLineController.initializeActionLine(isCellSelectedProperty);
         commandsController.InitializeCommandsController(isCellSelectedProperty);
+        rangesController.initializeRangesController();
 
     }
 
@@ -289,5 +242,10 @@ public class AppController {
     public void highlightRange(String rangeName) {
         List<Coordinate> rangeCoordinates = engine.getRangeCoordinates(rangeName);
         tableController.highlightRange(rangeCoordinates);
+    }
+
+    public void clearRangeHighlight(String rangeName) {
+        List<Coordinate> rangeCoordinates = engine.getRangeCoordinates(rangeName);
+        tableController.clearHighlighting(rangeCoordinates);;
     }
 }

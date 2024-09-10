@@ -313,11 +313,11 @@ public class Sheet implements Serializable {
         Coordinate tmpCoord;
         for(int i=topRow;i<=bottomRow;i++){
             for(int j=leftCol;j<=rightCol;j++){
-                Cell cell = cellsMatrix[i][j];
+                Cell cell = cellsMatrix[i-1][j-1];
                 if(cell==null){
                     tmpCoord= new CoordinateImpl(i, j);
                     cell = Cell.createEmptyCell(tmpCoord);
-                    cellsMatrix[i][j]=cell;
+                    cellsMatrix[i-1][j-1]=cell;
                 }
                 rangeList.add(cell);
             }

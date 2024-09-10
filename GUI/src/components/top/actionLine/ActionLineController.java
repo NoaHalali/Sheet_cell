@@ -26,6 +26,19 @@ public class ActionLineController {
 
     private EngineImpl engine;
 
+    public void initializeActionLine(SimpleBooleanProperty isCellSelected) {
+//        updateCell.setOnAction(event -> {
+//            try {
+//                mainController.updateCellValue(updateCellValueField.getText());
+//
+//            } catch (Exception e) {
+//                throw new RuntimeException(e);
+//            }
+//
+//        });
+        updateCell.disableProperty().bind(isCellSelected.not());
+        updateCellValueField.disableProperty().bind(isCellSelected.not());
+    }
     public void setActionLine(CellDTO cell) {
         if (cell != null) {
             // עדכון השדות בשורת הפעולה לפי פרטי התא
@@ -54,31 +67,6 @@ public class ActionLineController {
         }
     }
 
-
-    //    public void initializeActionLine(){
-//        updateCell.setOnAction(event -> {
-//            try {
-//                mainController.updateCellValue( updateCellValueField.getText());
-//
-//            } catch (Exception e) {
-//                throw new RuntimeException(e);
-//            }
-//
-//        });
-//    }
-    public void initializeActionLine(SimpleBooleanProperty isCellSelected) {
-//        updateCell.setOnAction(event -> {
-//            try {
-//                mainController.updateCellValue(updateCellValueField.getText());
-//
-//            } catch (Exception e) {
-//                throw new RuntimeException(e);
-//            }
-//
-//        });
-        updateCell.disableProperty().bind(isCellSelected.not());
-        updateCellValueField.disableProperty().bind(isCellSelected.not());
-    }
 
     public void setMainController(AppController mainController) {
         this.mainController = mainController;
