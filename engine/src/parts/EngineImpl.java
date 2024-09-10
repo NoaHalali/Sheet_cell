@@ -199,4 +199,10 @@ public class EngineImpl implements Engine {
             throw new ClassNotFoundException("Class not found while loading the system state", e);
         }
     }
+    //8
+    public void addRange(Coordinate leftBottomCoord, Coordinate rightTopCoord,String rangeName) {
+      currentSheet.addRange( leftBottomCoord,  rightTopCoord, rangeName);
+
+
+    }
 }

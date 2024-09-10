@@ -499,11 +499,37 @@ public class Sheet implements Serializable {
         Cell emptyCell=Cell.createEmptyCell(coord);
         cellsMatrix[coord.getRow()-1][coord.getCol()-1] = emptyCell;
     }
+    public List<Cell> getRangeCellsList(Coordinate leftBottomCoord, Coordinate rightTopCoord) {
+        List<Cell> rangeList = new LinkedList<>();
+        int bottomRow = leftBottomCoord.getRow();
+        int leftCol = leftBottomCoord.getCol();
+        int topRow = rightTopCoord.getRow();
+        int rightCol = rightTopCoord.getCol();
+        Coordinate tmpCoord;
+        for(int i=topRow;i<=bottomRow;i++){
+            for(int j=leftCol;j<=rightCol;j++){
+                Cell cell = cellsMatrix[i][j];
+                if(cell==null){
+                    tmpCoord= new CoordinateImpl(i, j);
+                    cell = Cell.createEmptyCell(tmpCoord);
+                    cellsMatrix[i][j]=cell;
+                }
+                rangeList.add(cell);
+            }
+        }
+        return rangeList;
+    }
 
-    public void addRange(String rangeName, Range range) throws IllegalArgumentException{
+    public void addRange(Coordinate leftBottomCoord, Coordinate rightTopCoord,String rangeName) throws IllegalArgumentException{
+
         if(ranges.containsKey(rangeName)){
             throw new IllegalArgumentException("Range with the name " + rangeName + " already exists.");
         }
+
+        validateCoordinateBounds(leftBottomCoord);
+        validateCoordinateBounds(rightTopCoord);
+        List<Cell> rangeList = getRangeCellsList(leftBottomCoord,rightTopCoord);
+        Range range = new Range(leftBottomCoord,rightTopCoord,rangeList);
         ranges.put(rangeName, range);
     }
 
@@ -522,4 +548,8 @@ public class Sheet implements Serializable {
         return ranges.get(rangeName);
     }
 
+    public Range createRange(Coordinate leftBottomCoord, Coordinate rightTopCoord) {
+        validateCoordinateBounds(leftBottomCoord);
+        validateCoordinateBounds(rightTopCoord);
+    }
 }

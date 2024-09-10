@@ -79,6 +79,7 @@ public class AppController {
             currentVersionLabel.textProperty().bind(versionProperty.asString());
 
             engine = new EngineImpl();
+
         }
     }
 
@@ -274,6 +275,7 @@ public class AppController {
 
         versionSelectorController.initializeVersionSelector(sheet.getVersion());
         actionLineController.initializeActionLine(isCellSelectedProperty);
+        commandsController.InitializeCommandsController(isCellSelectedProperty);
 
     }
 }

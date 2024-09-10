@@ -3,16 +3,62 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.layout.VBox?>
 
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ColorPicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Tooltip?>
+<?import javafx.util.Duration?>
 <VBox spacing="10" style="-fx-background-color: #5a9ad3;" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="components.left.commands.CommandsController">
     <!-- כפתור להגדרת רוחב עמודות/שורות -->
-    <Button fx:id="setColumnRowWidthButton" onAction="#setColumnRowWidthAction" text="Set Column/Row Width" />
+    <HBox spacing="5">
+        <Button fx:id="setColumnRowWidthButton" onAction="#setColumnRowWidthAction" text="Set Column/Row Width" />
+        <TextField fx:id="columnRowWidthTextField" promptText="Enter width" />
+    </HBox>
 
-    <!-- כפתור לבחירת יישור של התוכן בעמודה -->
-    <Button fx:id="setColumnAlignmentButton" onAction="#setColumnAlignmentAction" text="Set Column Alignment" />
+    <!-- יישור התוכן בעמודה -->
+    <HBox spacing="5">
+        <Button fx:id="setColumnAlignmentButton" onAction="#setColumnAlignmentAction" text="Set Column Alignment" />
+        <TextField fx:id="columnAlignmentTextField" promptText="Enter alignment" />
+    </HBox>
 
-    <!-- כפתור לבחירת עיצוב של תא מסוים -->
-    <Button fx:id="setCellStyleButton" onAction="#setCellStyleAction" text="Set Cell Style" />
+    <!-- כפתור לשינוי צבע טקסט וצבע גבול -->
+<!--    <HBox spacing="5">-->
+<!--        <Button fx:id="setCellStyleButton" onAction="#setCellStyleAction" text="Set Cell Style" />-->
+<!--        <ColorPicker fx:id="textColorPicker">-->
+<!--            <tooltip>-->
+<!--                <Tooltip text="Select Text Color">-->
+<!--                    <showDelay>-->
+<!--                        <Duration millis="100" />-->
+<!--                    </showDelay>-->
+<!--                </Tooltip>-->
+<!--            </tooltip>-->
+<!--        </ColorPicker>-->
+<!--        <ColorPicker fx:id="borderColorPicker">-->
+<!--            <tooltip>-->
+<!--                <Tooltip text="Select Border Color">-->
+<!--                    <showDelay>-->
+<!--                        <Duration millis="100" />-->
+<!--                    </showDelay>-->
+<!--                </Tooltip>-->
+<!--            </tooltip>-->
+<!--        </ColorPicker>-->
 
-    <!-- כפתור לביטול העיצוב של תא מסוים -->
+<!--    </HBox>-->
+    <HBox spacing="5">
+        <Button fx:id="changeTextColorButton" text="Change Text Color" />
+        <ColorPicker fx:id="textColorPicker" />
+    </HBox>
+    <HBox spacing="5">
+        <Button fx:id="changeBorderColorButton"  text="Change Border Color" />
+        <ColorPicker fx:id="borderColorPicker" />
+
+    </HBox>
+
+
+    <!-- עיצוב תא מסוים -->
+
+
+    <!-- ביטול עיצוב תא מסוים -->
     <Button fx:id="resetCellStyleButton" onAction="#resetCellStyleAction" text="Reset Cell Style" />
 </VBox>
