@@ -2,6 +2,8 @@ package parts;
 
 import parts.cell.Cell;
 import parts.cell.coordinate.Coordinate;
+import parts.cell.expression.effectiveValue.CellType;
+import parts.cell.expression.effectiveValue.EffectiveValue;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -18,6 +20,41 @@ public class Range {
         this.bottomRightCellID = bottomRightCellID;
         isUsed = false;
         this.cells = cells;
+    }
+    public double calculateCellsSum () {
+        double sum = 0 ,num;
+        EffectiveValue tmpVal;
+
+        for (Cell cell : cells) {
+            tmpVal = cell.getEffectiveValue();
+            if(tmpVal != null&&cell.getIsExist() && tmpVal.getCellType() == CellType.NUMERIC) {
+              num = tmpVal.extractValueWithExpectation(Double.class);
+              if(num!=Double.NaN) {
+                  sum += num;
+              }
+
+            }
+
+        }
+        return sum;
+    }
+    public double calculateCellsAverage() {
+        double sum = 0 ,num,numberOfCellsWithNumbers=0;
+        EffectiveValue tmpVal;
+
+        for (Cell cell : cells) {
+            tmpVal = cell.getEffectiveValue();
+            if(tmpVal != null&&cell.getIsExist() && tmpVal.getCellType() == CellType.NUMERIC) {
+                num = tmpVal.extractValueWithExpectation(Double.class);
+                if(num!=Double.NaN) {
+                    numberOfCellsWithNumbers++;
+                    sum += num;
+                }
+
+            }
+
+        }
+        return sum/numberOfCellsWithNumbers;
     }
 
 

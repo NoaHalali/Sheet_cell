@@ -6,10 +6,10 @@ import parts.cell.expression.effectiveValue.CellType;
 import parts.cell.expression.effectiveValue.EffectiveValue;
 import parts.cell.expression.effectiveValue.EffectiveValueImpl;
 
-public class Average implements Expression {
+public class Sum implements Expression {
     private Range range;
 
-    public Average(Range range) {
+    public Sum(Range range) {
         this.range = range;
 
     }
@@ -17,7 +17,7 @@ public class Average implements Expression {
 
     @Override
     public EffectiveValue calculateEffectiveValue() {
-        return new EffectiveValueImpl(CellType.NUMERIC,range.calculateCellsAverage());
+        return new EffectiveValueImpl(CellType.NUMERIC,range.calculateCellsSum());
 
     }
 
@@ -25,4 +25,5 @@ public class Average implements Expression {
     public CellType getFunctionResultType() {
         return CellType.NUMERIC;
     }
+
 }
