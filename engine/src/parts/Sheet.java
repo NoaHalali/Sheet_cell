@@ -361,4 +361,11 @@ public class Sheet implements Serializable {
         return ranges.get(rangeName);
     }
 
+    public List<Coordinate> getRangeCoordinates(String rangeName) {
+        if(!ranges.containsKey(rangeName)){
+            throw new IllegalArgumentException("Range with the name " + rangeName + " does not exist.");
+        }
+        return ranges.get(rangeName).getRangeCoordinates();
+    }
+
 }
