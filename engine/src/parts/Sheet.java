@@ -4,10 +4,7 @@ import parts.cell.*;
 import parts.cell.coordinate.Coordinate;
 import parts.cell.coordinate.CoordinateImpl;
 import parts.cell.expression.Expression;
-import parts.cell.expression.impl.BoolExpression;
-import parts.cell.expression.impl.NumberExpression;
-import parts.cell.expression.impl.StringExpression;
-import parts.function.*;
+
 import java.io.*;
 import java.util.*;
 
@@ -307,12 +304,12 @@ public class Sheet implements Serializable {
         Cell emptyCell=Cell.createEmptyCell(coord);
         cellsMatrix[coord.getRow()-1][coord.getCol()-1] = emptyCell;
     }
-    public List<Cell> getRangeCellsList(Coordinate leftBottomCoord, Coordinate rightTopCoord) {
+    public List<Cell> getRangeCellsList(Coordinate topLeftCoord, Coordinate bottomRightCoord) {
         List<Cell> rangeList = new LinkedList<>();
-        int bottomRow = leftBottomCoord.getRow();
-        int leftCol = leftBottomCoord.getCol();
-        int topRow = rightTopCoord.getRow();
-        int rightCol = rightTopCoord.getCol();
+        int bottomRow = bottomRightCoord.getRow();
+        int leftCol = topLeftCoord.getCol();
+        int topRow = topLeftCoord.getRow();
+        int rightCol = bottomRightCoord.getCol();
         Coordinate tmpCoord;
         for(int i=topRow;i<=bottomRow;i++){
             for(int j=leftCol;j<=rightCol;j++){
@@ -329,20 +326,20 @@ public class Sheet implements Serializable {
     }
 
     public void addRange(String rangeName, String rangeDefinition) throws IllegalArgumentException{
-        //Coordinate leftBottomCoord, Coordinate rightTopCoord,
+        //Coordinate topLeftCoord, Coordinate bottomRightCoord,
 
         if(ranges.containsKey(rangeName)){
             throw new IllegalArgumentException("Range with the name " + rangeName + " already exists.");
         }
 
         String[] parts = rangeDefinition.split("\\.\\."); // מחלק את המחרוזת לפי ".."
-        Coordinate leftBottomCoord = CoordinateImpl.parseCoordinate(parts[0]);
-        Coordinate rightTopCoord = CoordinateImpl.parseCoordinate(parts[1]);
+        Coordinate topLeftCoord = CoordinateImpl.parseCoordinate(parts[0]);
+        Coordinate bottomRightCoord = CoordinateImpl.parseCoordinate(parts[1]);
 
-        validateCoordinateBounds(leftBottomCoord);
-        validateCoordinateBounds(rightTopCoord);
-        List<Cell> rangeList = getRangeCellsList(leftBottomCoord,rightTopCoord);
-        Range range = new Range(leftBottomCoord,rightTopCoord,rangeList);
+        validateCoordinateBounds(topLeftCoord);
+        validateCoordinateBounds(bottomRightCoord);
+        List<Cell> rangeList = getRangeCellsList(topLeftCoord, bottomRightCoord);
+        Range range = new Range(topLeftCoord, bottomRightCoord,rangeList);
         ranges.put(rangeName, range);
     }
 

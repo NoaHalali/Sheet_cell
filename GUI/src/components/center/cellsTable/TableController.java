@@ -201,7 +201,7 @@ public class TableController {
     public void highlightRange(List<Coordinate> rangeCoordinates) {
         for (Coordinate coord : rangeCoordinates) {
             CellController cellController = coordToCellControllerMap.get(coord.toString());
-            cellController.setBackgroundColor("yellow");
+            cellController.setBackgroundColor("red");
         }
     }
 }

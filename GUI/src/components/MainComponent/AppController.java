@@ -282,12 +282,8 @@ public class AppController {
 
     }
 
-    public void addRange(String rangeName, String rangeDefinition) {
-        try {
-            engine.addRange(rangeName, rangeDefinition);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public void addRange(String rangeName, String rangeDefinition) throws Exception {
+        engine.addRange(rangeName, rangeDefinition);
     }
 
     public void highlightRange(String rangeName) {
