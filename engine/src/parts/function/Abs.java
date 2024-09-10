@@ -9,7 +9,7 @@ public class Abs extends UnaryExpression{
 
     public Abs(Expression exp) {
 
-        CellType expCellType = exp.getFunctionResultType();
+//        CellType expCellType = exp.getFunctionResultType();
 
 //        if ( (!expCellType.equals(CellType.NUMERIC) && !expCellType.equals(CellType.UNKNOWN)) ) {
 //            throw new IllegalArgumentException("Invalid argument types for ABS function. Expected to get one arguments from type NUMERIC, but got " + expCellType);

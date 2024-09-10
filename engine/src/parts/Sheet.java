@@ -270,7 +270,7 @@ public class Sheet implements Serializable {
     //מחזירה אקספרשיון מערך מקור
     public Expression getExpressionOfCell(String OriginalValue, List<Cell> dependsOnCellList) throws Exception {
         List<String> list = splitExpressionToStrings(OriginalValue);
-        Expression arg2 = null;
+        Expression arg2 = null,arg3 = null;
         Expression res = null;
         if(list.size() == 1){
             res = getSmallArgs(list.get(0));
@@ -281,6 +281,54 @@ public class Sheet implements Serializable {
                 arg2 = getExpressionOfCell(list.get(2), dependsOnCellList);
             }
             switch (list.get(0).toUpperCase()) {
+                case "EQUAL":
+                    if(list.size() != 3){
+                        throw new IllegalArgumentException("EQUAL function expected to get 2 arguments") ;
+                    }
+                    res = new Equal(arg1, arg2);
+                    break;
+                case "BIGGER":
+                    if(list.size() != 3){
+                        throw new IllegalArgumentException("BIGGER function expected to get 2 arguments") ;
+                    }
+                    res =new Bigger(arg1, arg2);
+                    break;
+                case "LESS":
+                    if(list.size() != 3){
+                        throw new IllegalArgumentException("LESS function expected to get 2 arguments") ;
+                    }
+                    res = new Less(arg1, arg2);
+                    break;
+                case "OR":
+                    if(list.size() != 3){
+                        throw new IllegalArgumentException("OR function expected to get 2 arguments") ;
+                    }
+                    res = new Or(arg1, arg2);
+                    break;
+                case "NOT":
+                     if(list.size() != 2){
+                         throw new IllegalArgumentException("NOT function expected to get 1 arguments") ;
+                     }
+                     res= new Not(arg1);
+                     break;
+                case "AND":
+                    if(list.size() != 3){
+                        throw new IllegalArgumentException("AND function expected to get 2 arguments") ;
+                    }
+                    res = new And(arg1, arg2);
+                    break;
+                case "IF":
+                    if(list.size() != 4){
+                        throw new IllegalArgumentException("IF function expected to get 3 arguments") ;
+                    }
+                    arg3 = getExpressionOfCell(list.get(3), dependsOnCellList);
+                    res = new If(arg1,arg2,arg3);
+                    break;
+                case "PERCENT":
+                    if(list.size() != 3){
+                        throw new IllegalArgumentException("PERCENT function expected to get 2 arguments") ;
+                    }
+                    res = new Percent(arg1, arg2);
                 case "PLUS":
                     if(list.size() != 3){
                         throw new IllegalArgumentException("PLUS function expected to get 2 arguments") ;
@@ -333,7 +381,7 @@ public class Sheet implements Serializable {
                     if(list.size() != 4){
                         throw new IllegalArgumentException("SUB function expected to get 3 arguments") ;
                     }
-                    Expression arg3 = getExpressionOfCell(list.get(3), dependsOnCellList);
+                    arg3 = getExpressionOfCell(list.get(3), dependsOnCellList);
                     res = new Sub(arg1,arg2,arg3);
                     break;
                 case "REF"://sheet סטטי ?
