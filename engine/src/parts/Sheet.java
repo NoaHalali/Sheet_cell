@@ -147,9 +147,10 @@ public class Sheet implements Serializable {
     public void createNewCellValueForCommand1(Cell cell) throws Exception {
 
         List<Cell> dependsOnCellList = new LinkedList<Cell>();
-        Expression expression = FunctionParser.getExpressionOfCell(cell.getOriginalValue(), dependsOnCellList,this);
+        List<String> rangesDependsOnList= new LinkedList<String>();
+        Expression expression = FunctionParser.getExpressionOfCell(cell.getOriginalValue(), dependsOnCellList,rangesDependsOnList,this);
         cell.setExpression(expression);
-        updateDependencies(cell, dependsOnCellList);
+        updateDependencies(cell, dependsOnCellList,rangesDependsOnList);
 
     }
 
@@ -160,7 +161,8 @@ public class Sheet implements Serializable {
 
         Cell cell;
         List<Cell> dependsOnCellList = new LinkedList<Cell>();
-        Expression expression = FunctionParser.getExpressionOfCell(originalValue, dependsOnCellList,this);
+        List<String> rangesDependsOnList= new LinkedList<String>();
+        Expression expression = FunctionParser.getExpressionOfCell(originalValue, dependsOnCellList,rangesDependsOnList,this);
         Cell newCell = new Cell(coord,originalValue);
         addCell(coord, newCell);
         cell = getCellByCoord(coord);
@@ -168,7 +170,7 @@ public class Sheet implements Serializable {
         //changeCell.setCellOriginalValue(originalValue);
         try {
             cell.getAndUpdateEffectiveValue();
-            updateDependencies(cell, dependsOnCellList);
+            updateDependencies(cell, dependsOnCellList,rangesDependsOnList);
             return cell;
         }
         catch(Exception e){
@@ -188,8 +190,8 @@ public class Sheet implements Serializable {
         else {
             isDeleted = false;
             List<Cell> dependsOnCellList = new LinkedList<Cell>();
-
-            Expression expression = FunctionParser.getExpressionOfCell(originalValue, dependsOnCellList,this);;
+            List<String> rangesDependsOnList= new LinkedList<String>();
+            Expression expression = FunctionParser.getExpressionOfCell(originalValue, dependsOnCellList,rangesDependsOnList,this);;
             //changeCell = getCellByCoord(coord);
             Expression oldExpression = changeCell.getCellValue();
             changeCell.checkForCircularDependencyWrapper(changeCell.getCoordinate(), dependsOnCellList);
@@ -202,7 +204,7 @@ public class Sheet implements Serializable {
                 throw new Exception(e.getMessage());
             }
             changeCell.setCellOriginalValue(originalValue);
-            updateDependencies(changeCell, dependsOnCellList);
+            updateDependencies(changeCell, dependsOnCellList,rangesDependsOnList);
             changeCell.setIsExist(true);
         }
         return isDeleted;
@@ -261,12 +263,24 @@ public class Sheet implements Serializable {
         }
     }
 
-    public void updateDependencies(Cell changeCell, List<Cell> dependsOnCellList )
+    public void updateDependencies(Cell changeCell, List<Cell> dependsOnCellList,List<String> rangesDependsOnList )
     {
-        List<Cell> oldList = changeCell.getDependsOn();
+        List<Cell> oldDependsList = changeCell.getDependsOn();
+        List<String> oldRangesDependsList = changeCell.getRangesDependsOnList();
         changeCell.setDependsOn(dependsOnCellList);
+        changeCell.setRangesDependsOnList(rangesDependsOnList);
+        Range tmpRange;
+        for(String range : oldRangesDependsList){
+            tmpRange=getRange(range);
+            tmpRange.removeCoordinateFromInfluencingOnCoordinates(changeCell.getCoordinate());
 
-        for (Cell cell : oldList) {
+        }
+        for(String range : rangesDependsOnList){
+            tmpRange=getRange(range);
+            tmpRange.addCoordinateFromInfluencingOnCoordinates(changeCell.getCoordinate());
+        }
+
+        for (Cell cell : oldDependsList) {
             cell.removeCellFromInfluencingOnList(changeCell);
         }
         for (Cell cell : dependsOnCellList) {

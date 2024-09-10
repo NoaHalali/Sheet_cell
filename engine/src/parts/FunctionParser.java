@@ -74,31 +74,36 @@ public  class FunctionParser {
 
 
     //מחזירה אקספרשיון מערך מקור
-    public static Expression getExpressionOfCell(String OriginalValue, List<Cell> dependsOnCellList,Sheet evalSheet) throws Exception {
+    public static Expression getExpressionOfCell(String OriginalValue, List<Cell> dependsOnCellList,List<String>rangesDependsOnList, Sheet evalSheet) throws Exception {
         List<String> list = splitExpressionToStrings(OriginalValue);
         Expression arg2 = null,arg3 = null, res = null;
         Range range;
+        String rangeName;
         if(list.size() == 1){
             res = getSmallArgs(list.get(0));
         }
         else {
-            Expression arg1 = getExpressionOfCell(list.get(1), dependsOnCellList,evalSheet);
+            Expression arg1 = getExpressionOfCell(list.get(1), dependsOnCellList,rangesDependsOnList,evalSheet);
             if(list.size() > 2 ){
-                arg2 = getExpressionOfCell(list.get(2), dependsOnCellList,evalSheet);
+                arg2 = getExpressionOfCell(list.get(2), dependsOnCellList,rangesDependsOnList,evalSheet);
             }
             switch (list.get(0).toUpperCase()) {
                 case"AVERAGE":
                     if(list.size() != 2){
                         throw new IllegalArgumentException("AVERAGE function expected to get 1 arguments");
                     }
-                    range=evalSheet.getRange(list.get(1));
+                    rangeName=list.get(1);
+                    range=evalSheet.getRange(rangeName);
+                    rangesDependsOnList.add(rangeName);
                     res = new Average(range);
                     break;
                 case "SUM":
                     if(list.size() != 2){
                         throw new IllegalArgumentException("SUM function expected to get 1 arguments");
                     }
-                    range = evalSheet.getRange(list.get(1));
+                    rangeName=list.get(1);
+                    range = evalSheet.getRange(rangeName);
+                    rangesDependsOnList.add(rangeName);
                     res = new Sum(range);
                     break;
                 case "EQUAL":
@@ -141,7 +146,7 @@ public  class FunctionParser {
                     if(list.size() != 4){
                         throw new IllegalArgumentException("IF function expected to get 3 arguments") ;
                     }
-                    arg3 = getExpressionOfCell(list.get(3), dependsOnCellList,evalSheet);
+                    arg3 = getExpressionOfCell(list.get(3), dependsOnCellList,rangesDependsOnList,evalSheet);
                     res = new If(arg1,arg2,arg3);
                     break;
                 case "PERCENT":
@@ -149,6 +154,7 @@ public  class FunctionParser {
                         throw new IllegalArgumentException("PERCENT function expected to get 2 arguments") ;
                     }
                     res = new Percent(arg1, arg2);
+                    break;
                 case "PLUS":
                     if(list.size() != 3){
                         throw new IllegalArgumentException("PLUS function expected to get 2 arguments") ;
@@ -201,7 +207,7 @@ public  class FunctionParser {
                     if(list.size() != 4){
                         throw new IllegalArgumentException("SUB function expected to get 3 arguments") ;
                     }
-                    arg3 = getExpressionOfCell(list.get(3), dependsOnCellList,evalSheet);
+                    arg3 = getExpressionOfCell(list.get(3), dependsOnCellList,rangesDependsOnList,evalSheet);
                     res = new Sub(arg1,arg2,arg3);
                     break;
                 case "REF"://sheet סטטי ?
