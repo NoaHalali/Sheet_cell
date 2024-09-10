@@ -33,4 +33,6 @@ public interface Engine {
 
     public List<Integer> getNumberOfCellsChangedListDeepClone();
     public void loadSystemState(String filePath) throws FileNotFoundException, IOException, ClassNotFoundException;
+
+    public void addRange(String rangeName, String rangeDefinition) throws Exception;
 }

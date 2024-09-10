@@ -200,9 +200,14 @@ public class EngineImpl implements Engine {
         }
     }
     //8
-    public void addRange(Coordinate leftBottomCoord, Coordinate rightTopCoord,String rangeName) {
-      currentSheet.addRange( leftBottomCoord,  rightTopCoord, rangeName);
+    @Override
+    public void addRange(String rangeName, String rangeDefinition) throws Exception
+    {
+        if (!sheetLoadad()) {
+            throw new IllegalStateException(SHEET_NOT_LOADED_MESSAGE);
+        }
 
-
+        currentSheet.addRange(rangeName, rangeDefinition);
     }
+
 }

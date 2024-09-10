@@ -69,6 +69,8 @@ public class AppController {
             tableController.setMainController(this);
             versionSelectorController.setMainController(this);
             fileChooserController.setMainController(this);
+            commandsController.setMainController(this);
+            rangesController.setMainController(this);
 
             isFileSelectedProperty = new SimpleBooleanProperty(false);
             isCellSelectedProperty = new SimpleBooleanProperty(false);
@@ -277,5 +279,13 @@ public class AppController {
         actionLineController.initializeActionLine(isCellSelectedProperty);
         commandsController.InitializeCommandsController(isCellSelectedProperty);
 
+    }
+
+    public void addRange(String rangeName, String rangeDefinition) {
+        try {
+            engine.addRange(rangeName, rangeDefinition);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

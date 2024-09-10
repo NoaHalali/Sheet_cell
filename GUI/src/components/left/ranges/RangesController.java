@@ -1,6 +1,7 @@
 package components.left.ranges;
 
 
+import components.MainComponent.AppController;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -20,19 +21,17 @@ public class RangesController {
 
     // מפה לשמירת הטווחים
     private Map<String, String> ranges = new HashMap<>();
+    private AppController mainController;
 
     @FXML
-    public void addRangeAction() {
+    public void addRangeButtonAction() {
         String rangeName = rangeNameField.getText();
         String rangeDefinition = rangeDefinitionField.getText();
 
-        // בדיקה אם השם ייחודי
-        if (ranges.containsKey(rangeName)) {
-            showAlert("Error", "Range name already exists!");
-        } else {
-            ranges.put(rangeName, rangeDefinition);
-            rangeListView.getItems().add(rangeName);
-        }
+        mainController.addRange(rangeName, rangeDefinition);
+
+        ranges.put(rangeName, rangeDefinition);
+        rangeListView.getItems().add(rangeName);
     }
 
     @FXML
@@ -56,6 +55,10 @@ public class RangesController {
         } else {
             showAlert("Error", "No range selected or range does not exist!");
         }
+    }
+
+    public void setMainController(AppController mainController) {
+        this.mainController = mainController;
     }
 
     private void showAlert(String title, String message) {

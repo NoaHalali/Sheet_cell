@@ -520,11 +520,16 @@ public class Sheet implements Serializable {
         return rangeList;
     }
 
-    public void addRange(Coordinate leftBottomCoord, Coordinate rightTopCoord,String rangeName) throws IllegalArgumentException{
+    public void addRange(String rangeName, String rangeDefinition) throws IllegalArgumentException{
+        //Coordinate leftBottomCoord, Coordinate rightTopCoord,
 
         if(ranges.containsKey(rangeName)){
             throw new IllegalArgumentException("Range with the name " + rangeName + " already exists.");
         }
+
+        String[] parts = rangeDefinition.split(".."); // מחלק את המחרוזת לפי רווח
+        Coordinate leftBottomCoord = CoordinateImpl.parseCoordinate(parts[0]);
+        Coordinate rightTopCoord = CoordinateImpl.parseCoordinate(parts[1]);
 
         validateCoordinateBounds(leftBottomCoord);
         validateCoordinateBounds(rightTopCoord);
@@ -546,10 +551,5 @@ public class Sheet implements Serializable {
             throw new IllegalArgumentException("Range with the name " + rangeName + " does not exist.");
         }
         return ranges.get(rangeName);
-    }
-
-    public Range createRange(Coordinate leftBottomCoord, Coordinate rightTopCoord) {
-        validateCoordinateBounds(leftBottomCoord);
-        validateCoordinateBounds(rightTopCoord);
     }
 }
