@@ -1,5 +1,6 @@
 package parts.cell;
 
+import parts.Range;
 import parts.cell.coordinate.Coordinate;
 import parts.cell.expression.Expression;
 import parts.cell.expression.effectiveValue.EffectiveValue;
@@ -21,7 +22,7 @@ public class Cell implements Serializable {
     private Expression cellValue;
     private List<Cell> influencingOn;//משפיע על התאים האלה
     private List<Cell> dependsOn; //התאים שמושפע מהם
-    private List<String> rangesDependsOn;
+    private List<Range> rangesDependsOn;
 
 
     //TODO - maybe send version of sheet
@@ -32,7 +33,7 @@ public class Cell implements Serializable {
         isExist = true;
         this.influencingOn = new LinkedList<Cell>();
         this.dependsOn = new LinkedList<Cell>();
-        this.rangesDependsOn = new LinkedList<String>();
+        this.rangesDependsOn = new LinkedList<Range>();
     }
     public static Cell createEmptyCell(Coordinate coordinate) {
         Cell cell= new Cell(coordinate, "");
@@ -114,10 +115,10 @@ public class Cell implements Serializable {
         }
 
     }
-    public List<String>getRangesDependsOnList(){
+    public List<Range>getRangesDependsOnList(){
         return rangesDependsOn;
     }
-    public void setRangesDependsOnList(List<String> rangesDependsOn) {
+    public void setRangesDependsOnList(List<Range> rangesDependsOn) {
         this.rangesDependsOn = rangesDependsOn;
     }
 
@@ -179,6 +180,10 @@ public class Cell implements Serializable {
         isExist = false;
         cellValue = null;
         dependsOn.clear();
+        for(Range range : rangesDependsOn) {
+            range.removeCoordinateFromInfluencingOnCoordinates(coordinate);
+        }
+        rangesDependsOn.clear();
         //influencing ??
     }
 

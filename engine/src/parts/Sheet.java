@@ -122,6 +122,8 @@ public class Sheet implements Serializable {
     }
 
     public void deleteCell(Coordinate coord){
+
+
         cellsMatrix[coord.getRow()-1][coord.getCol()-1].resetCell();
     }
 
@@ -147,7 +149,7 @@ public class Sheet implements Serializable {
     public void createNewCellValueForCommand1(Cell cell) throws Exception {
 
         List<Cell> dependsOnCellList = new LinkedList<Cell>();
-        List<String> rangesDependsOnList= new LinkedList<String>();
+        List<Range> rangesDependsOnList= new LinkedList<Range>();
         Expression expression = FunctionParser.getExpressionOfCell(cell.getOriginalValue(), dependsOnCellList,rangesDependsOnList,this);
         cell.setExpression(expression);
         updateDependencies(cell, dependsOnCellList,rangesDependsOnList);
@@ -161,7 +163,7 @@ public class Sheet implements Serializable {
 
         Cell cell;
         List<Cell> dependsOnCellList = new LinkedList<Cell>();
-        List<String> rangesDependsOnList= new LinkedList<String>();
+        List<Range> rangesDependsOnList= new LinkedList<Range>();
         Expression expression = FunctionParser.getExpressionOfCell(originalValue, dependsOnCellList,rangesDependsOnList,this);
         Cell newCell = new Cell(coord,originalValue);
         addCell(coord, newCell);
@@ -190,7 +192,7 @@ public class Sheet implements Serializable {
         else {
             isDeleted = false;
             List<Cell> dependsOnCellList = new LinkedList<Cell>();
-            List<String> rangesDependsOnList= new LinkedList<String>();
+            List<Range> rangesDependsOnList= new LinkedList<Range>();
             Expression expression = FunctionParser.getExpressionOfCell(originalValue, dependsOnCellList,rangesDependsOnList,this);;
             //changeCell = getCellByCoord(coord);
             Expression oldExpression = changeCell.getCellValue();
@@ -263,21 +265,21 @@ public class Sheet implements Serializable {
         }
     }
 
-    public void updateDependencies(Cell changeCell, List<Cell> dependsOnCellList,List<String> rangesDependsOnList )
+    public void updateDependencies(Cell changeCell, List<Cell> dependsOnCellList,List<Range> rangesDependsOnList )
     {
         List<Cell> oldDependsList = changeCell.getDependsOn();
-        List<String> oldRangesDependsList = changeCell.getRangesDependsOnList();
+        List<Range> oldRangesDependsList = changeCell.getRangesDependsOnList();
         changeCell.setDependsOn(dependsOnCellList);
         changeCell.setRangesDependsOnList(rangesDependsOnList);
         Range tmpRange;
-        for(String range : oldRangesDependsList){
-            tmpRange=getRange(range);
-            tmpRange.removeCoordinateFromInfluencingOnCoordinates(changeCell.getCoordinate());
+        for(Range range : oldRangesDependsList){
+           // tmpRange=getRange(range);
+            range.removeCoordinateFromInfluencingOnCoordinates(changeCell.getCoordinate());
 
         }
-        for(String range : rangesDependsOnList){
-            tmpRange=getRange(range);
-            tmpRange.addCoordinateFromInfluencingOnCoordinates(changeCell.getCoordinate());
+        for(Range range : rangesDependsOnList){
+            //tmpRange=getRange(range);
+            range.addCoordinateFromInfluencingOnCoordinates(changeCell.getCoordinate());
         }
 
         for (Cell cell : oldDependsList) {

@@ -74,7 +74,10 @@ public class RangesController {
         {
             mainController.deleteRange(selectedRangeName);
             ranges.remove(selectedRangeName);
-            rangeListView.getItems().remove(selectedRangeName);
+           //rangeListView.getItems().remove(selectedRangeName);
+            rangeListView.setItems(FXCollections.observableArrayList(ranges.keySet()));
+            rangeListView.getItems().add("None");
+
         }catch (Exception e) {
             showAlert("Error", e.getMessage());
         }

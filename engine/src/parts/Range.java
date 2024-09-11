@@ -67,6 +67,7 @@ public class Range implements Serializable {
     }
     public void removeCoordinateFromInfluencingOnCoordinates(Coordinate coordinate) {
         InfluencingOnCoordinates.remove(coordinate);
+
     }
     public void addCoordinateFromInfluencingOnCoordinates(Coordinate coordinate) {
         InfluencingOnCoordinates.add(coordinate);

@@ -74,7 +74,7 @@ public  class FunctionParser {
 
 
     //מחזירה אקספרשיון מערך מקור
-    public static Expression getExpressionOfCell(String OriginalValue, List<Cell> dependsOnCellList,List<String>rangesDependsOnList, Sheet evalSheet) throws Exception {
+    public static Expression getExpressionOfCell(String OriginalValue, List<Cell> dependsOnCellList,List<Range>rangesDependsOnList, Sheet evalSheet) throws Exception {
         List<String> list = splitExpressionToStrings(OriginalValue);
         Expression arg2 = null,arg3 = null, res = null;
         Range range;
@@ -94,7 +94,7 @@ public  class FunctionParser {
                     }
                     rangeName=list.get(1);
                     range=evalSheet.getRange(rangeName);
-                    rangesDependsOnList.add(rangeName);
+                    rangesDependsOnList.add(range);
                     res = new Average(range);
                     break;
                 case "SUM":
@@ -103,7 +103,7 @@ public  class FunctionParser {
                     }
                     rangeName=list.get(1);
                     range = evalSheet.getRange(rangeName);
-                    rangesDependsOnList.add(rangeName);
+                    rangesDependsOnList.add(range);
                     res = new Sum(range);
                     break;
                 case "EQUAL":
