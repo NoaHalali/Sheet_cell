@@ -1,7 +1,5 @@
 package parts.cell;
 
-import com.sun.tools.xjc.reader.xmlschema.bindinfo.BIConversion;
-import parts.Range;
 import parts.cell.coordinate.Coordinate;
 import parts.cell.expression.Expression;
 import parts.cell.expression.effectiveValue.EffectiveValue;
@@ -23,7 +21,7 @@ public class Cell implements Serializable {
     private Expression cellValue;
     private List<Cell> influencingOn;//משפיע על התאים האלה
     private List<Cell> dependsOn; //התאים שמושפע מהם
-    private List<String> RangesDependsOn;
+    private List<String> rangesDependsOn;
 
 
     //TODO - maybe send version of sheet
@@ -34,7 +32,7 @@ public class Cell implements Serializable {
         isExist = true;
         this.influencingOn = new LinkedList<Cell>();
         this.dependsOn = new LinkedList<Cell>();
-        this.RangesDependsOn = new LinkedList<String>();
+        this.rangesDependsOn = new LinkedList<String>();
     }
     public static Cell createEmptyCell(Coordinate coordinate) {
         Cell cell= new Cell(coordinate, "");
@@ -117,10 +115,10 @@ public class Cell implements Serializable {
 
     }
     public List<String>getRangesDependsOnList(){
-        return RangesDependsOn;
+        return rangesDependsOn;
     }
     public void setRangesDependsOnList(List<String> rangesDependsOn) {
-        RangesDependsOn = rangesDependsOn;
+        this.rangesDependsOn = rangesDependsOn;
     }
 
 

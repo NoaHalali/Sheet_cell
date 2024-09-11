@@ -37,4 +37,6 @@ public interface Engine {
     public void addRange(String rangeName, String rangeDefinition) throws Exception;
 
     public List<Coordinate> getRangeCoordinates(String rangeName);
+
+    public void deleteRange(String selectedRangeName);
 }

@@ -69,13 +69,23 @@ public class RangesController {
 
     @FXML
     public void deleteRangeAction() {
-        String selectedRange = rangeListView.getSelectionModel().getSelectedItem();
-        if (selectedRange != null && ranges.containsKey(selectedRange)) {
-            ranges.remove(selectedRange);
-            rangeListView.getItems().remove(selectedRange);
-        } else {
-            showAlert("Error", "No range selected or range does not exist!");
+        String selectedRangeName = rangeListView.getSelectionModel().getSelectedItem();
+        try
+        {
+            mainController.deleteRange(selectedRangeName);
+            ranges.remove(selectedRangeName);
+            rangeListView.getItems().remove(selectedRangeName);
+        }catch (Exception e) {
+            showAlert("Error", e.getMessage());
         }
+
+
+//        if (selectedRange != null && ranges.containsKey(selectedRange)) {
+//            ranges.remove(selectedRange);
+//            rangeListView.getItems().remove(selectedRange);
+//        } else {
+//            showAlert("Error", "No range selected or range does not exist!");
+//        }
     }
 
     @FXML

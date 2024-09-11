@@ -147,11 +147,10 @@ public class EngineImpl implements Engine {
         return versionsList.get(version-1).getSheet();
     }
 
-    //4
+    //5
     @Override
     public void addVersion( Sheet sheet,int numberOfCellsChanged) {
         versionsList.addLast(new Version(sheet,numberOfCellsChanged));
-
     }
 
     //5
@@ -215,4 +214,8 @@ public class EngineImpl implements Engine {
         return currentSheet.getRangeCoordinates(rangeName);
     }
 
+    @Override
+    public void deleteRange(String selectedRangeName) {
+        currentSheet.deleteRange(selectedRangeName);
+    }
 }

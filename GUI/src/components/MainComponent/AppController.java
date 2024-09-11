@@ -248,4 +248,8 @@ public class AppController {
         List<Coordinate> rangeCoordinates = engine.getRangeCoordinates(rangeName);
         tableController.clearHighlighting(rangeCoordinates);;
     }
+
+    public void deleteRange(String selectedRangeName) {
+        engine.deleteRange(selectedRangeName);
+    }
 }

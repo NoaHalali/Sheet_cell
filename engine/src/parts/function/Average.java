@@ -6,7 +6,9 @@ import parts.cell.expression.effectiveValue.CellType;
 import parts.cell.expression.effectiveValue.EffectiveValue;
 import parts.cell.expression.effectiveValue.EffectiveValueImpl;
 
-public class Average implements Expression {
+import java.io.Serializable;
+
+public class Average implements Expression, Serializable {
     private Range range;
 
     public Average(Range range) {

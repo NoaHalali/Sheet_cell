@@ -362,6 +362,11 @@ public class Sheet implements Serializable {
         if(!ranges.containsKey(rangeName)){
             throw new IllegalArgumentException("Range with the name " + rangeName + " does not exist.");
         }
+        Range range = ranges.get(rangeName);
+        if(range.isBeingUsed())
+        {
+            throw new IllegalArgumentException("Range with the name " + rangeName + " is being used in a function, and therefore can't be deleted.");
+        }
         ranges.remove(rangeName);
     }
 
