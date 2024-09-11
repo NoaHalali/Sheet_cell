@@ -1,6 +1,8 @@
 package components.left.ranges;
 
 import components.MainComponent.AppController;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -16,34 +18,39 @@ public class RangesController {
     @FXML private TextField rangeDefinitionField;
     @FXML private Button addRangeButton;
     @FXML private Button deleteRangeButton;
-    @FXML private Button viewRangeButton;
+    //@FXML private Button viewRangeButton;
     @FXML private ListView<String> rangeListView;
 
     // מפה לשמירת הטווחים
     private Map<String, String> ranges = new HashMap<>();
     private AppController mainController;
     private String lastSelectedRange; // משתנה לשמירת הבחירה האחרונה
+    //private SimpleBooleanProperty isRangeSelected;
+
 
     public void initializeRangesController() {
+        //isRangeSelected= new SimpleBooleanProperty(false);
+        lastSelectedRange = null;
+        //deleteRangeButton.disableProperty().bind(isRangeSelected.not());
+
+        rangeListView.setItems(FXCollections.observableArrayList("None"));
         rangeListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
-                // נקה את הסימון של ה-range הקודם
-                if (lastSelectedRange != null && !lastSelectedRange.equals(newValue)) {
-                    clearRangeHighlight();
+                if(lastSelectedRange != null) {
+                    clearRangeHighlight(); // נקה את כל הסימונים
                 }
-
-                //todo -לא עובד בינתיים
-                // אם נבחר אותו פריט שוב, הסתר את ה-highlight
-                if (newValue.equals(lastSelectedRange)) {
-                    clearRangeHighlight();
-                    lastSelectedRange = null; // נקה את הבחירה האחרונה
+                // אם נבחר "None", נקה את הסימון
+                if ("None".equals(newValue)) {
+                    lastSelectedRange = null; // איפוס הבחירה האחרונה
                 } else {
-                    // עדכון הבחירה והצגת highlight
-                    lastSelectedRange = newValue;
-                    viewRangeAction();
+                    // במקרה שנבחר טווח אחר, נקה את הסימון והצג את הטווח החדש
+                    //clearRangeHighlight();
+                    lastSelectedRange = newValue; // עדכון הבחירה האחרונה
+                    viewRangeAction(); // הצג את הטווח החדש
                 }
             }
         });
+
     }
 
     @FXML

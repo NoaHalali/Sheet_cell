@@ -14,7 +14,6 @@
     <!-- כפתורים לניהול טווחים -->
     <Button fx:id="addRangeButton" onAction="#addRangeButtonAction" text="Add Range" />
     <Button fx:id="deleteRangeButton" onAction="#deleteRangeAction" text="Delete Range" />
-    <Button fx:id="viewRangeButton" onAction="#viewRangeAction" text="View Range" />
 
     <!-- רשימת טווחים -->
     <ListView fx:id="rangeListView" />

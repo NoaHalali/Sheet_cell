@@ -45,7 +45,7 @@ public class FileChooserController {
 
                 // ניתן להוסיף השהיה קטנה כדי לסמלץ התקדמות
                 for (int i = 0; i <= 100; i++) {
-                    Thread.sleep(10); // השהיה קצרה לדימוי התקדמות
+                    Thread.sleep(5); // השהיה קצרה לדימוי התקדמות
                     updateProgress(i, 100); // עדכון התקדמות
                 }
 
