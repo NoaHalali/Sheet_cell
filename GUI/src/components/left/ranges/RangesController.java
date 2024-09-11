@@ -3,6 +3,7 @@ package components.left.ranges;
 import components.MainComponent.AppController;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -18,35 +19,38 @@ public class RangesController {
     @FXML private TextField rangeDefinitionField;
     @FXML private Button addRangeButton;
     @FXML private Button deleteRangeButton;
-    //@FXML private Button viewRangeButton;
     @FXML private ListView<String> rangeListView;
 
-    // מפה לשמירת הטווחים
     private Map<String, String> ranges = new HashMap<>();
+    private ObservableList<String> listViewItems; // הרשימה הנתמכת לצורך עדכון דינמי
     private AppController mainController;
-    private String lastSelectedRange; // משתנה לשמירת הבחירה האחרונה
-    //private SimpleBooleanProperty isRangeSelected;
-
+    private String lastSelectedRange;
 
     public void initializeRangesController() {
-        //isRangeSelected= new SimpleBooleanProperty(false);
         lastSelectedRange = null;
-        //deleteRangeButton.disableProperty().bind(isRangeSelected.not());
 
-        rangeListView.setItems(FXCollections.observableArrayList("None"));
+        // אתחול הרשימה עם "None" בהתחלה
+        listViewItems = FXCollections.observableArrayList();
+        listViewItems.add("None");
+        rangeListView.setItems(listViewItems);
+
         rangeListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
-                if(lastSelectedRange != null) {
+                // נקה את הסימון של הטווח הקודם אם קיים
+                if (lastSelectedRange != null && ranges.containsKey(lastSelectedRange)) {
                     clearRangeHighlight(); // נקה את כל הסימונים
                 }
-                // אם נבחר "None", נקה את הסימון
+
+                // אם נבחר "None", איפוס הבחירה האחרונה
                 if ("None".equals(newValue)) {
-                    lastSelectedRange = null; // איפוס הבחירה האחרונה
-                } else {
-                    // במקרה שנבחר טווח אחר, נקה את הסימון והצג את הטווח החדש
-                    //clearRangeHighlight();
-                    lastSelectedRange = newValue; // עדכון הבחירה האחרונה
+                    lastSelectedRange = null;
+                } else if (ranges.containsKey(newValue)) {
+                    // אם הטווח קיים במפה, עדכן את הבחירה והצג את הטווח החדש
+                    lastSelectedRange = newValue;
                     viewRangeAction(); // הצג את הטווח החדש
+                } else {
+                    // במידה ולא קיים, יש להציג הודעה או לטפל במקרה בהתאם
+                    System.out.println("Selected range " + newValue + " does not exist.");
                 }
             }
         });
@@ -61,7 +65,7 @@ public class RangesController {
         try {
             mainController.addRange(rangeName, rangeDefinition);
             ranges.put(rangeName, rangeDefinition);
-            rangeListView.getItems().add(rangeName);
+            listViewItems.add(rangeName); // הוספה לרשימת ה-ListView
         } catch (Exception e) {
             showAlert("Error", e.getMessage());
         }
@@ -70,25 +74,30 @@ public class RangesController {
     @FXML
     public void deleteRangeAction() {
         String selectedRangeName = rangeListView.getSelectionModel().getSelectedItem();
-        try
-        {
-            mainController.deleteRange(selectedRangeName);
-            ranges.remove(selectedRangeName);
-           //rangeListView.getItems().remove(selectedRangeName);
-            rangeListView.setItems(FXCollections.observableArrayList(ranges.keySet()));
-            rangeListView.getItems().add("None");
-
-        }catch (Exception e) {
-            showAlert("Error", e.getMessage());
+        if ("None".equals(selectedRangeName)) {
+            showAlert("Error", "Cannot delete 'None'!");
+            return; // אין טווח נבחר או שלא ניתן למחוק את "None"
+        }
+        if(selectedRangeName == null) { //לא בטוח משתמשים אבל שיהיה בינתיים
+            showAlert("Error", "No range selected!");
+            return;
         }
 
+        try {
+            clearRangeHighlight();
+            mainController.deleteRange(selectedRangeName);
+            ranges.remove(selectedRangeName);
 
-//        if (selectedRange != null && ranges.containsKey(selectedRange)) {
-//            ranges.remove(selectedRange);
-//            rangeListView.getItems().remove(selectedRange);
-//        } else {
-//            showAlert("Error", "No range selected or range does not exist!");
-//        }
+            // בדוק אם הטווח נמצא ברשימה לפני שמנסים להסירו
+            if (listViewItems.contains(selectedRangeName)) {
+                listViewItems.remove(selectedRangeName);
+            }
+
+            //lastSelectedRange = null; //
+
+        } catch (Exception e) {
+            showAlert("Error", e.getMessage());
+        }
     }
 
     @FXML
