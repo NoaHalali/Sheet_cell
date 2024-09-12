@@ -2,6 +2,7 @@ package XMLFile;
 
 import XMLFile.GeneratedFiles.STLCell;
 import XMLFile.GeneratedFiles.STLLayout;
+import XMLFile.GeneratedFiles.STLRange;
 import XMLFile.GeneratedFiles.STLSheet;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
@@ -32,8 +33,9 @@ public class FileManager {
         STLSheet XMLSheet = loadXML(filePath);
         validateSheetSize(XMLSheet);
         vaidateCells(XMLSheet);
-        Sheet sheet = convertSLTSheetToSheet(XMLSheet);
 
+        Sheet sheet = convertSLTSheetToSheet(XMLSheet);
+        validateAndAddRanges(sheet,XMLSheet);
         sheet.validateSheetExpressions();
 
         return sheet;
@@ -89,6 +91,15 @@ public class FileManager {
     private void vaidateCells(STLSheet xmlSheet) {
         checkCellInBoardRange(xmlSheet);
         //TODO - 4
+    }
+    public void validateAndAddRanges(Sheet Sheet,STLSheet xmlSheet) {
+        String rangeName;
+        String CoordFormat;
+        for (STLRange range:xmlSheet.getSTLRanges().getSTLRange() ){
+            rangeName = range.getName();
+            CoordFormat = range.getSTLBoundaries().getFrom()+".."+range.getSTLBoundaries().getTo();
+            Sheet.addRange(rangeName,CoordFormat);
+        }
     }
 
     public void checkCellInBoardRange(STLSheet sheet) throws IllegalArgumentException {

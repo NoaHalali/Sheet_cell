@@ -237,7 +237,7 @@ public class Sheet implements Serializable {
     public void parseExpressions() throws Exception {
         for(Cell[] cells : cellsMatrix){
             for(Cell cell : cells){
-                if(cell!=null){
+                if(cell!=null&&cell.getIsExist()){
                     createNewCellValueForCommand1(cell);
                 }
             }

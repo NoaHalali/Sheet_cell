@@ -83,7 +83,9 @@ public  class FunctionParser {
             res = getSmallArgs(list.get(0));
         }
         else {
-            Expression arg1 = getExpressionOfCell(list.get(1), dependsOnCellList,rangesDependsOnList,evalSheet);
+
+            Expression  arg1 = getExpressionOfCell(list.get(1), dependsOnCellList, rangesDependsOnList, evalSheet);
+
             if(list.size() > 2 ){
                 arg2 = getExpressionOfCell(list.get(2), dependsOnCellList,rangesDependsOnList,evalSheet);
             }

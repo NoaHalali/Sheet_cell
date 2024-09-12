@@ -239,7 +239,6 @@ public class AppController {
         isFileSelectedProperty.set(true);
         SheetDTO sheet = engine.getCurrentSheetDTO();
         tableController.initializeGrid(sheet);
-
         versionSelectorController.initializeVersionSelector(sheet.getVersion());
         actionLineController.initializeActionLine(isCellSelectedProperty);
         commandsController.InitializeCommandsController(isCellSelectedProperty);

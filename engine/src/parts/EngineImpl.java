@@ -38,6 +38,7 @@ public class EngineImpl implements Engine {
             addVersion(currentSheet, currentSheet.howManyActiveCellsInSheet());
         }
         catch (Exception e) {
+           e.printStackTrace();
             throw new Exception(e.getMessage());
         }
     }
