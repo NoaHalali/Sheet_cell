@@ -53,7 +53,8 @@ public class Sheet implements Serializable {
                 numberOfCols,
                 columnWidth,
                 rowHeight,
-                getCellsDTOMatrix()
+                getCellsDTOMatrix(),
+                new ArrayList<>(ranges.keySet())
         );
     }
     public CellDTO[][] getCellsDTOMatrix() {
@@ -384,6 +385,10 @@ public class Sheet implements Serializable {
             throw new IllegalArgumentException("Range with the name " + rangeName + " does not exist.");
         }
         return ranges.get(rangeName).getRangeCoordinates();
+    }
+
+    public List<String> getRangesNames(){
+        return new ArrayList(ranges.keySet());
     }
 
 }

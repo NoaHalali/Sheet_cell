@@ -32,6 +32,7 @@ public interface Engine {
     public void saveSystemState(String filePath) throws Exception;
 
     public List<Integer> getNumberOfCellsChangedListDeepClone();
+
     public void loadSystemState(String filePath) throws FileNotFoundException, IOException, ClassNotFoundException;
 
     public void addRange(String rangeName, String rangeDefinition) throws Exception;
@@ -39,4 +40,8 @@ public interface Engine {
     public List<Coordinate> getRangeCoordinates(String rangeName);
 
     public void deleteRange(String selectedRangeName);
+
+    public List<String> getRangesNames();
 }
+
+

@@ -5,6 +5,8 @@ import parts.cell.CellDTO;
 import parts.cell.EmptyCellDTO;
 import parts.cell.coordinate.Coordinate;
 
+import java.util.List;
+
 public class SheetDTO {
     private int version;
     private String name;
@@ -13,9 +15,10 @@ public class SheetDTO {
     private int columnWidth;
     private int rowHeight;
     private CellDTO[][] cellsMatrix; // מערך דו-ממדי של תאים
+    private List<String> rangesNames;
 
     public SheetDTO(int version, String name, int numberOfRows, int numberOfCols,
-                    int columnWidth, int rowHeight, CellDTO[][] cellsDTOMatrix) {
+                    int columnWidth, int rowHeight, CellDTO[][] cellsDTOMatrix, List<String> rangesNames) {
         this.version = version;
         this.name = name;
         this.numberOfRows = numberOfRows;
@@ -23,8 +26,8 @@ public class SheetDTO {
         this.columnWidth = columnWidth;
         this.rowHeight = rowHeight;
         this.cellsMatrix = cellsDTOMatrix;
+        this.rangesNames = rangesNames;
     }
-
 
     public int getVersion() {
         return version;
@@ -60,5 +63,9 @@ public class SheetDTO {
         }else{
            return new EmptyCellDTO(coordinate, 0, null);
         }
+    }
+
+    public List<String> getRangesNames() {
+        return rangesNames;
     }
 }

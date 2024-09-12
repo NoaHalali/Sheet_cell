@@ -5,6 +5,7 @@ import parts.cell.*;
 import parts.cell.coordinate.Coordinate;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -219,4 +220,9 @@ public class EngineImpl implements Engine {
     public void deleteRange(String selectedRangeName) {
         currentSheet.deleteRange(selectedRangeName);
     }
+
+    public List<String> getRangesNames(){
+        return currentSheet.getRangesNames();
+    }
+
 }

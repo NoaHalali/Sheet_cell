@@ -242,8 +242,7 @@ public class AppController {
         versionSelectorController.initializeVersionSelector(sheet.getVersion());
         actionLineController.initializeActionLine(isCellSelectedProperty);
         commandsController.InitializeCommandsController(isCellSelectedProperty);
-        rangesController.initializeRangesController();
-
+        rangesController.initializeRangesController(sheet.getRangesNames());
     }
 
     public void addRange(String rangeName, String rangeDefinition) throws Exception {
@@ -295,5 +294,9 @@ public class AppController {
                     (int) (color.getBlue() * 255));
         }
         return "#000000"; // צבע ברירת מחדל אם הצבע הוא null
+    }
+
+    public List<String> getRanges() {
+        return engine.getRangesNames();
     }
 }
