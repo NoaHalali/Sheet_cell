@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class Cell implements Serializable {
@@ -212,19 +213,21 @@ public class Cell implements Serializable {
 
 
     public void checkForCircularDependencyWrapper(Coordinate coordinate, List<Cell> dependsOn) {
-        HashSet<Coordinate> coordSet = new HashSet<>();
-        coordSet.add(coordinate);
+        HashSet<String> coordSet = new HashSet<>();
+        coordSet.add(coordinate.toString());
         checkForCircularDependency(coordSet, dependsOn);
 
     }
 
-    public void checkForCircularDependency(HashSet<Coordinate> coordSet, List<Cell> dependsOn) {
+    public void checkForCircularDependency(Set<String> coordSet, List<Cell> dependsOn) {
+        Set<String> ClonedSet ;
         for (Cell cell : dependsOn) {
-            if (coordSet.contains(cell.getCoordinate())) {
+            ClonedSet = new HashSet<String>(coordSet);
+            if (coordSet.contains(cell.getCoordinate().toString())) {
                 throw new RuntimeException("Circular dependency found");//לחפור וזה
             }
-            coordSet.add(cell.getCoordinate());
-            cell.checkForCircularDependency(coordSet, cell.getDependsOn());
+            ClonedSet.add(cell.getCoordinate().toString());
+            cell.checkForCircularDependency(ClonedSet, cell.getDependsOn());
         }
 
     }
