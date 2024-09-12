@@ -7,7 +7,6 @@ import parts.cell.expression.effectiveValue.EffectiveValue;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -76,9 +75,14 @@ public class Range implements Serializable {
         return InfluencingOnCoordinates.size() > 0;
     }
 
-    public static boolean isValidRange(Coordinate topLeft, Coordinate bottomRight) {
+    public static void isValidRange(Coordinate topLeftCoord, Coordinate bottomRightCoord) throws IllegalArgumentException {
         // בדוק אם השורה והעמודה של הקואורדינטה העליונה השמאלית קטנים או שווים לאלו של הקואורדינטה התחתונה הימנית
-        return topLeft.getRow() <= bottomRight.getRow() && topLeft.getCol() <= bottomRight.getCol();
+
+         if(!(topLeftCoord.getRow() <= bottomRightCoord.getRow() && topLeftCoord.getCol() <= bottomRightCoord.getCol()))
+         {
+             throw new IllegalArgumentException("Invalid range coordinates: " + topLeftCoord + " to " + bottomRightCoord + ".\n" +
+                     "Top-left coordinate must be smaller or equal to bottom-right coordinate.");
+         }
     }
 
 

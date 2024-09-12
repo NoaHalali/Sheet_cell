@@ -333,6 +333,7 @@ public class Sheet implements Serializable {
 
         validateCoordinateBounds(topLeftCoord);
         validateCoordinateBounds(bottomRightCoord);
+        Range.isValidRange(topLeftCoord, bottomRightCoord);
 
         List<Cell> rangeList = getRangeCellsList(topLeftCoord, bottomRightCoord);
         Range range = new Range(topLeftCoord, bottomRightCoord,rangeList);
