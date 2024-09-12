@@ -6,10 +6,7 @@ import parts.cell.expression.Expression;
 import parts.cell.expression.effectiveValue.EffectiveValue;
 
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Cell implements Serializable {
@@ -95,6 +92,13 @@ public class Cell implements Serializable {
 //    public EmptyCellDTO toEmptyCellDTO() {
 //
 //    }
+    public List<Coordinate> getFullDependsOnCoordList(){
+        List<Coordinate> fullList = getDependsOnCoordinates();
+        for(Range range : rangesDependsOn){
+            fullList.addAll(range.getRangeCoordinates());
+        }
+        return fullList;
+    }
     public CellDTO toCellDTO() {
         if (isExist)
         {
@@ -104,7 +108,7 @@ public class Cell implements Serializable {
                     getAndUpdateEffectiveValue(),
                     lastUpdatedVersion,
                     getInfluencingOnCoordinates(),
-                    getDependsOnCoordinates()
+                    getFullDependsOnCoordList()
             );
         }
         else {
