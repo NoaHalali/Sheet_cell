@@ -46,8 +46,8 @@
 
 <!--    </HBox>-->
     <HBox spacing="5">
-        <Button fx:id="changeTextColorButton" text="Change Text Color" />
-        <ColorPicker fx:id="textColorPicker" />
+        <Button fx:id="changeTextColorButton" text="Change Text Color"  />
+        <ColorPicker fx:id="textColorPicker"  />
     </HBox>
     <HBox spacing="5">
         <Button fx:id="changeBorderColorButton"  text="Change Border Color" />

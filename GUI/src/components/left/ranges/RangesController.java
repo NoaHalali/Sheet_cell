@@ -96,7 +96,7 @@ public class RangesController {
             //lastSelectedRange = null; //
 
         } catch (Exception e) {
-            showAlert("Error", e.getMessage());
+            mainController.showAlert("Error", e.getMessage());
         }
     }
 
@@ -106,7 +106,7 @@ public class RangesController {
         if (selectedRangeName != null) {
             highlightRange(selectedRangeName);
         } else {
-            showAlert("Error", "No range selected or range does not exist!");
+            mainController.showAlert("Error", "No range selected or range does not exist!");
         }
     }
 

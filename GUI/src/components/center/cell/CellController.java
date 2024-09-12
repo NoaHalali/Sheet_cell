@@ -10,7 +10,7 @@ public class CellController {
 
     @FXML
     private Label cellLabel;
-
+    private String textColor;
     private String backgroundColor;
     private String alignment;
     private String borderColor;
@@ -27,6 +27,12 @@ public class CellController {
     // כאן ניתן להוסיף לוגיקה לשינוי התא
     public void setText(String text) {
         cellLabel.setText(text);
+    }
+
+    public void setTextColor(String color) {
+//
+        cellLabel.setTextFill(Color.web(color));
+        applyStyles();
     }
 
     public void setBackgroundColor(String color) {
@@ -78,6 +84,9 @@ public class CellController {
 
         if (borderWidth != null) {
             style.append(borderWidth);
+        }
+        if (textColor != null) {
+            style.append(textColor);
         }
 
         return style.toString();

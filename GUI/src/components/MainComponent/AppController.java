@@ -12,9 +12,13 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import parts.Engine;
@@ -23,6 +27,7 @@ import parts.EngineImpl;
 import parts.SheetDTO;
 import parts.cell.coordinate.Coordinate;
 import parts.cell.coordinate.CoordinateImpl;
+
 
 import java.io.File;
 import java.util.Arrays;
@@ -100,6 +105,9 @@ public class AppController {
             actionLineController.setActionLine(cell); // עדכון השורה עם התא החדש
 
         }
+    }
+    public void setCellTextColor(Color color){
+        tableController.setCellTextColor(color);
     }
 
     public void setPrimaryStage(Stage primaryStage) {
@@ -196,7 +204,7 @@ public class AppController {
             @Override
             protected void failed() {
                 super.failed();
-                System.out.println("Failed to update cell: " + getException().getMessage());
+               showAlert("Error:","Failed to update cell: " + getException().getMessage());
             }
         };
 
@@ -208,6 +216,13 @@ public class AppController {
         Coordinate coordinate = CoordinateImpl.parseCoordinate(coord);
         return engine.getCellDTOByCoordinate(coordinate);
     }
+    public void showAlert(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
 
     public SheetDTO getSheetDTOByVersion(String version) {
         return engine.getSheetDTOByVersion(Integer.parseInt(version));
@@ -216,7 +231,7 @@ public class AppController {
         try {
             engine.readFileData(absolutePath);
         } catch (Exception e) {
-            e.printStackTrace();
+            showAlert( "Error" ,e.getMessage());
         }
     }
 

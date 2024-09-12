@@ -9,6 +9,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
+import javafx.scene.paint.Color;
 import parts.cell.CellDTO;
 import parts.SheetDTO;
 import parts.cell.coordinate.Coordinate;
@@ -131,6 +132,10 @@ public class TableController {
         }
     }
 
+    public void setCellTextColor(Color color){
+        CellController changeCell = coordToCellControllerMap.get(currentlyFocusedCoord.toString());
+        changeCell.setTextColor(color.toString());
+    }
     public void setMainController(AppController mainController) {
         this.mainController = mainController;
     }

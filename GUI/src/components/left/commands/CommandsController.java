@@ -7,6 +7,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.TextField;
+import javafx.scene.paint.Color;
 
 public class CommandsController {
 
@@ -40,6 +41,18 @@ public class CommandsController {
         resetCellStyleButton.disableProperty().bind(isCellSelected.not());
         textColorPicker.disableProperty().bind(isCellSelected.not());
         borderColorPicker.disableProperty().bind(isCellSelected.not());
+        textColorPicker.valueProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                changeTextColor(newValue);
+            }
+        });
+
+        // הוספת מאזין לבחירת צבע גבול
+        borderColorPicker.valueProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                changeBorderColor(newValue);
+            }
+        });
     }
 
     @FXML
@@ -55,12 +68,12 @@ public class CommandsController {
     }
 
     @FXML
-    public void changeTextColorAction() {
-        // לוגיקה לשינוי צבע הטקסט
+    public void changeTextColor(Color color) {
+        mainController.setCellTextColor(color);
     }
 
     @FXML
-    public void changeBorderColorAction() {
+    public void changeBorderColor(Color color) {
         // לוגיקה לשינוי צבע הגבול
     }
 
