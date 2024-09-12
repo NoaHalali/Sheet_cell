@@ -37,7 +37,7 @@
 			<STL-Original-Value>25</STL-Original-Value>
 		</STL-Cell>
 		<STL-Cell row="3" column="E">
-			<STL-Original-Value>{PERCENT,{REF, D3}, {REF, C3}}</STL-Original-Value>
+			<STL-Original-Value>{PERCENT,{REF,D3},{REF,C3}}</STL-Original-Value>
 		</STL-Cell>
 		<STL-Cell row="4" column="B">
 			<STL-Original-Value>ex 2</STL-Original-Value>
@@ -49,7 +49,7 @@
 			<STL-Original-Value>35</STL-Original-Value>
 		</STL-Cell>
 		<STL-Cell row="4" column="E">
-			<STL-Original-Value>{PERCENT,{REF, D4}, {REF, C4}}</STL-Original-Value>
+			<STL-Original-Value>{PERCENT,{REF,D4},{REF,C4}}</STL-Original-Value>
 		</STL-Cell>
 		<STL-Cell row="5" column="B">
 			<STL-Original-Value>ex 3</STL-Original-Value>
@@ -61,7 +61,7 @@
 			<STL-Original-Value>40</STL-Original-Value>
 		</STL-Cell>
 		<STL-Cell row="5" column="E">
-			<STL-Original-Value>{PERCENT,{REF, D5}, {REF, C5}}</STL-Original-Value>
+			<STL-Original-Value>{PERCENT,{REF,D5},{REF,C5}}</STL-Original-Value>
 		</STL-Cell>
 		<STL-Cell row="6" column="C">
 			<STL-Original-Value>{AVERAGE,grades}</STL-Original-Value>
@@ -73,7 +73,7 @@
 			<STL-Original-Value>{SUM,effective-grades}</STL-Original-Value>
 		</STL-Cell>
 		<STL-Cell row="7" column="E">
-			<STL-Original-Value>{IF,{BIGGER, {REF,E6}, 60},"PASS","FAILED"}</STL-Original-Value>
+			<STL-Original-Value>{IF,{BIGGER,{REF,E6},60},"PASS","FAILED"}</STL-Original-Value>
 		</STL-Cell>
 	</STL-Cells>
 </STL-Sheet>

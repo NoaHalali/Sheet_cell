@@ -3,6 +3,7 @@ package parts;
 import XMLFile.FileManager;
 import parts.cell.*;
 import parts.cell.coordinate.Coordinate;
+import parts.cell.coordinate.CoordinateImpl;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -208,7 +209,10 @@ public class EngineImpl implements Engine {
             throw new IllegalStateException(SHEET_NOT_LOADED_MESSAGE);
         }
 
-        currentSheet.addRange(rangeName, rangeDefinition);
+        String[] parts = rangeDefinition.split("\\.\\."); // מחלק את המחרוזת לפי ".."
+        Coordinate topLeftCoord = CoordinateImpl.parseCoordinate(parts[0]);
+        Coordinate bottomRightCoord = CoordinateImpl.parseCoordinate(parts[1]);
+        currentSheet.addRange(rangeName, topLeftCoord, bottomRightCoord);
     }
 
     @Override

@@ -167,45 +167,70 @@ public class AppController {
 //        new Thread(loadFileTask).start();
 //    }
 
+//    public void updateCellValue(String value) {
+//        Coordinate coordinate = tableController.getCurrentlyFocusedCoord();
+//
+//        Task<Void> updateCellTask = new Task<Void>() {
+//            @Override
+//            protected Void call() throws Exception {
+//                engine.updateCellValue(value, coordinate);
+//                return null;
+//            }
+//
+//            @Override
+//            protected void succeeded() {
+//                super.succeeded();
+//                SheetDTO sheet = engine.getCurrentSheetDTO();
+//                CellDTO[][] cells = sheet.getCellsMatrix();
+//
+//                Arrays.stream(cells).flatMap(Arrays::stream).forEach(cell -> {
+//                    if (cell != null) {
+//                        tableController.updateCellContent(cell.getCoord(), cell.getEffectiveValue());
+//                    }
+//                });
+//
+//                tableController.addFocusingToCell(coordinate);
+//                actionLineController.setActionLine(engine.getCellDTOByCoordinate(coordinate));
+//
+//                // עדכון אפשרויות הגרסה בצורה בטוחה
+//                versionProperty.set(sheet.getVersion());
+//                versionSelectorController.setVersionSelectorOptions(sheet.getVersion());
+//            }
+//
+//            @Override
+//            protected void failed() {
+//                super.failed();
+//               showAlert("Error:","Failed to update cell: " + getException().getMessage());
+//            }
+//        };
+//
+//        new Thread(updateCellTask).start();
+//    }
 
     public void updateCellValue(String value) {
         Coordinate coordinate = tableController.getCurrentlyFocusedCoord();
+        try {
+            engine.updateCellValue(value, coordinate);
+            SheetDTO sheet = engine.getCurrentSheetDTO();
+            CellDTO[][] cells = sheet.getCellsMatrix();
 
-        Task<Void> updateCellTask = new Task<Void>() {
-            @Override
-            protected Void call() throws Exception {
-                engine.updateCellValue(value, coordinate);
-                return null;
-            }
+            Arrays.stream(cells).flatMap(Arrays::stream).forEach(cell -> {
+                if (cell != null) {
+                    tableController.updateCellContent(cell.getCoord(), cell.getEffectiveValue());
+                }
+            });
 
-            @Override
-            protected void succeeded() {
-                super.succeeded();
-                SheetDTO sheet = engine.getCurrentSheetDTO();
-                CellDTO[][] cells = sheet.getCellsMatrix();
+            tableController.addFocusingToCell(coordinate);
+            actionLineController.setActionLine(engine.getCellDTOByCoordinate(coordinate));
 
-                Arrays.stream(cells).flatMap(Arrays::stream).forEach(cell -> {
-                    if (cell != null) {
-                        tableController.updateCellContent(cell.getCoord(), cell.getEffectiveValue());
-                    }
-                });
+            // עדכון אפשרויות הגרסה בצורה בטוחה
+            versionProperty.set(sheet.getVersion());
+            versionSelectorController.setVersionSelectorOptions(sheet.getVersion());
 
-                tableController.addFocusingToCell(coordinate);
-                actionLineController.setActionLine(engine.getCellDTOByCoordinate(coordinate));
+        } catch (Exception e) {
+            showAlert("Error:", "Failed to update cell: " + e.getMessage());
+        }
 
-                // עדכון אפשרויות הגרסה בצורה בטוחה
-                versionProperty.set(sheet.getVersion());
-                versionSelectorController.setVersionSelectorOptions(sheet.getVersion());
-            }
-
-            @Override
-            protected void failed() {
-                super.failed();
-               showAlert("Error:","Failed to update cell: " + getException().getMessage());
-            }
-        };
-
-        new Thread(updateCellTask).start();
     }
 
 
@@ -262,24 +287,14 @@ public class AppController {
     public void deleteRange(String selectedRangeName) {
         engine.deleteRange(selectedRangeName);
     }
-//
-//    public void setCellTextColor(Color color){
-//        tableController.setCellTextColor(color);
-//    }
-//
-//    public void setCellBorderColor(Color color) {
-//        tableController.setCellBorderColor(color);
-//    }
+
 
     public void setCellTextColor(Color color) {
         String colorStr = formatColorToString(color);
         tableController.setCellTextColor(colorStr);
     }
 
-//    public void setCellBorderColor(Color color) {
-//        String colorStr = formatColorToString(color);
-//        tableController.setCellBorderColor(colorStr);
-//    }
+
     public void setCellBackgroundColor(Color color) {
         String colorStr = formatColorToString(color);
         tableController.setCellBackgroundColor(colorStr);
@@ -300,3 +315,17 @@ public class AppController {
         return engine.getRangesNames();
     }
 }
+
+//
+//    public void setCellTextColor(Color color){
+//        tableController.setCellTextColor(color);
+//    }
+//
+//    public void setCellBorderColor(Color color) {
+//        tableController.setCellBorderColor(color);
+//    }
+
+//    public void setCellBorderColor(Color color) {
+//        String colorStr = formatColorToString(color);
+//        tableController.setCellBorderColor(colorStr);
+//    }

@@ -106,9 +106,7 @@ public class Sheet implements Serializable {
     public int upgradeCellsVersionsAndGetNumOfChanges(){
         List<Cell>changedCells = Arrays.stream(cellsMatrix)                          // Stream over rows of cellsMatrix
                 .flatMap(Arrays::stream)                    // Flatten the stream of rows into a single stream of cells
-                .filter(cell -> cell != null)
-                //.filter(cell-> cell.getIsExist())
-                // Filter out null cells
+                .filter(cell -> cell != null)               // Filter out null cells
                 .filter(Cell::calculateAndCheckIfUpdated)   // Filter cells that have been updated
                 .toList();
         //  if(changedCells.size() != 0){//תכלס שטום דבר לא השתנה
@@ -127,21 +125,6 @@ public class Sheet implements Serializable {
 
         cellsMatrix[coord.getRow()-1][coord.getCol()-1].resetCell();
     }
-
-//    public void deleteCell(Coordinate coord){
-//        cellsMatrix[coord.getRow()-1][coord.getCol()-1] = null;
-//        if(deletedCells.containsKey(coord.toString())){
-//            deletedCells.remove(coord.toString());
-//        }
-//        deletedCells.put(coord.toString(),version);
-//
-//    }
-//    public int getEmptyCellVersion(Coordinate coord){
-//        if(deletedCells.containsKey(coord.toString())){
-//            return deletedCells.get(coord.toString());
-//        }
-//        return 0;
-//    }
 
     public void addCell(Coordinate coord, Cell cell){
         cellsMatrix[coord.getRow()-1][coord.getCol()-1] = cell;
@@ -342,19 +325,15 @@ public class Sheet implements Serializable {
         return rangeList;
     }
 
-    public void addRange(String rangeName, String rangeDefinition) throws IllegalArgumentException{
-        //Coordinate topLeftCoord, Coordinate bottomRightCoord,
+    public void addRange(String rangeName, Coordinate topLeftCoord, Coordinate bottomRightCoord) throws IllegalArgumentException{
 
         if(ranges.containsKey(rangeName)){
             throw new IllegalArgumentException("Range with the name " + rangeName + " already exists.");
         }
 
-        String[] parts = rangeDefinition.split("\\.\\."); // מחלק את המחרוזת לפי ".."
-        Coordinate topLeftCoord = CoordinateImpl.parseCoordinate(parts[0]);
-        Coordinate bottomRightCoord = CoordinateImpl.parseCoordinate(parts[1]);
-
         validateCoordinateBounds(topLeftCoord);
         validateCoordinateBounds(bottomRightCoord);
+
         List<Cell> rangeList = getRangeCellsList(topLeftCoord, bottomRightCoord);
         Range range = new Range(topLeftCoord, bottomRightCoord,rangeList);
         ranges.put(rangeName, range);

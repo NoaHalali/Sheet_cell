@@ -10,10 +10,6 @@ public class Version implements Serializable {
     private  Sheet sheet;
     private int numberOfCellsChanged;
 
-//    private List<Sheet> versionsList= new LinkedList<Sheet>();
-//    private List <Integer> numberOfCellsChanged = new LinkedList<Integer>();
-
-
     public Version(Sheet sheet, int numberOfCellsChanged) {
         this.sheet = sheet;
         this.numberOfCellsChanged = numberOfCellsChanged;

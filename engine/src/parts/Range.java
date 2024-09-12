@@ -76,6 +76,10 @@ public class Range implements Serializable {
         return InfluencingOnCoordinates.size() > 0;
     }
 
+    public static boolean isValidRange(Coordinate topLeft, Coordinate bottomRight) {
+        // בדוק אם השורה והעמודה של הקואורדינטה העליונה השמאלית קטנים או שווים לאלו של הקואורדינטה התחתונה הימנית
+        return topLeft.getRow() <= bottomRight.getRow() && topLeft.getCol() <= bottomRight.getCol();
+    }
 
 
 

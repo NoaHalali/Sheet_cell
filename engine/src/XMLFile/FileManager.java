@@ -94,11 +94,13 @@ public class FileManager {
     }
     public void validateAndAddRanges(Sheet Sheet,STLSheet xmlSheet) {
         String rangeName;
-        String CoordFormat;
+        //String CoordFormat;
         for (STLRange range:xmlSheet.getSTLRanges().getSTLRange() ){
             rangeName = range.getName();
-            CoordFormat = range.getSTLBoundaries().getFrom()+".."+range.getSTLBoundaries().getTo();
-            Sheet.addRange(rangeName,CoordFormat);
+            Coordinate topLeftCoord =  CoordinateImpl.parseCoordinate(range.getSTLBoundaries().getFrom());
+            Coordinate bottomRightCoord =  CoordinateImpl.parseCoordinate(range.getSTLBoundaries().getTo());
+            //CoordFormat = range.getSTLBoundaries().getFrom()+".."+range.getSTLBoundaries().getTo();
+            Sheet.addRange(rangeName,topLeftCoord,bottomRightCoord);
         }
     }
 
