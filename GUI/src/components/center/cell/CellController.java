@@ -29,9 +29,12 @@ public class CellController {
         cellLabel.setText(text);
     }
 
+//    public void setTextColor(String color) {
+//        cellLabel.setTextFill(color);
+//        applyStyles();
+//    }
     public void setTextColor(String color) {
-//
-        cellLabel.setTextFill(Color.web(color));
+        this.textColor = "-fx-text-fill: " + color + ";";
         applyStyles();
     }
 

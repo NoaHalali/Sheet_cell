@@ -132,10 +132,6 @@ public class TableController {
         }
     }
 
-    public void setCellTextColor(Color color){
-        CellController changeCell = coordToCellControllerMap.get(currentlyFocusedCoord.toString());
-        changeCell.setTextColor(color.toString());
-    }
     public void setMainController(AppController mainController) {
         this.mainController = mainController;
     }
@@ -216,5 +212,20 @@ public class TableController {
             CellController cellController = coordToCellControllerMap.get(coord.toString());
             cellController.setBackgroundColor("#f0f0f0");
         }
+    }
+
+    public void setCellTextColor(String colorStr){
+        CellController changeCell = coordToCellControllerMap.get(currentlyFocusedCoord.toString());
+        changeCell.setTextColor(colorStr);
+    }
+
+    public void setCellBorderColor(String colorStr) {
+        CellController changeCell = coordToCellControllerMap.get(currentlyFocusedCoord.toString());
+        changeCell.setBorderColor(colorStr);
+    }
+
+    public void setCellBackgroundColor(String colorStr) {
+        CellController changeCell = coordToCellControllerMap.get(currentlyFocusedCoord.toString());
+        changeCell.setBackgroundColor(colorStr);
     }
 }

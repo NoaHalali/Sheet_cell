@@ -106,9 +106,6 @@ public class AppController {
 
         }
     }
-    public void setCellTextColor(Color color){
-        tableController.setCellTextColor(color);
-    }
 
     public void setPrimaryStage(Stage primaryStage) {
         this.primaryStage = primaryStage;
@@ -266,5 +263,38 @@ public class AppController {
 
     public void deleteRange(String selectedRangeName) {
         engine.deleteRange(selectedRangeName);
+    }
+//
+//    public void setCellTextColor(Color color){
+//        tableController.setCellTextColor(color);
+//    }
+//
+//    public void setCellBorderColor(Color color) {
+//        tableController.setCellBorderColor(color);
+//    }
+
+    public void setCellTextColor(Color color) {
+        String colorStr = formatColorToString(color);
+        tableController.setCellTextColor(colorStr);
+    }
+
+//    public void setCellBorderColor(Color color) {
+//        String colorStr = formatColorToString(color);
+//        tableController.setCellBorderColor(colorStr);
+//    }
+    public void setCellBackgroundColor(Color color) {
+        String colorStr = formatColorToString(color);
+        tableController.setCellBackgroundColor(colorStr);
+    }
+
+    private String formatColorToString(Color color) {
+        if (color != null) {
+            // הפורמט כולל ערך עבור האדום, הירוק והכחול בלבד
+            return String.format("#%02X%02X%02X",
+                    (int) (color.getRed() * 255),
+                    (int) (color.getGreen() * 255),
+                    (int) (color.getBlue() * 255));
+        }
+        return "#000000"; // צבע ברירת מחדל אם הצבע הוא null
     }
 }

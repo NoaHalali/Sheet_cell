@@ -1,7 +1,6 @@
 package components.left.commands;
 
 import components.MainComponent.AppController;
-import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -15,32 +14,17 @@ public class CommandsController {
 
     @FXML private Button setColumnRowWidthButton;
     @FXML private Button setColumnAlignmentButton;
-    @FXML private Button changeTextColorButton;
-    @FXML private Button changeBorderColorButton;
     @FXML private Button resetCellStyleButton;
 
     @FXML private TextField columnRowWidthTextField;
     @FXML private TextField columnAlignmentTextField;
     @FXML private ColorPicker textColorPicker;
-    @FXML private ColorPicker borderColorPicker;
+    @FXML private ColorPicker backgroundColorPicker;
     public void InitializeCommandsController(SimpleBooleanProperty isCellSelected){
-        changeTextColorButton.disableProperty().bind(
-                Bindings.or(
-                        Bindings.isNull(textColorPicker.valueProperty()),  // Color not selected
-                        isCellSelected.not()  // No cell selected
-                )
-        );
-
-        // Disable the changeBorderColorButton until a color is selected in borderColorPicker
-        changeBorderColorButton.disableProperty().bind(
-                Bindings.or(
-                        Bindings.isNull(borderColorPicker.valueProperty()),  // Color not selected
-                        isCellSelected.not()  // No cell selected
-                )
-        );
         resetCellStyleButton.disableProperty().bind(isCellSelected.not());
         textColorPicker.disableProperty().bind(isCellSelected.not());
-        borderColorPicker.disableProperty().bind(isCellSelected.not());
+        backgroundColorPicker.disableProperty().bind(isCellSelected.not());
+
         textColorPicker.valueProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
                 changeTextColor(newValue);
@@ -48,9 +32,9 @@ public class CommandsController {
         });
 
         // הוספת מאזין לבחירת צבע גבול
-        borderColorPicker.valueProperty().addListener((observable, oldValue, newValue) -> {
+        backgroundColorPicker.valueProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
-                changeBorderColor(newValue);
+                changeBackgroundColor(newValue);
             }
         });
     }
@@ -73,8 +57,8 @@ public class CommandsController {
     }
 
     @FXML
-    public void changeBorderColor(Color color) {
-        // לוגיקה לשינוי צבע הגבול
+    public void changeBackgroundColor(Color color) {
+        mainController.setCellBackgroundColor(color);
     }
 
     @FXML
