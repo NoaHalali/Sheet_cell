@@ -34,12 +34,12 @@ public class CellController {
     }
 
     public void setTextColor(String color) {
-        this.textColor = "-fx-text-fill: " + color + ";";
+        textColor = "-fx-text-fill: " + color + ";";
         applyStyles();
     }
 
     public void setBackgroundColor(String color) {
-        this.backgroundColor = "-fx-background-color: " + color + ";";
+        backgroundColor = "-fx-background-color: " + color + ";";
         applyStyles();
     }
 
@@ -121,4 +121,14 @@ public class CellController {
         borderWidth = "-fx-border-width: " + DEFAULT_BORDER_WIDTH + ";";
         applyStyles();
     }
+
+    public void setRangeHighlight() {
+        String style = buildStyleString() + "-fx-border-color: red; -fx-background-color: #ff0000;";
+        cellLabel.setStyle(style);
+    }
+
+    public void clearRangeHighlight() {
+        applyStyles();
+    }
+
 }

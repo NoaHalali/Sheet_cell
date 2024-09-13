@@ -203,7 +203,8 @@ public class TableController {
     public void highlightRange(List<Coordinate> rangeCoordinates) {
         for (Coordinate coord : rangeCoordinates) {
             CellController cellController = coordToCellControllerMap.get(coord.toString());
-            cellController.setBackgroundColor("red");
+            cellController.setRangeHighlight();
+            //cellController.setBackgroundColor("red");
         }
     }
 
@@ -211,7 +212,8 @@ public class TableController {
     public void clearHighlighting(List<Coordinate> rangeCoordinates) {
         for (Coordinate coord : rangeCoordinates) {
             CellController cellController = coordToCellControllerMap.get(coord.toString());
-            cellController.setBackgroundColor("#f0f0f0");
+            cellController.clearRangeHighlight();
+            //cellController.setBackgroundColor("#f0f0f0");
         }
     }
 

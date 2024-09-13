@@ -20,24 +20,56 @@ public class CommandsController {
     @FXML private TextField columnAlignmentTextField;
     @FXML private ColorPicker textColorPicker;
     @FXML private ColorPicker backgroundColorPicker;
-    public void InitializeCommandsController(SimpleBooleanProperty isCellSelected){
+    @FXML private Button applyTextColorButton;
+    @FXML private Button applyBackgroundColorButton;
+
+    private Color lastSelectedTextColor;
+    private Color lastSelectedBackgroundColor;
+
+    public void InitializeCommandsController(SimpleBooleanProperty isCellSelected) {
         resetCellStyleButton.disableProperty().bind(isCellSelected.not());
         textColorPicker.disableProperty().bind(isCellSelected.not());
         backgroundColorPicker.disableProperty().bind(isCellSelected.not());
+        applyTextColorButton.disableProperty().bind(isCellSelected.not());
+        applyBackgroundColorButton.disableProperty().bind(isCellSelected.not());
 
-        textColorPicker.valueProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue != null) {
-                changeTextColor(newValue);
-            }
-        });
+//        textColorPicker.setOnAction(event -> {
+//            Color newColor = textColorPicker.getValue();
+//            if (newColor != null) {
+//                changeTextColor(newColor);
+//                // אפשר גם לאפס פוקוס או לבצע פעולה נוספת
+//            }
+//        });
+//
+//        backgroundColorPicker.setOnAction(event -> {
+//            Color newColor = backgroundColorPicker.getValue();
+//            if (newColor != null) {
+//                changeBackgroundColor(newColor);
+//                // אפשר גם לאפס פוקוס או לבצע פעולה נוספת
+//            }
+//        });
 
-        // הוספת מאזין לבחירת צבע גבול
-        backgroundColorPicker.valueProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue != null) {
-                changeBackgroundColor(newValue);
-            }
-        });
     }
+
+
+//    public void InitializeCommandsController(SimpleBooleanProperty isCellSelected){
+//        resetCellStyleButton.disableProperty().bind(isCellSelected.not());
+//        textColorPicker.disableProperty().bind(isCellSelected.not());
+//        backgroundColorPicker.disableProperty().bind(isCellSelected.not());
+//
+//        textColorPicker.valueProperty().addListener((observable, oldValue, newValue) -> {
+//            if (newValue != null) {
+//                changeTextColor(newValue);
+//            }
+//        });
+//
+//        // הוספת מאזין לבחירת צבע גבול
+//        backgroundColorPicker.valueProperty().addListener((observable, oldValue, newValue) -> {
+//            if (newValue != null) {
+//                changeBackgroundColor(newValue);
+//            }
+//        });
+//    }
 
     @FXML
     public void setColumnRowWidthAction() {
@@ -51,15 +83,32 @@ public class CommandsController {
         // לוגיקה לבחירת יישור של התוכן בעמודה
     }
 
+//    @FXML
+//    public void changeTextColor(Color color) {
+//        mainController.setCellTextColor(color);
+//    }
+//
+//    @FXML
+//    public void changeBackgroundColor(Color color) {
+//        mainController.setCellBackgroundColor(color);
+//    }
+
     @FXML
-    public void changeTextColor(Color color) {
-        mainController.setCellTextColor(color);
+    public void applyTextColorAction() {
+        Color selectedColor = textColorPicker.getValue();
+        if (selectedColor != null) {
+            mainController.setCellTextColor(selectedColor);
+        }
     }
 
     @FXML
-    public void changeBackgroundColor(Color color) {
-        mainController.setCellBackgroundColor(color);
+    public void applyBackgroundColorAction() {
+        Color selectedColor = backgroundColorPicker.getValue();
+        if (selectedColor != null) {
+            mainController.setCellBackgroundColor(selectedColor);
+        }
     }
+
 
     @FXML
     public void resetCellStyleAction() {
@@ -69,4 +118,6 @@ public class CommandsController {
     public void setMainController(AppController mainController) {
         this.mainController = mainController;
     }
+
+
 }
