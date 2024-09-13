@@ -9,12 +9,10 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
-import javafx.scene.paint.Color;
 import parts.cell.CellDTO;
 import parts.SheetDTO;
 import parts.cell.coordinate.Coordinate;
 import parts.cell.coordinate.CoordinateImpl;
-import parts.cell.expression.effectiveValue.CellType;
 import parts.cell.expression.effectiveValue.EffectiveValue;
 
 import java.io.IOException;
@@ -27,7 +25,8 @@ public class TableController {
     private AppController mainController;
     @FXML private GridPane dynamicGridPane;
     private final Map<String, CellController> coordToCellControllerMap = new HashMap<>();
-    private Coordinate currentlyFocusedCoord;
+    private Coordinate currentlyFocusedCoord; // שדה לשמירת הקואורדינטה הממוקדת הנוכחית
+    private CellController currentlyFocusedCellController; // שדה לשמירת התא הממוקד הנוכחי
 
     public void initializeGrid(SheetDTO sheet) {
         setupGrid(sheet);
@@ -78,7 +77,7 @@ public class TableController {
 
                     if (enableClick) {
                         String coordStr = coord.toString();
-                        cellPane.setOnMouseClicked(event ->  handleCellClick(coordStr));
+                        cellPane.setOnMouseClicked(event -> handleCellClick(coordStr));
 
                         cellController.applyHoverEffectListeners();
                     }
@@ -140,21 +139,23 @@ public class TableController {
         if (currentlyFocusedCoord != null && currentlyFocusedCoord.toString().equals(newCoord)) {
             removeFocusingOfCell(currentlyFocusedCoord.toString());
             currentlyFocusedCoord = null;
+            currentlyFocusedCellController = null; // עדכון התא הממוקד לאפס
             mainController.updateActionLine(null);
         } else {
             if (currentlyFocusedCoord != null) {
                 removeFocusingOfCell(currentlyFocusedCoord.toString());
             }
             currentlyFocusedCoord = CoordinateImpl.parseCoordinate(newCoord);
+            currentlyFocusedCellController = coordToCellControllerMap.get(currentlyFocusedCoord.toString()); // עדכון התא הממוקד
             addFocusingToCell(currentlyFocusedCoord);
             mainController.updateActionLine(currentlyFocusedCoord);
         }
     }
 
     public void addFocusingToCell(Coordinate newFocusedCoord) {
-        CellController cellController = coordToCellControllerMap.get(newFocusedCoord.toString());
-        cellController.setBorderColor("red");
-        cellController.setBorderWidth("3px");
+        currentlyFocusedCellController = coordToCellControllerMap.get(newFocusedCoord.toString());
+        currentlyFocusedCellController.setBorderColor("red");
+        currentlyFocusedCellController.setBorderWidth("3px");
 
         CellDTO cell = mainController.getCellDTO(newFocusedCoord.toString());
         List<Coordinate> dependsOn = cell.getDependsOn();
@@ -215,17 +216,26 @@ public class TableController {
     }
 
     public void setCellTextColor(String colorStr){
-        CellController changeCell = coordToCellControllerMap.get(currentlyFocusedCoord.toString());
-        changeCell.setTextColor(colorStr);
+        if (currentlyFocusedCellController != null) {
+            currentlyFocusedCellController.setTextColor(colorStr);
+        }
     }
 
     public void setCellBorderColor(String colorStr) {
-        CellController changeCell = coordToCellControllerMap.get(currentlyFocusedCoord.toString());
-        changeCell.setBorderColor(colorStr);
+        if (currentlyFocusedCellController != null) {
+            currentlyFocusedCellController.setBorderColor(colorStr);
+        }
     }
 
     public void setCellBackgroundColor(String colorStr) {
-        CellController changeCell = coordToCellControllerMap.get(currentlyFocusedCoord.toString());
-        changeCell.setBackgroundColor(colorStr);
+        if (currentlyFocusedCellController != null) {
+            currentlyFocusedCellController.setBackgroundColor(colorStr);
+        }
+    }
+
+    public void resetCellStyle() {
+        if (currentlyFocusedCellController != null) {
+            currentlyFocusedCellController.resetStyle();
+        }
     }
 }

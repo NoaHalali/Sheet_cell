@@ -270,6 +270,7 @@ public class AppController {
         rangesController.initializeRangesController(sheet.getRangesNames());
     }
 
+    //Ranges
     public void addRange(String rangeName, String rangeDefinition) throws Exception {
         engine.addRange(rangeName, rangeDefinition);
     }
@@ -313,6 +314,10 @@ public class AppController {
 
     public List<String> getRanges() {
         return engine.getRangesNames();
+    }
+
+    public void resetCellStyle() {
+        tableController.resetCellStyle();
     }
 }
 

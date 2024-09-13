@@ -14,25 +14,25 @@ public class CellController {
     private String backgroundColor;
     private String alignment;
     private String borderColor;
-    private String borderWidth; // משתנה חדש לשמירת רוחב המסגרת
-    // הגדרת הצל עבור אפקט hover
+    private String borderWidth;
     private final DropShadow hoverShadow = new DropShadow();
 
+    //Default style values
+    private static final String DEFAULT_BACKGROUND_COLOR = "#f0f0f0";
+    private static final String DEFAULT_TEXT_COLOR = "black";
+    //private static final String DEFAULT_ALIGNMENT = "center";
+    private static final String DEFAULT_BORDER_COLOR = "black";
+    private static final String DEFAULT_BORDER_WIDTH = "0.5px";
+
     public CellController() {
-        // הגדרת הצל להוספה ב-hover
         hoverShadow.setColor(Color.LIGHTBLUE);
         hoverShadow.setRadius(10);
     }
 
-    // כאן ניתן להוסיף לוגיקה לשינוי התא
     public void setText(String text) {
         cellLabel.setText(text);
     }
 
-//    public void setTextColor(String color) {
-//        cellLabel.setTextFill(color);
-//        applyStyles();
-//    }
     public void setTextColor(String color) {
         this.textColor = "-fx-text-fill: " + color + ";";
         applyStyles();
@@ -59,17 +59,15 @@ public class CellController {
     }
 
     public void setBorderColor(String color) {
-        this.borderColor = "-fx-border-color: " + color + ";";
+        borderColor = "-fx-border-color: " + color + ";";
         applyStyles();
     }
 
-    // מתודה חדשה להגדרת רוחב המסגרת
     public void setBorderWidth(String width) {
-        this.borderWidth = "-fx-border-width: " + width + ";";
+        borderWidth = "-fx-border-width: " + width + ";";
         applyStyles();
     }
 
-    // מתודה פרטית לבניית מחרוזת הסגנונות
     private String buildStyleString() {
         StringBuilder style = new StringBuilder();
 
@@ -96,32 +94,31 @@ public class CellController {
     }
 
     private void applyStyles() {
-        // שימוש במחרוזת הבנויה ליישום הסגנון
         cellLabel.setStyle(buildStyleString());
     }
 
     public void applyHoverEffectListeners() {
-        // מאזין לאירוע ריחוף עם העכבר
         cellLabel.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> applyHoverEffect());
-
-        // מאזין לאירוע יציאה עם העכבר
         cellLabel.addEventHandler(MouseEvent.MOUSE_EXITED, event -> removeHoverEffect());
     }
 
     private void applyHoverEffect() {
-        cellLabel.setEffect(hoverShadow); // הוספת אפקט הצל
-
-        // הוספת הסגנונות החדשים למחרוזת הזמנית
+        cellLabel.setEffect(hoverShadow);
         String style = buildStyleString() + "-fx-border-color: blue; -fx-border-width: 2px; -fx-background-color: #f0f8ff;";
-
-        // הגדרת הסגנון החדש עם כל השינויים
         cellLabel.setStyle(style);
     }
 
     private void removeHoverEffect() {
-        cellLabel.setEffect(null); // הסרת אפקט הצל
+        cellLabel.setEffect(null);
+        applyStyles();
+    }
 
-        // חזרה לעיצוב המקורי על ידי יישום הסגנונות הקיימים בלבד
+    public void resetStyle() {
+        textColor = "-fx-text-fill: " + DEFAULT_TEXT_COLOR + ";";
+        backgroundColor = "-fx-background-color: " + DEFAULT_BACKGROUND_COLOR + ";";
+        //alignment = "-fx-alignment: " + DEFAULT_ALIGNMENT + ";";
+        borderColor = "-fx-border-color: " + DEFAULT_BORDER_COLOR + ";";
+        borderWidth = "-fx-border-width: " + DEFAULT_BORDER_WIDTH + ";";
         applyStyles();
     }
 }

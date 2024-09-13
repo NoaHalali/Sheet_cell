@@ -63,7 +63,7 @@ public class CommandsController {
 
     @FXML
     public void resetCellStyleAction() {
-        // לוגיקה לביטול העיצוב של תא מסוים
+        mainController.resetCellStyle();
     }
 
     public void setMainController(AppController mainController) {
