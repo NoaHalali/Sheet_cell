@@ -26,11 +26,14 @@ public class CoordinateImpl implements Coordinate, Serializable {
     @Override
     public String toString() {
         char char1= (char) ('A'+ column -1);
-        char char2= (char) ('1'+row-1);
-        return indexToColumnString(column)+char2;
+        String number= String.valueOf(row);
+        return indexToColumnString(column)+number;
     }
 
     public static Coordinate parseCoordinate(String input) throws IllegalArgumentException {
+        if(input==null) {
+            System.out.println("was here");
+        }
 
         if (input.matches("^[A-Za-z]+[0-9]+$")) { // Accepts both uppercase and lowercase letters
             String columnString = input.replaceAll("[0-9]", "");
