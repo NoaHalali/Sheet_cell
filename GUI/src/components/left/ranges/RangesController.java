@@ -1,10 +1,10 @@
 package components.left.ranges;
 
 import components.MainComponent.AppController;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
@@ -20,35 +20,40 @@ public class RangesController {
     @FXML private ListView<String> rangeListView;
 
     private AppController mainController;
-    private String lastSelectedRange;
+    //private String lastSelectedRange;
 
-    public void initializeRangesController(List<String> existingRanges) {
-        lastSelectedRange = null;
-
+    public void initializeRangesController(List<String> existingRanges, SimpleBooleanProperty isCellSelected) {
         // אתחול הרשימה עם "None" בהתחלה
         refreshListView(existingRanges);
 
+        // איפוס הבחירה ברשימה כאשר מתבצע אתחול
+        rangeListView.getSelectionModel().clearSelection();
+
+        // מאזין לבחירת פריט ברשימה
         rangeListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
-                // נקה את הסימון של הטווח הקודם אם קיים
-                if (lastSelectedRange != null) {
-                    clearRangeHighlight(); // נקה את כל הסימונים
-                }
-
                 // אם נבחר "None", איפוס הבחירה האחרונה
                 if ("None".equals(newValue)) {
-                    lastSelectedRange = null;
+                    clearCurrSelectedRangeHighlight();
                 } else {
-                    // אם הטווח קיים ברשימה, עדכן את הבחירה והצג את הטווח החדש
-                    lastSelectedRange = newValue;
-                    viewRangeAction(); // הצג את הטווח החדש
+                    viewRangeAction();
                 }
+            }
+        });
+
+        // מאזין למאפיין של בחירת תא מ-AppController
+        isCellSelected.addListener((observable, oldValue, newValue) -> {
+            // אם תא נבחר, איפוס הבחירה ברשימה
+            if (newValue) {
+                rangeListView.getSelectionModel().clearSelection();
             }
         });
     }
 
+
+
     private void refreshListView(List<String> ranges) {
-        // אתחול הרשימה עם "None" בהתחלה
+        // יצירת רשימה חדשה בכל פעם שמאתחלים את הרשימה
         ObservableList<String> listViewItems = FXCollections.observableArrayList();
         listViewItems.add("None");
 
@@ -58,7 +63,11 @@ public class RangesController {
         }
 
         rangeListView.setItems(listViewItems);
+
+        // איפוס הבחירה ב-ListView
+        rangeListView.getSelectionModel().clearSelection();
     }
+
 
     @FXML
     public void addRangeButtonAction() {
@@ -90,8 +99,8 @@ public class RangesController {
         }
 
         try {
-            clearRangeHighlight();
-            lastSelectedRange =null;
+            clearCurrSelectedRangeHighlight();
+            //lastSelectedRange =null;
             // שליחת הפעולה ללוגיקה
             mainController.deleteRange(selectedRangeName);
 
@@ -129,7 +138,7 @@ public class RangesController {
         mainController.highlightRange(rangeName);
     }
 
-    private void clearRangeHighlight() {
-        mainController.clearRangeHighlight(lastSelectedRange); // פונקציה להסרת ההדגשה ב-AppController
+    private void clearCurrSelectedRangeHighlight() {
+        mainController.clearCurrSelectedRangeHighlight(); // פונקציה להסרת ההדגשה ב-AppController
     }
 }

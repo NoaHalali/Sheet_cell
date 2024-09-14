@@ -81,6 +81,7 @@ public class AppController {
             isFileSelectedProperty = new SimpleBooleanProperty(false);
             isCellSelectedProperty = new SimpleBooleanProperty(false);
             versionProperty = new SimpleIntegerProperty(1);
+
             table.disableProperty().bind(isFileSelectedProperty.not());
             actionLine.disableProperty().bind(isFileSelectedProperty.not());
             versionSelector.disableProperty().bind(isFileSelectedProperty.not());
@@ -95,17 +96,41 @@ public class AppController {
         }
     }
 
-    public void updateActionLine(Coordinate coord) {
+    public void initializeComponentsAfterLoad() {
+
+        isFileSelectedProperty.set(true);
+        // עדכון ה-UI במקרה של הצלחה
+        isFileSelectedProperty.set(true);
+        SheetDTO sheet = engine.getCurrentSheetDTO();
+        tableController.initializeGrid(sheet);
+        versionSelectorController.initializeVersionSelector(sheet.getVersion());
+        actionLineController.initializeActionLine(isCellSelectedProperty);
+        commandsController.InitializeCommandsController(isCellSelectedProperty);
+        rangesController.initializeRangesController(sheet.getRangesNames(), isCellSelectedProperty);
+    }
+    public void handleCellClick(Coordinate coord)
+    {
         if (coord == null) {
             isCellSelectedProperty.set(false);
             actionLineController.setActionLine(null); // איפוס השורה
-        } else {
+        }
+        else {
             isCellSelectedProperty.set(true);
             CellDTO cell = engine.getCellDTOByCoordinate(coord);
             actionLineController.setActionLine(cell); // עדכון השורה עם התא החדש
-
         }
     }
+
+//    public void updateActionLine(Coordinate coord) {
+//
+//        actionLineController.setActionLine(null); // איפוס השורה
+//        } else {
+//            isCellSelectedProperty.set(true);
+//            CellDTO cell = engine.getCellDTOByCoordinate(coord);
+//            actionLineController.setActionLine(cell); // עדכון השורה עם התא החדש
+//
+//        }
+//    }
 
     public void setPrimaryStage(Stage primaryStage) {
         this.primaryStage = primaryStage;
@@ -207,6 +232,10 @@ public class AppController {
 //        new Thread(updateCellTask).start();
 //    }
 
+//    public BooleanProperty cellSelectedProperty() {
+//        return cellsSelected;
+//    }
+
     public void updateCellValue(String value) {
         Coordinate coordinate = tableController.getCurrentlyFocusedCoord();
         try {
@@ -258,19 +287,6 @@ public class AppController {
         }
     }
 
-    public void initializeComponentsAfterLoad() {
-
-        isFileSelectedProperty.set(true);
-        // עדכון ה-UI במקרה של הצלחה
-        isFileSelectedProperty.set(true);
-        SheetDTO sheet = engine.getCurrentSheetDTO();
-        tableController.initializeGrid(sheet);
-        versionSelectorController.initializeVersionSelector(sheet.getVersion());
-        actionLineController.initializeActionLine(isCellSelectedProperty);
-        commandsController.InitializeCommandsController(isCellSelectedProperty);
-        rangesController.initializeRangesController(sheet.getRangesNames());
-    }
-
     //Ranges
     public void addRange(String rangeName, String rangeDefinition) throws Exception {
         engine.addRange(rangeName, rangeDefinition);
@@ -281,9 +297,9 @@ public class AppController {
         tableController.highlightRange(rangeCoordinates);
     }
 
-    public void clearRangeHighlight(String rangeName) {
-        List<Coordinate> rangeCoordinates = engine.getRangeCoordinates(rangeName);
-        tableController.clearHighlighting(rangeCoordinates);;
+    public void clearCurrSelectedRangeHighlight() {
+        //List<Coordinate> rangeCoordinates = engine.getRangeCoordinates(rangeName);
+        tableController.clearCurrentHighlightRange();;
     }
 
     public void deleteRange(String selectedRangeName) {
@@ -328,12 +344,15 @@ public class AppController {
         return engine.getSortedSheetDTO(rangeDefinition, columnsToSortBy);
     }
 
-//    public void clearMarksBeforePreview()
-//    {
-//        tableController.removeFocusingOfFocusedCell();
-//        //tableController
-//    }
+    public void clearBorderMarkOfCells()
+    {
+        //tableController.removeFocusingOfFocusedCell();
+        tableController.clearMarkOfCells();
+    }
 
+    public void setCellSelectedProperty(boolean flag) {
+        isCellSelectedProperty.set(flag);
+    }
 }
 
 //

@@ -112,23 +112,26 @@ public class CellController {
     }
 
     public void applyHoverEffectListeners() {
-        cellLabel.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> applyHoverEffect());
-        cellLabel.addEventHandler(MouseEvent.MOUSE_EXITED, event -> removeHoverEffect());
+//        cellLabel.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> applyHoverEffect());
+//        cellLabel.addEventHandler(MouseEvent.MOUSE_EXITED, event -> removeHoverEffect());
     }
 
-    private void applyHoverEffect() {
-        cellLabel.setEffect(hoverShadow);
-        String style = buildStyleString() + "-fx-border-color: blue; -fx-border-width: 2px; -fx-background-color: #f0f8ff;";
-        cellLabel.setStyle(style);
-    }
+//    private void applyHoverEffect() {
+//        cellLabel.setEffect(hoverShadow);
+//        String style = buildStyleString() + "-fx-border-color: blue; -fx-border-width: 2px; -fx-background-color: #f0f8ff;";
+//        cellLabel.setStyle(style);
+//    }
+
+//private void removeHoverEffect() {
+//    cellLabel.setEffect(null);
+//    applyStyles();
+//}
+
     public void setCellStyle(String style){
         cellLabel.setStyle(style);
     }
 
-    private void removeHoverEffect() {
-        cellLabel.setEffect(null);
-        applyStyles();
-    }
+
 
     public void resetStyle() {
         textColor = "-fx-text-fill: " + DEFAULT_TEXT_COLOR + ";";
@@ -145,6 +148,17 @@ public class CellController {
     }
 
     public void clearRangeHighlight() {
+        applyStyles();
+    }
+
+    public void setBorder(String color, String width) {
+        borderColor = "-fx-border-color: " + color + ";";
+        borderWidth = "-fx-border-width: " + width + ";";
+        applyStyles();
+    }
+
+    public void resetBorder() {
+        setBorder(DEFAULT_BORDER_COLOR, DEFAULT_BORDER_WIDTH);
         applyStyles();
     }
 
