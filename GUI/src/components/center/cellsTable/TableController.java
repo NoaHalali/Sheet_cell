@@ -40,6 +40,8 @@ public class TableController {
         addRowAndColumnLabels(sheet.getNumberOfRows(), sheet.getNumberOfCols());
     }
 
+
+
     private void setupGrid(SheetDTO sheet) {
         dynamicGridPane.getColumnConstraints().clear();
         dynamicGridPane.getRowConstraints().clear();
@@ -59,6 +61,7 @@ public class TableController {
     }
 
     private void populateGridWithCells(SheetDTO sheet, boolean enableClick) {
+
         for (int row = 1; row <= sheet.getNumberOfRows(); row++) {
             for (int col = 1; col <= sheet.getNumberOfCols(); col++) {
                 CoordinateImpl coord = new CoordinateImpl(row, col);
@@ -68,12 +71,19 @@ public class TableController {
                     CellController cellController = loader.getController();
 
                     CellDTO cell = sheet.getCell(coord);
+                    cellController.setCoord(cell.getCoord());
+
+
                     String cellText = cell == null ? "" : calcValueToPrint(cell.getEffectiveValue());
                     cellController.setText(cellText);
-                    cellController.setBackgroundColor("#f0f0f0");
-                    cellController.setAlignment("center");
-                    cellController.setBorderColor("black");
-                    cellController.setBorderWidth("0.5px");
+
+
+
+                        cellController.setBackgroundColor("#f0f0f0");
+                        cellController.setAlignment("center");
+                        cellController.setBorderColor("black");
+                        cellController.setBorderWidth("0.5px");
+
 
                     if (enableClick) {
                         String coordStr = coord.toString();
@@ -81,6 +91,7 @@ public class TableController {
 
                         cellController.applyHoverEffectListeners();
                     }
+
 
                     dynamicGridPane.add(cellPane, col, row);
                     coordToCellControllerMap.put(coord.toString(), cellController);
@@ -106,11 +117,44 @@ public class TableController {
         }
     }
 
+
+
     public void updateCellContent(Coordinate coord, EffectiveValue newText) {
         CellController cellController = coordToCellControllerMap.get(coord.toString());
         if (cellController != null) {
             cellController.setText(calcValueToPrint(newText));
         }
+    }
+    public Map<String, String> getCoordToStyleMap() {
+        Map<String, String> styleMap = new HashMap<String, String>();
+        for (String coordStr : coordToCellControllerMap.keySet()) {
+            CellController cellController = coordToCellControllerMap.get(coordStr);
+            styleMap.put(cellController.getCoord().toString(),cellController.buildStyleString());
+
+        }
+        return styleMap;
+    }
+
+    public void updateCellsStyleAfterSort(Map<String, String> prevStyleMap, SheetDTO sheet){
+        for (int row = 1; row <= sheet.getNumberOfRows(); row++) {
+            for (int col = 1; col <= sheet.getNumberOfCols(); col++) {
+                CoordinateImpl coord = new CoordinateImpl(row, col);
+
+                CellController cell = coordToCellControllerMap.get(coord.toString()); // current coordinate controller after sort
+                Coordinate prevCoord = sheet.getCell(coord).getCoord(); //previous coordinate of this cell, with its style
+                String prevCoordStyle = prevStyleMap.get(prevCoord.toString());//get the old style of our current cell
+                cell.setCellStyle(prevCoordStyle); //set cell style to its new place after sort
+            }
+        }
+
+
+//        for (String coordStr : prevStyleMap.keySet()) {
+//
+//            CellController cellToChangeStyle = coordToCellControllerMap.get(coordStr);
+//            cellToChangeStyle.setCellStyle(prevStyleMap.get(sheet.getCell(CoordinateImpl.parseCoordinate(coordStr)).getCoord().toString()));
+//
+//
+//        }
     }
 
     public String calcValueToPrint(EffectiveValue effectiveValue) {

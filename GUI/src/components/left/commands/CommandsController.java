@@ -15,9 +15,9 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import parts.SheetDTO;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class CommandsController {
 
@@ -150,7 +150,9 @@ public class CommandsController {
             TableController tableController = loader.getController();
             List<Character> colsList = colsStringToCharList(sortColumnsTextField.getText());
             SheetDTO sheet = mainController.getSortedSheetDTO(sortRangeTextField.getText(), colsList);
+            Map<String,String> styleMap=mainController.getStylesFromMainSheet();
             tableController.showSheetPreview(sheet);
+            tableController.updateCellsStyleAfterSort(styleMap,sheet);
 
             // Set the scene and show the popup
             Scene scene = new Scene(root);

@@ -5,6 +5,7 @@ import javafx.scene.control.Label;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
+import parts.sheet.cell.coordinate.Coordinate;
 
 public class CellController {
 
@@ -16,6 +17,7 @@ public class CellController {
     private String borderColor;
     private String borderWidth;
     private final DropShadow hoverShadow = new DropShadow();
+    private Coordinate coord;
 
     //Default style values
     private static final String DEFAULT_BACKGROUND_COLOR = "#f0f0f0";
@@ -36,6 +38,12 @@ public class CellController {
     public void setTextColor(String color) {
         textColor = "-fx-text-fill: " + color + ";";
         applyStyles();
+    }
+    public  Coordinate getCoord() {
+      return coord;
+    }
+    public void setCoord(Coordinate coord) {
+        this.coord = coord;
     }
 
     public void setBackgroundColor(String color) {
@@ -68,7 +76,8 @@ public class CellController {
         applyStyles();
     }
 
-    private String buildStyleString() {
+
+    public String buildStyleString() {
         StringBuilder style = new StringBuilder();
 
         if (backgroundColor != null) {
@@ -105,6 +114,9 @@ public class CellController {
     private void applyHoverEffect() {
         cellLabel.setEffect(hoverShadow);
         String style = buildStyleString() + "-fx-border-color: blue; -fx-border-width: 2px; -fx-background-color: #f0f8ff;";
+        cellLabel.setStyle(style);
+    }
+    public void setCellStyle(String style){
         cellLabel.setStyle(style);
     }
 

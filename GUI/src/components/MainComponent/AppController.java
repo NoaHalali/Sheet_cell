@@ -31,6 +31,7 @@ import parts.sheet.cell.coordinate.CoordinateImpl;
 import java.io.File;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 public class AppController {
 
@@ -288,6 +289,9 @@ public class AppController {
     public void deleteRange(String selectedRangeName) {
         engine.deleteRange(selectedRangeName);
     }
+    public Map<String,String> getStylesFromMainSheet() {
+        return tableController.getCoordToStyleMap();
+    }
 
 
     public void setCellTextColor(Color color) {
@@ -323,6 +327,12 @@ public class AppController {
     public SheetDTO getSortedSheetDTO(String rangeDefinition, List<Character> columnsToSortBy) throws IllegalArgumentException {
         return engine.getSortedSheetDTO(rangeDefinition, columnsToSortBy);
     }
+
+    public void clearMarksBeforePreview()
+    {
+
+    }
+
 }
 
 //
