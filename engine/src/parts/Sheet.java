@@ -371,4 +371,61 @@ public class Sheet implements Serializable {
         return new ArrayList(ranges.keySet());
     }
 
+    public Sheet getSortedSheet(String rangeDefinition, List<Character> columnsToSortBy) {
+        // יצירת עותק של הגיליון הנוכחי
+        Sheet sortedSheet = this.cloneSheet();
+
+        // פירוש הגדרת הטווח
+        String[] rangeBounds = rangeDefinition.split("\\.\\.");
+        Coordinate topLeft = CoordinateImpl.parseCoordinate(rangeBounds[0]);
+        Coordinate bottomRight = CoordinateImpl.parseCoordinate(rangeBounds[1]);
+
+        // בדיקת הקואורדינטות
+        sortedSheet.validateCoordinateBounds(topLeft);
+        sortedSheet.validateCoordinateBounds(bottomRight);
+        Range.isValidRange(topLeft, bottomRight);
+
+        // שליפת המטריצה של התאים מתוך העותק
+        Cell[][] cellsMatrix = sortedSheet.getCellsMatrix();
+
+        // קביעת הגבולות לטווח המיון
+        int startRow = topLeft.getRow() - 1;
+        int endRow = bottomRight.getRow() - 1;
+        int startCol = topLeft.getCol() - 1;
+        int endCol = bottomRight.getCol() - 1;
+
+        // מיון המטריצה על פי העמודות שנבחרו
+        Arrays.sort(cellsMatrix, startRow, endRow + 1, (row1, row2) -> {
+            for (char col : columnsToSortBy) {
+                int colIndex = col - 'A'; // המרת אות לעמודה מספרית
+                if (colIndex >= startCol && colIndex <= endCol) {
+                    Double value1 = parseNumericValue(row1[colIndex].getEffectiveValue().);
+                    Double value2 = parseNumericValue(row2[colIndex].getEffectiveValue());
+
+                    // בדיקת Null כדי לוודא השוואה מספרית
+                    if (value1 != null && value2 != null) {
+                        int compareResult = Double.compare(value1, value2);
+                        if (compareResult != 0) {
+                            return compareResult; // נמצא הבדל, החזר את תוצאת ההשוואה
+                        }
+                    }
+                }
+            }
+            return 0; // אם כל העמודות שוות, שמור על הסדר המקורי
+        });
+
+        // החזרת עותק ממוין של הגיליון כ-DTO
+        return sortedSheet;
+    }
+
+    // פונקציה עזר לפרש ערכים מספריים
+    private Double parseNumericValue(String value) {
+        try {
+            return Double.parseDouble(value);
+        } catch (NumberFormatException e) {
+            return null; // מחזיר null אם לא מדובר במספר
+        }
+    }
+
+
 }

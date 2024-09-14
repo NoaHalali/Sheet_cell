@@ -42,6 +42,8 @@ public interface Engine {
     public void deleteRange(String selectedRangeName);
 
     public List<String> getRangesNames();
+
+    public SheetDTO getSortedSheetDTO(String rangeDefinition, List<Character> columnsToSortBy);
 }
 
 

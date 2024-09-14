@@ -229,4 +229,9 @@ public class EngineImpl implements Engine {
         return currentSheet.getRangesNames();
     }
 
+    @Override
+    public SheetDTO getSortedSheetDTO(String rangeDefinition, List<Character> columnsToSortBy) {
+        return currentSheet.getSortedSheet(rangeDefinition, columnsToSortBy).toSheetDTO();
+    }
+
 }
