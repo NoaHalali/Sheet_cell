@@ -52,5 +52,25 @@ public void setValue(Object value) {}
         // error handling... exception ? return null ?
 
     }
+    @Override
+    public int compare(EffectiveValue effectiveValue) {
+        if (cellType == CellType.NUMERIC && effectiveValue.getCellType() == CellType.NUMERIC) {
+         double val1 = (double) effectiveValue.getValue();
+         double val2 = (double) effectiveValue.getValue();
+         return Double.compare(val1, val2);
+
+        }
+//        else if(cellType == CellType.NUMERIC && effectiveValue.getCellType() != CellType.NUMERIC){//the first is number and the second is
+//         return 1;
+//
+//        }
+//        else if(cellType != CellType.NUMERIC && effectiveValue.getCellType() == CellType.NUMERIC){//first not number but second is
+//            return  -1;
+//
+//        }else{//both not numbers
+//            return 0;
+//        }
+        return 0;
+    }
 
 }

@@ -6,4 +6,5 @@ public interface EffectiveValue {
     <T> T extractValueWithExpectation(Class<T> type);
     @Override
     boolean equals(Object obj);
+    int compare(EffectiveValue effectiveValue);
 }
