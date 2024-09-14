@@ -4,7 +4,7 @@ import parts.Engine;
 import parts.EngineImpl;
 import parts.SheetDTO;
 import parts.cell.CellDTO;
-import parts.cell.coordinate.Coordinate;
+import parts.sheet.cell.coordinate.Coordinate;
 
 import java.util.List;
 

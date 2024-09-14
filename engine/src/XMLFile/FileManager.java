@@ -7,10 +7,10 @@ import XMLFile.GeneratedFiles.STLSheet;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Unmarshaller;
-import parts.Sheet;
-import parts.cell.Cell;
-import parts.cell.coordinate.Coordinate;
-import parts.cell.coordinate.CoordinateImpl;
+import parts.sheet.Sheet;
+import parts.sheet.cell.Cell;
+import parts.sheet.cell.coordinate.Coordinate;
+import parts.sheet.cell.coordinate.CoordinateImpl;
 
 import java.io.File;
 import java.io.FileInputStream;

@@ -1,7 +1,8 @@
 package parts;
 
 import parts.cell.CellDTO;
-import parts.cell.coordinate.Coordinate;
+import parts.sheet.cell.coordinate.Coordinate;
+import parts.sheet.Sheet;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -43,7 +44,7 @@ public interface Engine {
 
     public List<String> getRangesNames();
 
-    public SheetDTO getSortedSheetDTO(String rangeDefinition, List<Character> columnsToSortBy);
+    public SheetDTO getSortedSheetDTO(String rangeDefinition, List<Character> columnsToSortBy) throws IllegalArgumentException;
 }
 
 

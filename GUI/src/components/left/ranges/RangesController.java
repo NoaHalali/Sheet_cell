@@ -73,7 +73,7 @@ public class RangesController {
             refreshListView(mainController.getRanges());
 
         } catch (Exception e) {
-            showAlert("Error", e.getMessage());
+            mainController.showAlert("Error", e.getMessage());
         }
     }
 
@@ -81,11 +81,11 @@ public class RangesController {
     public void deleteRangeAction() {
         String selectedRangeName = rangeListView.getSelectionModel().getSelectedItem();
         if ("None".equals(selectedRangeName)) {
-            showAlert("Error", "Cannot delete 'None'!");
+            mainController.showAlert("Error", "Cannot delete 'None'!");
             return;
         }
         if(selectedRangeName == null) {
-            showAlert("Error", "No range selected!");
+            mainController.showAlert("Error", "No range selected!");
             return;
         }
 
@@ -99,7 +99,7 @@ public class RangesController {
             refreshListView(mainController.getRanges());
 
         } catch (Exception e) {
-            showAlert("Error", e.getMessage());
+            mainController.showAlert("Error", e.getMessage());
         }
     }
 
@@ -109,7 +109,7 @@ public class RangesController {
         if (selectedRangeName != null) {
             highlightRange(selectedRangeName);
         } else {
-            showAlert("Error", "No range selected or range does not exist!");
+            mainController.showAlert("Error", "No range selected or range does not exist!");
         }
     }
 
@@ -117,13 +117,13 @@ public class RangesController {
         this.mainController = mainController;
     }
 
-    private void showAlert(String title, String message) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
-    }
+//    private void showAlert(String title, String message) {
+//        Alert alert = new Alert(Alert.AlertType.ERROR);
+//        alert.setTitle(title);
+//        alert.setHeaderText(null);
+//        alert.setContentText(message);
+//        alert.showAndWait();
+//    }
 
     private void highlightRange(String rangeName) {
         mainController.highlightRange(rangeName);

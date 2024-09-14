@@ -1,4 +1,4 @@
-package parts.cell.expression.effectiveValue;
+package parts.sheet.cell.expression.effectiveValue;
 
 public interface EffectiveValue {
     CellType getCellType();

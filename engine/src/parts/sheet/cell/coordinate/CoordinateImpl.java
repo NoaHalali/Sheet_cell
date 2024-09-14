@@ -1,4 +1,4 @@
-package parts.cell.coordinate;
+package parts.sheet.cell.coordinate;
 
 import java.io.Serializable;
 
@@ -28,6 +28,11 @@ public class CoordinateImpl implements Coordinate, Serializable {
         char char1= (char) ('A'+ column -1);
         String number= String.valueOf(row);
         return indexToColumnString(column)+number;
+    }
+
+    @Override
+    public char getColChar() {
+        return indexToColumnString(column).charAt(0); //assuming the column is a single letter
     }
 
     public static Coordinate parseCoordinate(String input) throws IllegalArgumentException {

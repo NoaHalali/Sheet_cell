@@ -162,14 +162,14 @@ public class CommandsController {
             // Show the popup and wait for it to be closed before returning to the main window
             popupStage.showAndWait();
 
-        } catch (IOException e) {
-            e.printStackTrace();
-            // Handle exception if FXML loading fails
+        } catch (Exception e) {
+            mainController.showAlert("Error", e.getMessage());
         }
     }
 
+    //For now here, maybe move to logic
     private List<Character> colsStringToCharList(String input) {
-        String[] charArray = input.split(",");
+        String[] charArray = input.toUpperCase().split(",");
         List<Character> charList = new ArrayList<>();
 
         // המרה לרשימת תווים

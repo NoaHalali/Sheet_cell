@@ -9,7 +9,6 @@ import components.top.versions.VersionSelectorController;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
-import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
@@ -25,8 +24,8 @@ import parts.Engine;
 import parts.cell.CellDTO;
 import parts.EngineImpl;
 import parts.SheetDTO;
-import parts.cell.coordinate.Coordinate;
-import parts.cell.coordinate.CoordinateImpl;
+import parts.sheet.cell.coordinate.Coordinate;
+import parts.sheet.cell.coordinate.CoordinateImpl;
 
 
 import java.io.File;
@@ -238,6 +237,7 @@ public class AppController {
         Coordinate coordinate = CoordinateImpl.parseCoordinate(coord);
         return engine.getCellDTOByCoordinate(coordinate);
     }
+
     public void showAlert(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle(title);
@@ -320,7 +320,7 @@ public class AppController {
         tableController.resetCellStyle();
     }
 
-    public SheetDTO getSortedSheetDTO(String rangeDefinition, List<Character> columnsToSortBy) {
+    public SheetDTO getSortedSheetDTO(String rangeDefinition, List<Character> columnsToSortBy) throws IllegalArgumentException {
         return engine.getSortedSheetDTO(rangeDefinition, columnsToSortBy);
     }
 }

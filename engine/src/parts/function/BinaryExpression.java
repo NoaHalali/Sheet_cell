@@ -1,7 +1,7 @@
 package parts.function;
 
-import parts.cell.expression.effectiveValue.EffectiveValue;
-import parts.cell.expression.Expression;
+import parts.sheet.cell.expression.effectiveValue.EffectiveValue;
+import parts.sheet.cell.expression.Expression;
 
 import java.io.Serializable;
 

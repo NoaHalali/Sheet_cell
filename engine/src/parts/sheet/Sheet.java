@@ -1,9 +1,13 @@
-package parts;
+package parts.sheet;
 
+import parts.FunctionParser;
+import parts.Range;
+import parts.SheetDTO;
 import parts.cell.*;
-import parts.cell.coordinate.Coordinate;
-import parts.cell.coordinate.CoordinateImpl;
-import parts.cell.expression.Expression;
+import parts.sheet.cell.Cell;
+import parts.sheet.cell.coordinate.Coordinate;
+import parts.sheet.cell.coordinate.CoordinateImpl;
+import parts.sheet.cell.expression.Expression;
 
 import java.io.*;
 import java.util.*;
@@ -17,7 +21,7 @@ public class Sheet implements Serializable {
     private final int columnWidth;
     private final int rowHeight;
     private Cell[][] cellsMatrix; // מערך דו-ממדי של תאים
-    private Map<String,Range> ranges = new HashMap<String,Range>();
+    private Map<String, Range> ranges = new HashMap<String,Range>();
     //private Map<String,Integer> deletedCells= new HashMap<String,Integer>();
     private static final char minCol = 'A';
     private static final int minRow = 1;
@@ -371,31 +375,59 @@ public class Sheet implements Serializable {
         return new ArrayList(ranges.keySet());
     }
 
-    public Sheet getSortedSheet(String rangeDefinition, List<Character> columnsToSortBy) {
+    public Sheet getSortedSheet(String rangeDefinition, List<Character> columnsToSortBy) throws IllegalArgumentException {
         // יצירת עותק של הגיליון הנוכחי
         Sheet sortedSheet = this.cloneSheet();
 
         // פירוש הגדרת הטווח
         String[] rangeBounds = rangeDefinition.split("\\.\\.");
-        Coordinate topLeft = CoordinateImpl.parseCoordinate(rangeBounds[0]);
-        Coordinate bottomRight = CoordinateImpl.parseCoordinate(rangeBounds[1]);
+        Coordinate topLeftCoord = CoordinateImpl.parseCoordinate(rangeBounds[0]);
+        Coordinate bottomRightCoord = CoordinateImpl.parseCoordinate(rangeBounds[1]);
+        char leftRangeColChar = topLeftCoord.getColChar();
+        char rightRangeColChar = bottomRightCoord.getColChar();
 
         // בדיקת הקואורדינטות
-        sortedSheet.validateCoordinateBounds(topLeft);
-        sortedSheet.validateCoordinateBounds(bottomRight);
-        Range.isValidRange(topLeft, bottomRight);
+        sortedSheet.validateCoordinateBounds(topLeftCoord);
+        sortedSheet.validateCoordinateBounds(bottomRightCoord);
+        Range.isValidRange(topLeftCoord, bottomRightCoord);
 
-        // שליפת רשימת התאים בטווח המוגדר
-        List<Cell> cellsInRange = sortedSheet.getRangeCellsList(topLeft, bottomRight);
+        validateSelectedColumnsInRange(columnsToSortBy, leftRangeColChar, rightRangeColChar);
+
+        // המרת המטריצה לרשימה של תאים בטווח שנבחר
+        List<SheetRow> rowsToSort = convertMatrixToRowList(sortedSheet.getCellsMatrix(), topLeftCoord, bottomRightCoord);
 
         // מיון השורות לפי העמודות שנבחרו
-        cellsInRange.sort((cell1, cell2) -> {
-            for (char col : columnsToSortBy) {
-                int colIndex = col - 'A'; // המרת אות לעמודה מספרית
-                Double value1 = cell1.getEffectiveValue().extractValueWithExpectation(Double.class);
-                Double value2 = cell2.getEffectiveValue().extractValueWithExpectation(Double.class);
+        rowsToSort.sort(createMultiLevelComparator(columnsToSortBy, leftRangeColChar));
 
-                // בדיקת Null כדי לוודא השוואה מספרית
+        // עדכון המטריצה של התאים בעותק הממוין
+        sortedSheet.updateCellsMatrix(rowsToSort, topLeftCoord, bottomRightCoord);
+
+        return sortedSheet;
+    }
+
+
+    // פונקציה להמרת המטריצה לרשימה של שורות בטווח שנבחר
+    private List<SheetRow> convertMatrixToRowList(Cell[][] cellsMatrix, Coordinate topLeft, Coordinate bottomRight) {
+        List<SheetRow> rows = new ArrayList<>();
+        for (int i = topLeft.getRow() - 1; i <= bottomRight.getRow() - 1; i++) {
+            List<Cell> cells = new ArrayList<>();
+            for (int j = topLeft.getCol() - 1; j <= bottomRight.getCol() - 1; j++) {
+                cells.add(cellsMatrix[i][j]);
+            }
+            rows.add(new SheetRow(cells));
+        }
+        return rows;
+    }
+
+    // פונקציה ליצירת Comparator רב-שלבי
+    private Comparator<SheetRow> createMultiLevelComparator(List<Character> columnsToSortBy, char leftRangeColChar) {
+        return (row1, row2) -> {
+            for (char colChar : columnsToSortBy) {
+                //chekIfColumnInRange(colChar, leftRangeColChar);
+                int colIndex = colChar - leftRangeColChar; //convert letter to colChar index according to the number of columns in the selected range
+                Double value1 = row1.getCell(colIndex).getEffectiveValue().extractValueWithExpectation(Double.class);
+                Double value2 = row2.getCell(colIndex).getEffectiveValue().extractValueWithExpectation(Double.class);
+
                 if (value1 != null && value2 != null) {
                     int compareResult = Double.compare(value1, value2);
                     if (compareResult != 0) {
@@ -404,24 +436,29 @@ public class Sheet implements Serializable {
                 }
             }
             return 0; // אם כל העמודות שוות, שמור על הסדר המקורי
-        });
-
-        // עדכון המטריצה של התאים בעותק הממוין
-        sortedSheet.updateCellsMatrix(cellsInRange, topLeft, bottomRight);
-
-        return sortedSheet;
+        };
     }
 
-    private void updateCellsMatrix(List<Cell> cellsInRange, Coordinate topLeft, Coordinate bottomRight) {
-        int row = topLeft.getRow();
-        int col = topLeft.getCol();
 
-        for (Cell cell : cellsInRange) {
-            cellsMatrix[row - 1][col - 1] = cell;
-            col++;
-            if (col > bottomRight.getCol()) {
-                col = topLeft.getCol();
-                row++;
+    // עדכון מטריצת התאים בגיליון לאחר המיון
+    private void updateCellsMatrix(List<SheetRow> sortedRows, Coordinate topLeft, Coordinate bottomRight) {
+        int startRow = topLeft.getRow() - 1;
+        int colStart = topLeft.getCol() - 1;
+        Cell[][] cellsMatrix = this.getCellsMatrix();
+
+        // מילוי המטריצה עם התאים הממויינים
+        for (int i = 0; i < sortedRows.size(); i++) {
+            List<Cell> rowCells = sortedRows.get(i).getCells();
+            for (int j = 0; j < rowCells.size(); j++) {
+                cellsMatrix[startRow + i][colStart + j] = rowCells.get(j);
+            }
+        }
+    }
+
+    private void validateSelectedColumnsInRange(List<Character> columnsToSortBy, char leftRangeColChar, char rightRangeColChar) throws IllegalArgumentException {
+        for (char colChar : columnsToSortBy) {
+            if (colChar < leftRangeColChar || colChar > rightRangeColChar) {
+                throw new IllegalArgumentException("Column " + colChar + " is not in the selected range.");
             }
         }
     }

@@ -1,8 +1,8 @@
-package parts.cell.expression.impl;
-import parts.cell.expression.effectiveValue.CellType;
-import parts.cell.expression.effectiveValue.EffectiveValue;
-import parts.cell.expression.effectiveValue.EffectiveValueImpl;
-import parts.cell.expression.Expression;
+package parts.sheet.cell.expression.impl;
+import parts.sheet.cell.expression.effectiveValue.CellType;
+import parts.sheet.cell.expression.effectiveValue.EffectiveValue;
+import parts.sheet.cell.expression.effectiveValue.EffectiveValueImpl;
+import parts.sheet.cell.expression.Expression;
 
 import java.io.Serializable;
 

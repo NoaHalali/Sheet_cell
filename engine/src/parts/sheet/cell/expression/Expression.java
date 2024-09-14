@@ -1,7 +1,7 @@
-package parts.cell.expression;
+package parts.sheet.cell.expression;
 
-import parts.cell.expression.effectiveValue.CellType;
-import parts.cell.expression.effectiveValue.EffectiveValue;
+import parts.sheet.cell.expression.effectiveValue.CellType;
+import parts.sheet.cell.expression.effectiveValue.EffectiveValue;
 
 public interface Expression {
 

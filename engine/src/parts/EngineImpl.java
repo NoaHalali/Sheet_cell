@@ -2,11 +2,12 @@ package parts;
 
 import XMLFile.FileManager;
 import parts.cell.*;
-import parts.cell.coordinate.Coordinate;
-import parts.cell.coordinate.CoordinateImpl;
+import parts.sheet.cell.Cell;
+import parts.sheet.cell.coordinate.Coordinate;
+import parts.sheet.cell.coordinate.CoordinateImpl;
+import parts.sheet.Sheet;
 
 import java.io.*;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -229,7 +230,7 @@ public class EngineImpl implements Engine {
     }
 
     @Override
-    public SheetDTO getSortedSheetDTO(String rangeDefinition, List<Character> columnsToSortBy) {
+    public SheetDTO getSortedSheetDTO(String rangeDefinition, List<Character> columnsToSortBy) throws IllegalArgumentException {
         return currentSheet.getSortedSheet(rangeDefinition, columnsToSortBy).toSheetDTO();
     }
 

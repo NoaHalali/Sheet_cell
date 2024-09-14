@@ -1,9 +1,9 @@
 package parts;
 
-import parts.cell.Cell;
-import parts.cell.coordinate.Coordinate;
-import parts.cell.expression.effectiveValue.CellType;
-import parts.cell.expression.effectiveValue.EffectiveValue;
+import parts.sheet.cell.Cell;
+import parts.sheet.cell.coordinate.Coordinate;
+import parts.sheet.cell.expression.effectiveValue.CellType;
+import parts.sheet.cell.expression.effectiveValue.EffectiveValue;
 
 import java.io.Serializable;
 import java.util.ArrayList;
