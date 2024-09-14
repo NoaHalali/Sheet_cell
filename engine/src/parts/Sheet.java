@@ -385,47 +385,54 @@ public class Sheet implements Serializable {
         sortedSheet.validateCoordinateBounds(bottomRight);
         Range.isValidRange(topLeft, bottomRight);
 
-        // שליפת המטריצה של התאים מתוך העותק
-        Cell[][] cellsMatrix = sortedSheet.getCellsMatrix();
+        // שליפת רשימת התאים בטווח המוגדר
+        List<Cell> cellsInRange = sortedSheet.getRangeCellsList(topLeft, bottomRight);
 
-        // קביעת הגבולות לטווח המיון
-        int startRow = topLeft.getRow() - 1;
-        int endRow = bottomRight.getRow() - 1;
-        int startCol = topLeft.getCol() - 1;
-        int endCol = bottomRight.getCol() - 1;
-
-        // מיון המטריצה על פי העמודות שנבחרו
-        Arrays.sort(cellsMatrix, startRow, endRow + 1, (row1, row2) -> {
+        // מיון השורות לפי העמודות שנבחרו
+        cellsInRange.sort((cell1, cell2) -> {
             for (char col : columnsToSortBy) {
                 int colIndex = col - 'A'; // המרת אות לעמודה מספרית
-                if (colIndex >= startCol && colIndex <= endCol) {
-                    Double value1 = parseNumericValue(row1[colIndex].getEffectiveValue().);
-                    Double value2 = parseNumericValue(row2[colIndex].getEffectiveValue());
+                Double value1 = cell1.getEffectiveValue().extractValueWithExpectation(Double.class);
+                Double value2 = cell2.getEffectiveValue().extractValueWithExpectation(Double.class);
 
-                    // בדיקת Null כדי לוודא השוואה מספרית
-                    if (value1 != null && value2 != null) {
-                        int compareResult = Double.compare(value1, value2);
-                        if (compareResult != 0) {
-                            return compareResult; // נמצא הבדל, החזר את תוצאת ההשוואה
-                        }
+                // בדיקת Null כדי לוודא השוואה מספרית
+                if (value1 != null && value2 != null) {
+                    int compareResult = Double.compare(value1, value2);
+                    if (compareResult != 0) {
+                        return compareResult; // נמצא הבדל, החזר את תוצאת ההשוואה
                     }
                 }
             }
             return 0; // אם כל העמודות שוות, שמור על הסדר המקורי
         });
 
-        // החזרת עותק ממוין של הגיליון כ-DTO
+        // עדכון המטריצה של התאים בעותק הממוין
+        sortedSheet.updateCellsMatrix(cellsInRange, topLeft, bottomRight);
+
         return sortedSheet;
     }
 
-    // פונקציה עזר לפרש ערכים מספריים
-    private Double parseNumericValue(String value) {
-        try {
-            return Double.parseDouble(value);
-        } catch (NumberFormatException e) {
-            return null; // מחזיר null אם לא מדובר במספר
+    private void updateCellsMatrix(List<Cell> cellsInRange, Coordinate topLeft, Coordinate bottomRight) {
+        int row = topLeft.getRow();
+        int col = topLeft.getCol();
+
+        for (Cell cell : cellsInRange) {
+            cellsMatrix[row - 1][col - 1] = cell;
+            col++;
+            if (col > bottomRight.getCol()) {
+                col = topLeft.getCol();
+                row++;
+            }
         }
     }
 
-
 }
+
+//    // פונקציה עזר לפרש ערכים מספריים
+//    private Double parseNumericValue(String value) {
+//        try {
+//            return Double.parseDouble(value);
+//        } catch (NumberFormatException e) {
+//            return null; // מחזיר null אם לא מדובר במספר
+//        }
+//    }

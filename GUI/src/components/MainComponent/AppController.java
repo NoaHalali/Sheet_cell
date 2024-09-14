@@ -319,6 +319,10 @@ public class AppController {
     public void resetCellStyle() {
         tableController.resetCellStyle();
     }
+
+    public SheetDTO getSortedSheetDTO(String rangeDefinition, List<Character> columnsToSortBy) {
+        return engine.getSortedSheetDTO(rangeDefinition, columnsToSortBy);
+    }
 }
 
 //

@@ -1,12 +1,23 @@
 package components.left.commands;
 
 import components.MainComponent.AppController;
+import components.center.cellsTable.TableController;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import parts.SheetDTO;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CommandsController {
 
@@ -22,6 +33,10 @@ public class CommandsController {
     @FXML private ColorPicker backgroundColorPicker;
     @FXML private Button applyTextColorButton;
     @FXML private Button applyBackgroundColorButton;
+    @FXML private Button displaySortButton;
+    @FXML private TextField sortRangeTextField;
+    @FXML private TextField sortColumnsTextField;
+
 
     private Color lastSelectedTextColor;
     private Color lastSelectedBackgroundColor;
@@ -118,6 +133,56 @@ public class CommandsController {
     public void setMainController(AppController mainController) {
         this.mainController = mainController;
     }
+
+    @FXML
+    private void displaySortAction() {
+
+        try {
+            // Create a new stage for the popup
+            Stage popupStage = new Stage();
+            popupStage.setTitle("Sorting Preview: ");
+
+            // Load the FXML or create a layout dynamically
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/components/center/cellsTable/table.fxml")); // Adjust the path
+            Parent root = loader.load();
+
+            // Get the TableController and initialize it with the selected version of the sheet
+            TableController tableController = loader.getController();
+            List<Character> colsList = colsStringToCharList(sortColumnsTextField.getText());
+            SheetDTO sheet = mainController.getSortedSheetDTO(sortRangeTextField.getText(), colsList);
+            tableController.showSheetPreview(sheet);
+
+            // Set the scene and show the popup
+            Scene scene = new Scene(root);
+            popupStage.setScene(scene);
+
+            // Set the popup to block the main window (modality)
+            popupStage.initModality(Modality.APPLICATION_MODAL);
+
+            // Show the popup and wait for it to be closed before returning to the main window
+            popupStage.showAndWait();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            // Handle exception if FXML loading fails
+        }
+    }
+
+    private List<Character> colsStringToCharList(String input) {
+        String[] charArray = input.split(",");
+        List<Character> charList = new ArrayList<>();
+
+        // המרה לרשימת תווים
+        for (String s : charArray) {
+            if (!s.isEmpty()) {
+                charList.add(s.charAt(0));
+            }
+        }
+        return charList;
+    }
+
+
+
 
 
 }

@@ -22,12 +22,13 @@
         <Button fx:id="setColumnAlignmentButton" onAction="#setColumnAlignmentAction" prefHeight="25.0" prefWidth="141.0" text="Set Column Alignment" />
         <TextField fx:id="columnAlignmentTextField" promptText="Enter alignment" />
     </HBox>
-   <Separator prefWidth="200.0" />
-   <Label text="Cell Style:">
-      <font>
-         <Font size="13.0" />
-      </font>
-   </Label>
+
+    <Separator prefWidth="200.0" />
+    <Label text="Cell Style:">
+        <font>
+            <Font size="13.0" />
+        </font>
+    </Label>
 
     <!-- שינוי צבע טקסט -->
     <HBox alignment="CENTER_LEFT" spacing="10.0">
@@ -44,7 +45,17 @@
     <!-- ביטול עיצוב תא מסוים -->
     <Button fx:id="resetCellStyleButton" onAction="#resetCellStyleAction" text="Reset Style" />
 
+    <!-- הוספת HBox למיון טבלה -->
+    <HBox alignment="CENTER_LEFT" spacing="5">
+        <Label text="Sort Range:" />
+        <TextField fx:id="sortRangeTextField" promptText="Enter range (e.g., A3..V9)" />
+        <Label text="Sort By Columns:" />
+        <TextField fx:id="sortColumnsTextField" promptText="Enter columns (e.g., A,C,E)" />
+        <Button fx:id="displaySortButton" onAction="#displaySortAction" text="Apply Sort" />
+    </HBox>
+
     <padding>
         <Insets bottom="5.0" left="10.0" right="10.0" top="5.0" />
     </padding>
 </VBox>
+

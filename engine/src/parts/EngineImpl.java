@@ -52,7 +52,6 @@ public class EngineImpl implements Engine {
         if (!sheetLoadad()) {
             throw new IllegalStateException(SHEET_NOT_LOADED_MESSAGE);
         }
-
         return currentSheet.toSheetDTO(); //temp
     }
 
