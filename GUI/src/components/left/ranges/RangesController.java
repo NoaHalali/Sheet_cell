@@ -1,38 +1,33 @@
 package components.left.ranges;
 
 import components.MainComponent.AppController;
-import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.ListView;
+import javafx.scene.control.ComboBox;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 
 import java.util.List;
 
 public class RangesController {
 
+    @FXML private ComboBox<String> rangeComboBox;
     @FXML private TextField rangeNameField;
     @FXML private TextField rangeDefinitionField;
     @FXML private Button addRangeButton;
     @FXML private Button deleteRangeButton;
-    @FXML private ListView<String> rangeListView;
 
     private AppController mainController;
-    //private String lastSelectedRange;
 
     public void initializeRangesController(List<String> existingRanges, SimpleBooleanProperty isCellSelected) {
-        // אתחול הרשימה עם "None" בהתחלה
-        refreshListView(existingRanges);
+        refreshComboBox(existingRanges);
 
-        // איפוס הבחירה ברשימה כאשר מתבצע אתחול
-        rangeListView.getSelectionModel().clearSelection();
-
-        // מאזין לבחירת פריט ברשימה
-        rangeListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+        // Listener לבחירת טווח
+        rangeComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
-                // אם נבחר "None", איפוס הבחירה האחרונה
                 if ("None".equals(newValue)) {
                     clearCurrSelectedRangeHighlight();
                 } else {
@@ -41,33 +36,30 @@ public class RangesController {
             }
         });
 
-        // מאזין למאפיין של בחירת תא מ-AppController
+        // Listener לאיפוס הבחירה כאשר תא נבחר
         isCellSelected.addListener((observable, oldValue, newValue) -> {
-            // אם תא נבחר, איפוס הבחירה ברשימה
             if (newValue) {
-                rangeListView.getSelectionModel().clearSelection();
+                rangeComboBox.getSelectionModel().clearSelection(); // איפוס הבחירה
+                rangeComboBox.setValue(null); // הגדרת ערך נבחר ל-null כדי לאפס את התצוגה
             }
         });
     }
 
-
-
-    private void refreshListView(List<String> ranges) {
+    private void refreshComboBox(List<String> ranges) {
         // יצירת רשימה חדשה בכל פעם שמאתחלים את הרשימה
-        ObservableList<String> listViewItems = FXCollections.observableArrayList();
-        listViewItems.add("None");
+        ObservableList<String> comboBoxItems = FXCollections.observableArrayList();
+        comboBoxItems.add("None");
 
-        // הוספת הרשימה המעודכנת מהלוגיקה
         if (ranges != null && !ranges.isEmpty()) {
-            listViewItems.addAll(ranges);
+            comboBoxItems.addAll(ranges);
         }
 
-        rangeListView.setItems(listViewItems);
+        rangeComboBox.setItems(comboBoxItems);
 
-        // איפוס הבחירה ב-ListView
-        rangeListView.getSelectionModel().clearSelection();
+        // איפוס הבחירה ב-ComboBox
+        rangeComboBox.getSelectionModel().clearSelection();
+        rangeComboBox.setValue(null); // הגדרת ערך נבחר ל-null כדי לאפס את התצוגה
     }
-
 
     @FXML
     public void addRangeButtonAction() {
@@ -75,11 +67,8 @@ public class RangesController {
         String rangeDefinition = rangeDefinitionField.getText();
 
         try {
-            // שליחת הפעולה ללוגיקה
             mainController.addRange(rangeName, rangeDefinition);
-
-            // רענון הרשימה ב-ListView
-            refreshListView(mainController.getRanges());
+            refreshComboBox(mainController.getRanges());
 
         } catch (Exception e) {
             mainController.showAlert("Error", e.getMessage());
@@ -88,7 +77,7 @@ public class RangesController {
 
     @FXML
     public void deleteRangeAction() {
-        String selectedRangeName = rangeListView.getSelectionModel().getSelectedItem();
+        String selectedRangeName = rangeComboBox.getSelectionModel().getSelectedItem();
         if ("None".equals(selectedRangeName)) {
             mainController.showAlert("Error", "Cannot delete 'None'!");
             return;
@@ -100,25 +89,11 @@ public class RangesController {
 
         try {
             clearCurrSelectedRangeHighlight();
-            //lastSelectedRange =null;
-            // שליחת הפעולה ללוגיקה
             mainController.deleteRange(selectedRangeName);
-
-            // רענון הרשימה ב-ListView
-            refreshListView(mainController.getRanges());
+            refreshComboBox(mainController.getRanges());
 
         } catch (Exception e) {
             mainController.showAlert("Error", e.getMessage());
-        }
-    }
-
-    @FXML
-    public void viewRangeAction() {
-        String selectedRangeName = rangeListView.getSelectionModel().getSelectedItem();
-        if (selectedRangeName != null) {
-            highlightRange(selectedRangeName);
-        } else {
-            mainController.showAlert("Error", "No range selected or range does not exist!");
         }
     }
 
@@ -126,19 +101,20 @@ public class RangesController {
         this.mainController = mainController;
     }
 
-//    private void showAlert(String title, String message) {
-//        Alert alert = new Alert(Alert.AlertType.ERROR);
-//        alert.setTitle(title);
-//        alert.setHeaderText(null);
-//        alert.setContentText(message);
-//        alert.showAndWait();
-//    }
+    private void clearCurrSelectedRangeHighlight() {
+        mainController.clearCurrSelectedRangeHighlight();
+    }
+
+    private void viewRangeAction() {
+        String selectedRangeName = rangeComboBox.getSelectionModel().getSelectedItem();
+        if (selectedRangeName != null) {
+            highlightRange(selectedRangeName);
+        } else {
+            mainController.showAlert("Error", "No range selected or range does not exist!");
+        }
+    }
 
     private void highlightRange(String rangeName) {
         mainController.highlightRange(rangeName);
-    }
-
-    private void clearCurrSelectedRangeHighlight() {
-        mainController.clearCurrSelectedRangeHighlight(); // פונקציה להסרת ההדגשה ב-AppController
     }
 }

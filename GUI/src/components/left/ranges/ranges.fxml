@@ -6,7 +6,9 @@
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.ComboBox?>
 
+<!-- הגדרת ה-VBox הראשי עם fx:controller -->
 <VBox spacing="10" style="-fx-background-color: #f2f273;" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="components.left.ranges.RangesController">
     <!-- אזור ניהול ה-Ranges -->
     <TextField fx:id="rangeNameField" promptText="Enter unique range name" />
@@ -15,11 +17,8 @@
     <!-- כפתורים לניהול טווחים -->
     <Button fx:id="addRangeButton" onAction="#addRangeButtonAction" text="Add Range" />
     <Button fx:id="deleteRangeButton" onAction="#deleteRangeAction" text="Delete Range" />
-   <Label text="Choose range to display:" />
+    <Label text="Choose range to display:" />
 
-    <!-- רשימת טווחים -->
-    <ListView fx:id="rangeListView" />
-   <padding>
-      <Insets bottom="5.0" left="10.0" right="10.0" top="5.0" />
-   </padding>
+    <!-- שינוי מ-ListView ל-ComboBox -->
+    <ComboBox fx:id="rangeComboBox" promptText="Choose range to display" />
 </VBox>
