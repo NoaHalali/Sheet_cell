@@ -129,7 +129,7 @@ public class TableController {
         Map<String, String> styleMap = new HashMap<String, String>();
         for (String coordStr : coordToCellControllerMap.keySet()) {
             CellController cellController = coordToCellControllerMap.get(coordStr);
-            styleMap.put(cellController.getCoord().toString(),cellController.buildStyleString());
+            styleMap.put(cellController.getCoord().toString(),cellController.copyPreviewStyle());
 
         }
         return styleMap;
@@ -181,13 +181,13 @@ public class TableController {
 
     private void handleCellClick(String newCoord) {
         if (currentlyFocusedCoord != null && currentlyFocusedCoord.toString().equals(newCoord)) {
-            removeFocusingOfCell(currentlyFocusedCoord.toString());
+            removeFocusingOfFocusedCell();
             currentlyFocusedCoord = null;
             currentlyFocusedCellController = null; // עדכון התא הממוקד לאפס
             mainController.updateActionLine(null);
         } else {
             if (currentlyFocusedCoord != null) {
-                removeFocusingOfCell(currentlyFocusedCoord.toString());
+                removeFocusingOfFocusedCell();
             }
             currentlyFocusedCoord = CoordinateImpl.parseCoordinate(newCoord);
             currentlyFocusedCellController = coordToCellControllerMap.get(currentlyFocusedCoord.toString()); // עדכון התא הממוקד
@@ -217,14 +217,15 @@ public class TableController {
         }
     }
 
-    public void removeFocusingOfCell(String oldCellCoordinate) {
-        CellController cellController = coordToCellControllerMap.get(oldCellCoordinate);
-        if (cellController != null) {
-            cellController.setBorderColor("black");
-            cellController.setBorderWidth("0.5px");
-
-            CellDTO cell = mainController.getCellDTO(oldCellCoordinate);
+    public void removeFocusingOfFocusedCell() {
+        //CellController currentlyFocusedCellController = coordToCellControllerMap.get(oldCellCoordinate);
+        if (currentlyFocusedCellController != null) {
+            currentlyFocusedCellController.setBorderColor("black");
+            currentlyFocusedCellController.setBorderWidth("0.5px");
+            Coordinate cellCoord = currentlyFocusedCellController.getCoord();
+            CellDTO cell = mainController.getCellDTO(cellCoord.toString());
             List<Coordinate> dependsOn = cell.getDependsOn();
+
             for (Coordinate coord : dependsOn) {
                 CellController depCellController = coordToCellControllerMap.get(coord.toString());
                 depCellController.setBorderColor("black");
@@ -267,11 +268,11 @@ public class TableController {
         }
     }
 
-    public void setCellBorderColor(String colorStr) {
-        if (currentlyFocusedCellController != null) {
-            currentlyFocusedCellController.setBorderColor(colorStr);
-        }
-    }
+//    public void setCellBorderColor(String colorStr) {
+//        if (currentlyFocusedCellController != null) {
+//            currentlyFocusedCellController.setBorderColor(colorStr);
+//        }
+//    }
 
     public void setCellBackgroundColor(String colorStr) {
         if (currentlyFocusedCellController != null) {

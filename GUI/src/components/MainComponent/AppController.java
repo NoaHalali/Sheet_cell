@@ -328,10 +328,11 @@ public class AppController {
         return engine.getSortedSheetDTO(rangeDefinition, columnsToSortBy);
     }
 
-    public void clearMarksBeforePreview()
-    {
-
-    }
+//    public void clearMarksBeforePreview()
+//    {
+//        tableController.removeFocusingOfFocusedCell();
+//        //tableController
+//    }
 
 }
 

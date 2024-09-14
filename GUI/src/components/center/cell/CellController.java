@@ -76,6 +76,11 @@ public class CellController {
         applyStyles();
     }
 
+    public String copyPreviewStyle() {
+        String style = buildStyleString() + "-fx-border-color: black; -fx-border-width: 0.5px;";
+        return style;
+    }
+
 
     public String buildStyleString() {
         StringBuilder style = new StringBuilder();
@@ -135,7 +140,7 @@ public class CellController {
     }
 
     public void setRangeHighlight() {
-        String style = buildStyleString() + "-fx-border-color: red; -fx-background-color: #ff0000;";
+        String style = buildStyleString() + "-fx-border-color: #fdfd00; -fx-border-width: 2px;";
         cellLabel.setStyle(style);
     }
 
