@@ -4,17 +4,16 @@ import components.MainComponent.AppController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.ComboBox;
+import javafx.scene.control.ListView;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 
 import java.util.List;
 
 public class RangesController {
 
-    @FXML private ComboBox<String> rangeComboBox;
+    @FXML private ListView<String> rangeListView;
     @FXML private TextField rangeNameField;
     @FXML private TextField rangeDefinitionField;
     @FXML private Button addRangeButton;
@@ -23,10 +22,10 @@ public class RangesController {
     private AppController mainController;
 
     public void initializeRangesController(List<String> existingRanges, SimpleBooleanProperty isCellSelected) {
-        refreshComboBox(existingRanges);
+        refreshListView(existingRanges);
 
         // Listener לבחירת טווח
-        rangeComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+        rangeListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
                 if ("None".equals(newValue)) {
                     clearCurrSelectedRangeHighlight();
@@ -39,26 +38,27 @@ public class RangesController {
         // Listener לאיפוס הבחירה כאשר תא נבחר
         isCellSelected.addListener((observable, oldValue, newValue) -> {
             if (newValue) {
-                rangeComboBox.getSelectionModel().clearSelection(); // איפוס הבחירה
-                rangeComboBox.setValue(null); // הגדרת ערך נבחר ל-null כדי לאפס את התצוגה
+                clearSelection(); // קריאה למתודת איפוס הבחירה
             }
         });
     }
 
-    private void refreshComboBox(List<String> ranges) {
+    private void refreshListView(List<String> ranges) {
         // יצירת רשימה חדשה בכל פעם שמאתחלים את הרשימה
-        ObservableList<String> comboBoxItems = FXCollections.observableArrayList();
-        comboBoxItems.add("None");
+        ObservableList<String> listViewItems = FXCollections.observableArrayList();
+        listViewItems.add("None");
 
         if (ranges != null && !ranges.isEmpty()) {
-            comboBoxItems.addAll(ranges);
+            listViewItems.addAll(ranges);
         }
 
-        rangeComboBox.setItems(comboBoxItems);
+        rangeListView.setItems(listViewItems);
 
-        // איפוס הבחירה ב-ComboBox
-        rangeComboBox.getSelectionModel().clearSelection();
-        rangeComboBox.setValue(null); // הגדרת ערך נבחר ל-null כדי לאפס את התצוגה
+        clearSelection(); // איפוס הבחירה לאחר עדכון הפריטים
+    }
+
+    private void clearSelection() {
+        rangeListView.getSelectionModel().clearSelection(); // איפוס הבחירה ב-ListView
     }
 
     @FXML
@@ -68,7 +68,7 @@ public class RangesController {
 
         try {
             mainController.addRange(rangeName, rangeDefinition);
-            refreshComboBox(mainController.getRanges());
+            refreshListView(mainController.getRanges());
 
         } catch (Exception e) {
             mainController.showAlert("Error", e.getMessage());
@@ -77,7 +77,7 @@ public class RangesController {
 
     @FXML
     public void deleteRangeAction() {
-        String selectedRangeName = rangeComboBox.getSelectionModel().getSelectedItem();
+        String selectedRangeName = rangeListView.getSelectionModel().getSelectedItem();
         if ("None".equals(selectedRangeName)) {
             mainController.showAlert("Error", "Cannot delete 'None'!");
             return;
@@ -90,7 +90,7 @@ public class RangesController {
         try {
             clearCurrSelectedRangeHighlight();
             mainController.deleteRange(selectedRangeName);
-            refreshComboBox(mainController.getRanges());
+            refreshListView(mainController.getRanges());
 
         } catch (Exception e) {
             mainController.showAlert("Error", e.getMessage());
@@ -106,7 +106,7 @@ public class RangesController {
     }
 
     private void viewRangeAction() {
-        String selectedRangeName = rangeComboBox.getSelectionModel().getSelectedItem();
+        String selectedRangeName = rangeListView.getSelectionModel().getSelectedItem();
         if (selectedRangeName != null) {
             highlightRange(selectedRangeName);
         } else {
