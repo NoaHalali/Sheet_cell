@@ -39,6 +39,7 @@ public class AppController {
     private SimpleBooleanProperty isFileSelectedProperty;
     private SimpleBooleanProperty isCellSelectedProperty;
     private IntegerProperty versionProperty;
+    private SimpleBooleanProperty isRangeSelectedProperty;
 
 
     //Components
@@ -81,6 +82,7 @@ public class AppController {
             isFileSelectedProperty = new SimpleBooleanProperty(false);
             isCellSelectedProperty = new SimpleBooleanProperty(false);
             versionProperty = new SimpleIntegerProperty(1);
+            isRangeSelectedProperty = new SimpleBooleanProperty(false);
 
             table.disableProperty().bind(isFileSelectedProperty.not());
             actionLine.disableProperty().bind(isFileSelectedProperty.not());
@@ -92,6 +94,24 @@ public class AppController {
 
 
             engine = new EngineImpl();
+
+            // Listener לבחירת טווח
+            isRangeSelectedProperty.addListener((observable, oldValue, newValue) -> {
+                if (newValue) {
+                    // אם נבחר טווח, בטל את סימון התא הנבחר
+                    isCellSelectedProperty.set(false);
+                    //clearBorderMarkOfCells();
+                }
+            });
+
+            // Listener לבחירת תא
+            isCellSelectedProperty.addListener((observable, oldValue, newValue) -> {
+                if (newValue) {
+                    // אם נבחר תא, בטל את סימון הטווח הנבחר
+                    isRangeSelectedProperty.set(false);
+                    //rangesController.clearCurrSelectedRange();
+                }
+            });
 
         }
     }
@@ -106,31 +126,9 @@ public class AppController {
         versionSelectorController.initializeVersionSelector(sheet.getVersion());
         actionLineController.initializeActionLine(isCellSelectedProperty);
         commandsController.InitializeCommandsController(isCellSelectedProperty);
-        rangesController.initializeRangesController(sheet.getRangesNames(), isCellSelectedProperty);
-    }
-    public void handleCellClick(Coordinate coord)
-    {
-        if (coord == null) {
-            isCellSelectedProperty.set(false);
-            actionLineController.setActionLine(null); // איפוס השורה
-        }
-        else {
-            isCellSelectedProperty.set(true);
-            CellDTO cell = engine.getCellDTOByCoordinate(coord);
-            actionLineController.setActionLine(cell); // עדכון השורה עם התא החדש
-        }
+        rangesController.initializeRangesController(sheet.getRangesNames()/*, isCellSelectedProperty*/);
     }
 
-//    public void updateActionLine(Coordinate coord) {
-//
-//        actionLineController.setActionLine(null); // איפוס השורה
-//        } else {
-//            isCellSelectedProperty.set(true);
-//            CellDTO cell = engine.getCellDTOByCoordinate(coord);
-//            actionLineController.setActionLine(cell); // עדכון השורה עם התא החדש
-//
-//        }
-//    }
 
     public void setPrimaryStage(Stage primaryStage) {
         this.primaryStage = primaryStage;
@@ -139,102 +137,6 @@ public class AppController {
     public File showFileSelector(FileChooser fileChooser) {
         return fileChooser.showOpenDialog(primaryStage);
     }
-
-//    public void loadFile(String absolutePath, ProgressIndicator progressIndicator) throws Exception {
-//        // יצירת משימה לטעינת הקובץ ברקע
-//        Task<Void> loadFileTask = new Task<Void>() {
-//            @Override
-//            protected Void call() throws Exception {
-//                // סימולציה של התקדמות ההורדה
-//                updateProgress(0, 100); // התחלת התקדמות ב-0%
-//
-//                // קריאת נתוני הקובץ (כאן אפשר להוסיף לולאה אם רוצים לסמלץ התקדמות)
-//                engine.readFileData(absolutePath);
-//
-//                // ניתן להוסיף השהיה קטנה כדי לסמלץ התקדמות
-//                for (int i = 0; i <= 100; i++) {
-//                    Thread.sleep(30); // השהיה קצרה
-//                    updateProgress(i, 100); // עדכון התקדמות
-//                }
-//
-//                updateProgress(100, 100); // סיום התקדמות
-//                return null;
-//            }
-//
-//            @Override
-//            protected void succeeded() {
-//                super.succeeded();
-//                // עדכון ה-UI במקרה של הצלחה
-//                isFileSelectedProperty.set(true);
-//                SheetDTO sheet = engine.getCurrentSheetDTO();
-//                tableController.initializeGrid(sheet);
-//
-//                versionSelectorController.initializeVersionSelector(sheet.getVersion());
-//                actionLineController.initializeActionLine(isCellSelectedProperty);
-//
-//                progressIndicator.setVisible(false); // הסתרת ProgressIndicator
-//            }
-//
-//            @Override
-//            protected void failed() {
-//                super.failed();
-//                // טיפול בשגיאה במקרה של כשל בטעינת הקובץ
-//                System.out.println("Failed to load file: " + getException().getMessage());
-//                progressIndicator.setVisible(false); // הסתרת ProgressIndicator
-//            }
-//        };
-//
-//        // קישור ה-ProgressIndicator להתקדמות המשימה
-//        progressIndicator.progressProperty().bind(loadFileTask.progressProperty());
-//        progressIndicator.setVisible(true);  // הצגת ה-ProgressIndicator
-//
-//        // הפעלת המשימה ב-Thread נפרד
-//        new Thread(loadFileTask).start();
-//    }
-
-//    public void updateCellValue(String value) {
-//        Coordinate coordinate = tableController.getCurrentlyFocusedCoord();
-//
-//        Task<Void> updateCellTask = new Task<Void>() {
-//            @Override
-//            protected Void call() throws Exception {
-//                engine.updateCellValue(value, coordinate);
-//                return null;
-//            }
-//
-//            @Override
-//            protected void succeeded() {
-//                super.succeeded();
-//                SheetDTO sheet = engine.getCurrentSheetDTO();
-//                CellDTO[][] cells = sheet.getCellsMatrix();
-//
-//                Arrays.stream(cells).flatMap(Arrays::stream).forEach(cell -> {
-//                    if (cell != null) {
-//                        tableController.updateCellContent(cell.getCoord(), cell.getEffectiveValue());
-//                    }
-//                });
-//
-//                tableController.addFocusingToCell(coordinate);
-//                actionLineController.setActionLine(engine.getCellDTOByCoordinate(coordinate));
-//
-//                // עדכון אפשרויות הגרסה בצורה בטוחה
-//                versionProperty.set(sheet.getVersion());
-//                versionSelectorController.setVersionSelectorOptions(sheet.getVersion());
-//            }
-//
-//            @Override
-//            protected void failed() {
-//                super.failed();
-//               showAlert("Error:","Failed to update cell: " + getException().getMessage());
-//            }
-//        };
-//
-//        new Thread(updateCellTask).start();
-//    }
-
-//    public BooleanProperty cellSelectedProperty() {
-//        return cellsSelected;
-//    }
 
     public void updateCellValue(String value) {
         Coordinate coordinate = tableController.getCurrentlyFocusedCoord();
@@ -305,9 +207,14 @@ public class AppController {
         tableController.clearCurrentHighlightRange();;
     }
 
-    public void deleteRange(String selectedRangeName) {
+    public void handleDeleteRange(String selectedRangeName) {
+
+        rangeSelectedProperty().set(false); // עדכון מצב בחירת טווח
+        tableController.clearCurrentHighlightRange(); //? this or remove marks
         engine.deleteRange(selectedRangeName);
+
     }
+
     public Map<String,String> getStylesFromMainSheet() {
         return tableController.getCoordToStyleMap();
     }
@@ -356,6 +263,56 @@ public class AppController {
     public void setCellSelectedProperty(boolean flag) {
         isCellSelectedProperty.set(flag);
     }
+
+    // חשיפת ה-Properties לשימוש חיצוני
+    public SimpleBooleanProperty rangeSelectedProperty() {
+        return isRangeSelectedProperty;
+    }
+
+    public SimpleBooleanProperty cellSelectedProperty() {
+        return isCellSelectedProperty;
+    }
+
+    public void handleCellClick(Coordinate coord)
+    {
+        if (coord == null) {
+            isCellSelectedProperty.set(false);
+            actionLineController.setActionLine(null); // איפוס השורה
+        }
+        else {
+            if(isRangeSelectedProperty.get()) {
+                //isRangeSelectedProperty.set(false);
+                rangesController.clearSelectedRangeOption();
+            }
+
+            isCellSelectedProperty.set(true);
+            CellDTO cell = engine.getCellDTOByCoordinate(coord);
+            actionLineController.setActionLine(cell); // עדכון השורה עם התא החדש
+        }
+    }
+
+//    public void updateActionLine(Coordinate coord) {
+//
+//        actionLineController.setActionLine(c); // איפוס השורה
+//        } else {
+//            isCellSelectedProperty.set(true);
+//            CellDTO cell = engine.getCellDTOByCoordinate(coord);
+//            actionLineController.setActionLine(cell); // עדכון השורה עם התא החדש
+//
+//        }
+//    }
+
+    public void handleRangeSelection(String rangeName) {
+        if(isCellSelectedProperty.get()) {
+            //isCellSelectedProperty.set(false);
+            actionLineController.setActionLine(null); // איפוס השורה
+        }
+        clearBorderMarkOfCells(); // ניקוי סימוני תאים קודם
+        highlightRange(rangeName);
+        rangeSelectedProperty().set(true); // עדכון מצב בחירת טווח
+    }
+
+
 }
 
 //

@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ListView?>
-<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Button?>
 
-<!-- שימוש ב-VBox ראשי עם fx:controller -->
 <VBox spacing="10" style="-fx-background-color: #f2f273;" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="components.left.ranges.RangesController">
     <!-- אזור ניהול ה-Ranges -->
     <TextField fx:id="rangeNameField" promptText="Enter unique range name" />
@@ -16,8 +15,7 @@
     <!-- כפתורים לניהול טווחים -->
     <Button fx:id="addRangeButton" onAction="#addRangeButtonAction" text="Add Range" />
     <Button fx:id="deleteRangeButton" onAction="#deleteRangeAction" text="Delete Range" />
-    <Label text="Choose range to display:" />
 
-    <!-- שימוש ב-ListView להצגת הטווחים -->
-    <ListView fx:id="rangeListView" />
+    <!-- שימוש ב-MenuButton להצגת אפשרויות הטווחים -->
+    <MenuButton fx:id="rangeMenuButton" text="Choose range to display" />
 </VBox>

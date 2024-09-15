@@ -131,8 +131,6 @@ public class CellController {
         cellLabel.setStyle(style);
     }
 
-
-
     public void resetStyle() {
         textColor = "-fx-text-fill: " + DEFAULT_TEXT_COLOR + ";";
         backgroundColor = "-fx-background-color: " + DEFAULT_BACKGROUND_COLOR + ";";

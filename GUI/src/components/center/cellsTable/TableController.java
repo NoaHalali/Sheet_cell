@@ -122,6 +122,7 @@ public class TableController {
             cellController.setText(calcValueToPrint(newText));
         }
     }
+
     public Map<String, String> getCoordToStyleMap() {
         Map<String, String> styleMap = new HashMap<String, String>();
 
@@ -188,24 +189,27 @@ public class TableController {
 
     private void handleCellClick(String newCoord) {
 
-        Boolean doubleClick = currentlyFocusedCoord != null && currentlyFocusedCoord.toString().equals(newCoord);
-        if (doubleClick) {
-            removeFocusingOfFocusedCell();
-            mainController.handleCellClick(null);
-            //mainController.updateActionLine(null);
-            //mainController.setCellSelectedProperty(false);
-        }
-        else {
-            clearMarkOfCells();
-            currentlyFocusedCoord = CoordinateImpl.parseCoordinate(newCoord);
-            currentlyFocusedCellController = coordToCellControllerMap.get(currentlyFocusedCoord.toString()); // עדכון התא הממוקד
-            addFocusingToCell(currentlyFocusedCoord);
-            mainController.handleCellClick(currentlyFocusedCoord);
-            //mainController.updateActionLine(currentlyFocusedCoord);
-            //mainController.setCellSelectedProperty(true);
-        }
+        boolean isNewCoordSelected = newCoord != null;
 
+        // עדכון מצב הבחירה ב-AppController
+//        mainController.rangeSelectedProperty().set(false);
+//        mainController.cellSelectedProperty().set(isNewCoordSelected);
+
+        boolean isDoubleClick = currentlyFocusedCoord != null && currentlyFocusedCoord.toString().equals(newCoord);
+
+        if (isDoubleClick) {
+            removeFocusingOfFocusedCell();
+            mainController.handleCellClick(null); // ביטול בחירת תא
+        } else if (isNewCoordSelected) {
+            clearMarkOfCells(); // ניקוי הדגשות תאים
+            currentlyFocusedCoord = CoordinateImpl.parseCoordinate(newCoord);
+            currentlyFocusedCellController = coordToCellControllerMap.get(currentlyFocusedCoord.toString());
+            addFocusingToCell(currentlyFocusedCoord);
+
+            mainController.handleCellClick(currentlyFocusedCoord); // עדכון בחירת תא
+        }
     }
+
 
     public void addFocusingToCell(Coordinate newFocusedCoord) {
         currentlyFocusedCellController = coordToCellControllerMap.get(newFocusedCoord.toString());

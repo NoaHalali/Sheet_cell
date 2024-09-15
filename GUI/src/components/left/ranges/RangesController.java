@@ -1,64 +1,48 @@
 package components.left.ranges;
 
 import components.MainComponent.AppController;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.ListView;
-import javafx.beans.property.SimpleBooleanProperty;
+import javafx.scene.control.MenuButton;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Button;
-
 import java.util.List;
 
 public class RangesController {
 
-    @FXML private ListView<String> rangeListView;
+    @FXML private MenuButton rangeMenuButton;
     @FXML private TextField rangeNameField;
     @FXML private TextField rangeDefinitionField;
     @FXML private Button addRangeButton;
     @FXML private Button deleteRangeButton;
 
     private AppController mainController;
+    private String lastSelectedRange = null; // שמירת שם הטווח שנבחר לאחרונה
 
-    public void initializeRangesController(List<String> existingRanges, SimpleBooleanProperty isCellSelected) {
-        refreshListView(existingRanges);
-
-        // Listener לבחירת טווח
-        rangeListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue != null) {
-                if ("None".equals(newValue)) {
-                    clearCurrSelectedRangeHighlight();
-                } else {
-                    viewRangeAction();
-                }
-            }
-        });
-
-        // Listener לאיפוס הבחירה כאשר תא נבחר
-        isCellSelected.addListener((observable, oldValue, newValue) -> {
-            if (newValue) {
-                clearSelection(); // קריאה למתודת איפוס הבחירה
-            }
-        });
+    public void initializeRangesController(List<String> existingRanges) {
+        refreshMenuButton(existingRanges);
     }
 
-    private void refreshListView(List<String> ranges) {
-        // יצירת רשימה חדשה בכל פעם שמאתחלים את הרשימה
-        ObservableList<String> listViewItems = FXCollections.observableArrayList();
-        listViewItems.add("None");
+    private void refreshMenuButton(List<String> ranges) {
+        rangeMenuButton.getItems().clear();
 
-        if (ranges != null && !ranges.isEmpty()) {
-            listViewItems.addAll(ranges);
+        // הוספת פריט "None" לתפריט
+        MenuItem noneItem = new MenuItem("None");
+        noneItem.setOnAction(event -> {
+            mainController.rangeSelectedProperty().set(false); // הגדרת המצב כשאין טווח נבחר
+            rangeMenuButton.setText("Choose range to display"); // איפוס שם ה-MenuButton
+        });
+        rangeMenuButton.getItems().add(noneItem);
+
+        // הוספת כל הפריטים האחרים לתפריט
+        for (String range : ranges) {
+            MenuItem item = new MenuItem(range);
+            item.setOnAction(event -> {
+                handleRangeSelection(item);
+                rangeMenuButton.setText(range); // הצגת הטווח שנבחר על הכפתור
+            });
+            rangeMenuButton.getItems().add(item);
         }
-
-        rangeListView.setItems(listViewItems);
-
-        clearSelection(); // איפוס הבחירה לאחר עדכון הפריטים
-    }
-
-    private void clearSelection() {
-        rangeListView.getSelectionModel().clearSelection(); // איפוס הבחירה ב-ListView
     }
 
     @FXML
@@ -68,8 +52,7 @@ public class RangesController {
 
         try {
             mainController.addRange(rangeName, rangeDefinition);
-            refreshListView(mainController.getRanges());
-
+            refreshMenuButton(mainController.getRanges());
         } catch (Exception e) {
             mainController.showAlert("Error", e.getMessage());
         }
@@ -77,44 +60,53 @@ public class RangesController {
 
     @FXML
     public void deleteRangeAction() {
-        String selectedRangeName = rangeListView.getSelectionModel().getSelectedItem();
-        if ("None".equals(selectedRangeName)) {
-            mainController.showAlert("Error", "Cannot delete 'None'!");
-            return;
-        }
-        if(selectedRangeName == null) {
-            mainController.showAlert("Error", "No range selected!");
+        if (lastSelectedRange == null || "None".equals(lastSelectedRange)) {
+            mainController.showAlert("Error", "No range selected or cannot delete 'None'!");
             return;
         }
 
         try {
-            clearCurrSelectedRangeHighlight();
-            mainController.deleteRange(selectedRangeName);
-            refreshListView(mainController.getRanges());
+            mainController.handleDeleteRange(lastSelectedRange);
+            refreshMenuButton(mainController.getRanges());
+            clearSelectedRangeOption();
 
         } catch (Exception e) {
             mainController.showAlert("Error", e.getMessage());
         }
     }
 
-    public void setMainController(AppController mainController) {
-        this.mainController = mainController;
-    }
+    private void handleRangeSelection(MenuItem selectedItem) {
+        String rangeName = selectedItem.getText();
 
-    private void clearCurrSelectedRangeHighlight() {
-        mainController.clearCurrSelectedRangeHighlight();
-    }
+        if ("None".equals(rangeName)) {
+            if(lastSelectedRange != null) {
+                mainController.clearBorderMarkOfCells(); // ניקוי סימוני תאים קודם
+                mainController.rangeSelectedProperty().set(false); // עדכון מצב בחירת טווח
+                clearSelectedRangeOption();
+            }
+            else{
+            }
+            return;
+        }
 
-    private void viewRangeAction() {
-        String selectedRangeName = rangeListView.getSelectionModel().getSelectedItem();
-        if (selectedRangeName != null) {
-            highlightRange(selectedRangeName);
-        } else {
-            mainController.showAlert("Error", "No range selected or range does not exist!");
+        if (rangeName != null && !"None".equals(rangeName)) {
+            lastSelectedRange = rangeName; // שמירת הטווח הנבחר
+            mainController.handleRangeSelection(rangeName);
+//            mainController.clearBorderMarkOfCells(); // ניקוי סימוני תאים קודם
+//            mainController.highlightRange(rangeName);
+
+            //mainController.rangeSelectedProperty().set(true); // עדכון מצב בחירת טווח
         }
     }
 
-    private void highlightRange(String rangeName) {
-        mainController.highlightRange(rangeName);
+    public void clearSelectedRangeOption() {
+        lastSelectedRange = null; // איפוס שם הטווח שנבחר לאחרונה
+        rangeMenuButton.setText("Choose range to display"); // איפוס שם ה-MenuButton
+        //deleteRangeButton.disableProperty()
+
+    }
+
+    public void setMainController(AppController mainController) {
+        this.mainController = mainController;
     }
 }
