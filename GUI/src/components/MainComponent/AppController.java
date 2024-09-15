@@ -239,23 +239,26 @@ public class AppController {
     public void updateCellValue(String value) {
         Coordinate coordinate = tableController.getCurrentlyFocusedCoord();
         try {
-            engine.updateCellValue(value, coordinate);
-            SheetDTO sheet = engine.getCurrentSheetDTO();
-            CellDTO[][] cells = sheet.getCellsMatrix();
+            boolean isUpdated = engine.updateCellValue(value, coordinate);
+            if (isUpdated) {
+                //engine.updateCellValue(value, coordinate);
+                SheetDTO sheet = engine.getCurrentSheetDTO();
+                CellDTO[][] cells = sheet.getCellsMatrix();
 
-            Arrays.stream(cells).flatMap(Arrays::stream).forEach(cell -> {
-                if (cell != null) {
-                    tableController.updateCellContent(cell.getCoord(), cell.getEffectiveValue());
-                }
-            });
+                Arrays.stream(cells).flatMap(Arrays::stream).forEach(cell -> {
+                    if (cell != null) {
+                        tableController.updateCellContent(cell.getCoord(), cell.getEffectiveValue());
+                    }
+                });
 
-            tableController.addFocusingToCell(coordinate);
-            actionLineController.setActionLine(engine.getCellDTOByCoordinate(coordinate));
 
-            // עדכון אפשרויות הגרסה בצורה בטוחה
-            versionProperty.set(sheet.getVersion());
-            versionSelectorController.setVersionSelectorOptions(sheet.getVersion());
+                tableController.addFocusingToCell(coordinate);
+                actionLineController.setActionLine(engine.getCellDTOByCoordinate(coordinate));
 
+                // עדכון אפשרויות הגרסה בצורה בטוחה
+                versionProperty.set(sheet.getVersion());
+                versionSelectorController.setVersionSelectorOptions(sheet.getVersion());
+            }
         } catch (Exception e) {
             showAlert("Error:", "Failed to update cell: " + e.getMessage());
         }

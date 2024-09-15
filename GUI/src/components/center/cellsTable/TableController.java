@@ -124,11 +124,21 @@ public class TableController {
     }
     public Map<String, String> getCoordToStyleMap() {
         Map<String, String> styleMap = new HashMap<String, String>();
-        for (String coordStr : coordToCellControllerMap.keySet()) {
-            CellController cellController = coordToCellControllerMap.get(coordStr);
-            styleMap.put(cellController.getCoord().toString(),cellController.copyPreviewStyle());
 
+        // לולאה עבור כל CellController ב- coordToCellControllerMap
+        for (CellController cellController : coordToCellControllerMap.values()) {
+            String coordStr = cellController.getCoord().toString();
+            String style = cellController.copyPreviewStyle();
+
+            styleMap.put(coordStr, style);
         }
+
+//        for (String coordStr : coordToCellControllerMap.keySet()) {
+//            CellController cellController = coordToCellControllerMap.get(coordStr);
+//            styleMap.put(cellController.getCoord().toString(),cellController.copyPreviewStyle());
+//
+//        }
+
         return styleMap;
     }
 

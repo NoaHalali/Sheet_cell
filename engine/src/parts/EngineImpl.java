@@ -75,39 +75,48 @@ public class EngineImpl implements Engine {
 
     //4
     @Override
-    public void updateCellValue(String originalValue, Coordinate coord) throws Exception {
+    public boolean updateCellValue(String newOriginalValue, Coordinate coord) throws Exception {
         if (!sheetLoadad()) {
             throw new IllegalStateException(SHEET_NOT_LOADED_MESSAGE);
         }
-
         Sheet clonedSheet = currentSheet.cloneSheet();
         int numOfCellsChanged;
 
         if (clonedSheet != null) {
             Cell cell = clonedSheet.getCellByCoord(coord);
-           // clonedSheet.upgradeVersion(); //פה או בתוך התנאים?
-            boolean isDeleted=false;
-            String lastOriginalValue;
+            // clonedSheet.upgradeVersion(); //פה או בתוך התנאים?
+            boolean isDeleted = false;
+            String oldOriginalValue;
 
             if (cell != null) {
-                lastOriginalValue = cell.getOriginalValue();
-                isDeleted = clonedSheet.updateCellValue(originalValue, cell);
+                oldOriginalValue = cell.getOriginalValue();
+                boolean originalValueChanged = !newOriginalValue.equals(oldOriginalValue);
 
-                numOfCellsChanged = clonedSheet.upgradeCellsVersionsAndGetNumOfChanges();
-                if(numOfCellsChanged == 0 && !lastOriginalValue.equals( cell.getOriginalValue())){
-                    clonedSheet.upgradeCellVersion(cell);
+                if (originalValueChanged) {
+                    clonedSheet.updateCellValue(newOriginalValue, cell);
+
+                    numOfCellsChanged = clonedSheet.upgradeCellsVersionsAndGetNumOfChanges();
+                    if (numOfCellsChanged == 0) {
+                        clonedSheet.upgradeCellVersion(cell);
+
+                    }
+                } else { // original value didn't change
+                    return false;
                 }
-            } else {
-                cell = clonedSheet.createNewCellForCommand4(originalValue, coord);
+            }
+            else { // cell is null
+                cell = clonedSheet.createNewCellForCommand4(newOriginalValue, coord);
                 clonedSheet.upgradeCellVersion(cell);
                 numOfCellsChanged = 1;
+
             }
 
 
+            addVersion(clonedSheet, numOfCellsChanged);
             currentSheet = clonedSheet;
-            addVersion(currentSheet, numOfCellsChanged);
 
         }
+        return true;
     }
 
     //5

@@ -146,7 +146,6 @@ public class CommandsController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/components/center/cellsTable/table.fxml")); // Adjust the path
             Parent root = loader.load();
 
-            // Get the TableController and initialize it with the selected version of the sheet
             TableController tableController = loader.getController();
             List<Character> colsList = colsStringToCharList(sortColumnsTextField.getText());
             SheetDTO sheet = mainController.getSortedSheetDTO(sortRangeTextField.getText(), colsList);

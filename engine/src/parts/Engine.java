@@ -18,7 +18,7 @@ public interface Engine {
 
     public CellDTO getCellDTOByCoordinate(Coordinate coordinate) throws IllegalArgumentException;
 
-    public void updateCellValue(String value, Coordinate coordinate) throws Exception;
+    public boolean updateCellValue(String value, Coordinate coordinate) throws Exception;
 
     public SheetDTO getSheetDTOByVersion(int versionNumber) throws IllegalArgumentException, IllegalStateException;
 
