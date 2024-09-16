@@ -139,11 +139,13 @@ public class AppController {
     }
 
     public void updateCellValue(String value) {
-        Coordinate coordinate = tableController.getCurrentlyFocusedCoord();
         try {
+
+            Coordinate coordinate = tableController.getCurrentlyFocusedCoord();
+            tableController.removeMarksOfFocusedCell(); //temp - bette to do only if updated but insie it takes the updated cell from engine
             boolean isUpdated = engine.updateCellValue(value, coordinate);
+
             if (isUpdated) {
-                //engine.updateCellValue(value, coordinate);
                 SheetDTO sheet = engine.getCurrentSheetDTO();
                 CellDTO[][] cells = sheet.getCellsMatrix();
 
@@ -154,15 +156,17 @@ public class AppController {
                 });
 
 
-                tableController.addFocusingToCell(coordinate);
                 actionLineController.setActionLine(engine.getCellDTOByCoordinate(coordinate));
 
                 // עדכון אפשרויות הגרסה בצורה בטוחה
                 versionProperty.set(sheet.getVersion());
                 versionSelectorController.setVersionSelectorOptions(sheet.getVersion());
             }
-        } catch (Exception e) {
+            tableController.addMarksOfFocusingToCell();
+        }
+        catch (Exception e) {
             showAlert("Error:", "Failed to update cell: " + e.getMessage());
+            e.printStackTrace();
         }
 
     }
@@ -256,7 +260,7 @@ public class AppController {
 
     public void clearBorderMarkOfCells()
     {
-        //tableController.removeFocusingOfFocusedCell();
+        //tableController.removeMarksFocusingOfFocusedCell();
         tableController.clearMarkOfCells();
     }
 

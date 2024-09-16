@@ -198,24 +198,24 @@ public class TableController {
         boolean isDoubleClick = currentlyFocusedCoord != null && currentlyFocusedCoord.toString().equals(newCoord);
 
         if (isDoubleClick) {
-            removeFocusingOfFocusedCell();
+            removeMarksOfFocusedCell();
+            setFocusedCoord(null);
             mainController.handleCellClick(null); // ביטול בחירת תא
         } else if (isNewCoordSelected) {
-            clearMarkOfCells(); // ניקוי הדגשות תאים
-            currentlyFocusedCoord = CoordinateImpl.parseCoordinate(newCoord);
-            currentlyFocusedCellController = coordToCellControllerMap.get(currentlyFocusedCoord.toString());
-            addFocusingToCell(currentlyFocusedCoord);
+            clearMarkOfCells(); // ניקוי הדגשות תאים ישנות
+            setFocusedCoord(CoordinateImpl.parseCoordinate(newCoord));
+            addMarksOfFocusingToCell();
 
             mainController.handleCellClick(currentlyFocusedCoord); // עדכון בחירת תא
         }
     }
 
 
-    public void addFocusingToCell(Coordinate newFocusedCoord) {
-        currentlyFocusedCellController = coordToCellControllerMap.get(newFocusedCoord.toString());
+    public void addMarksOfFocusingToCell() {
+        //currentlyFocusedCellController = coordToCellControllerMap.get(newFocusedCoord.toString());
         currentlyFocusedCellController.setBorder("red", "3px");
 
-        CellDTO cell = mainController.getCellDTO(newFocusedCoord.toString());
+        CellDTO cell = mainController.getCellDTO(currentlyFocusedCoord.toString());
         List<Coordinate> dependsOn = cell.getDependsOn();
         for (Coordinate coord : dependsOn) {
             CellController depCellController = coordToCellControllerMap.get(coord.toString());
@@ -229,7 +229,7 @@ public class TableController {
         }
     }
 
-    public void removeFocusingOfFocusedCell() {
+    public void removeMarksOfFocusedCell() {
         //CellController currentlyFocusedCellController = coordToCellControllerMap.get(oldCellCoordinate);
         if (currentlyFocusedCellController != null) {
             currentlyFocusedCellController.resetBorder();
@@ -247,8 +247,14 @@ public class TableController {
                 CellController infCellController = coordToCellControllerMap.get(coord.toString());
                 infCellController.resetBorder();
             }
+        }
+    }
 
-            currentlyFocusedCoord = null;
+    public void setFocusedCoord(Coordinate coord) {
+        currentlyFocusedCoord = coord;
+        if (coord != null) {
+            currentlyFocusedCellController = coordToCellControllerMap.get(coord.toString());
+        } else {
             currentlyFocusedCellController = null;
         }
     }
@@ -304,6 +310,6 @@ public class TableController {
 
     public void clearMarkOfCells() {
         clearCurrentHighlightRange();
-        removeFocusingOfFocusedCell();
+        removeMarksOfFocusedCell();
     }
 }
