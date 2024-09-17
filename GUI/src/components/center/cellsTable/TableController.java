@@ -72,11 +72,8 @@ public class TableController {
                     CellDTO cell = sheet.getCell(coord);
                     cellController.setCoord(cell.getCoord());
 
-
                     String cellText = cell == null ? "" : calcValueToPrint(cell.getEffectiveValue());
                     cellController.setText(cellText);
-
-
 
                         cellController.setBackgroundColor("#f0f0f0");
                         cellController.setAlignment("center");

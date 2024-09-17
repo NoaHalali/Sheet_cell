@@ -8,7 +8,6 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
 
 <VBox spacing="10" style="-fx-background-color: #5a9ad3;" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="components.left.commands.CommandsController">
     <!-- כפתור להגדרת רוחב עמודות/שורות -->
@@ -24,38 +23,51 @@
     </HBox>
 
     <Separator prefWidth="200.0" />
-    <Label text="Cell Style:">
-        <font>
-            <Font size="13.0" />
-        </font>
-    </Label>
 
     <!-- שינוי צבע טקסט -->
     <HBox alignment="CENTER_LEFT" spacing="10.0">
         <ColorPicker fx:id="textColorPicker" minHeight="30.0" />
-        <Button fx:id="applyTextColorButton" onAction="#applyTextColorAction" text="Apply Text Color" />
+        <Button fx:id="applyTextColorButton" onAction="#applyTextColorAction" text="Apply Cell Text Color" />
     </HBox>
 
     <!-- שינוי צבע רקע תא -->
     <HBox alignment="CENTER_LEFT" spacing="10.0">
         <ColorPicker fx:id="backgroundColorPicker" minHeight="30.0" />
-        <Button fx:id="applyBackgroundColorButton" onAction="#applyBackgroundColorAction" text="Apply Background Color" />
+        <Button fx:id="applyBackgroundColorButton" onAction="#applyBackgroundColorAction" text="Apply Cell Background Color" />
     </HBox>
 
     <!-- ביטול עיצוב תא מסוים -->
-    <Button fx:id="resetCellStyleButton" onAction="#resetCellStyleAction" text="Reset Style" />
+    <Button fx:id="resetCellStyleButton" onAction="#resetCellStyleAction" text="Reset Cell Style" />
+   <Separator layoutX="20.0" layoutY="85.0" prefWidth="200.0" />
 
     <!-- הוספת HBox למיון טבלה -->
     <HBox alignment="CENTER_LEFT" spacing="5">
         <Label text="Sort Range:" />
         <TextField fx:id="sortRangeTextField" promptText="Enter range (e.g., A3..V9)" />
-        <Label text="Sort By Columns:" />
-        <TextField fx:id="sortColumnsTextField" promptText="Enter columns (e.g., A,C,E)" />
-        <Button fx:id="displaySortButton" onAction="#displaySortAction" text="Apply Sort" />
     </HBox>
+   <HBox prefHeight="0.0" prefWidth="295.0" spacing="5.0">
+      <children>
+           <Label text="Sort By Columns:" />
+           <TextField fx:id="sortColumnsTextField" promptText="Enter columns (e.g., A,C,E)" />
+      </children>
+   </HBox>
+     <Button fx:id="displaySortButton" onAction="#displaySortAction" text="Apply Sort" />
+   <Separator layoutX="20.0" layoutY="213.0" prefWidth="303.0" />
+   <HBox alignment="CENTER_LEFT" layoutX="20.0" layoutY="226.0" spacing="5">
+      <children>
+         <Label text="Filter Range:" />
+         <TextField fx:id="sortRangeTextField1" promptText="Enter range (e.g., A3..V9)" />
+      </children>
+   </HBox>
+   <HBox layoutX="20.0" layoutY="261.0" prefHeight="0.0" prefWidth="295.0" spacing="5.0">
+      <children>
+         <Label text="Filter By Column:" />
+         <TextField fx:id="sortColumnsTextField1" promptText="Enter column (e.g., A)" />
+      </children>
+   </HBox>
+   <Button fx:id="displaySortButton1" layoutX="20.0" layoutY="296.0" onAction="#displaySortAction" text="Apply Filter" />
 
     <padding>
         <Insets bottom="5.0" left="10.0" right="10.0" top="5.0" />
     </padding>
 </VBox>
-
