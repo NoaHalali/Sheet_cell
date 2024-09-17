@@ -29,7 +29,7 @@ public class EmptyCellDTO implements CellDTO {
 
     @Override
     public List<Coordinate> getInfluencingOn() {
-        return List.of();
+        return influencingOn;
     }
 
     @Override
