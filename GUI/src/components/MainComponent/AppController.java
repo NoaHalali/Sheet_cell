@@ -9,6 +9,7 @@ import components.top.versions.VersionSelectorController;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
@@ -166,7 +167,6 @@ public class AppController {
         }
         catch (Exception e) {
             showAlert("Error:", "Failed to update cell: " + e.getMessage());
-            e.printStackTrace();
         }
 
     }
@@ -216,7 +216,6 @@ public class AppController {
         rangeSelectedProperty().set(false); // עדכון מצב בחירת טווח
         tableController.clearCurrentHighlightRange(); //? this or remove marks
         engine.deleteRange(selectedRangeName);
-
     }
 
     public Map<String,String> getStylesFromMainSheet() {
@@ -317,6 +316,9 @@ public class AppController {
     }
 
 
+    public void filterData(ObservableList<String> selectedItems) {
+
+    }
 }
 
 //

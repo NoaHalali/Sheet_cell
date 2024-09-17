@@ -331,6 +331,9 @@ public class Sheet implements Serializable {
 
     public void addRange(String rangeName, Coordinate topLeftCoord, Coordinate bottomRightCoord) throws IllegalArgumentException{
 
+        if(rangeName.equals("")){
+            throw new IllegalArgumentException("Range name cannot be empty.");
+        }
         if(ranges.containsKey(rangeName)){
             throw new IllegalArgumentException("Range with the name " + rangeName + " already exists.");
         }

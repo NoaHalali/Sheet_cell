@@ -29,8 +29,7 @@ public class RangesController {
         // הוספת פריט "None" לתפריט
         MenuItem noneItem = new MenuItem("None");
         noneItem.setOnAction(event -> {
-            mainController.rangeSelectedProperty().set(false); // הגדרת המצב כשאין טווח נבחר
-            rangeMenuButton.setText("Choose range to display"); // איפוס שם ה-MenuButton
+            handleRangeSelection(noneItem);
         });
         rangeMenuButton.getItems().add(noneItem);
 
@@ -55,6 +54,7 @@ public class RangesController {
             refreshMenuButton(mainController.getRanges());
         } catch (Exception e) {
             mainController.showAlert("Error", e.getMessage());
+            clearSelectedRangeOption();
         }
     }
 
@@ -72,6 +72,7 @@ public class RangesController {
 
         } catch (Exception e) {
             mainController.showAlert("Error", e.getMessage());
+            clearSelectedRangeOption();
         }
     }
 
