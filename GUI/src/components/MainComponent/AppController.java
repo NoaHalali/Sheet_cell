@@ -166,7 +166,6 @@ public class AppController {
         }
         catch (Exception e) {
             showAlert("Error:", "Failed to update cell: " + e.getMessage());
-            e.printStackTrace();
         }
 
     }
@@ -216,7 +215,6 @@ public class AppController {
         rangeSelectedProperty().set(false); // עדכון מצב בחירת טווח
         tableController.clearCurrentHighlightRange(); //? this or remove marks
         engine.deleteRange(selectedRangeName);
-
     }
 
     public Map<String,String> getStylesFromMainSheet() {
