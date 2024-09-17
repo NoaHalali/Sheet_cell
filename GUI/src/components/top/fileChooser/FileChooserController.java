@@ -57,6 +57,7 @@ public class FileChooserController {
             protected void succeeded() {
                 super.succeeded();
                 // עדכון ה-UI במקרה של הצלחה
+
                 mainController.initializeComponentsAfterLoad(); // קריאה למתודה שמעדכנת את כל הרכיבים
 
                 progressBar.setVisible(false); // הסתרת ProgressIndicator

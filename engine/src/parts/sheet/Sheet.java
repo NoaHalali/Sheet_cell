@@ -484,6 +484,8 @@ public class Sheet implements Serializable {
         return effectiveValues;
     }
 
+
+
 }
 
 //    // פונקציה עזר לפרש ערכים מספריים
