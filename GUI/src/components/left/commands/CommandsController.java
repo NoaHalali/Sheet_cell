@@ -2,14 +2,16 @@ package components.left.commands;
 
 import components.MainComponent.AppController;
 import components.center.cellsTable.TableController;
+import components.left.commands.filter.FilterPopupController;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ColorPicker;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.CheckBoxListCell;
 import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -23,23 +25,43 @@ public class CommandsController {
 
     private AppController mainController;
 
-    @FXML private Button setColumnRowWidthButton;
-    @FXML private Button setColumnAlignmentButton;
-    @FXML private Button resetCellStyleButton;
+    @FXML
+    private Button setColumnRowWidthButton;
+    @FXML
+    private Button setColumnAlignmentButton;
+    @FXML
+    private Button resetCellStyleButton;
+    @FXML
+    private TextField columnRowWidthTextField;
+    @FXML
+    private TextField columnAlignmentTextField;
+    @FXML
+    private ColorPicker textColorPicker;
+    @FXML
+    private ColorPicker backgroundColorPicker;
+    @FXML
+    private Button applyTextColorButton;
+    @FXML
+    private Button applyBackgroundColorButton;
+    @FXML
+    private Button displaySortButton;
+    @FXML
+    private TextField sortRangeTextField;
+    @FXML
+    private TextField sortColumnsTextField;
 
-    @FXML private TextField columnRowWidthTextField;
-    @FXML private TextField columnAlignmentTextField;
-    @FXML private ColorPicker textColorPicker;
-    @FXML private ColorPicker backgroundColorPicker;
-    @FXML private Button applyTextColorButton;
-    @FXML private Button applyBackgroundColorButton;
-    @FXML private Button displaySortButton;
-    @FXML private TextField sortRangeTextField;
-    @FXML private TextField sortColumnsTextField;
+    @FXML
+    private TextField filterRangeTextField;
+    @FXML
+    private TextField filterColumnsTextField;
 
+    @FXML private Button calcValuesToFilterButton;
+    @FXML
+    private ListView<String> filterListView; // הוספת ListView לסינון
+    @FXML
+    private Button applyFilterButton; // כפתור לסינון
 
-    private Color lastSelectedTextColor;
-    private Color lastSelectedBackgroundColor;
+    private ObservableList<String> selectedItems = FXCollections.observableArrayList(); // רשימת פריטים נבחרים
 
     public void InitializeCommandsController(SimpleBooleanProperty isCellSelected) {
         resetCellStyleButton.disableProperty().bind(isCellSelected.not());
@@ -48,43 +70,42 @@ public class CommandsController {
         applyTextColorButton.disableProperty().bind(isCellSelected.not());
         applyBackgroundColorButton.disableProperty().bind(isCellSelected.not());
 
-//        textColorPicker.setOnAction(event -> {
-//            Color newColor = textColorPicker.getValue();
-//            if (newColor != null) {
-//                changeTextColor(newColor);
-//                // אפשר גם לאפס פוקוס או לבצע פעולה נוספת
-//            }
-//        });
-//
-//        backgroundColorPicker.setOnAction(event -> {
-//            Color newColor = backgroundColorPicker.getValue();
-//            if (newColor != null) {
-//                changeBackgroundColor(newColor);
-//                // אפשר גם לאפס פוקוס או לבצע פעולה נוספת
-//            }
-//        });
+        // אתחול ListView לסינון
+        initializeFilterListView();
 
+        applyFilterButton.setOnAction(event -> applyFilterAction());
     }
 
+    // פונקציה לאתחול ListView לסינון
+    private void initializeFilterListView() {
+        // יצירת רשימה של פריטים להוספה ל-ListView
+        ObservableList<String> items = FXCollections.observableArrayList("Value 1", "Value 2", "Value 3", "Value 4");
 
-//    public void InitializeCommandsController(SimpleBooleanProperty isCellSelected){
-//        resetCellStyleButton.disableProperty().bind(isCellSelected.not());
-//        textColorPicker.disableProperty().bind(isCellSelected.not());
-//        backgroundColorPicker.disableProperty().bind(isCellSelected.not());
-//
-//        textColorPicker.valueProperty().addListener((observable, oldValue, newValue) -> {
-//            if (newValue != null) {
-//                changeTextColor(newValue);
-//            }
-//        });
-//
-//        // הוספת מאזין לבחירת צבע גבול
-//        backgroundColorPicker.valueProperty().addListener((observable, oldValue, newValue) -> {
-//            if (newValue != null) {
-//                changeBackgroundColor(newValue);
-//            }
-//        });
-//    }
+        // הגדרת רשימת הפריטים ל-ListView
+        filterListView.setItems(items);
+
+        // יצירת CheckBox עבור כל פריט ברשימה
+        filterListView.setCellFactory(CheckBoxListCell.forListView(item -> {
+            SimpleBooleanProperty selected = new SimpleBooleanProperty(false);
+
+            // הוספת מאזין כדי לעדכן את רשימת הפריטים הנבחרים
+            selected.addListener((obs, wasSelected, isNowSelected) -> {
+                if (isNowSelected) {
+                    selectedItems.add(item);
+                } else {
+                    selectedItems.remove(item);
+                }
+            });
+
+            return selected;
+        }));
+    }
+
+    @FXML
+    private void applyFilterAction() {
+        // יישום לוגיקת הסינון לפי הערכים שנבחרו
+        mainController.filterData(selectedItems);
+    }
 
     @FXML
     public void setColumnRowWidthAction() {
@@ -97,16 +118,6 @@ public class CommandsController {
         String alignment = columnAlignmentTextField.getText();
         // לוגיקה לבחירת יישור של התוכן בעמודה
     }
-
-//    @FXML
-//    public void changeTextColor(Color color) {
-//        mainController.setCellTextColor(color);
-//    }
-//
-//    @FXML
-//    public void changeBackgroundColor(Color color) {
-//        mainController.setCellBackgroundColor(color);
-//    }
 
     @FXML
     public void applyTextColorAction() {
@@ -124,7 +135,6 @@ public class CommandsController {
         }
     }
 
-
     @FXML
     public void resetCellStyleAction() {
         mainController.resetCellStyle();
@@ -136,31 +146,22 @@ public class CommandsController {
 
     @FXML
     private void displaySortAction() {
-
         try {
-            // Create a new stage for the popup
             Stage popupStage = new Stage();
             popupStage.setTitle("Sorting Preview: ");
-
-            // Load the FXML or create a layout dynamically
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/components/center/cellsTable/table.fxml")); // Adjust the path
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/components/center/cellsTable/table.fxml"));
             Parent root = loader.load();
 
             TableController tableController = loader.getController();
             List<Character> colsList = colsStringToCharList(sortColumnsTextField.getText());
             SheetDTO sheet = mainController.getSortedSheetDTO(sortRangeTextField.getText(), colsList);
-            Map<String,String> styleMap=mainController.getStylesFromMainSheet();
+            Map<String, String> styleMap = mainController.getStylesFromMainSheet();
             tableController.showSheetPreview(sheet);
-            tableController.updateCellsStyleAfterSort(styleMap,sheet);
+            tableController.updateCellsStyleAfterSort(styleMap, sheet);
 
-            // Set the scene and show the popup
             Scene scene = new Scene(root);
             popupStage.setScene(scene);
-
-            // Set the popup to block the main window (modality)
             popupStage.initModality(Modality.APPLICATION_MODAL);
-
-            // Show the popup and wait for it to be closed before returning to the main window
             popupStage.showAndWait();
 
         } catch (Exception e) {
@@ -168,12 +169,10 @@ public class CommandsController {
         }
     }
 
-    //For now here, maybe move to logic
     private List<Character> colsStringToCharList(String input) {
         String[] charArray = input.toUpperCase().split(",");
         List<Character> charList = new ArrayList<>();
 
-        // המרה לרשימת תווים
         for (String s : charArray) {
             if (!s.isEmpty()) {
                 charList.add(s.charAt(0));
@@ -182,8 +181,36 @@ public class CommandsController {
         return charList;
     }
 
+    @FXML
+    private void openFilterPopup() {
+        try {
+            // טוען את ה-FXML של הפופאפ
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/components/left/commands/filter/FilterPopup.fxml"));
+            Parent root = loader.load();
 
+            // קבל את הבקר של הפופאפ
+            FilterPopupController filterPopupController = loader.getController();
 
+            filterPopupController.initializeFilterListView();
 
+            // יצירת הבמה (Stage) לפופאפ
+            Stage popupStage = new Stage();
+            popupStage.setTitle("Filter Values");
+            popupStage.setScene(new Scene(root));
+            popupStage.initModality(Modality.APPLICATION_MODAL); // פופאפ במצב מודאלי
 
+            // הצגת הפופאפ וחסימת חלון ראשי עד לסגירת הפופאפ
+            popupStage.showAndWait();
+
+            // קבלת הערכים שנבחרו מהפופאפ לאחר שהמשתמש סיים את הבחירה
+            ObservableList<String> selectedItems = filterPopupController.getSelectedItems();
+            System.out.println("Selected items from popup: " + selectedItems);
+
+            // תוכל לקרוא לפונקציה filterData עם הערכים שנבחרו
+            mainController.filterData(selectedItems);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

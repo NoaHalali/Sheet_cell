@@ -9,6 +9,7 @@ import components.top.versions.VersionSelectorController;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
@@ -315,6 +316,9 @@ public class AppController {
     }
 
 
+    public void filterData(ObservableList<String> selectedItems) {
+
+    }
 }
 
 //
