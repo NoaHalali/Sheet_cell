@@ -4,12 +4,13 @@ import XMLFile.FileManager;
 import parts.cell.*;
 import parts.sheet.cell.Cell;
 import parts.sheet.cell.coordinate.Coordinate;
-import parts.sheet.cell.coordinate.CoordinateImpl;
 import parts.sheet.Sheet;
+import parts.sheet.cell.expression.effectiveValue.EffectiveValue;
 
 import java.io.*;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.io.FileInputStream;
 import java.io.ObjectInputStream;
@@ -218,9 +219,9 @@ public class EngineImpl implements Engine {
             throw new IllegalStateException(SHEET_NOT_LOADED_MESSAGE);
         }
 
-        String[] parts = rangeDefinition.split("\\.\\."); // מחלק את המחרוזת לפי ".."
-        Coordinate topLeftCoord = CoordinateImpl.parseCoordinate(parts[0]);
-        Coordinate bottomRightCoord = CoordinateImpl.parseCoordinate(parts[1]);
+        Coordinate[] rangeEdgeCoordinates=Range.parseRange(rangeDefinition);
+        Coordinate topLeftCoord = rangeEdgeCoordinates[0];
+        Coordinate bottomRightCoord = rangeEdgeCoordinates[1];
         currentSheet.addRange(rangeName, topLeftCoord, bottomRightCoord);
     }
 
@@ -241,6 +242,14 @@ public class EngineImpl implements Engine {
     @Override
     public SheetDTO getSortedSheetDTO(String rangeDefinition, List<Character> columnsToSortBy) throws IllegalArgumentException {
         return currentSheet.getSortedSheet(rangeDefinition, columnsToSortBy).toSheetDTO();
+    }
+
+    @Override
+    public Set<EffectiveValue> getDistinctValuesOfColInRange(String col,String rangeDefinition) throws IllegalArgumentException {
+        Coordinate[] rangeEdgeCoordinates =Range.parseRange(rangeDefinition);
+        Coordinate topLeftCoord = rangeEdgeCoordinates[0];
+        Coordinate bottomRightCoord = rangeEdgeCoordinates[1];
+        return currentSheet.getDistinctValuesOfColInRange(col, topLeftCoord, bottomRightCoord);
     }
 
 }

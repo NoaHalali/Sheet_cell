@@ -2,6 +2,7 @@ package parts;
 
 import parts.sheet.cell.Cell;
 import parts.sheet.cell.coordinate.Coordinate;
+import parts.sheet.cell.coordinate.CoordinateImpl;
 import parts.sheet.cell.expression.effectiveValue.CellType;
 import parts.sheet.cell.expression.effectiveValue.EffectiveValue;
 
@@ -84,7 +85,17 @@ public class Range implements Serializable {
                      "Top-left coordinate must be smaller or equal to bottom-right coordinate.");
          }
     }
+    public static Coordinate[] parseRange(String rangeDefinition) {
+        // מחלק את המחרוזת לפי ".."
+        String[] parts = rangeDefinition.split("\\.\\.");
 
+        // מפרש את הקואורדינטות
+        Coordinate topLeftCoord = CoordinateImpl.parseCoordinate(parts[0]);
+        Coordinate bottomRightCoord = CoordinateImpl.parseCoordinate(parts[1]);
+
+        // מחזיר מערך עם שתי הקואורדינטות
+        return new Coordinate[] {topLeftCoord, bottomRightCoord};
+    }
 
 
 }

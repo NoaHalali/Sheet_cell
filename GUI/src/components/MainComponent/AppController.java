@@ -27,12 +27,12 @@ import parts.EngineImpl;
 import parts.SheetDTO;
 import parts.sheet.cell.coordinate.Coordinate;
 import parts.sheet.cell.coordinate.CoordinateImpl;
+import parts.sheet.cell.expression.effectiveValue.EffectiveValue;
 
 
 import java.io.File;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class AppController {
 
@@ -313,6 +313,15 @@ public class AppController {
         clearBorderMarkOfCells(); // ניקוי סימוני תאים קודם
         highlightRange(rangeName);
         rangeSelectedProperty().set(true); // עדכון מצב בחירת טווח
+    }
+    public Set<String> getDistinctValuesOfColInRange(String col,String rangeDefinition){
+        Set<String>strValues=new HashSet<String>();
+           Set<EffectiveValue> values=engine.getDistinctValuesOfColInRange(col,rangeDefinition);
+        strValues = values.stream()
+                .map(value -> tableController.calcValueToPrint(value)) // המרה למחרוזת//todo להוסיף את CALCVALUE למקום אחר
+                .collect(Collectors.toSet()); // המרת הזרם לסט
+
+        return strValues;
     }
 
 

@@ -22,7 +22,7 @@ public class EffectiveValueImpl implements EffectiveValue, Serializable {
         return value;
     }
 
-public void setValue(Object value) {}
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

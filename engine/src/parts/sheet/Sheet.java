@@ -8,6 +8,7 @@ import parts.sheet.cell.Cell;
 import parts.sheet.cell.coordinate.Coordinate;
 import parts.sheet.cell.coordinate.CoordinateImpl;
 import parts.sheet.cell.expression.Expression;
+import parts.sheet.cell.expression.effectiveValue.EffectiveValue;
 
 import java.io.*;
 import java.util.*;
@@ -143,6 +144,7 @@ public class Sheet implements Serializable {
         updateDependencies(cell, dependsOnCellList,rangesDependsOnList);
 
     }
+
 
     public Cell createNewCellForCommand4(String originalValue, Coordinate coord) throws Exception {
         if(originalValue.isEmpty()){
@@ -464,6 +466,22 @@ public class Sheet implements Serializable {
                 throw new IllegalArgumentException("Column " + colChar + " is not in the selected range.");
             }
         }
+    }
+    public Set<EffectiveValue> getDistinctValuesOfColInRange(String col, Coordinate rangeTopLeftCoord, Coordinate rangeBottomRightCoord){
+        Set<EffectiveValue> effectiveValues = new HashSet<EffectiveValue>();
+        int topRow = rangeTopLeftCoord.getRow();
+        int bottomRow = rangeBottomRightCoord.getRow();
+        int colIndex =CoordinateImpl.columnStringToIndex(col);
+
+        for (int row = topRow; row <= bottomRow; row++) {
+            Cell cell = cellsMatrix[row - 1][colIndex - 1];
+            if (cell != null && cell.getIsExist()) {
+                EffectiveValue effectiveValue = cell.getEffectiveValue();
+                effectiveValues.add(effectiveValue); // יתווסף רק אם ייחודי
+            }
+        }
+
+        return effectiveValues;
     }
 
 }

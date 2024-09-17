@@ -20,6 +20,7 @@ import parts.SheetDTO;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class CommandsController {
 
@@ -190,8 +191,10 @@ public class CommandsController {
 
             // קבל את הבקר של הפופאפ
             FilterPopupController filterPopupController = loader.getController();
-
-            filterPopupController.initializeFilterListView();
+            String col= filterColumnsTextField.getText();
+            String rangeDefinition =filterRangeTextField.getText();
+            Set<String> values=mainController.getDistinctValuesOfColInRange(col, rangeDefinition);
+            filterPopupController.initializeFilterListView(values);
 
             // יצירת הבמה (Stage) לפופאפ
             Stage popupStage = new Stage();

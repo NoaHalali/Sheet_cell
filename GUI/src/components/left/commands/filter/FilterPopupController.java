@@ -8,6 +8,8 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.cell.CheckBoxListCell;
 import javafx.stage.Stage;
 
+import java.util.Set;
+
 public class FilterPopupController {
     @FXML
     private ListView<String> filterListView;
@@ -19,9 +21,9 @@ public class FilterPopupController {
 //        initializeFilterListView();
 //    }
 
-    public void initializeFilterListView() {
-        // יצירת רשימה של פריטים להוספה ל-ListView
-        ObservableList<String> items = FXCollections.observableArrayList("Value 1", "Value 2", "Value 3", "Value 4");
+    public void initializeFilterListView(Set<String> values) {
+        // יצירת רשימה של פריטים מהערכים שהועברו ל-Set
+        ObservableList<String> items = FXCollections.observableArrayList(values);
 
         // הגדרת רשימת הפריטים ל-ListView
         filterListView.setItems(items);
@@ -42,6 +44,7 @@ public class FilterPopupController {
             return selected;
         }));
     }
+
 
     @FXML
     private void applyFilterAction() {

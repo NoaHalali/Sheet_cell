@@ -36,6 +36,7 @@ public class CoordinateImpl implements Coordinate, Serializable {
     }
 
     public static Coordinate parseCoordinate(String input) throws IllegalArgumentException {
+
         if(input==null) {
             System.out.println("was here");
         }
@@ -44,7 +45,7 @@ public class CoordinateImpl implements Coordinate, Serializable {
             String columnString = input.replaceAll("[0-9]", "");
             String rowString = input.replaceAll("[A-Za-z]", ""); // Also removes lowercase letters
 
-            int column = columnStringToIndex(columnString.toUpperCase()); // Convert to uppercase before processing
+            int column = columnStringToIndex(columnString); // Convert to uppercase before processing
             int row = Integer.parseInt(rowString);
 
             return new CoordinateImpl(row, column);
@@ -54,7 +55,7 @@ public class CoordinateImpl implements Coordinate, Serializable {
         }
     }
     public static int columnStringToIndex(String column) {
-
+           column = column.toUpperCase();
         int index = 0;
         for (int i = 0; i < column.length(); i++) {
             index = index * 26 + (column.charAt(i) - 'A' + 1);

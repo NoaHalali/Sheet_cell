@@ -3,10 +3,12 @@ package parts;
 import parts.cell.CellDTO;
 import parts.sheet.cell.coordinate.Coordinate;
 import parts.sheet.Sheet;
+import parts.sheet.cell.expression.effectiveValue.EffectiveValue;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
+import java.util.Set;
 
 public interface Engine {
 
@@ -45,6 +47,8 @@ public interface Engine {
     public List<String> getRangesNames();
 
     public SheetDTO getSortedSheetDTO(String rangeDefinition, List<Character> columnsToSortBy) throws IllegalArgumentException;
+
+    public Set<EffectiveValue> getDistinctValuesOfColInRange(String col, String rangeDefinition) throws IllegalArgumentException;
 }
 
 
