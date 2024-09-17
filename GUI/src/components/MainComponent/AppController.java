@@ -314,18 +314,20 @@ public class AppController {
         highlightRange(rangeName);
         rangeSelectedProperty().set(true); // עדכון מצב בחירת טווח
     }
-    public Set<String> getDistinctValuesOfColInRange(String col,String rangeDefinition){
-        Set<String>strValues=new HashSet<String>();
+    public Set<EffectiveValue> getDistinctValuesOfColInRange(String col,String rangeDefinition){
+//        Set<String>strValues=new HashSet<String>();
            Set<EffectiveValue> values=engine.getDistinctValuesOfColInRange(col,rangeDefinition);
-        strValues = values.stream()
-                .map(value -> tableController.calcValueToPrint(value)) // המרה למחרוזת//todo להוסיף את CALCVALUE למקום אחר
-                .collect(Collectors.toSet()); // המרת הזרם לסט
+//        strValues = values.stream()
+//                .map(value -> tableController.calcValueToString(value)) // המרה למחרוזת//todo להוסיף את CALCVALUE למקום אחר
+//                .collect(Collectors.toSet()); // המרת הזרם לסט
 
-        return strValues;
+
+        return values;
     }
 
 
-    public void filterData(ObservableList<String> selectedItems) {
+    public void filterData(Set<EffectiveValue> selectedValues) {
+
 
     }
 }

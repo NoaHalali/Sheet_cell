@@ -1,6 +1,7 @@
 package components.left.commands;
 
 import components.MainComponent.AppController;
+import components.Utils.EffectiveValueUtils;
 import components.center.cellsTable.TableController;
 import components.left.commands.filter.FilterPopupController;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -16,11 +17,15 @@ import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import parts.SheetDTO;
+import parts.sheet.cell.expression.effectiveValue.EffectiveValue;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
+
+
 
 public class CommandsController {
 
@@ -74,7 +79,7 @@ public class CommandsController {
         // אתחול ListView לסינון
         initializeFilterListView();
 
-        applyFilterButton.setOnAction(event -> applyFilterAction());
+        //applyFilterButton.setOnAction(event -> applyFilterAction());
     }
 
     // פונקציה לאתחול ListView לסינון
@@ -102,11 +107,11 @@ public class CommandsController {
         }));
     }
 
-    @FXML
-    private void applyFilterAction() {
-        // יישום לוגיקת הסינון לפי הערכים שנבחרו
-        mainController.filterData(selectedItems);
-    }
+//    @FXML
+////    private void applyFilterAction() {
+////        // יישום לוגיקת הסינון לפי הערכים שנבחרו
+////        mainController.filterData(selectedItems);
+////    }
 
     @FXML
     public void setColumnRowWidthAction() {
@@ -193,8 +198,10 @@ public class CommandsController {
             FilterPopupController filterPopupController = loader.getController();
             String col= filterColumnsTextField.getText();
             String rangeDefinition =filterRangeTextField.getText();
-            Set<String> values=mainController.getDistinctValuesOfColInRange(col, rangeDefinition);
-            filterPopupController.initializeFilterListView(values);
+            Set<EffectiveValue> values=mainController.getDistinctValuesOfColInRange(col, rangeDefinition);
+            Map<String, EffectiveValue> stringToEffectiveValueMap = getStringToEffectiveValueMap(values);
+            Set<String> valuesSet = stringToEffectiveValueMap.keySet();
+            filterPopupController.initializeFilterListView(valuesSet);
 
             // יצירת הבמה (Stage) לפופאפ
             Stage popupStage = new Stage();
@@ -207,13 +214,26 @@ public class CommandsController {
 
             // קבלת הערכים שנבחרו מהפופאפ לאחר שהמשתמש סיים את הבחירה
             ObservableList<String> selectedItems = filterPopupController.getSelectedItems();
-            System.out.println("Selected items from popup: " + selectedItems);
+
+           System.out.println("Selected items from popup: " + selectedItems);
+            Set<EffectiveValue> selectedValues = selectedItems.stream()
+                    .map(stringToEffectiveValueMap::get)
+                    .collect(Collectors.toSet());
 
             // תוכל לקרוא לפונקציה filterData עם הערכים שנבחרו
-            mainController.filterData(selectedItems);
+            mainController.filterData(selectedValues);
 
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+    public Map<String, EffectiveValue> getStringToEffectiveValueMap(Set<EffectiveValue> values) {
+        return values.stream()
+                .collect(Collectors.toMap(EffectiveValueUtils::calcValueToString, v -> v));
+    }
+    public Set<String> getStringSetFromEffectiveValues(Set<EffectiveValue> values) {
+        return values.stream()
+               .map(EffectiveValueUtils::calcValueToString) // המרה למחרוזת//todo להוסיף את CALCVALUE למקום אחר
+               .collect(Collectors.toSet()); // המרת הזרם לסט
     }
 }

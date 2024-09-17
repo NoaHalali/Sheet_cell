@@ -7,6 +7,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
 import javafx.scene.control.cell.CheckBoxListCell;
 import javafx.stage.Stage;
+import parts.sheet.cell.expression.effectiveValue.EffectiveValue;
 
 import java.util.Set;
 

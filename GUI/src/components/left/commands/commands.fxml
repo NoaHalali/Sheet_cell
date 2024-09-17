@@ -74,7 +74,7 @@
     <Label text="Select Values to Filter:" />
     <ListView fx:id="filterListView" />
 
-    <Button fx:id="applyFilterButton" layoutX="20.0" layoutY="296.0" onAction="#applyFilterAction" text="Apply Filter" />
+    <Button fx:id="applyFilterButton" layoutX="20.0" layoutY="296.0"  text="Apply Filter" />
 
     <padding>
         <Insets bottom="5.0" left="10.0" right="10.0" top="5.0" />
