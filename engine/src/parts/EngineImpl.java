@@ -251,10 +251,14 @@ public class EngineImpl implements Engine {
         Coordinate bottomRightCoord = rangeEdgeCoordinates[1];
         return currentSheet.getDistinctValuesOfColInRange(col, topLeftCoord, bottomRightCoord);
     }
+
+    @Override
     public SheetDTO getFilteredSheetDTO(Set<EffectiveValue> filteredValues, String col,String rangeDefinition) throws IllegalArgumentException {
         Coordinate[] rangeEdgeCoordinates =Range.parseRange(rangeDefinition);
         Coordinate topLeftCoord = rangeEdgeCoordinates[0];
         Coordinate bottomRightCoord = rangeEdgeCoordinates[1];
+
+        return currentSheet.getFilteredSheetByColumnInRange(filteredValues, col, topLeftCoord, bottomRightCoord).toSheetDTO();
 
     }
 

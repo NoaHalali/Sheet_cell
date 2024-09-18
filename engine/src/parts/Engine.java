@@ -49,6 +49,8 @@ public interface Engine {
     public SheetDTO getSortedSheetDTO(String rangeDefinition, List<Character> columnsToSortBy) throws IllegalArgumentException;
 
     public Set<EffectiveValue> getDistinctValuesOfColInRange(String col, String rangeDefinition) throws IllegalArgumentException;
+
+    public SheetDTO getFilteredSheetDTO(Set<EffectiveValue> filteredValues, String col,String rangeDefinition) throws IllegalArgumentException;
 }
 
 

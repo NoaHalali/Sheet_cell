@@ -456,6 +456,7 @@ public class Sheet implements Serializable {
             List<Cell> rowCells = sortedRows.get(i).getCells();
             for (int j = 0; j < rowCells.size(); j++) {
                 cellsMatrix[startRow + i][colStart + j] = rowCells.get(j);
+                //System.out.println("cell "+rowCells.get(j).getCoordinate()+" is now in "+(startRow + i)+" "+(colStart + j));
             }
         }
     }
@@ -484,35 +485,62 @@ public class Sheet implements Serializable {
         return effectiveValues;
     }
 
-    public void filterRowsByColumnRange(Coordinate topLeftCoord, Coordinate bottomRightCoord, int column, Set<EffectiveValue> valuesToMatch) {
+    public Sheet getFilteredSheetByColumnInRange( Set<EffectiveValue> valuesToMatch, String colStr,Coordinate topLeftCoord, Coordinate bottomRightCoord) {
+        // שכפול הגיליון הנוכחי
+        Sheet filteredSheet = this.cloneSheet();
 
-
+        int colIndex =CoordinateImpl.columnStringToIndex(colStr);
 
         // וידוא שטווח התאים בעמודה תקין
-        if (column < 1 || column > numberOfCols) {
+        if (colIndex < 1 || colIndex > numberOfCols) {
             throw new IllegalArgumentException("Invalid column index.");
         }
 
-        // מעבר על כל השורות בטווח
-        for (int row = topLeftCoord.getRow(); row <= bottomRightCoord.getRow(); row++) {
-            Cell cell = cellsMatrix[row - 1][column - 1];  // עמודה נתונה
+        // רשימה זמנית שתכיל את השורות שתואמות לערכים הנבחרים
+        List<SheetRow> filteredRows = new ArrayList<>();
 
-            // בדיקה אם התא קיים ואם הערך מתאים לאחד הערכים מהרשימה
-            if (cell == null || !valuesToMatch.contains(cell.getEffectiveValue().getValue())) {
-                // הסרה של השורה אם הערך לא קיים או לא מתאים
-                removeRow(row);
+        // מעבר על כל השורות בטווח הרלוונטי
+        for (int row = topLeftCoord.getRow(); row <= bottomRightCoord.getRow(); row++) {
+            List<Cell> filteredRowCells = new ArrayList<>();
+            boolean rowMatches = false;  // דגל שיציין אם יש ערכים שתואמים בשורה
+
+            // נתחום את העמודות וניקח רק את התאים הנמצאים בטווח של העמודות
+            for (int col = topLeftCoord.getCol(); col <= bottomRightCoord.getCol(); col++) {
+                Cell cell = filteredSheet.getCellsMatrix()[row - 1][col - 1];
+
+                // בדיקה אם התא קיים ואם הערך מתאים לאחד הערכים מהרשימה
+                if (cell != null && valuesToMatch.contains(cell.getEffectiveValue())) {
+                    rowMatches = true;
+                }
+                filteredRowCells.add(cell);  // נוסיף את התא לרשימה של השורה המסוננת
+            }
+
+            // אם מצאנו ערכים תואמים בשורה, נוסיף את השורה לרשימת השורות המסוננות
+            if (rowMatches) {
+                filteredRows.add(new SheetRow(filteredRowCells));
+            }
+        }
+
+        // עדכון המטריצה של התאים בגיליון המשוכפל עם השורות המסוננות
+        filteredSheet.updateCellsMatrix(filteredRows, topLeftCoord, bottomRightCoord);
+        resetRemainingCells(filteredSheet, topLeftCoord, bottomRightCoord, filteredRows);
+
+        // החזרת הגיליון המסונן
+        return filteredSheet;
+    }
+
+    private void resetRemainingCells(Sheet filteredSheet, Coordinate topLeft, Coordinate bottomRight, List<SheetRow> filteredRows) {
+        Cell[][] cellsMatrix = filteredSheet.getCellsMatrix();
+        int numberOfFilteredRows = filteredRows.size();
+        int totalRows = bottomRight.getRow() - topLeft.getRow() + 1;
+
+        // איפוס התאים בשורות שלא מולאו (מתחילים משורת הסיום של הסינון עד סוף הטווח)
+        for (int rowIndex = numberOfFilteredRows; rowIndex < totalRows; rowIndex++) {
+            for (int col = topLeft.getCol(); col <= bottomRight.getCol(); col++) {
+                cellsMatrix[topLeft.getRow() - 1 + rowIndex][col - 1] = Cell.createEmptyCell(new CoordinateImpl(topLeft.getRow() - 1 + rowIndex, col));
             }
         }
     }
-
-    // מתודה לעדכון או הסרה של שורה
-    private void removeRow(int rowIndex) {
-        for (int col = 0; col < numberOfCols; col++) {
-            cellsMatrix[rowIndex - 1][col] = null;  // ניקוי התאים בשורה
-        }
-    }
-
-
 }
 
 

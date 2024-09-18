@@ -335,49 +335,22 @@ public class AppController {
         columnSelected.set(false);
     }
 
-
-//    // פונקציות גישה למצב סימון תא
-//    public boolean isCellSelected() {
-//        return cellSelected.get();
-//    }
-
-//    public void setCellSelected(boolean isSelected) {
-//        this.cellSelected.set(isSelected);
-//    }
-
     public BooleanProperty cellSelectedProperty() {
         return cellSelected;
     }
 
-//    // פונקציות גישה למצב סימון טווח
-//    public boolean isRangeSelected() {
-//        return rangeSelected.get();
-//    }
-
-//    public void setRangeSelected(boolean isSelected) {
-//        this.rangeSelected.set(isSelected);
-//    }
 
     public BooleanProperty rangeSelectedProperty() {
         return rangeSelected;
     }
-
-//    // פונקציות גישה למצב סימון עמודה
-//    public boolean isColumnSelected() {
-//        return columnSelected.get();
-//    }
-
-//    public void setColumnSelected(boolean isSelected) {
-//        this.columnSelected.set(isSelected);
-//    }
 
     public BooleanProperty columnSelectedProperty() {
         return columnSelected;
     }
 
 
-    public void filterData(Set<EffectiveValue> selectedValues) {
-
+    public SheetDTO filterData(Set<EffectiveValue> selectedValues, String col, String rangeDefinition) {
+        return engine.getFilteredSheetDTO(selectedValues, col, rangeDefinition);
     }
 
     public Set<EffectiveValue> getDistinctValuesOfColInRange(String col,String rangeDefinition){
@@ -386,22 +359,6 @@ public class AppController {
 //        strValues = values.stream()
 //                .map(value -> tableController.calcValueToString(value)) // המרה למחרוזת//todo להוסיף את CALCVALUE למקום אחר
 //                .collect(Collectors.toSet()); // המרת הזרם לסט
-
-
         return values;
     }
 }
-
-//
-//    public void setCellTextColor(Color color){
-//        tableController.setCellTextColor(color);
-//    }
-//
-//    public void setCellBorderColor(Color color) {
-//        tableController.setCellBorderColor(color);
-//    }
-
-//    public void setCellBorderColor(Color color) {
-//        String colorStr = formatColorToString(color);
-//        tableController.setCellBorderColor(colorStr);
-//    }

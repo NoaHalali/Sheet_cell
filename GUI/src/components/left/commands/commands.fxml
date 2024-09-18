@@ -68,7 +68,7 @@
             <TextField fx:id="filterColumnsTextField" promptText="Enter column (e.g., A)" />
         </children>
     </HBox>
-    <Button fx:id="calcValuesToFilterButton" onAction="#openFilterPopup" text="Calculate Values to Filter" />
+    <Button fx:id="calcValuesToFilterButton" onAction="#OnCalcValuesToFilterButtonClicked" text="Calculate Values to Filter" />
 
     <!-- ListView עבור סינון ערכים -->
     <Label text="Select Values to Filter:" />
