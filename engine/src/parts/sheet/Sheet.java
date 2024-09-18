@@ -484,9 +484,38 @@ public class Sheet implements Serializable {
         return effectiveValues;
     }
 
+    public void filterRowsByColumnRange(Coordinate topLeftCoord, Coordinate bottomRightCoord, int column, Set<EffectiveValue> valuesToMatch) {
+
+
+
+        // וידוא שטווח התאים בעמודה תקין
+        if (column < 1 || column > numberOfCols) {
+            throw new IllegalArgumentException("Invalid column index.");
+        }
+
+        // מעבר על כל השורות בטווח
+        for (int row = topLeftCoord.getRow(); row <= bottomRightCoord.getRow(); row++) {
+            Cell cell = cellsMatrix[row - 1][column - 1];  // עמודה נתונה
+
+            // בדיקה אם התא קיים ואם הערך מתאים לאחד הערכים מהרשימה
+            if (cell == null || !valuesToMatch.contains(cell.getEffectiveValue().getValue())) {
+                // הסרה של השורה אם הערך לא קיים או לא מתאים
+                removeRow(row);
+            }
+        }
+    }
+
+    // מתודה לעדכון או הסרה של שורה
+    private void removeRow(int rowIndex) {
+        for (int col = 0; col < numberOfCols; col++) {
+            cellsMatrix[rowIndex - 1][col] = null;  // ניקוי התאים בשורה
+        }
+    }
 
 
 }
+
+
 
 //    // פונקציה עזר לפרש ערכים מספריים
 //    private Double parseNumericValue(String value) {
