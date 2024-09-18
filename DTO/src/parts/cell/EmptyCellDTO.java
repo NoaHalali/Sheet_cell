@@ -28,14 +28,11 @@ public class EmptyCellDTO implements CellDTO {
     }
 
     @Override
-    public List<Coordinate> getInfluencingOn() {
-        return List.of();
-    }
+    public List<Coordinate> getInfluencingOn() { return influencingOn; }
 
     @Override
-    public List<Coordinate> getDependsOn() {
-        return List.of();
-    }
+    public List<Coordinate> getDependsOn() {  return List.of();}
+
 
     @Override
     public Coordinate getCoord() {

@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 public class TableController {
-
+    private final String basicCellStyle = "-fx-background-color: #f0f0f0; -fx-alignment: center; -fx-border-color: black; -fx-border-width: 0.5px;";
     private AppController mainController;
     @FXML private GridPane dynamicGridPane;
     private final Map<String, CellController> coordToCellControllerMap = new HashMap<>();
@@ -136,6 +136,7 @@ public class TableController {
 
             styleMap.put(coordStr, style);
         }
+        styleMap.put(CoordinateImpl.notExists.toString(),basicCellStyle);
 
 //        for (String coordStr : coordToCellControllerMap.keySet()) {
 //            CellController cellController = coordToCellControllerMap.get(coordStr);

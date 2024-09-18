@@ -187,9 +187,9 @@ public class Cell implements Serializable {
         //effectiveValue = null;
         isExist = false;
         cellValue = null;
-//        for (Cell cell :dependsOn){
-//            cell.removeCellFromInfluencingOnList(this);
-//        }
+        for (Cell cell :dependsOn){
+            cell.removeCellFromInfluencingOnList(this);
+        }
         dependsOn.clear();
         for(Range range : rangesDependsOn) {
             range.removeCoordinateFromInfluencingOnCoordinates(coordinate);

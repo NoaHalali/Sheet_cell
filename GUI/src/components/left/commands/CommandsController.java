@@ -153,26 +153,35 @@ public class CommandsController {
     @FXML
     private void displaySortAction() {
         try {
-            Stage popupStage = new Stage();
-            popupStage.setTitle("Sorting Preview: ");
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/components/center/cellsTable/table.fxml"));
-            Parent root = loader.load();
 
-            TableController tableController = loader.getController();
             List<Character> colsList = colsStringToCharList(sortColumnsTextField.getText());
             SheetDTO sheet = mainController.getSortedSheetDTO(sortRangeTextField.getText(), colsList);
-            Map<String, String> styleMap = mainController.getStylesFromMainSheet();
-            tableController.showSheetPreview(sheet);
-            tableController.updateCellsStyleAfterSort(styleMap, sheet);
-
-            Scene scene = new Scene(root);
-            popupStage.setScene(scene);
-            popupStage.initModality(Modality.APPLICATION_MODAL);
-            popupStage.showAndWait();
+            previewSheetDTOWithPrevStyleInPopup(sheet,"Sorted Sheet Preview");
 
         } catch (Exception e) {
             mainController.showAlert("Error", e.getMessage());
         }
+    }
+    public void previewSheetDTOWithPrevStyleInPopup(SheetDTO sheet,String popUpName) throws Exception {
+        Stage popupStage = new Stage();
+        popupStage.setTitle(popUpName);
+
+        // טעינת FXML או יצירת ממשק באופן דינמי
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/components/center/cellsTable/table.fxml")); // Adjust the path
+        Parent root = loader.load();
+
+        // קבלת ה-TableController ואתחולו עם הגרסה הנבחרת של הגיליון
+        TableController tableController = loader.getController();
+        Map<String, String> styleMap = mainController.getStylesFromMainSheet();
+        tableController.showSheetPreview(sheet);
+        tableController.updateCellsStyleAfterSort(styleMap, sheet);
+
+
+        Scene scene = new Scene(root);
+        popupStage.setScene(scene);
+        popupStage.initModality(Modality.APPLICATION_MODAL);
+        popupStage.showAndWait();
+
     }
 
     private List<Character> colsStringToCharList(String input) {
@@ -191,7 +200,7 @@ public class CommandsController {
     private void OnCalcValuesToFilterButtonClicked() {
        try{
            SheetDTO sheet = openFilterOptionsPopupAndGetFilteredSheet();
-           openFilteredSheetPopUp(sheet);
+           previewSheetDTOWithPrevStyleInPopup(sheet,"Filtered Sheet Preview");
 
        }
          catch (Exception e) {
@@ -247,21 +256,5 @@ public class CommandsController {
                .collect(Collectors.toSet()); // המרת הזרם לסט
     }
 
-    private void openFilteredSheetPopUp(SheetDTO sheet) throws Exception {
-        Stage popupStage = new Stage();
-        popupStage.setTitle("Filtered Sheet Preview");
 
-        // טעינת FXML או יצירת ממשק באופן דינמי
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/components/center/cellsTable/table.fxml")); // Adjust the path
-        Parent root = loader.load();
-
-        // קבלת ה-TableController ואתחולו עם הגרסה הנבחרת של הגיליון
-        TableController tableController = loader.getController();
-        tableController.showSheetPreview(sheet);
-
-        Scene scene = new Scene(root);
-        popupStage.setScene(scene);
-        popupStage.initModality(Modality.APPLICATION_MODAL);
-        popupStage.showAndWait();
-    }
 }

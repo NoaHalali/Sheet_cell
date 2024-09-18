@@ -61,7 +61,7 @@ public class SheetDTO {
         if(cell != null){
             return cell;
         }else{
-           return new EmptyCellDTO(coordinate, 0, null);
+           return new EmptyCellDTO(coordinate, 0, List.of());
         }
     }
 

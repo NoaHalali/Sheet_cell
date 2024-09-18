@@ -5,6 +5,7 @@ import java.io.Serializable;
 public class CoordinateImpl implements Coordinate, Serializable {
     private final int row;
     private final int column;
+    public final static Coordinate notExists = new CoordinateImpl(-1, -1);
 
 
     public CoordinateImpl(int row, int column) {
@@ -25,6 +26,9 @@ public class CoordinateImpl implements Coordinate, Serializable {
 
     @Override
     public String toString() {
+        if(row == -1 && column == -1){
+            return "Not Exists";
+        }
         char char1= (char) ('A'+ column -1);
         String number= String.valueOf(row);
         return indexToColumnString(column)+number;

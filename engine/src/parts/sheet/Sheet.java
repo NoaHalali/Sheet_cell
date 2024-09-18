@@ -537,7 +537,8 @@ public class Sheet implements Serializable {
         // איפוס התאים בשורות שלא מולאו (מתחילים משורת הסיום של הסינון עד סוף הטווח)
         for (int rowIndex = numberOfFilteredRows; rowIndex < totalRows; rowIndex++) {
             for (int col = topLeft.getCol(); col <= bottomRight.getCol(); col++) {
-                cellsMatrix[topLeft.getRow() - 1 + rowIndex][col - 1] = Cell.createEmptyCell(new CoordinateImpl(topLeft.getRow() - 1 + rowIndex, col));
+               // cellsMatrix[topLeft.getRow() - 1 + rowIndex][col - 1] = Cell.createEmptyCell(new CoordinateImpl(topLeft.getRow() - 1 + rowIndex, col));
+                cellsMatrix[topLeft.getRow() - 1 + rowIndex][col - 1] = Cell.createEmptyCell(CoordinateImpl.notExists);
             }
         }
     }
