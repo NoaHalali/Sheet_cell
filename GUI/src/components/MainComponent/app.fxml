@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
@@ -9,56 +10,57 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="components.MainComponent.AppController">
+<ScrollPane xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="components.MainComponent.AppController" fitToWidth="true" fitToHeight="true">
+    <BorderPane maxHeight="Infinity" maxWidth="Infinity"  prefHeight="600.0" prefWidth="800.0">
+        <top>
+            <VBox spacing="10">
+                <GridPane>
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                    <children>
+                        <Label alignment="CENTER" text="Shticell" GridPane.columnIndex="1">
+                            <font>
+                                <Font size="24.0" />
+                            </font>
+                        </Label>
+                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="10.0" GridPane.columnIndex="2">
+                            <children>
+                                <Label text="Current version:" />
+                                <Label fx:id="currentVersionLabel" text="1.0" />
+                            </children>
+                        </HBox>
+                    </children>
+                </GridPane>
+                <!-- הכללת קובץ ה-FXML של הרכיב העליון -->
+                <fx:include fx:id="fileChooser" source="../top/fileChooser/fileChooser.fxml" />
 
-    <top>
-        <VBox spacing="10">
-         <GridPane>
-           <columnConstraints>
-             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-               <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-             <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-           </columnConstraints>
-           <rowConstraints>
-             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-           </rowConstraints>
-            <children>
-               <Label alignment="CENTER" text="Shticell" GridPane.columnIndex="1">
-                  <font>
-                     <Font size="24.0" />
-                  </font>
-               </Label>
-               <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="10.0" GridPane.columnIndex="2">
-                  <children>
-                     <Label text="Current version:" />
-                     <Label fx:id="currentVersionLabel" text="1.0" />
-                  </children>
-               </HBox>
-            </children>
-         </GridPane>
-            <!-- הכללת קובץ ה-FXML של הרכיב העליון -->
-            <fx:include fx:id="fileChooser" source="../top/fileChooser/fileChooser.fxml" />
+                <!-- הכללת קובץ ה-FXML של Action Line -->
+                <HBox alignment="CENTER_LEFT" spacing="10" HBox.hgrow="ALWAYS">
+                    <fx:include fx:id="actionLine" source="../top/actionLine/actionLine.fxml" HBox.hgrow="ALWAYS" />
+                    <fx:include fx:id="versionSelector" source="../top/versions/versionSelector.fxml" />
+                </HBox>
+            </VBox>
+        </top>
 
-            <!-- הכללת קובץ ה-FXML של Action Line -->
-            <HBox alignment="CENTER_LEFT" spacing="10" HBox.hgrow="ALWAYS">
-                <fx:include fx:id="actionLine" source="../top/actionLine/actionLine.fxml" HBox.hgrow="ALWAYS" />
-                <fx:include fx:id="versionSelector" source="../top/versions/versionSelector.fxml" />
-            </HBox>
-        </VBox>
-    </top>
+        <left>
+            <VBox spacing="10">
+                <!-- הכללת קובץ ה-FXML של Commands -->
+                <fx:include fx:id="commands" source="../left/commands/commands.fxml" />
 
-    <left>
-        <VBox spacing="10">
-            <!-- הכללת קובץ ה-FXML של Commands -->
-            <fx:include fx:id="commands" source="../left/commands/commands.fxml" />
+                <!-- הכללת קובץ ה-FXML של Ranges -->
+                <fx:include fx:id="ranges" source="../left/ranges/ranges.fxml" />
+            </VBox>
+        </left>
 
-            <!-- הכללת קובץ ה-FXML של Ranges -->
-            <fx:include fx:id="ranges" source="../left/ranges/ranges.fxml" />
-        </VBox>
-    </left>
-
-    <center>
-        <!-- הכללת רכיב ה-Cells Table -->
-        <fx:include fx:id="table" source="../center/cellsTable/table.fxml" />
-    </center>
-</BorderPane>
+        <center>
+            <!-- הכללת רכיב ה-Cells Table -->
+            <fx:include fx:id="table" source="../center/cellsTable/table.fxml" />
+        </center>
+    </BorderPane>
+</ScrollPane>

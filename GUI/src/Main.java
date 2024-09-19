@@ -25,8 +25,8 @@ public class Main extends Application {
         primaryStage.setTitle("Shticell");
 
         // הגדרת גודל מינימלי לחלון (למניעת כיווץ יתר של החלון)
-        primaryStage.setMinWidth(700);
-        primaryStage.setMinHeight(500);
+//        primaryStage.setMinWidth(700);
+//        primaryStage.setMinHeight(500);
 
         primaryStage.show();
 
