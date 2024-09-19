@@ -355,4 +355,16 @@ public class AppController {
 //                .collect(Collectors.toSet()); // המרת הזרם לסט
         return values;
     }
+
+    public void setColumnWidth(int rowIndex, double height) {
+        tableController.setColumnWidth(rowIndex, height);
+    }
+
+    public void setRowHeight(int rowIndex, double height) {
+        tableController.setRowHeight(rowIndex, height);
+    }
+
+    public void setColumnAlignment(int colIndex, String alignment) {
+        tableController.setColumnAlignment(colIndex, alignment);
+    }
 }

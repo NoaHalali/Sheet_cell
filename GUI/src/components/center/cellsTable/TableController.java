@@ -350,4 +350,41 @@ public class TableController {
             currentlyHighlightedColumn = null; // נקה את רשימת התאים בעמודה הנבחרת
         }
     }
+
+    public void setRowHeight(int rowIndex, double height) {
+        if (rowIndex >= 0 && rowIndex < dynamicGridPane.getRowConstraints().size()) {
+            RowConstraints rowConst = dynamicGridPane.getRowConstraints().get(rowIndex);
+            rowConst.setPrefHeight(height);
+        } else {
+            // טיפול במקרה שהאינדקס לא חוקי
+            System.out.println("Invalid row index");
+        }
+    }
+
+    public void setColumnWidth(int colIndex, double width) {
+        if (colIndex >= 0 && colIndex < dynamicGridPane.getColumnConstraints().size()) {
+            ColumnConstraints colConst = dynamicGridPane.getColumnConstraints().get(colIndex);
+            colConst.setPrefWidth(width);
+        } else {
+            // טיפול במקרה שהאינדקס לא חוקי
+            System.out.println("Invalid column index");
+        }
+    }
+
+    public void setColumnAlignment(int colIndex, String alignment) {
+        if (colIndex >= 0 && colIndex < dynamicGridPane.getColumnConstraints().size()) {
+            // עבור על כל התאים בעמודה שנבחרה
+            for (int row = 1; row <= dynamicGridPane.getRowConstraints().size(); row++) {
+                CoordinateImpl coord = new CoordinateImpl(row, colIndex);
+                CellController cellController = coordToCellControllerMap.get(coord.toString());
+
+                if (cellController != null) {
+                    // קריאה למתודה ב-CellController שמבצעת את היישור
+                    cellController.setAlignment(alignment);
+                }
+            }
+        } else {
+            System.out.println("Invalid column index");
+        }
+    }
 }

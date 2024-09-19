@@ -5,6 +5,7 @@ import components.Utils.EffectiveValueUtils;
 import components.Utils.StageUtils;
 import components.center.cellsTable.TableController;
 import components.left.commands.filter.FilterPopupController;
+import components.left.commands.rowsAndCols.DialogManager;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -14,6 +15,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.CheckBoxListCell;
+import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -32,41 +34,29 @@ public class CommandsController {
 
     private AppController mainController;
 
-    @FXML
-    private Button setColumnRowWidthButton;
-    @FXML
-    private Button setColumnAlignmentButton;
-    @FXML
-    private Button resetCellStyleButton;
-    @FXML
-    private TextField columnRowWidthTextField;
-    @FXML
-    private TextField columnAlignmentTextField;
-    @FXML
-    private ColorPicker textColorPicker;
-    @FXML
-    private ColorPicker backgroundColorPicker;
-    @FXML
-    private Button applyTextColorButton;
-    @FXML
-    private Button applyBackgroundColorButton;
-    @FXML
-    private Button displaySortButton;
-    @FXML
-    private TextField sortRangeTextField;
-    @FXML
-    private TextField sortColumnsTextField;
+    //@FXML private Button setColumnRowWidthButton;
+    @FXML private Button setColumnWidthButton;
+    @FXML private Button setRowHeightButton;
+    @FXML private Button setColumnAlignmentButton;
 
-    @FXML
-    private TextField filterRangeTextField;
-    @FXML
-    private TextField filterColumnsTextField;
+    @FXML private Button resetCellStyleButton;
+    @FXML private TextField columnRowWidthTextField;
+    @FXML private TextField columnAlignmentTextField;
+    @FXML private ColorPicker textColorPicker;
+    @FXML private ColorPicker backgroundColorPicker;
+    @FXML private Button applyTextColorButton;
+    @FXML private Button applyBackgroundColorButton;
+    @FXML private Button displaySortButton;
+    @FXML private TextField sortRangeTextField;
+    @FXML private TextField sortColumnsTextField;
+
+    @FXML private TextField filterRangeTextField;
+    @FXML private TextField filterColumnsTextField;
 
     @FXML private Button calcValuesToFilterButton;
-    @FXML
-    private ListView<String> filterListView; // הוספת ListView לסינון
-    @FXML
-    private Button applyFilterButton; // כפתור לסינון
+    @FXML private ListView<String> filterListView; // הוספת ListView לסינון
+    @FXML private Button applyFilterButton; // כפתור לסינון
+    private DialogManager dialogManager = new DialogManager();
 
     private ObservableList<String> selectedItems = FXCollections.observableArrayList(); // רשימת פריטים נבחרים
 
@@ -256,6 +246,85 @@ public class CommandsController {
                .map(EffectiveValueUtils::calcValueToString) // המרה למחרוזת//todo להוסיף את CALCVALUE למקום אחר
                .collect(Collectors.toSet()); // המרת הזרם לסט
     }
+
+//    public void showRowColumnStyleDialog() {
+//        // יצירת דיאלוג חדש
+//        Dialog<ButtonType> dialog = new Dialog<>();
+//        dialog.setTitle("עיצוב שורות/עמודות");
+//
+//        // יצירת Layout עבור הדיאלוג
+//        GridPane dialogGrid = new GridPane();
+//        dialogGrid.setHgap(10);
+//        dialogGrid.setVgap(10);
+//
+//        // שדות טקסט עבור רוחב וגובה
+//        TextField widthField = new TextField();
+//        widthField.setPromptText("רוחב עמודה");
+//        TextField heightField = new TextField();
+//        heightField.setPromptText("גובה שורה");
+//
+//        // הוספת השדות ל-GridPane
+//        dialogGrid.add(new Label("רוחב עמודה:"), 0, 0);
+//        dialogGrid.add(widthField, 1, 0);
+//        dialogGrid.add(new Label("גובה שורה:"), 0, 1);
+//        dialogGrid.add(heightField, 1, 1);
+//
+//        // הגדרת התוכן של הדיאלוג
+//        dialog.getDialogPane().setContent(dialogGrid);
+//
+//        // הוספת כפתורים לאישור וביטול
+//        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+//
+//        // טיפול בלחיצה על "אישור"
+//        dialog.setResultConverter(button -> {
+//            if (button == ButtonType.OK) {
+//                // קבלת הערכים מהשדות
+//                double width = Double.parseDouble(widthField.getText());
+//                double height = Double.parseDouble(heightField.getText());
+//
+//                // קריאה לפונקציות שמעדכנות את הרוחב/גובה של השורות או העמודות
+//                mainController.setColumnWidth(0, width);  // לדוגמה, לעמודה הראשונה
+//                mainController.setRowHeight(0, height);   // לדוגמה, לשורה הראשונה
+//            }
+//            return null;
+//        });
+//
+//        // הצגת הדיאלוג
+//        dialog.showAndWait();
+//    }
+
+    // פעולה לפתיחת דיאלוג עיצוב שורות/עמודות
+    // פעולה לפתיחת דיאלוג לעיצוב עמודות
+    public void showColumnWidthDialog() {
+        dialogManager.showColumnWidthDialog(0,
+                width -> mainController.setColumnWidth(0, width)  // קריאה לפונקציה לעדכון רוחב עמודה
+        );
+    }
+
+    // פעולה לפתיחת דיאלוג לעיצוב שורות
+    public void showRowHeightDialog() {
+        dialogManager.showRowHeightDialog(0,
+                height -> mainController.setRowHeight(0, height)  // קריאה לפונקציה לעדכון גובה שורה
+        );
+    }
+    // פעולה לפתיחת דיאלוג יישור עמודות
+    public void showColumnAlignmentDialog() {
+        dialogManager.showColumnAlignmentDialog(0,
+                alignment -> mainController.setColumnAlignment(0, alignment)  // פונקציה לעדכון יישור עמודה
+        );
+    }
+
+//    private void setColumnWidth(int colIndex, double width) {
+//        // לוגיקה לעדכון רוחב עמודה
+//    }
+//
+//    private void setRowHeight(int rowIndex, double height) {
+//        // לוגיקה לעדכון גובה שורה
+//    }
+//
+//    private void setColumnAlignment(int colIndex, String alignment) {
+//        // לוגיקה ליישור עמודה
+//    }
 
 
 }
