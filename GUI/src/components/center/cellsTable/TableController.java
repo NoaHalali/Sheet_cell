@@ -37,13 +37,13 @@ public class TableController {
     public void initializeGrid(SheetDTO sheet) {
         setupGrid(sheet);
         populateGridWithCells(sheet, true);
-        addRowAndColumnLabels(sheet.getNumberOfRows(), sheet.getNumberOfCols());
+        addRowAndColumnLabels(sheet.getNumberOfRows(), sheet.getNumberOfCols(),true);
     }
 
     public void showSheetPreview(SheetDTO sheet) {
         setupGrid(sheet);
         populateGridWithCells(sheet, false);
-        addRowAndColumnLabels(sheet.getNumberOfRows(), sheet.getNumberOfCols());
+        addRowAndColumnLabels(sheet.getNumberOfRows(), sheet.getNumberOfCols(),false);
     }
 
     private void setupGrid(SheetDTO sheet) {
@@ -97,15 +97,16 @@ public class TableController {
         }
     }
 
-    private void addRowAndColumnLabels(int rows, int cols) {
+    private void addRowAndColumnLabels(int rows, int cols, boolean enableClick) {
         for (int row = 1; row <= rows; row++) {
             Label label = new Label(String.valueOf(row));
             label.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
             label.setStyle("-fx-background-color: #f0f0f0; -fx-alignment: center; -fx-border-color: black; -fx-border-width: 0.5px;");
             dynamicGridPane.add(label, 0, row);
-
-            final int rowIndex = row; // use final for lambda
-            label.setOnMouseClicked(event -> handleRowClick(rowIndex)); // Add row click handler
+            if(enableClick) {
+                final int rowIndex = row; // use final for lambda
+                label.setOnMouseClicked(event -> handleRowClick(rowIndex)); // Add row click handler
+            }
         }
 
         for (int col = 1; col <= cols; col++) {
@@ -113,9 +114,10 @@ public class TableController {
             label.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
             label.setStyle("-fx-background-color: #f0f0f0; -fx-alignment: center; -fx-border-color: black; -fx-border-width: 0.5px;");
             dynamicGridPane.add(label, col, 0);
-
+            if (enableClick) {
             final int colIndex = col; // use final for lambda
             label.setOnMouseClicked(event -> handleColumnClick(colIndex)); // Add column click handler
+            }
         }
     }
 
