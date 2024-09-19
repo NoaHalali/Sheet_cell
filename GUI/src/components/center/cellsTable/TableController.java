@@ -31,6 +31,7 @@ public class TableController {
     private List<Coordinate> currentlyHighlightedRange;
     private List<Coordinate> currentlyHighlightedColumn; // רשימת התאים בעמודה הממוקדת הנוכחית
     private int currentColumnIndex;
+    private int currentRowIndex;
     private List<Coordinate> currentlyHighlightedRow;
 
     public void initializeGrid(SheetDTO sheet) {
@@ -253,6 +254,7 @@ public class TableController {
         // mainController.setRowSelected(true);
 
         // Create a list for the currently highlighted row
+        currentRowIndex=rowIndex;
         currentlyHighlightedRow = new ArrayList<>();
 
         // Highlight all cells in the selected row
@@ -385,7 +387,9 @@ public class TableController {
                 }
             }
             currentlyHighlightedRow = null; // Clear the list of highlighted row cells
+            currentRowIndex=-1;
         }
+
     }
 
     private void clearColumnHighlight() {
@@ -401,14 +405,11 @@ public class TableController {
         }
     }
 
-    public void setRowHeight(int rowIndex, double height) {
-        if (rowIndex >= 0 && rowIndex < dynamicGridPane.getRowConstraints().size()) {
-            RowConstraints rowConst = dynamicGridPane.getRowConstraints().get(rowIndex);
+    public void setRowHeight( double height) {
+
+            RowConstraints rowConst = dynamicGridPane.getRowConstraints().get(currentRowIndex);
             rowConst.setPrefHeight(height);
-        } else {
-            // טיפול במקרה שהאינדקס לא חוקי
-            System.out.println("Invalid row index");
-        }
+
     }
 
     public void setColumnWidth(double width) {

@@ -380,8 +380,8 @@ public class AppController {
         tableController.setColumnWidth( height);
     }
 
-    public void setRowHeight(int rowIndex, double height) {
-        tableController.setRowHeight(rowIndex, height);
+    public void setRowHeight( double height) {
+        tableController.setRowHeight( height);
     }
 
     public void setColumnAlignment(String alignment) {

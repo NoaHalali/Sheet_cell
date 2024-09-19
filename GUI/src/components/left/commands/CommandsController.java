@@ -306,8 +306,8 @@ public class CommandsController {
 
     // פעולה לפתיחת דיאלוג לעיצוב שורות
     public void showRowHeightDialog() {
-        dialogManager.showRowHeightDialog(0,
-                height -> mainController.setRowHeight(0, height)  // קריאה לפונקציה לעדכון גובה שורה
+        dialogManager.showRowHeightDialog(
+                height -> mainController.setRowHeight( height)  // קריאה לפונקציה לעדכון גובה שורה
         );
     }
     // פעולה לפתיחת דיאלוג יישור עמודות

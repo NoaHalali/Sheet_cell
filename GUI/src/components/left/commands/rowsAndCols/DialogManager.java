@@ -64,26 +64,55 @@ public class DialogManager {
 //        dialog.showAndWait();
 //    }
     public void showColumnWidthDialog( Consumer<Double> setColumnWidth) {
+        showDialog(setColumnWidth,"Set Column Width","Column Width");
+//        Dialog<ButtonType> dialog = new Dialog<>();
+//        dialog.setTitle("Set Column Width");
+//
+//        GridPane dialogGrid = new GridPane();
+//        dialogGrid.setHgap(10);
+//        dialogGrid.setVgap(10);
+//
+//        TextField columnWidthField = new TextField();
+//        columnWidthField.setPromptText("Column Width");
+//
+//        dialogGrid.add(new Label("Column Width:"), 0, 0);
+//        dialogGrid.add(columnWidthField, 1, 0);
+//
+//        dialog.getDialogPane().setContent(dialogGrid);
+//        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+//
+//        dialog.setResultConverter(button -> {
+//            if (button == ButtonType.OK) {
+//                double columnWidth = Double.parseDouble(columnWidthField.getText());
+//                setColumnWidth.accept(columnWidth);  // קריאה לפונקציה לעדכון רוחב עמודה
+//            }
+//            return null;
+//        });
+//
+//        dialog.showAndWait();
+    }
+    public void showDialog(Consumer<Double> setColumnWidth,String DialogTitle,String DialogMessageInfo) {
         Dialog<ButtonType> dialog = new Dialog<>();
-        dialog.setTitle("Set Column Width");
+        dialog.setTitle(DialogTitle);
 
         GridPane dialogGrid = new GridPane();
         dialogGrid.setHgap(10);
         dialogGrid.setVgap(10);
 
-        TextField columnWidthField = new TextField();
-        columnWidthField.setPromptText("Column Width");
+        // Create a Spinner for column width with a range (e.g., 0.0 to 1000.0) and step value (e.g., 0.1)
+        Spinner<Double> columnWidthSpinner = new Spinner<>(0.0, 1000.0, 100.0, 0.1);
+        columnWidthSpinner.setEditable(true);  // Allow the user to type a value directly
 
-        dialogGrid.add(new Label("Column Width:"), 0, 0);
-        dialogGrid.add(columnWidthField, 1, 0);
+        dialogGrid.add(new Label(DialogMessageInfo), 0, 0);
+        dialogGrid.add(columnWidthSpinner, 1, 0);
 
         dialog.getDialogPane().setContent(dialogGrid);
         dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
 
         dialog.setResultConverter(button -> {
             if (button == ButtonType.OK) {
-                double columnWidth = Double.parseDouble(columnWidthField.getText());
-                setColumnWidth.accept(columnWidth);  // קריאה לפונקציה לעדכון רוחב עמודה
+                double columnWidth = columnWidthSpinner.getValue();
+                setColumnWidth.accept(columnWidth);  // Call the function to update the column width
             }
             return null;
         });
@@ -91,32 +120,35 @@ public class DialogManager {
         dialog.showAndWait();
     }
 
-    public void showRowHeightDialog(int rowIndex, Consumer<Double> setRowHeight) {
-        Dialog<ButtonType> dialog = new Dialog<>();
-        dialog.setTitle("Set Row Height");
 
-        GridPane dialogGrid = new GridPane();
-        dialogGrid.setHgap(10);
-        dialogGrid.setVgap(10);
+    public void showRowHeightDialog( Consumer<Double> setRowHeight) {
 
-        TextField rowHeightField = new TextField();
-        rowHeightField.setPromptText("Row Height");
-
-        dialogGrid.add(new Label("Row Height:"), 0, 0);
-        dialogGrid.add(rowHeightField, 1, 0);
-
-        dialog.getDialogPane().setContent(dialogGrid);
-        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
-
-        dialog.setResultConverter(button -> {
-            if (button == ButtonType.OK) {
-                double rowHeight = Double.parseDouble(rowHeightField.getText());
-                setRowHeight.accept(rowHeight);  // קריאה לפונקציה לעדכון גובה שורה
-            }
-            return null;
-        });
-
-        dialog.showAndWait();
+        showDialog(setRowHeight,"Set Row Height","Row Height");
+//        Dialog<ButtonType> dialog = new Dialog<>();
+//        dialog.setTitle("Set Row Height");
+//
+//        GridPane dialogGrid = new GridPane();
+//        dialogGrid.setHgap(10);
+//        dialogGrid.setVgap(10);
+//
+//        TextField rowHeightField = new TextField();
+//        rowHeightField.setPromptText("Row Height");
+//
+//        dialogGrid.add(new Label("Row Height:"), 0, 0);
+//        dialogGrid.add(rowHeightField, 1, 0);
+//
+//        dialog.getDialogPane().setContent(dialogGrid);
+//        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+//
+//        dialog.setResultConverter(button -> {
+//            if (button == ButtonType.OK) {
+//                double rowHeight = Double.parseDouble(rowHeightField.getText());
+//                setRowHeight.accept(rowHeight);  // קריאה לפונקציה לעדכון גובה שורה
+//            }
+//            return null;
+//        });
+//
+//        dialog.showAndWait();
     }
 
 //    public void showColumnAlignmentDialog(int colIndex, Consumer<String> setColumnAlignment) {
