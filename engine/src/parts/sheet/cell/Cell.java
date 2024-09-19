@@ -24,6 +24,7 @@ public class Cell implements Serializable {
     private List<Cell> influencingOn;//משפיע על התאים האלה
     private List<Cell> dependsOn; //התאים שמושפע מהם
     private List<Range> rangesDependsOn;
+    private List<Range>InfluencingOnRanges;
 
 
     //TODO - maybe send version of sheet
@@ -35,6 +36,7 @@ public class Cell implements Serializable {
         this.influencingOn = new LinkedList<Cell>();
         this.dependsOn = new LinkedList<Cell>();
         this.rangesDependsOn = new LinkedList<Range>();
+        this.InfluencingOnRanges = new LinkedList<Range>();
     }
     public static Cell createEmptyCell(Coordinate coordinate) {
         Cell cell= new Cell(coordinate, "");
@@ -48,6 +50,7 @@ public class Cell implements Serializable {
 //    public void setLastUpdatedVersion(int  lastUpdatedVersion) {
 //        lastUpdatedVersion=0;
 //    }
+
 
 
     public boolean calculateAndCheckIfUpdated() {
@@ -110,7 +113,7 @@ public class Cell implements Serializable {
                     originalValue,
                     getAndUpdateEffectiveValue(),
                     lastUpdatedVersion,
-                    getInfluencingOnCoordinates(),
+                    getFullInfluencingOnCoordinates(),
                     getFullDependsOnCoordList()
             );
         }
@@ -118,7 +121,7 @@ public class Cell implements Serializable {
             return new EmptyCellDTO(
                     coordinate, //"A4"
                     lastUpdatedVersion,
-                    getInfluencingOnCoordinates()
+                   getFullInfluencingOnCoordinates()
             );
         }
 
@@ -130,7 +133,13 @@ public class Cell implements Serializable {
         this.rangesDependsOn = rangesDependsOn;
     }
 
-
+    public void AddRangeToInfluencingOnRange(Range influencingOnRange)
+    {
+        InfluencingOnRanges.add(influencingOnRange);
+    }
+    public void removeRangeFromInfluencingOnRange(Range influencingOnRange){
+        InfluencingOnRanges.remove(influencingOnRange);
+    }
     public Expression getCellValue() {
         return cellValue;
     }
@@ -171,6 +180,13 @@ public class Cell implements Serializable {
     public List<Coordinate> getInfluencingOnCoordinates() {
         return influencingOn.stream().map(Cell::getCoordinate).collect(Collectors.toList());
 
+    }
+    public List<Coordinate> getFullInfluencingOnCoordinates() {
+        List <Coordinate> fullList = getInfluencingOnCoordinates();
+        for(Range range : InfluencingOnRanges){
+            fullList.addAll(range.getInfluencingOnList());
+        }
+        return fullList;
     }
 
     public Coordinate getCoordinate() {

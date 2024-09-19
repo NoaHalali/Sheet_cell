@@ -42,6 +42,7 @@ public class AppController {
     private SimpleBooleanProperty cellSelected;
     private SimpleBooleanProperty rangeSelected;
     private SimpleBooleanProperty columnSelected;
+    private SimpleBooleanProperty rowSelected;
 
 
 
@@ -85,6 +86,8 @@ public class AppController {
             fileSelectedProperty = new SimpleBooleanProperty(false);
             versionProperty = new SimpleIntegerProperty(1);
             columnSelected = new SimpleBooleanProperty(false);
+            rowSelected=new SimpleBooleanProperty(false);
+
             cellSelected = new SimpleBooleanProperty(false);
             rangeSelected = new SimpleBooleanProperty(false);
 
@@ -268,8 +271,9 @@ public class AppController {
             actionLineController.setActionLine(null); // איפוס השורה
         }
         else {
-            if(rangeSelected.get() || columnSelected.get()) {
+            if(rangeSelected.get() || columnSelected.get()||rowSelected.get()) {
                 columnSelected.set(false);
+                rowSelected.set(false);
                 rangeSelected.set(false);
                 rangesController.clearSelectedRangeOption();
             }
@@ -293,10 +297,11 @@ public class AppController {
 
     public void handleRangeSelection(String rangeName) {
         // אם תא נבחר או עמודה נבחרה, בטל את הסימון שלהם
-        if(cellSelected.get() || columnSelected.get()) {
+        if(cellSelected.get() || columnSelected.get()||rowSelected.get()) {
             // בטל את הבחירה של התא והעמודה
             cellSelected.set(false);
             columnSelected.set(false);
+            rowSelected.set(false);
             actionLineController.setActionLine(null); // איפוס השורה
         }
 
@@ -307,15 +312,29 @@ public class AppController {
 
     public void handleColumnSelection() {
         // אם תא נבחר או טווח נבחר, בטל את הסימון שלהם
-        if(cellSelected.get() || rangeSelected.get()) {
+        if(cellSelected.get() || rangeSelected.get()||rowSelected.get()) {
             cellSelected.set(false);
             rangeSelected.set(false);
+            rowSelected.set(false);
             actionLineController.setActionLine(null); // איפוס השורה
         }
 
         //clearBorderMarkOfCells(); // ניקוי סימוני תאים קודם
         columnSelected.set(true); // עדכון מצב בחירת עמודה
     }
+    public void handleRowSelection() {
+        // If a cell or range is selected, clear their selection
+        if (cellSelected.get() || columnSelected.get() || rangeSelected.get()) {
+            cellSelected.set(false);
+            columnSelected.set(false);
+            rangeSelected.set(false);
+            actionLineController.setActionLine(null); // Reset the action line
+        }
+
+       // clearBorderMarkOfCells(); // Clear any existing cell highlights
+        rowSelected.set(true); // Update the row selection state
+    }
+
 //
 //    public void highlightColumn(String rangeName) {
 //        List<Coordinate> rangeCoordinates = engine.getRangeCoordinates(rangeName);
@@ -327,20 +346,21 @@ public class AppController {
         cellSelected.set(false);
         rangeSelected.set(false);
         columnSelected.set(false);
+        rowSelected.set(false);
     }
 
-    public BooleanProperty cellSelectedProperty() {
-        return cellSelected;
-    }
+//    public BooleanProperty cellSelectedProperty() {
+//        return cellSelected;
+//    }
 
 
     public BooleanProperty rangeSelectedProperty() {
         return rangeSelected;
     }
 
-    public BooleanProperty columnSelectedProperty() {
-        return columnSelected;
-    }
+//    public BooleanProperty columnSelectedProperty() {
+//        return columnSelected;
+//    }
 
 
     public SheetDTO filterData(Set<EffectiveValue> selectedValues, String col, String rangeDefinition) {

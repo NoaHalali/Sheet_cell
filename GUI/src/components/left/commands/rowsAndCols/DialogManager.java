@@ -1,9 +1,6 @@
 package components.left.commands.rowsAndCols;
 
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Dialog;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 
 import java.util.function.Consumer;
@@ -122,6 +119,35 @@ public class DialogManager {
         dialog.showAndWait();
     }
 
+//    public void showColumnAlignmentDialog(int colIndex, Consumer<String> setColumnAlignment) {
+//        Dialog<ButtonType> dialog = new Dialog<>();
+//        dialog.setTitle("Set Column Alignment");
+//
+//        GridPane dialogGrid = new GridPane();
+//        dialogGrid.setHgap(10);
+//        dialogGrid.setVgap(10);
+//
+//        // שדה להזנת יישור
+//        TextField alignmentField = new TextField();
+//        alignmentField.setPromptText("Enter Alignment (LEFT, CENTER, RIGHT)");
+//
+//        dialogGrid.add(new Label("Column Alignment:"), 0, 0);
+//        dialogGrid.add(alignmentField, 1, 0);
+//
+//        dialog.getDialogPane().setContent(dialogGrid);
+//        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+//
+//        dialog.setResultConverter(button -> {
+//            if (button == ButtonType.OK) {
+//                String alignment = alignmentField.getText().toUpperCase();
+//                setColumnAlignment.accept(alignment); // קריאה לפונקציה לעדכון היישור
+//            }
+//            return null;
+//        });
+//
+//        dialog.showAndWait();
+//    }
+
     public void showColumnAlignmentDialog(int colIndex, Consumer<String> setColumnAlignment) {
         Dialog<ButtonType> dialog = new Dialog<>();
         dialog.setTitle("Set Column Alignment");
@@ -130,20 +156,23 @@ public class DialogManager {
         dialogGrid.setHgap(10);
         dialogGrid.setVgap(10);
 
-        // שדה להזנת יישור
-        TextField alignmentField = new TextField();
-        alignmentField.setPromptText("Enter Alignment (LEFT, CENTER, RIGHT)");
+        // יצירת ComboBox עם אפשרויות יישור
+        ComboBox<String> alignmentComboBox = new ComboBox<>();
+        alignmentComboBox.getItems().addAll("LEFT", "CENTER", "RIGHT");
+        alignmentComboBox.setPromptText("Choose Alignment");
 
         dialogGrid.add(new Label("Column Alignment:"), 0, 0);
-        dialogGrid.add(alignmentField, 1, 0);
+        dialogGrid.add(alignmentComboBox, 1, 0);
 
         dialog.getDialogPane().setContent(dialogGrid);
         dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
 
         dialog.setResultConverter(button -> {
             if (button == ButtonType.OK) {
-                String alignment = alignmentField.getText().toUpperCase();
-                setColumnAlignment.accept(alignment); // קריאה לפונקציה לעדכון היישור
+                String alignment = alignmentComboBox.getValue();
+                if (alignment != null) {
+                    setColumnAlignment.accept(alignment); // קריאה לפונקציה לעדכון היישור
+                }
             }
             return null;
         });
@@ -152,5 +181,5 @@ public class DialogManager {
     }
 
 
-
 }
+

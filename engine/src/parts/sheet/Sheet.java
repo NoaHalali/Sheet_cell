@@ -272,6 +272,7 @@ public class Sheet implements Serializable {
             range.addCoordinateFromInfluencingOnCoordinates(changeCell.getCoordinate());
         }
 
+
         for (Cell cell : oldDependsList) {
             cell.removeCellFromInfluencingOnList(changeCell);
         }
@@ -346,6 +347,9 @@ public class Sheet implements Serializable {
 
         List<Cell> rangeList = getRangeCellsList(topLeftCoord, bottomRightCoord);
         Range range = new Range(topLeftCoord, bottomRightCoord,rangeList);
+        for (Cell cell : rangeList) {
+            cell.AddRangeToInfluencingOnRange(range);
+        }
         ranges.put(rangeName, range);
     }
 
@@ -358,6 +362,12 @@ public class Sheet implements Serializable {
         if(range.isBeingUsed())
         {
             throw new IllegalArgumentException("Range with the name " + rangeName + " is being used in a function, and therefore can't be deleted.");
+        }
+        List<Coordinate> cellCoord=range.getRangeCoordinates();
+        for(Coordinate coord : cellCoord){
+            Cell InfluencedCell=getCellByCoord(coord);
+            InfluencedCell.removeRangeFromInfluencingOnRange(range);
+
         }
         ranges.remove(rangeName);
     }

@@ -17,14 +17,14 @@ public class Range implements Serializable {
     private Coordinate bottomRightCellID;
     private boolean isUsed;//todo - check if needed
     private List<Cell> cells;
-    private List<Coordinate> InfluencingOnCoordinates;//התאים שמשתמשים בטווח \ה
+    private List<Coordinate> influencingOnCoordinates;//התאים שמשתמשים בטווח \ה
 
     public Range(Coordinate topLeftCellID, Coordinate bottomRightCellID,List<Cell> cells ) {
         this.topLeftCellID = topLeftCellID;
         this.bottomRightCellID = bottomRightCellID;
         isUsed = false;
         this.cells = cells;
-        InfluencingOnCoordinates = new ArrayList<>();
+        influencingOnCoordinates = new ArrayList<>();
     }
     public double calculateCellsSum () {
         double sum = 0 ,num;
@@ -62,18 +62,22 @@ public class Range implements Serializable {
         return sum/numberOfCellsWithNumbers;
     }
 
+
     public List<Coordinate> getRangeCoordinates() {
         return cells.stream().map(Cell::getCoordinate).collect(Collectors.toList());
     }
     public void removeCoordinateFromInfluencingOnCoordinates(Coordinate coordinate) {
-        InfluencingOnCoordinates.remove(coordinate);
+        influencingOnCoordinates.remove(coordinate);
 
     }
     public void addCoordinateFromInfluencingOnCoordinates(Coordinate coordinate) {
-        InfluencingOnCoordinates.add(coordinate);
+        influencingOnCoordinates.add(coordinate);
+    }
+    public List<Coordinate> getInfluencingOnList(){
+        return influencingOnCoordinates;
     }
     public boolean isBeingUsed() {
-        return InfluencingOnCoordinates.size() > 0;
+        return influencingOnCoordinates.size() > 0;
     }
 
     public static void isValidRange(Coordinate topLeftCoord, Coordinate bottomRightCoord) throws IllegalArgumentException {
