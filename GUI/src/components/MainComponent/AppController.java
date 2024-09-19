@@ -52,7 +52,7 @@ public class AppController {
     @FXML private ScrollPane table;
     @FXML private Button myButton=new Button();
     @FXML private Label myLabel ;
-    @FXML private VBox commands;
+    @FXML private ScrollPane commands;
     @FXML private VBox ranges;
     @FXML private HBox versionSelector;
     @FXML private Button updateCell;
@@ -148,7 +148,6 @@ public class AppController {
 
     public void updateCellValue(String value) {
         try {
-
             Coordinate coordinate = tableController.getCurrentlyFocusedCoord();
             tableController.removeMarksOfFocusedCell(); //temp - bette to do only if updated but insie it takes the updated cell from engine
             boolean isUpdated = engine.updateCellValue(value, coordinate);
@@ -349,9 +348,9 @@ public class AppController {
         rowSelected.set(false);
     }
 
-//    public BooleanProperty cellSelectedProperty() {
-//        return cellSelected;
-//    }
+    public BooleanProperty cellSelectedProperty() {
+        return cellSelected;
+    }
 
 
     public BooleanProperty rangeSelectedProperty() {
@@ -376,15 +375,15 @@ public class AppController {
         return values;
     }
 
-    public void setColumnWidth(int rowIndex, double height) {
-        tableController.setColumnWidth(rowIndex, height);
+    public void setColumnWidth( double height) {
+        tableController.setColumnWidth( height);
     }
 
     public void setRowHeight(int rowIndex, double height) {
         tableController.setRowHeight(rowIndex, height);
     }
 
-    public void setColumnAlignment(int colIndex, String alignment) {
-        tableController.setColumnAlignment(colIndex, alignment);
+    public void setColumnAlignment(String alignment) {
+        tableController.setColumnAlignment(alignment);
     }
 }

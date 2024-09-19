@@ -30,6 +30,7 @@ public class TableController {
     private CellController currentlyFocusedCellController; // שדה לשמירת התא הממוקד הנוכחי
     private List<Coordinate> currentlyHighlightedRange;
     private List<Coordinate> currentlyHighlightedColumn; // רשימת התאים בעמודה הממוקדת הנוכחית
+    private int currentColumnIndex;
     private List<Coordinate> currentlyHighlightedRow;
 
     public void initializeGrid(SheetDTO sheet) {
@@ -118,56 +119,6 @@ public class TableController {
         }
     }
 
-    private void handleRowClick(int rowIndex) {
-        // Clear previous cell highlights
-        clearMarkOfCells();
-
-        // Notify the AppController about the row selection
-        // mainController.clearSelectionStates();
-        // mainController.setRowSelected(true);
-
-        // Create a list for the currently highlighted row
-        currentlyHighlightedRow = new ArrayList<>();
-
-        // Highlight all cells in the selected row
-        for (int col = 1; col <= dynamicGridPane.getColumnConstraints().size(); col++) {
-            CoordinateImpl coord = new CoordinateImpl(rowIndex, col);
-            CellController cellController = coordToCellControllerMap.get(coord.toString());
-
-            if (cellController != null) {
-                cellController.setBorder("#FFA500", "2px"); // Highlight the cell with orange
-                currentlyHighlightedRow.add(coord); // Add the cell to the highlighted row list
-            }
-        }
-
-        mainController.handleRowSelection(); // Notify the main controller about the row selection
-    }
-    private void handleColumnClick(int colIndex) {
-        // נקה סימונים קודמים
-        clearMarkOfCells();
-
-        // עדכן את ה-AppController על סימון העמודה
-//        mainController.clearSelectionStates(); // נקה סימונים קודמים ב-AppController
-//        mainController.setColumnSelected(true); // עדכן שסומן עמודה
-
-        // יצירת רשימה חדשה עבור העמודה הנוכחית
-        currentlyHighlightedColumn = new ArrayList<>();
-
-        // עבור על כל התאים בעמודה עם האינדקס שנבחר
-        //TODO - maybe get the column from the engine
-        for (int row = 1; row <= dynamicGridPane.getRowConstraints().size(); row++) {
-            CoordinateImpl coord = new CoordinateImpl(row, colIndex);
-            CellController cellController = coordToCellControllerMap.get(coord.toString());
-
-            if (cellController != null) {
-                cellController.setBorder("#FFA500", "2px"); // הדגש את התא בצבע כתום
-                currentlyHighlightedColumn.add(coord); // הוסף את התא לרשימת התאים בעמודה הנבחרת
-            }
-        }
-        mainController.handleColumnSelection();
-    }
-
-
 
     public void updateCellContent(Coordinate coord, EffectiveValue newText) {
         CellController cellController = coordToCellControllerMap.get(coord.toString());
@@ -249,7 +200,7 @@ public class TableController {
 //        mainController.rangeSelectedProperty().set(false);
 //        mainController.cellSelectedProperty().set(isNewCoordSelected);
 
-        boolean isDoubleClick = currentlyFocusedCoord != null && currentlyFocusedCoord.toString().equals(newCoord);
+        boolean isDoubleClick = currentlyFocusedCoord != null && currentlyFocusedCoord.toString().equals(newCoord)&&mainController.cellSelectedProperty().get();
 
         if (isDoubleClick) {
             removeMarksOfFocusedCell();
@@ -265,6 +216,59 @@ public class TableController {
         }
     }
 
+
+
+    private void handleColumnClick(int colIndex) {
+        // נקה סימונים קודמים
+
+        clearMarkOfCells();
+        // עדכן את ה-AppController על סימון העמודה
+//        mainController.clearSelectionStates(); // נקה סימונים קודמים ב-AppController
+//        mainController.setColumnSelected(true); // עדכן שסומן עמודה
+
+        // יצירת רשימה חדשה עבור העמודה הנוכחית
+
+        currentColumnIndex = colIndex;
+        currentlyHighlightedColumn = new ArrayList<>();
+
+        // עבור על כל התאים בעמודה עם האינדקס שנבחר
+        //TODO - maybe get the column from the engine
+        for (int row = 1; row <= dynamicGridPane.getRowConstraints().size(); row++) {
+            CoordinateImpl coord = new CoordinateImpl(row, colIndex);
+            CellController cellController = coordToCellControllerMap.get(coord.toString());
+
+            if (cellController != null) {
+                cellController.setBorder("#FFA500", "2px"); // הדגש את התא בצבע כתום
+                currentlyHighlightedColumn.add(coord); // הוסף את התא לרשימת התאים בעמודה הנבחרת
+            }
+        }
+        mainController.handleColumnSelection();
+    }
+
+    private void handleRowClick(int rowIndex) {
+        // Clear previous cell highlights
+        clearMarkOfCells();
+
+        // Notify the AppController about the row selection
+        // mainController.clearSelectionStates();
+        // mainController.setRowSelected(true);
+
+        // Create a list for the currently highlighted row
+        currentlyHighlightedRow = new ArrayList<>();
+
+        // Highlight all cells in the selected row
+        for (int col = 1; col <= dynamicGridPane.getColumnConstraints().size(); col++) {
+            CoordinateImpl coord = new CoordinateImpl(rowIndex, col);
+            CellController cellController = coordToCellControllerMap.get(coord.toString());
+
+            if (cellController != null) {
+                cellController.setBorder("#FFA500", "2px"); // Highlight the cell with orange
+                currentlyHighlightedRow.add(coord); // Add the cell to the highlighted row list
+            }
+        }
+
+        mainController.handleRowSelection(); // Notify the main controller about the row selection
+    }
 
 
     public void addMarksOfFocusingToCell() {
@@ -392,6 +396,7 @@ public class TableController {
                 }
             }
             currentlyHighlightedColumn = null; // נקה את רשימת התאים בעמודה הנבחרת
+            currentColumnIndex = -1; // נקה את האינדקס של העמודה הנבחרת
         }
     }
 
@@ -405,30 +410,18 @@ public class TableController {
         }
     }
 
-    public void setColumnWidth(int colIndex, double width) {
-        if (colIndex >= 0 && colIndex < dynamicGridPane.getColumnConstraints().size()) {
-            ColumnConstraints colConst = dynamicGridPane.getColumnConstraints().get(colIndex);
-            colConst.setPrefWidth(width);
-        } else {
-            // טיפול במקרה שהאינדקס לא חוקי
-            System.out.println("Invalid column index");
-        }
+    public void setColumnWidth(double width) {
+
+        ColumnConstraints colConst = dynamicGridPane.getColumnConstraints().get(currentColumnIndex);
+        colConst.setPrefWidth(width);
     }
 
-    public void setColumnAlignment(int colIndex, String alignment) {
-        if (colIndex >= 0 && colIndex < dynamicGridPane.getColumnConstraints().size()) {
-            // עבור על כל התאים בעמודה שנבחרה
-            for (int row = 1; row <= dynamicGridPane.getRowConstraints().size(); row++) {
-                CoordinateImpl coord = new CoordinateImpl(row, colIndex);
+    public void setColumnAlignment(String alignment) {
+        if (currentlyHighlightedColumn != null) {
+            for (Coordinate coord : currentlyHighlightedColumn) {
                 CellController cellController = coordToCellControllerMap.get(coord.toString());
-
-                if (cellController != null) {
-                    // קריאה למתודה ב-CellController שמבצעת את היישור
-                    cellController.setAlignment(alignment);
-                }
+                cellController.setAlignment(alignment);
             }
-        } else {
-            System.out.println("Invalid column index");
         }
     }
 }

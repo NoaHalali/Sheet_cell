@@ -63,7 +63,7 @@ public class DialogManager {
 //
 //        dialog.showAndWait();
 //    }
-    public void showColumnWidthDialog(int colIndex, Consumer<Double> setColumnWidth) {
+    public void showColumnWidthDialog( Consumer<Double> setColumnWidth) {
         Dialog<ButtonType> dialog = new Dialog<>();
         dialog.setTitle("Set Column Width");
 
@@ -148,7 +148,7 @@ public class DialogManager {
 //        dialog.showAndWait();
 //    }
 
-    public void showColumnAlignmentDialog(int colIndex, Consumer<String> setColumnAlignment) {
+    public void showColumnAlignmentDialog(Consumer<String> setColumnAlignment) {
         Dialog<ButtonType> dialog = new Dialog<>();
         dialog.setTitle("Set Column Alignment");
 
@@ -179,7 +179,5 @@ public class DialogManager {
 
         dialog.showAndWait();
     }
-
-
 }
 

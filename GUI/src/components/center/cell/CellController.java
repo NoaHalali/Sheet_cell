@@ -52,7 +52,7 @@ public class CellController {
     }
 
     public void setAlignment(String alignment) {
-        switch (alignment) {
+        switch (alignment.toLowerCase()) {
             case "center":
                 this.alignment = "-fx-alignment: center;";
                 break;

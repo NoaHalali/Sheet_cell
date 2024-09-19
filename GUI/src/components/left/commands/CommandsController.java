@@ -68,35 +68,35 @@ public class CommandsController {
         applyBackgroundColorButton.disableProperty().bind(isCellSelected.not());
 
         // אתחול ListView לסינון
-        initializeFilterListView();
+        //initializeFilterListView();
 
         //applyFilterButton.setOnAction(event -> applyFilterAction());
     }
 
     // פונקציה לאתחול ListView לסינון
-    private void initializeFilterListView() {
-        // יצירת רשימה של פריטים להוספה ל-ListView
-        ObservableList<String> items = FXCollections.observableArrayList("Value 1", "Value 2", "Value 3", "Value 4");
-
-        // הגדרת רשימת הפריטים ל-ListView
-        filterListView.setItems(items);
-
-        // יצירת CheckBox עבור כל פריט ברשימה
-        filterListView.setCellFactory(CheckBoxListCell.forListView(item -> {
-            SimpleBooleanProperty selected = new SimpleBooleanProperty(false);
-
-            // הוספת מאזין כדי לעדכן את רשימת הפריטים הנבחרים
-            selected.addListener((obs, wasSelected, isNowSelected) -> {
-                if (isNowSelected) {
-                    selectedItems.add(item);
-                } else {
-                    selectedItems.remove(item);
-                }
-            });
-
-            return selected;
-        }));
-    }
+//    private void initializeFilterListView() {
+//        // יצירת רשימה של פריטים להוספה ל-ListView
+//        ObservableList<String> items = FXCollections.observableArrayList("Value 1", "Value 2", "Value 3", "Value 4");
+//
+//        // הגדרת רשימת הפריטים ל-ListView
+//        filterListView.setItems(items);
+//
+//        // יצירת CheckBox עבור כל פריט ברשימה
+//        filterListView.setCellFactory(CheckBoxListCell.forListView(item -> {
+//            SimpleBooleanProperty selected = new SimpleBooleanProperty(false);
+//
+//            // הוספת מאזין כדי לעדכן את רשימת הפריטים הנבחרים
+//            selected.addListener((obs, wasSelected, isNowSelected) -> {
+//                if (isNowSelected) {
+//                    selectedItems.add(item);
+//                } else {
+//                    selectedItems.remove(item);
+//                }
+//            });
+//
+//            return selected;
+//        }));
+//    }
 
 //    @FXML
 ////    private void applyFilterAction() {
@@ -296,8 +296,8 @@ public class CommandsController {
     // פעולה לפתיחת דיאלוג עיצוב שורות/עמודות
     // פעולה לפתיחת דיאלוג לעיצוב עמודות
     public void showColumnWidthDialog() {
-        dialogManager.showColumnWidthDialog(0,
-                width -> mainController.setColumnWidth(0, width)  // קריאה לפונקציה לעדכון רוחב עמודה
+        dialogManager.showColumnWidthDialog(
+                width -> mainController.setColumnWidth( width)  // קריאה לפונקציה לעדכון רוחב עמודה
         );
     }
 
@@ -309,22 +309,9 @@ public class CommandsController {
     }
     // פעולה לפתיחת דיאלוג יישור עמודות
     public void showColumnAlignmentDialog() {
-        dialogManager.showColumnAlignmentDialog(0,
-                alignment -> mainController.setColumnAlignment(0, alignment)  // פונקציה לעדכון יישור עמודה
+        dialogManager.showColumnAlignmentDialog(
+                alignment -> mainController.setColumnAlignment(alignment)  // פונקציה לעדכון יישור עמודה
         );
     }
-
-//    private void setColumnWidth(int colIndex, double width) {
-//        // לוגיקה לעדכון רוחב עמודה
-//    }
-//
-//    private void setRowHeight(int rowIndex, double height) {
-//        // לוגיקה לעדכון גובה שורה
-//    }
-//
-//    private void setColumnAlignment(int colIndex, String alignment) {
-//        // לוגיקה ליישור עמודה
-//    }
-
 
 }
