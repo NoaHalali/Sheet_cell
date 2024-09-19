@@ -76,12 +76,7 @@ public class TableController {
 
                     String cellText = cell == null ? "" : calcValueToPrint(cell.getEffectiveValue());
                     cellController.setText(cellText);
-
-                        cellController.setBackgroundColor("#f0f0f0");
-                        cellController.setAlignment("center");
-                        cellController.setBorderColor("black");
-                        cellController.setBorderWidth("0.5px");
-
+                    cellController.setInitialStyle();
 
                     if (enableClick) {
                         String coordStr = coord.toString();

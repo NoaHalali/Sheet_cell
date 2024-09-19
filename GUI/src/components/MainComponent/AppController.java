@@ -1,5 +1,6 @@
 package components.MainComponent;
 
+import components.Utils.StageUtils;
 import components.left.commands.CommandsController;
 import components.left.ranges.RangesController;
 import components.top.actionLine.ActionLineController;
@@ -158,20 +159,19 @@ public class AppController {
                         tableController.updateCellContent(cell.getCoord(), cell.getEffectiveValue());
                     }
                 });
-
-
                 actionLineController.setActionLine(engine.getCellDTOByCoordinate(coordinate));
 
                 // עדכון אפשרויות הגרסה בצורה בטוחה
                 versionProperty.set(sheet.getVersion());
                 versionSelectorController.setVersionSelectorOptions(sheet.getVersion());
             }
-            tableController.addMarksOfFocusingToCell();
         }
         catch (Exception e) {
-            showAlert("Error:", "Failed to update cell: " + e.getMessage());
+            StageUtils.showAlert("Error:", "Failed to update cell: " + e.getMessage());
         }
-
+        finally {
+            tableController.addMarksOfFocusingToCell();
+        }
     }
 
 
@@ -180,13 +180,7 @@ public class AppController {
         return engine.getCellDTOByCoordinate(coordinate);
     }
 
-    public void showAlert(String title, String message) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
-    }
+
 
     public SheetDTO getSheetDTOByVersion(String version) {
         return engine.getSheetDTOByVersion(Integer.parseInt(version));
@@ -195,7 +189,7 @@ public class AppController {
         try {
             engine.readFileData(absolutePath);
         } catch (Exception e) {
-            showAlert( "Error" ,e.getMessage());
+            StageUtils.showAlert( "Error" ,e.getMessage());
         }
     }
 

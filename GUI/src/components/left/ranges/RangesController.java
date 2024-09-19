@@ -1,6 +1,7 @@
 package components.left.ranges;
 
 import components.MainComponent.AppController;
+import components.Utils.StageUtils;
 import javafx.fxml.FXML;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
@@ -53,7 +54,7 @@ public class RangesController {
             mainController.addRange(rangeName, rangeDefinition);
             refreshMenuButton(mainController.getRanges());
         } catch (Exception e) {
-            mainController.showAlert("Error", e.getMessage());
+            StageUtils.showAlert("Error", e.getMessage());
             clearSelectedRangeOption();
         }
     }
@@ -61,7 +62,7 @@ public class RangesController {
     @FXML
     public void deleteRangeAction() {
         if (lastSelectedRange == null || "None".equals(lastSelectedRange)) {
-            mainController.showAlert("Error", "No range selected or cannot delete 'None'!");
+            StageUtils.showAlert("Error", "No range selected or cannot delete 'None'!");
             return;
         }
 
@@ -71,7 +72,7 @@ public class RangesController {
             clearSelectedRangeOption();
 
         } catch (Exception e) {
-            mainController.showAlert("Error", e.getMessage());
+            StageUtils.showAlert("Error", e.getMessage());
             clearSelectedRangeOption();
         }
     }

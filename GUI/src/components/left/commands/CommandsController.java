@@ -2,6 +2,7 @@ package components.left.commands;
 
 import components.MainComponent.AppController;
 import components.Utils.EffectiveValueUtils;
+import components.Utils.StageUtils;
 import components.center.cellsTable.TableController;
 import components.left.commands.filter.FilterPopupController;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -159,7 +160,7 @@ public class CommandsController {
             previewSheetDTOWithPrevStyleInPopup(sheet,"Sorted Sheet Preview");
 
         } catch (Exception e) {
-            mainController.showAlert("Error", e.getMessage());
+            StageUtils.showAlert("Error", e.getMessage());
         }
     }
     public void previewSheetDTOWithPrevStyleInPopup(SheetDTO sheet,String popUpName) throws Exception {
@@ -205,7 +206,7 @@ public class CommandsController {
        }
          catch (Exception e) {
              e.printStackTrace();
-             mainController.showAlert("Error", e.getMessage());
+             StageUtils.showAlert("Error", e.getMessage());
          }
     }
 

@@ -22,7 +22,7 @@ public class CellController {
     //Default style values
     private static final String DEFAULT_BACKGROUND_COLOR = "#f0f0f0";
     private static final String DEFAULT_TEXT_COLOR = "black";
-    //private static final String DEFAULT_ALIGNMENT = "center";
+    private static final String DEFAULT_ALIGNMENT = "center";
     private static final String DEFAULT_BORDER_COLOR = "black";
     private static final String DEFAULT_BORDER_WIDTH = "0.5px";
 
@@ -134,9 +134,9 @@ public class CellController {
     public void resetStyle() {
         textColor = "-fx-text-fill: " + DEFAULT_TEXT_COLOR + ";";
         backgroundColor = "-fx-background-color: " + DEFAULT_BACKGROUND_COLOR + ";";
+        //borderWidth = "-fx-border-width: " + DEFAULT_BORDER_WIDTH + ";";
         //alignment = "-fx-alignment: " + DEFAULT_ALIGNMENT + ";";
-        borderColor = "-fx-border-color: " + DEFAULT_BORDER_COLOR + ";";
-        borderWidth = "-fx-border-width: " + DEFAULT_BORDER_WIDTH + ";";
+        //borderColor = "-fx-border-color: " + DEFAULT_BORDER_COLOR + ";";
         applyStyles();
     }
 
@@ -160,4 +160,11 @@ public class CellController {
         applyStyles();
     }
 
+    public void setInitialStyle() {
+
+        alignment = "-fx-alignment: " + DEFAULT_ALIGNMENT + ";";
+        borderColor = "-fx-border-color: " + DEFAULT_BORDER_COLOR + ";";
+        borderWidth = "-fx-border-width: " + DEFAULT_BORDER_WIDTH + ";";
+        resetStyle();
+    }
 }
