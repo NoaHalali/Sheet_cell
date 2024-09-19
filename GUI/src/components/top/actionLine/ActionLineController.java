@@ -26,9 +26,9 @@ public class ActionLineController {
 
     private EngineImpl engine;
 
-    public void initializeActionLine(SimpleBooleanProperty isCellSelected) {
-        updateCell.disableProperty().bind(isCellSelected.not());
-        updateCellValueField.disableProperty().bind(isCellSelected.not());
+    public void initializeActionLine(SimpleBooleanProperty cellSelected) {
+        updateCell.disableProperty().bind(cellSelected.not());
+        updateCellValueField.disableProperty().bind(cellSelected.not());
 //        updateCell.setOnAction(event -> {
 //            try {
 //                mainController.updateCellValue(updateCellValueField.getText());

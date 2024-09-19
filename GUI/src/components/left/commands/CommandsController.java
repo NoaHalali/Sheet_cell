@@ -14,8 +14,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.CheckBoxListCell;
-import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -60,12 +58,17 @@ public class CommandsController {
 
     private ObservableList<String> selectedItems = FXCollections.observableArrayList(); // רשימת פריטים נבחרים
 
-    public void InitializeCommandsController(SimpleBooleanProperty isCellSelected) {
-        resetCellStyleButton.disableProperty().bind(isCellSelected.not());
-        textColorPicker.disableProperty().bind(isCellSelected.not());
-        backgroundColorPicker.disableProperty().bind(isCellSelected.not());
-        applyTextColorButton.disableProperty().bind(isCellSelected.not());
-        applyBackgroundColorButton.disableProperty().bind(isCellSelected.not());
+    public void InitializeCommandsController(SimpleBooleanProperty cellSelected, SimpleBooleanProperty rangeSelected,
+                                             SimpleBooleanProperty columnSelected, SimpleBooleanProperty rowSelected) {
+        setColumnWidthButton.disableProperty().bind(columnSelected.not());
+        setRowHeightButton.disableProperty().bind(rowSelected.not());
+        setColumnAlignmentButton.disableProperty().bind(columnSelected.not());
+        resetCellStyleButton.disableProperty().bind(cellSelected.not());
+        textColorPicker.disableProperty().bind(cellSelected.not());
+        backgroundColorPicker.disableProperty().bind(cellSelected.not());
+        applyTextColorButton.disableProperty().bind(cellSelected.not());
+        applyBackgroundColorButton.disableProperty().bind(cellSelected.not());
+
 
         // אתחול ListView לסינון
         //initializeFilterListView();

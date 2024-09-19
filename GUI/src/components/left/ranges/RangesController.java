@@ -2,6 +2,7 @@ package components.left.ranges;
 
 import components.MainComponent.AppController;
 import components.Utils.StageUtils;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
@@ -20,8 +21,9 @@ public class RangesController {
     private AppController mainController;
     private String lastSelectedRange = null; // שמירת שם הטווח שנבחר לאחרונה
 
-    public void initializeRangesController(List<String> existingRanges) {
+    public void initializeRangesController(List<String> existingRanges, SimpleBooleanProperty rangeSelected) {
         refreshMenuButton(existingRanges);
+        deleteRangeButton.disableProperty().bind(rangeSelected.not());
     }
 
     private void refreshMenuButton(List<String> ranges) {

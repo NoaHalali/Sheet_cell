@@ -133,8 +133,8 @@ public class AppController {
         tableController.initializeGrid(sheet);
         versionSelectorController.initializeVersionSelector(sheet.getVersion());
         actionLineController.initializeActionLine(cellSelected);
-        commandsController.InitializeCommandsController(cellSelected);
-        rangesController.initializeRangesController(sheet.getRangesNames()/*, isCellSelectedProperty*/);
+        commandsController.InitializeCommandsController(cellSelected,rangeSelected, columnSelected,rowSelected);
+        rangesController.initializeRangesController(sheet.getRangesNames(), rangeSelected);
     }
 
 
@@ -167,12 +167,13 @@ public class AppController {
                 versionProperty.set(sheet.getVersion());
                 versionSelectorController.setVersionSelectorOptions(sheet.getVersion());
             }
+            tableController.addMarksOfFocusingToCell(coordinate);
         }
         catch (Exception e) {
             StageUtils.showAlert("Error:", "Failed to update cell: " + e.getMessage());
-        }
-        finally {
-            tableController.addMarksOfFocusingToCell();
+            tableController.removeMarksOfFocusedCell();
+            actionLineController.setActionLine(null);
+            cellSelected.set(false);
         }
     }
 

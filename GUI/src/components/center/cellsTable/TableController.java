@@ -87,7 +87,6 @@ public class TableController {
                         cellController.applyHoverEffectListeners();
                     }
 
-
                     dynamicGridPane.add(cellPane, col, row);
                     coordToCellControllerMap.put(coord.toString(), cellController);
                 } catch (IOException e) {
@@ -200,17 +199,16 @@ public class TableController {
 //        mainController.rangeSelectedProperty().set(false);
 //        mainController.cellSelectedProperty().set(isNewCoordSelected);
 
-        boolean isDoubleClick = currentlyFocusedCoord != null && currentlyFocusedCoord.toString().equals(newCoord)&&mainController.cellSelectedProperty().get();
+        boolean isDoubleClick = currentlyFocusedCoord != null && currentlyFocusedCoord.toString().equals(newCoord)/*&&mainController.cellSelectedProperty().get()*/;
 
         if (isDoubleClick) {
             removeMarksOfFocusedCell();
-            setFocusedCoord(null);
+            //setFocusedCoord(null);
             mainController.handleCellClick(null); // ביטול בחירת תא
 
         } else if (isNewCoordSelected) {
             clearMarkOfCells(); // ניקוי הדגשות תאים ישנות
-            setFocusedCoord(CoordinateImpl.parseCoordinate(newCoord));
-            addMarksOfFocusingToCell();
+            addMarksOfFocusingToCell(CoordinateImpl.parseCoordinate(newCoord));
 
             mainController.handleCellClick(currentlyFocusedCoord); // עדכון בחירת תא
         }
@@ -222,6 +220,7 @@ public class TableController {
         // נקה סימונים קודמים
 
         clearMarkOfCells();
+
         // עדכן את ה-AppController על סימון העמודה
 //        mainController.clearSelectionStates(); // נקה סימונים קודמים ב-AppController
 //        mainController.setColumnSelected(true); // עדכן שסומן עמודה
@@ -271,8 +270,8 @@ public class TableController {
     }
 
 
-    public void addMarksOfFocusingToCell() {
-        //currentlyFocusedCellController = coordToCellControllerMap.get(newFocusedCoord.toString());
+    public void addMarksOfFocusingToCell(Coordinate newFocusedCoord) {
+        setFocusedCoord(newFocusedCoord);
         currentlyFocusedCellController.setBorder("red", "3px");
 
         CellDTO cell = mainController.getCellDTO(currentlyFocusedCoord.toString());
@@ -287,6 +286,7 @@ public class TableController {
             CellController infCellController = coordToCellControllerMap.get(coord.toString());
             infCellController.setBorder("green", "2px");
         }
+
     }
 
     public void removeMarksOfFocusedCell() {
@@ -307,6 +307,7 @@ public class TableController {
                 CellController infCellController = coordToCellControllerMap.get(coord.toString());
                 infCellController.resetBorder();
             }
+            setFocusedCoord(null);
         }
     }
 
