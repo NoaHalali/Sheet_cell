@@ -408,18 +408,18 @@ public class TableController {
     }
 
     public void setRowHeight(int height) {
-        if (height <= 0) {
-            throw new IllegalArgumentException("Width must be greater than 0");
-        }
+//        if (height <= 0) {
+//            throw new IllegalArgumentException("Width must be greater than 0");
+//        }
         RowConstraints rowConst = dynamicGridPane.getRowConstraints().get(currentRowIndex);
         rowConst.setPrefHeight(height);
 
     }
 
     public void setColumnWidth(int width) throws IllegalArgumentException {
-        if(width <=0 ){
-            throw new IllegalArgumentException("Width must be greater than 0");
-        }
+//        if(width <=0 ){
+//            throw new IllegalArgumentException("Width must be greater than 0");
+//        }
         ColumnConstraints colConst = dynamicGridPane.getColumnConstraints().get(currentColumnIndex);
         colConst.setPrefWidth(width);
     }

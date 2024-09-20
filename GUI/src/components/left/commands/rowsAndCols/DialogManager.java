@@ -1,5 +1,6 @@
 package components.left.commands.rowsAndCols;
 
+import components.Utils.StageUtils;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 
@@ -116,6 +117,28 @@ public class DialogManager {
 //        // קישור ה-TextFormatter ל-TextField של ה-Spinner
 //        spinner.getEditor().setTextFormatter(textFormatter);
 
+        TextFormatter<Integer> textFormatter = new TextFormatter<>(c -> {
+            if (c.getControlNewText().matches("-?\\d*")) { // לאפשר רק מספרים
+                try {
+                    int newValue = Integer.parseInt(c.getControlNewText());
+                    if (newValue < minValue) {
+                        // ערך מחוץ לטווח, זרוק הודעת שגיאה (לדוגמה, ערך שלילי)
+                        StageUtils.showAlert("Invalid Value", "Value cannot be less than " + minValue);
+                        return null; // לא להחיל את השינוי
+                    }
+                    return c; // הערך חוקי
+                } catch (NumberFormatException e) {
+                    StageUtils.showAlert("Invalid Input", "Input must be a number.");
+                    return null; // ערך לא חוקי, לא להחיל את השינוי
+                }
+            } else {
+                StageUtils.showAlert("Invalid Input", "Input must be a number.");
+                return null; // מחרוזת לא חוקית
+            }
+        });
+
+        // קישור ה-TextFormatter ל-TextField של ה-Spinner
+        spinner.getEditor().setTextFormatter(textFormatter);
 
         dialogGrid.add(new Label(dialogMessageInfo), 0, 0);
         dialogGrid.add(spinner, 1, 0);
