@@ -96,6 +96,8 @@ public class Sheet implements Serializable {
         evaluateSheetValuesForRefCheck();
     }
 
+
+
 //    public void setVersion(int version) {
 //        this.version = version;
 //        Arrays.stream(cellsMatrix)                          // Stream over rows of cellsMatrix
@@ -563,6 +565,12 @@ public class Sheet implements Serializable {
                // cellsMatrix[topLeft.getRow() - 1 + rowIndex][col - 1] = Cell.createEmptyCell(new CoordinateImpl(topLeft.getRow() - 1 + rowIndex, col));
                 cellsMatrix[topLeft.getRow() - 1 + rowIndex][col - 1] = Cell.createEmptyCell(CoordinateImpl.notExists);
             }
+        }
+    }
+
+    public void validateRowHeight(int rowHeight) throws IllegalArgumentException {
+        if (rowHeight <= 0) {
+            throw new IllegalArgumentException("Row height must be a positive number.");
         }
     }
 }

@@ -251,64 +251,19 @@ public class CommandsController {
                .collect(Collectors.toSet()); // המרת הזרם לסט
     }
 
-//    public void showRowColumnStyleDialog() {
-//        // יצירת דיאלוג חדש
-//        Dialog<ButtonType> dialog = new Dialog<>();
-//        dialog.setTitle("עיצוב שורות/עמודות");
-//
-//        // יצירת Layout עבור הדיאלוג
-//        GridPane dialogGrid = new GridPane();
-//        dialogGrid.setHgap(10);
-//        dialogGrid.setVgap(10);
-//
-//        // שדות טקסט עבור רוחב וגובה
-//        TextField widthField = new TextField();
-//        widthField.setPromptText("רוחב עמודה");
-//        TextField heightField = new TextField();
-//        heightField.setPromptText("גובה שורה");
-//
-//        // הוספת השדות ל-GridPane
-//        dialogGrid.add(new Label("רוחב עמודה:"), 0, 0);
-//        dialogGrid.add(widthField, 1, 0);
-//        dialogGrid.add(new Label("גובה שורה:"), 0, 1);
-//        dialogGrid.add(heightField, 1, 1);
-//
-//        // הגדרת התוכן של הדיאלוג
-//        dialog.getDialogPane().setContent(dialogGrid);
-//
-//        // הוספת כפתורים לאישור וביטול
-//        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
-//
-//        // טיפול בלחיצה על "אישור"
-//        dialog.setResultConverter(button -> {
-//            if (button == ButtonType.OK) {
-//                // קבלת הערכים מהשדות
-//                double width = Double.parseDouble(widthField.getText());
-//                double height = Double.parseDouble(heightField.getText());
-//
-//                // קריאה לפונקציות שמעדכנות את הרוחב/גובה של השורות או העמודות
-//                mainController.setColumnWidth(0, width);  // לדוגמה, לעמודה הראשונה
-//                mainController.setRowHeight(0, height);   // לדוגמה, לשורה הראשונה
-//            }
-//            return null;
-//        });
-//
-//        // הצגת הדיאלוג
-//        dialog.showAndWait();
-//    }
-
-    // פעולה לפתיחת דיאלוג עיצוב שורות/עמודות
     // פעולה לפתיחת דיאלוג לעיצוב עמודות
     public void showColumnWidthDialog() {
-        dialogManager.showColumnWidthDialog(
-                width -> mainController.setColumnWidth( width)  // קריאה לפונקציה לעדכון רוחב עמודה
+        int currentColumnWidth = mainController.getFocusedColumnWidth();
+        dialogManager.showColumnWidthDialog(currentColumnWidth,
+                width -> mainController.setColumnWidth(width)  // קריאה לפונקציה לעדכון רוחב עמודה
         );
     }
 
     // פעולה לפתיחת דיאלוג לעיצוב שורות
     public void showRowHeightDialog() {
-        dialogManager.showRowHeightDialog(
-                height -> mainController.setRowHeight( height)  // קריאה לפונקציה לעדכון גובה שורה
+        int currentRowHeight = mainController.getFocusedRowHeight();
+        dialogManager.showRowHeightDialog(currentRowHeight,
+                height -> mainController.setRowHeight(height)  // קריאה לפונקציה לעדכון גובה שורה
         );
     }
     // פעולה לפתיחת דיאלוג יישור עמודות

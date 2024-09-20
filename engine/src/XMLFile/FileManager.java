@@ -90,7 +90,6 @@ public class FileManager {
 
     private void vaidateCells(STLSheet xmlSheet) {
         checkCellInBoardRange(xmlSheet);
-        //TODO - 4
     }
     public void validateAndAddRanges(Sheet Sheet,STLSheet xmlSheet) {
         String rangeName;

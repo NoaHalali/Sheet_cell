@@ -376,15 +376,24 @@ public class AppController {
         return values;
     }
 
-    public void setColumnWidth( double height) {
-        tableController.setColumnWidth( height);
+
+    public void setColumnWidth(int width) throws IllegalArgumentException {
+        tableController.setColumnWidth(width);
     }
 
-    public void setRowHeight( double height) {
-        tableController.setRowHeight( height);
+    public void setRowHeight(int height) {
+        tableController.setRowHeight(height);
     }
 
     public void setColumnAlignment(String alignment) {
         tableController.setColumnAlignment(alignment);
+    }
+
+    public int getFocusedRowHeight() {
+        return tableController.getFocusedRowHeight();
+    }
+
+    public int getFocusedColumnWidth() {
+        return tableController.getFocusedColumnWidth();
     }
 }

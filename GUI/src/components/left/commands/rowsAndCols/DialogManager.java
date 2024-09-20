@@ -6,43 +6,8 @@ import javafx.scene.layout.GridPane;
 import java.util.function.Consumer;
 
 public class DialogManager {
-    //    // דיאלוג להגדרת רוחב עמודות וגובה שורות
-//    public void showColumnRowWidthDialog(int colIndex, int rowIndex, Consumer<Double> setColumnWidth, Consumer<Double> setRowHeight) {
-//        Dialog<ButtonType> dialog = new Dialog<>();
-//        dialog.setTitle("Set Column/Row Width");
-//
-//        GridPane dialogGrid = new GridPane();
-//        dialogGrid.setHgap(10);
-//        dialogGrid.setVgap(10);
-//
-//        TextField columnWidthField = new TextField();
-//        columnWidthField.setPromptText("Column Width");
-//        TextField rowHeightField = new TextField();
-//        rowHeightField.setPromptText("Row Height");
-//
-//        dialogGrid.add(new Label("Column Width:"), 0, 0);
-//        dialogGrid.add(columnWidthField, 1, 0);
-//        dialogGrid.add(new Label("Row Height:"), 0, 1);
-//        dialogGrid.add(rowHeightField, 1, 1);
-//
-//        dialog.getDialogPane().setContent(dialogGrid);
-//        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
-//
-//        dialog.setResultConverter(button -> {
-//            if (button == ButtonType.OK) {
-//                double columnWidth = Double.parseDouble(columnWidthField.getText());
-//                double rowHeight = Double.parseDouble(rowHeightField.getText());
-//
-//                setColumnWidth.accept(columnWidth);  // קורא לפונקציה שעושה את העדכון
-//                setRowHeight.accept(rowHeight);     // קורא לפונקציה שעושה את העדכון
-//            }
-//            return null;
-//        });
-//
-//        dialog.showAndWait();
-//    }
-//
-//    // דיאלוג להגדרת יישור עמודות
+
+    //    // דיאלוג להגדרת יישור עמודות
 //    public void showColumnAlignmentDialog(int colIndex, Consumer<String> setColumnAlignment) {
 //        Dialog<ButtonType> dialog = new Dialog<>();
 //        dialog.setTitle("Set Column Alignment");
@@ -63,8 +28,8 @@ public class DialogManager {
 //
 //        dialog.showAndWait();
 //    }
-    public void showColumnWidthDialog( Consumer<Double> setColumnWidth) {
-        showDialog(setColumnWidth,"Set Column Width","Column Width");
+    public void showColumnWidthDialog(int currentColumnWidth ,Consumer<Integer> setColumnWidth) {
+        showDialog(currentColumnWidth,setColumnWidth, "Set Column Width", "Column Width");
 //        Dialog<ButtonType> dialog = new Dialog<>();
 //        dialog.setTitle("Set Column Width");
 //
@@ -91,39 +56,10 @@ public class DialogManager {
 //
 //        dialog.showAndWait();
     }
-    public void showDialog(Consumer<Double> setColumnWidth,String DialogTitle,String DialogMessageInfo) {
-        Dialog<ButtonType> dialog = new Dialog<>();
-        dialog.setTitle(DialogTitle);
 
-        GridPane dialogGrid = new GridPane();
-        dialogGrid.setHgap(10);
-        dialogGrid.setVgap(10);
+    public void showRowHeightDialog(int currentRowHeight, Consumer<Integer> setRowHeight) {
 
-        // Create a Spinner for column width with a range (e.g., 0.0 to 1000.0) and step value (e.g., 0.1)
-        Spinner<Double> columnWidthSpinner = new Spinner<>(0.0, 1000.0, 100.0, 0.1);
-        columnWidthSpinner.setEditable(true);  // Allow the user to type a value directly
-
-        dialogGrid.add(new Label(DialogMessageInfo), 0, 0);
-        dialogGrid.add(columnWidthSpinner, 1, 0);
-
-        dialog.getDialogPane().setContent(dialogGrid);
-        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
-
-        dialog.setResultConverter(button -> {
-            if (button == ButtonType.OK) {
-                double columnWidth = columnWidthSpinner.getValue();
-                setColumnWidth.accept(columnWidth);  // Call the function to update the column width
-            }
-            return null;
-        });
-
-        dialog.showAndWait();
-    }
-
-
-    public void showRowHeightDialog( Consumer<Double> setRowHeight) {
-
-        showDialog(setRowHeight,"Set Row Height","Row Height");
+        showDialog(currentRowHeight, setRowHeight, "Set Row Height", "Row Height");
 //        Dialog<ButtonType> dialog = new Dialog<>();
 //        dialog.setTitle("Set Row Height");
 //
@@ -151,34 +87,56 @@ public class DialogManager {
 //        dialog.showAndWait();
     }
 
-//    public void showColumnAlignmentDialog(int colIndex, Consumer<String> setColumnAlignment) {
-//        Dialog<ButtonType> dialog = new Dialog<>();
-//        dialog.setTitle("Set Column Alignment");
-//
-//        GridPane dialogGrid = new GridPane();
-//        dialogGrid.setHgap(10);
-//        dialogGrid.setVgap(10);
-//
-//        // שדה להזנת יישור
-//        TextField alignmentField = new TextField();
-//        alignmentField.setPromptText("Enter Alignment (LEFT, CENTER, RIGHT)");
-//
-//        dialogGrid.add(new Label("Column Alignment:"), 0, 0);
-//        dialogGrid.add(alignmentField, 1, 0);
-//
-//        dialog.getDialogPane().setContent(dialogGrid);
-//        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
-//
-//        dialog.setResultConverter(button -> {
-//            if (button == ButtonType.OK) {
-//                String alignment = alignmentField.getText().toUpperCase();
-//                setColumnAlignment.accept(alignment); // קריאה לפונקציה לעדכון היישור
+    public void showDialog(int currentValue, Consumer<Integer> setColumnWidth, String dialogTitle, String dialogMessageInfo) {
+        Dialog<ButtonType> dialog = new Dialog<>();
+        dialog.setTitle(dialogTitle);
+
+        GridPane dialogGrid = new GridPane();
+        dialogGrid.setHgap(10);
+        dialogGrid.setVgap(10);
+
+        int minValue = 1;
+        int maxValue = 100;
+        int initialValue = currentValue;
+        int step = 1;
+        Spinner<Integer> spinner = createSpinner(minValue, maxValue, initialValue, step);
+        // יצירת Spinner עבור רוחב עמודה עם טווח בין 0 ל-1000, ערך התחלתי 100, ומדרגה של 1
+//        Spinner<Integer> columnWidthSpinner = new Spinner<>();
+//        SpinnerValueFactory<Integer> valueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(minValue, maxValue, initialValue, step);
+//        columnWidthSpinner.setValueFactory(valueFactory);
+//        columnWidthSpinner.setEditable(true);  // לאפשר למשתמש להכניס ערך ידנית
+//// הגדרת TextFormatter שמאפשר רק הכנסת ערכים מספריים
+//        TextFormatter<Integer> textFormatter = new TextFormatter<>(c -> {
+//            if (c.getControlNewText().matches("\\d*")) {
+//                return c; // מקבל רק מספרים
 //            }
-//            return null;
+//            return null; // לא מקבל טקסט לא חוקי (למשל string)
 //        });
 //
-//        dialog.showAndWait();
-//    }
+//        // קישור ה-TextFormatter ל-TextField של ה-Spinner
+//        spinner.getEditor().setTextFormatter(textFormatter);
+
+
+        dialogGrid.add(new Label(dialogMessageInfo), 0, 0);
+        dialogGrid.add(spinner, 1, 0);
+
+        dialog.getDialogPane().setContent(dialogGrid);
+        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+
+        //TODO-Add try catch for wrong input
+        dialog.setResultConverter(button -> {
+            if (button == ButtonType.OK) {
+                int columnWidth = spinner.getValue();
+                setColumnWidth.accept(columnWidth);  // קריאה לפונקציה לעדכן את רוחב העמודה
+            }
+            return null;
+        });
+
+        dialog.showAndWait();
+    }
+
+
+
 
     public void showColumnAlignmentDialog(Consumer<String> setColumnAlignment) {
         Dialog<ButtonType> dialog = new Dialog<>();
@@ -211,5 +169,12 @@ public class DialogManager {
 
         dialog.showAndWait();
     }
-}
 
+    private Spinner<Integer> createSpinner(int minValue, int maxValue, int initialValue, int step) {
+        Spinner<Integer> spinner = new Spinner<>();
+        SpinnerValueFactory<Integer> valueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(minValue, maxValue, initialValue, step);
+        spinner.setValueFactory(valueFactory);
+        spinner.setEditable(true);  // Allow user to enter value manually
+        return spinner;
+    }
+}
