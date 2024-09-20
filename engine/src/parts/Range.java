@@ -90,10 +90,7 @@ public class Range implements Serializable {
          }
     }
     public static Coordinate[] parseRange(String rangeDefinition) {
-        // מחלק את המחרוזת לפי ".."
         String[] parts = rangeDefinition.split("\\.\\.");
-
-        // מפרש את הקואורדינטות
         Coordinate topLeftCoord = CoordinateImpl.parseCoordinate(parts[0]);
         Coordinate bottomRightCoord = CoordinateImpl.parseCoordinate(parts[1]);
 

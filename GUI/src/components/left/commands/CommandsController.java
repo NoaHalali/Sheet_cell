@@ -154,6 +154,7 @@ public class CommandsController {
 
         } catch (Exception e) {
             StageUtils.showAlert("Error", e.getMessage());
+            e.printStackTrace();
         }
     }
     public void previewSheetDTOWithPrevStyleInPopup(SheetDTO sheet,String popUpName) throws Exception {

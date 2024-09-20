@@ -92,6 +92,7 @@ public class EngineImpl implements Engine {
             if (cell != null) {
                 oldOriginalValue = cell.getOriginalValue();
                 boolean originalValueChanged = !newOriginalValue.equals(oldOriginalValue);
+                boolean tryToDeleteGhostCell = newOriginalValue.isEmpty();
 
                 if (originalValueChanged) {
                     clonedSheet.updateCellValue(newOriginalValue, cell);
@@ -101,7 +102,12 @@ public class EngineImpl implements Engine {
                         clonedSheet.upgradeCellVersion(cell);
 
                     }
-                } else { // original value didn't change
+                }
+
+                else{ // original value didn't change
+                    if(tryToDeleteGhostCell){ //trying to delete ghost cell
+                        throw new Exception("Cell at coordinate "+coord+" is already empty!");
+                    }
                     return false;
                 }
             }
@@ -112,10 +118,8 @@ public class EngineImpl implements Engine {
 
             }
 
-
             addVersion(clonedSheet, numOfCellsChanged);
             currentSheet = clonedSheet;
-
         }
         return true;
     }

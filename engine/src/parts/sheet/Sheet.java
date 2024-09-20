@@ -391,13 +391,11 @@ public class Sheet implements Serializable {
     }
 
     public Sheet getSortedSheet(String rangeDefinition, List<Character> columnsToSortBy) throws IllegalArgumentException {
-        // יצירת עותק של הגיליון הנוכחי
         Sheet sortedSheet = this.cloneSheet();
 
-        // פירוש הגדרת הטווח
-        String[] rangeBounds = rangeDefinition.split("\\.\\.");
-        Coordinate topLeftCoord = CoordinateImpl.parseCoordinate(rangeBounds[0]);
-        Coordinate bottomRightCoord = CoordinateImpl.parseCoordinate(rangeBounds[1]);
+        Coordinate[] rangeEdgeCoordinates = Range.parseRange(rangeDefinition);
+        Coordinate topLeftCoord = rangeEdgeCoordinates[0];
+        Coordinate bottomRightCoord = rangeEdgeCoordinates[1];
         char leftRangeColChar = topLeftCoord.getColChar();
         char rightRangeColChar = bottomRightCoord.getColChar();
 
@@ -411,8 +409,14 @@ public class Sheet implements Serializable {
         // המרת המטריצה לרשימה של תאים בטווח שנבחר
         List<SheetRow> rowsToSort = convertMatrixToRowList(sortedSheet.getCellsMatrix(), topLeftCoord, bottomRightCoord);
 
-        // מיון השורות לפי העמודות שנבחרו
-        rowsToSort.sort(createMultiLevelComparator(columnsToSortBy, leftRangeColChar));
+        try {
+            // מיון השורות לפי העמודות שנבחרו
+            rowsToSort.sort(createMultiLevelComparator(columnsToSortBy, leftRangeColChar));
+        } catch (NullPointerException e) {
+            throw new IllegalArgumentException("One or more cells in the selected columns to sort are empty, and can't be sortd.");
+        }
+//        // מיון השורות לפי העמודות שנבחרו
+//        rowsToSort.sort(createMultiLevelComparator(columnsToSortBy, leftRangeColChar));
 
         // עדכון המטריצה של התאים בעותק הממוין
         sortedSheet.updateCellsMatrix(rowsToSort, topLeftCoord, bottomRightCoord);
@@ -435,7 +439,8 @@ public class Sheet implements Serializable {
     }
 
     // פונקציה ליצירת Comparator רב-שלבי
-    private Comparator<SheetRow> createMultiLevelComparator(List<Character> columnsToSortBy, char leftRangeColChar) {
+    private Comparator<SheetRow> createMultiLevelComparator(List<Character> columnsToSortBy,
+                                                            char leftRangeColChar) throws IllegalArgumentException {
         return (row1, row2) -> {
             for (char colChar : columnsToSortBy) {
                 //chekIfColumnInRange(colChar, leftRangeColChar);
@@ -453,6 +458,14 @@ public class Sheet implements Serializable {
             return 0; // אם כל העמודות שוות, שמור על הסדר המקורי
         };
     }
+
+//    private void checkForEmptyCells(SheetRow row1, SheetRow row2, int colIndex) throws IllegalArgumentException {
+//        EffectiveValue effectiveValue1 = row1.getCell(colIndex).getEffectiveValue();
+//        EffectiveValue effectiveValue2 = row2.getCell(colIndex).getEffectiveValue();
+//        if(effectiveValue1 == null || effectiveValue2 == null){
+//            throw new IllegalArgumentException("Can't sort column with empty cells");
+//        }
+//    }
 
 
     // עדכון מטריצת התאים בגיליון לאחר המיון
