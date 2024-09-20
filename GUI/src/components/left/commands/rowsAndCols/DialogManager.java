@@ -101,52 +101,22 @@ public class DialogManager {
         int initialValue = currentValue;
         int step = 1;
         Spinner<Integer> spinner = createSpinner(minValue, maxValue, initialValue, step);
-        // יצירת Spinner עבור רוחב עמודה עם טווח בין 0 ל-1000, ערך התחלתי 100, ומדרגה של 1
-//        Spinner<Integer> columnWidthSpinner = new Spinner<>();
-//        SpinnerValueFactory<Integer> valueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(minValue, maxValue, initialValue, step);
-//        columnWidthSpinner.setValueFactory(valueFactory);
-//        columnWidthSpinner.setEditable(true);  // לאפשר למשתמש להכניס ערך ידנית
-//// הגדרת TextFormatter שמאפשר רק הכנסת ערכים מספריים
-//        TextFormatter<Integer> textFormatter = new TextFormatter<>(c -> {
-//            if (c.getControlNewText().matches("\\d*")) {
-//                return c; // מקבל רק מספרים
-//            }
-//            return null; // לא מקבל טקסט לא חוקי (למשל string)
-//        });
-//
-//        // קישור ה-TextFormatter ל-TextField של ה-Spinner
-//        spinner.getEditor().setTextFormatter(textFormatter);
-
-        TextFormatter<Integer> textFormatter = new TextFormatter<>(c -> {
-            if (c.getControlNewText().matches("-?\\d*")) { // לאפשר רק מספרים
-                try {
-                    int newValue = Integer.parseInt(c.getControlNewText());
-                    if (newValue < minValue) {
-                        // ערך מחוץ לטווח, זרוק הודעת שגיאה (לדוגמה, ערך שלילי)
-                        StageUtils.showAlert("Invalid Value", "Value cannot be less than " + minValue);
-                        return null; // לא להחיל את השינוי
-                    }
-                    return c; // הערך חוקי
-                } catch (NumberFormatException e) {
-                    StageUtils.showAlert("Invalid Input", "Input must be a number.");
-                    return null; // ערך לא חוקי, לא להחיל את השינוי
-                }
-            } else {
-                StageUtils.showAlert("Invalid Input", "Input must be a number.");
-                return null; // מחרוזת לא חוקית
-            }
-        });
-
-        // קישור ה-TextFormatter ל-TextField של ה-Spinner
-        spinner.getEditor().setTextFormatter(textFormatter);
+        // Label עבור הודעת שגיאה
+        Label errorLabel = new Label();
+        errorLabel.setStyle("-fx-text-fill: red;");  // הגדרת צבע הטקסט לאדום, בהתחלה מוסתר
 
         dialogGrid.add(new Label(dialogMessageInfo), 0, 0);
         dialogGrid.add(spinner, 1, 0);
+        dialogGrid.add(errorLabel, 0, 2, 2, 1);  // להוסיף את הודעת השגיאה לרשת, שורה 2
 
         dialog.getDialogPane().setContent(dialogGrid);
         dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
 
-        //TODO-Add try catch for wrong input
+        TextFormatter<Integer> textFormatter = createIntegerTextFormatter(minValue, errorLabel);
+
+        // קישור ה-TextFormatter ל-TextField של ה-Spinner
+        spinner.getEditor().setTextFormatter(textFormatter);
+
         dialog.setResultConverter(button -> {
             if (button == ButtonType.OK) {
                 int columnWidth = spinner.getValue();
@@ -200,4 +170,27 @@ public class DialogManager {
         spinner.setEditable(true);  // Allow user to enter value manually
         return spinner;
     }
+
+    private TextFormatter<Integer> createIntegerTextFormatter(int minValue, Label errorLabel) {
+        return new TextFormatter<>(c -> {
+            if (c.getControlNewText().matches("-?\\d*")) { // לאפשר רק מספרים
+                try {
+                    int newValue = Integer.parseInt(c.getControlNewText());
+                    if (newValue < minValue) {
+                        errorLabel.setText("Value cannot be less than " + minValue);  // הצגת הודעת שגיאה
+                        return null;  // לא להחיל את השינוי
+                    }
+                    errorLabel.setText("");  // איפוס הודעת השגיאה אם הכל תקין
+                    return c;  // הערך חוקי
+                } catch (NumberFormatException e) {
+                    errorLabel.setText("Input must be a positive integer.");  // הצגת הודעת שגיאה
+                    return null;  // ערך לא חוקי, לא להחיל את השינוי
+                }
+            } else {
+                errorLabel.setText("Input must be a positive integer.");  // הצגת הודעת שגיאה
+                return null;  // מחרוזת לא חוקית
+            }
+        });
+    }
+
 }
