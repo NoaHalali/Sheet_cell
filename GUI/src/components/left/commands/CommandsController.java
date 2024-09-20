@@ -7,6 +7,7 @@ import components.center.cellsTable.TableController;
 import components.left.commands.filter.FilterPopupController;
 import components.left.commands.rowsAndCols.DialogManager;
 import javafx.beans.property.SimpleBooleanProperty;
+import components.left.commands.graph.GraphDialogController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -20,6 +21,7 @@ import javafx.stage.Stage;
 import parts.SheetDTO;
 import parts.sheet.cell.expression.effectiveValue.EffectiveValue;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -31,6 +33,7 @@ import java.util.stream.Collectors;
 public class CommandsController {
 
     private AppController mainController;
+    private DialogManager dialogManager = new DialogManager();
 
     //@FXML private Button setColumnRowWidthButton;
     @FXML private Button setColumnWidthButton;
@@ -54,9 +57,10 @@ public class CommandsController {
     @FXML private Button calcValuesToFilterButton;
     @FXML private ListView<String> filterListView; // הוספת ListView לסינון
     @FXML private Button applyFilterButton; // כפתור לסינון
-    private DialogManager dialogManager = new DialogManager();
+    @FXML private Button createGraphButton;
 
-    private ObservableList<String> selectedItems = FXCollections.observableArrayList(); // רשימת פריטים נבחרים
+
+//    private ObservableList<String> selectedItems = FXCollections.observableArrayList(); // רשימת פריטים נבחרים
 
     public void InitializeCommandsController(SimpleBooleanProperty cellSelected, SimpleBooleanProperty rangeSelected,
                                              SimpleBooleanProperty columnSelected, SimpleBooleanProperty rowSelected) {
@@ -272,5 +276,21 @@ public class CommandsController {
                 alignment -> mainController.setColumnAlignment(alignment)  // פונקציה לעדכון יישור עמודה
         );
     }
+
+    @FXML
+    private void handleCreateGraph() {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/components/left/commands/graph/GraphDialog.fxml"));
+            Parent root = fxmlLoader.load();
+
+            Stage stage = new Stage();
+            stage.setTitle("Create Graph");
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
 }
