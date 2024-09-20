@@ -1,6 +1,5 @@
 package components.left.commands.rowsAndCols;
 
-import components.Utils.StageUtils;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 
@@ -8,27 +7,6 @@ import java.util.function.Consumer;
 
 public class DialogManager {
 
-    //    // דיאלוג להגדרת יישור עמודות
-//    public void showColumnAlignmentDialog(int colIndex, Consumer<String> setColumnAlignment) {
-//        Dialog<ButtonType> dialog = new Dialog<>();
-//        dialog.setTitle("Set Column Alignment");
-//
-//        TextField alignmentField = new TextField();
-//        alignmentField.setPromptText("Enter Alignment (LEFT, CENTER, RIGHT)");
-//
-//        dialog.getDialogPane().setContent(alignmentField);
-//        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
-//
-//        dialog.setResultConverter(button -> {
-//            if (button == ButtonType.OK) {
-//                String alignment = alignmentField.getText().toUpperCase();
-//                setColumnAlignment.accept(alignment); // קורא לפונקציה שמיישמת את היישור
-//            }
-//            return null;
-//        });
-//
-//        dialog.showAndWait();
-//    }
     public void showColumnWidthDialog(int currentColumnWidth ,Consumer<Integer> setColumnWidth) {
         showDialog(currentColumnWidth,setColumnWidth, "Set Column Width", "Column Width");
 //        Dialog<ButtonType> dialog = new Dialog<>();
@@ -88,7 +66,7 @@ public class DialogManager {
 //        dialog.showAndWait();
     }
 
-    public void showDialog(int currentValue, Consumer<Integer> setColumnWidth, String dialogTitle, String dialogMessageInfo) {
+    public void showDialog(int currentValue, Consumer<Integer> setMeasureMethod, String dialogTitle, String dialogMessageInfo) {
         Dialog<ButtonType> dialog = new Dialog<>();
         dialog.setTitle(dialogTitle);
 
@@ -96,11 +74,11 @@ public class DialogManager {
         dialogGrid.setHgap(10);
         dialogGrid.setVgap(10);
 
-        int minValue = 1;
-        int maxValue = 100;
-        int initialValue = currentValue;
+        final int minValue = 1;
+        final int maxValue = 100;
+        final int initialValue = currentValue;
         int step = 1;
-        Spinner<Integer> spinner = createSpinner(minValue, maxValue, initialValue, step);
+        Spinner<Integer> spinner = createMeasureSpinner(minValue, maxValue, initialValue, step);
         // Label עבור הודעת שגיאה
         Label errorLabel = new Label();
         errorLabel.setStyle("-fx-text-fill: red;");  // הגדרת צבע הטקסט לאדום, בהתחלה מוסתר
@@ -112,7 +90,7 @@ public class DialogManager {
         dialog.getDialogPane().setContent(dialogGrid);
         dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
 
-        TextFormatter<Integer> textFormatter = createIntegerTextFormatter(minValue, errorLabel);
+        TextFormatter<Integer> textFormatter = createMeasureIntegerTextFormatter(minValue, errorLabel);
 
         // קישור ה-TextFormatter ל-TextField של ה-Spinner
         spinner.getEditor().setTextFormatter(textFormatter);
@@ -120,16 +98,13 @@ public class DialogManager {
         dialog.setResultConverter(button -> {
             if (button == ButtonType.OK) {
                 int columnWidth = spinner.getValue();
-                setColumnWidth.accept(columnWidth);  // קריאה לפונקציה לעדכן את רוחב העמודה
+                setMeasureMethod.accept(columnWidth);  // קריאה לפונקציה לעדכן את רוחב העמודה
             }
             return null;
         });
 
         dialog.showAndWait();
     }
-
-
-
 
     public void showColumnAlignmentDialog(Consumer<String> setColumnAlignment) {
         Dialog<ButtonType> dialog = new Dialog<>();
@@ -163,7 +138,7 @@ public class DialogManager {
         dialog.showAndWait();
     }
 
-    private Spinner<Integer> createSpinner(int minValue, int maxValue, int initialValue, int step) {
+    private Spinner<Integer> createMeasureSpinner(int minValue, int maxValue, int initialValue, int step) {
         Spinner<Integer> spinner = new Spinner<>();
         SpinnerValueFactory<Integer> valueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(minValue, maxValue, initialValue, step);
         spinner.setValueFactory(valueFactory);
@@ -171,7 +146,7 @@ public class DialogManager {
         return spinner;
     }
 
-    private TextFormatter<Integer> createIntegerTextFormatter(int minValue, Label errorLabel) {
+    private TextFormatter<Integer> createMeasureIntegerTextFormatter(int minValue, Label errorLabel) {
         return new TextFormatter<>(c -> {
             if (c.getControlNewText().matches("-?\\d*")) { // לאפשר רק מספרים
                 try {

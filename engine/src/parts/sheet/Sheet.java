@@ -23,9 +23,8 @@ public class Sheet implements Serializable {
     private final int rowHeight;
     private Cell[][] cellsMatrix; // מערך דו-ממדי של תאים
     private Map<String, Range> ranges = new HashMap<String,Range>();
-    //private Map<String,Integer> deletedCells= new HashMap<String,Integer>();
-    private static final char minCol = 'A';
-    private static final int minRow = 1;
+    private static final char MIN_COL = 'A';
+    private static final int MIN_ROW = 1;
     private final char maxCol;
     private final int maxRow;
 
@@ -37,7 +36,7 @@ public class Sheet implements Serializable {
         this.columnWidth = columnWidth;
         this.rowHeight = rowHeight;
         this.version = 1;
-        this.maxCol = (char) (minCol + numberOfCols - 1);
+        this.maxCol = (char) (MIN_COL + numberOfCols - 1);
         this.maxRow = numberOfRows;
 
     }
@@ -219,7 +218,7 @@ public class Sheet implements Serializable {
             String errorMessage = String.format("The %s coordinate is out of bounds!\n" +
                             "Valid column range: %c to %c, " +
                             "Valid row range: %d to %d.",
-                    coord.toString(),minCol, maxCol, minRow, maxRow);
+                    coord.toString(), MIN_COL, maxCol, MIN_ROW, maxRow);
 
             throw new IllegalArgumentException(errorMessage);
         };
