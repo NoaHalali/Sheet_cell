@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.BorderPane?>
@@ -10,8 +11,8 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<ScrollPane xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="components.MainComponent.AppController" fitToWidth="true" fitToHeight="true">
-    <BorderPane maxHeight="Infinity" maxWidth="Infinity"  prefHeight="600.0" prefWidth="800.0">
+<ScrollPane fitToHeight="true" fitToWidth="true" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="components.MainComponent.AppController">
+    <BorderPane maxHeight="Infinity" maxWidth="Infinity" prefHeight="600.0" prefWidth="800.0">
         <top>
             <VBox spacing="10">
                 <GridPane>
@@ -29,12 +30,20 @@
                                 <Font size="24.0" />
                             </font>
                         </Label>
-                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="10.0" GridPane.columnIndex="2">
+                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="217.0" spacing="10.0" GridPane.columnIndex="2">
                             <children>
                                 <Label text="Current version:" />
                                 <Label fx:id="currentVersionLabel" text="1.0" />
                             </children>
                         </HBox>
+                  <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="5.0">
+                     <padding>
+                        <Insets left="5.0" />
+                     </padding>
+                     <children>
+                        <fx:include fx:id="skinSelector" source="../skin/skin.fxml" />
+                     </children>
+                  </HBox>
                     </children>
                 </GridPane>
                 <!-- הכללת קובץ ה-FXML של הרכיב העליון -->

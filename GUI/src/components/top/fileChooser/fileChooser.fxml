@@ -17,13 +17,11 @@
         <ColumnConstraints hgrow="NEVER" />
     </columnConstraints>
 
-    <!-- כפתור טעינת הקובץ בעמודה הראשונה -->
-    <Button fx:id="loadFileButton" onAction="#openFileButtonAction" style="-fx-background-color: #0b540b; -fx-text-fill: white;" text="Load File" GridPane.columnIndex="0">
+    <Button fx:id="loadFileButton" onAction="#openFileButtonAction" text="Load File" GridPane.columnIndex="0">
       <GridPane.margin>
          <Insets bottom="2.0" left="2.0" top="2.0" />
       </GridPane.margin></Button>
 
-    <!-- HBox להצגת התווית והנתיב של הקובץ הנוכחי בעמודה השנייה -->
     <HBox alignment="CENTER_LEFT" spacing="5" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS">
         <Label text="Currently Loaded File path:">
          <padding>
@@ -35,13 +33,11 @@
       </GridPane.margin>
     </HBox>
 
-    <!-- ProgressBar להצגת התקדמות בעמודה השלישית -->
     <ProgressBar fx:id="progressBar" prefHeight="18.0" prefWidth="150.0" progress="0.0" visible="false" GridPane.columnIndex="2">
       <padding>
          <Insets right="5.0" />
       </padding></ProgressBar>
 
-    <!-- הגדרת שורות -->
     <rowConstraints>
         <RowConstraints />
     </rowConstraints>

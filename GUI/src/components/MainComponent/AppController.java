@@ -7,13 +7,13 @@ import components.top.actionLine.ActionLineController;
 import components.center.cellsTable.TableController;
 import components.top.fileChooser.FileChooserController;
 import components.top.versions.VersionSelectorController;
+import components.skin.SkinSelectorController;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
-import javafx.scene.control.Button;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.GridPane;
@@ -36,6 +36,31 @@ import java.util.*;
 
 public class AppController {
 
+    private Stage primaryStage;
+    private Scene scene;
+    private int count;
+    private Coordinate coordinate;
+    private Engine engine;
+
+    //Components
+    @FXML private GridPane actionLine;
+    @FXML private GridPane fileChooser;
+    @FXML private ScrollPane table;
+    @FXML private ScrollPane commands;
+    @FXML private VBox ranges;
+    @FXML private HBox versionSelector;
+    @FXML private Label currentVersionLabel;
+    @FXML private HBox skinSelector;
+
+    //Controllers
+    @FXML private ActionLineController actionLineController;
+    @FXML private TableController tableController;
+    @FXML private FileChooserController fileChooserController;
+    @FXML private CommandsController commandsController;
+    @FXML private RangesController rangesController;
+    @FXML private VersionSelectorController versionSelectorController;
+    @FXML private SkinSelectorController skinSelectorController;
+
     //Properties
     private SimpleBooleanProperty fileSelectedProperty;
     private IntegerProperty versionProperty;
@@ -44,83 +69,45 @@ public class AppController {
     private SimpleBooleanProperty columnSelected;
     private SimpleBooleanProperty rowSelected;
 
-
-
-    //Components
-    @FXML private GridPane actionLine;
-    @FXML private GridPane fileChooser;
-    @FXML private ScrollPane table;
-    //@FXML private Button myButton=new Button();
-    //@FXML private Label myLabel ;
-    @FXML private ScrollPane commands;
-    @FXML private VBox ranges;
-    @FXML private HBox versionSelector;
-    //@FXML private Button updateCell;
-    @FXML private Label currentVersionLabel;
-
-
-    //Controllers
-    @FXML private ActionLineController actionLineController;
-    @FXML private TableController tableController;
-    @FXML private FileChooserController fileChooserController;
-    @FXML private CommandsController commandsController;
-    @FXML private RangesController rangesController;
-    @FXML private VersionSelectorController versionSelectorController; // רפרנס לקונטרולר של הרכיב הקטן
-
-
-    private Stage primaryStage;
-    private int count;
-    private Coordinate coordinate;
-    private Engine engine;
-
     @FXML
     private void initialize() {
-        if (actionLineController != null && tableController != null && fileChooserController != null && versionSelectorController != null) {
-            actionLineController.setMainController(this);
-            tableController.setMainController(this);
-            versionSelectorController.setMainController(this);
-            fileChooserController.setMainController(this);
-            commandsController.setMainController(this);
-            rangesController.setMainController(this);
-
-            fileSelectedProperty = new SimpleBooleanProperty(false);
-            versionProperty = new SimpleIntegerProperty(1);
-            columnSelected = new SimpleBooleanProperty(false);
-            rowSelected=new SimpleBooleanProperty(false);
-
-            cellSelected = new SimpleBooleanProperty(false);
-            rangeSelected = new SimpleBooleanProperty(false);
-
-            table.disableProperty().bind(fileSelectedProperty.not());
-            actionLine.disableProperty().bind(fileSelectedProperty.not());
-            versionSelector.disableProperty().bind(fileSelectedProperty.not());
-            commands.disableProperty().bind(fileSelectedProperty.not());
-            ranges.disableProperty().bind(fileSelectedProperty.not());
-
-            currentVersionLabel.textProperty().bind(versionProperty.asString());
-
-
+        if (actionLineController != null && tableController != null && fileChooserController != null
+                && versionSelectorController != null && commandsController != null && rangesController != null && skinSelectorController != null) {
+            
             engine = new EngineImpl();
-
-//            // Listener לבחירת טווח
-//            rangeSelected.addListener((observable, oldValue, newValue) -> {
-//                if (newValue) {
-//                    // אם נבחר טווח, בטל את סימון התא הנבחר
-//                    cellSelected.set(false);
-//                    //clearBorderMarkOfCells();
-//                }
-//            });
-//
-//            // Listener לבחירת תא
-//            cellSelected.addListener((observable, oldValue, newValue) -> {
-//                if (newValue) {
-//                    // אם נבחר תא, בטל את סימון הטווח הנבחר
-//                    rangeSelected.set(false);
-//                    //rangesController.clearCurrSelectedRange();
-//                }
-//            });
-
+            setMainControllerForComponents();
+            initializeProperties();
+            bindUIComponents();
         }
+    }
+
+    private void setMainControllerForComponents() {
+        actionLineController.setMainController(this);
+        tableController.setMainController(this);
+        versionSelectorController.setMainController(this);
+        fileChooserController.setMainController(this);
+        commandsController.setMainController(this);
+        rangesController.setMainController(this);
+        skinSelectorController.setMainController(this);
+        skinSelectorController.setMainController(this);
+    }
+
+    private void initializeProperties() {
+        fileSelectedProperty = new SimpleBooleanProperty(false);
+        versionProperty = new SimpleIntegerProperty(1);
+        columnSelected = new SimpleBooleanProperty(false);
+        rowSelected=new SimpleBooleanProperty(false);
+        cellSelected = new SimpleBooleanProperty(false);
+        rangeSelected = new SimpleBooleanProperty(false);
+    }
+
+    private void bindUIComponents() {
+        table.disableProperty().bind(fileSelectedProperty.not());
+        actionLine.disableProperty().bind(fileSelectedProperty.not());
+        versionSelector.disableProperty().bind(fileSelectedProperty.not());
+        commands.disableProperty().bind(fileSelectedProperty.not());
+        ranges.disableProperty().bind(fileSelectedProperty.not());
+        currentVersionLabel.textProperty().bind(versionProperty.asString());
     }
 
     public void initializeComponentsAfterLoad() {
@@ -135,18 +122,26 @@ public class AppController {
         actionLineController.initializeActionLine(cellSelected);
         commandsController.InitializeCommandsController(cellSelected,rangeSelected, columnSelected,rowSelected);
         rangesController.initializeRangesController(sheet.getRangesNames(), rangeSelected);
+        versionProperty.set(1);
     }
 
 //    public SheetDTO getCurrrentSheet() {
 //        return engine.getCurrentSheetDTO();
 //    }
-
-
+    
     public void setPrimaryStage(Stage primaryStage) {
         this.primaryStage = primaryStage;
     }
 
-    public File showFileSelector(FileChooser fileChooser) {
+    public void setScene(Scene scene) {
+        this.scene = scene;
+        if (skinSelectorController != null) {
+            skinSelectorController.setScene(scene);  // העברת הסצנה ל-SkinSelectorController
+            skinSelectorController.initializeSkinSelector();  // אתחול ערכות הנושא
+        }
+    }
+
+    public File showFileChooser(FileChooser fileChooser) {
         return fileChooser.showOpenDialog(primaryStage);
     }
 
@@ -158,18 +153,10 @@ public class AppController {
 
             if (isUpdated) {
                 SheetDTO sheet = engine.getCurrentSheetDTO();
-                CellDTO[][] cells = sheet.getCellsMatrix();
-
-                Arrays.stream(cells).flatMap(Arrays::stream).forEach(cell -> {
-                    if (cell != null) {
-                        tableController.updateCellContent(cell.getCoord(), cell.getEffectiveValue());
-                    }
-                });
+                setCells(sheet);
                 actionLineController.setActionLine(engine.getCellDTOByCoordinate(coordinate));
+                setVersion(sheet.getVersion());
 
-                // עדכון אפשרויות הגרסה בצורה בטוחה
-                versionProperty.set(sheet.getVersion());
-                versionSelectorController.setVersionSelectorOptions(sheet.getVersion());
             }
             tableController.addMarksOfFocusingToCell(coordinate);
         }
@@ -179,6 +166,21 @@ public class AppController {
             actionLineController.setActionLine(null);
             cellSelected.set(false);
         }
+    }
+
+    private void setCells(SheetDTO sheet) {
+        CellDTO[][] cells = sheet.getCellsMatrix();
+
+        Arrays.stream(cells).flatMap(Arrays::stream).forEach(cell -> {
+            if (cell != null) {
+                tableController.updateCellContent(cell.getCoord(), cell.getEffectiveValue());
+            }
+        });
+    }
+
+    private void setVersion(int version) {
+        versionProperty.set(version);
+        versionSelectorController.setVersionSelectorOptions(version);
     }
 
 

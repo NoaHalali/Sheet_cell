@@ -26,7 +26,7 @@ public class FileChooserController {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Select shticell file");
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("xml files", "*.xml"));
-        File selectedFile = mainController.showFileSelector(fileChooser);
+        File selectedFile = mainController.showFileChooser(fileChooser);
         if (selectedFile == null) {
             return;
         }

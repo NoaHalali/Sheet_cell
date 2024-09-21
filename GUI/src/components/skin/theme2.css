@@ -1,0 +1,19 @@
+/* Background */
+.root {
+    -fx-background-color: #f0f8ff;
+}
+
+/* Button Styling */
+.button {
+    -fx-background-color: #87cefa;
+    -fx-text-fill: navy;
+    -fx-font-size: 16px;
+    -fx-border-radius: 5;
+}
+
+/* Label Styling */
+.label {
+    -fx-font-family: "Tahoma";
+    -fx-font-size: 16px;
+    -fx-text-fill: navy;
+}

@@ -1,0 +1,19 @@
+/* Background */
+.root {
+    -fx-background-color: white;
+}
+
+/* Button Styling */
+.button {
+    -fx-background-color: lightgray;
+    -fx-text-fill: black;
+    -fx-font-size: 14px;
+    -fx-border-radius: 5;
+}
+
+/* Label Styling */
+.label {
+    -fx-font-family: "Arial";
+    -fx-font-size: 12px;
+    -fx-text-fill: black;
+}
