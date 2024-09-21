@@ -3,6 +3,7 @@ package components.left.commands.rowsAndCols;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 public class DialogManager {
@@ -167,5 +168,41 @@ public class DialogManager {
             }
         });
     }
+
+    public void showGraphDialog(BiConsumer<String, String> onGraphCreate, String[] columns) {
+        Dialog<ButtonType> dialog = new Dialog<>();
+        dialog.setTitle("Create Graph");
+
+        GridPane dialogGrid = new GridPane();
+        dialogGrid.setHgap(10);
+        dialogGrid.setVgap(10);
+
+        ComboBox<String> xAxisComboBox = new ComboBox<>();
+        ComboBox<String> yAxisComboBox = new ComboBox<>();
+        xAxisComboBox.getItems().addAll(columns);  // כאן תכניס את שמות העמודות
+        yAxisComboBox.getItems().addAll(columns);  // כאן תכניס את שמות העמודות
+
+        dialogGrid.add(new Label("X Axis:"), 0, 0);
+        dialogGrid.add(xAxisComboBox, 1, 0);
+        dialogGrid.add(new Label("Y Axis:"), 0, 1);
+        dialogGrid.add(yAxisComboBox, 1, 1);
+
+        dialog.getDialogPane().setContent(dialogGrid);
+        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+
+        dialog.setResultConverter(button -> {
+            if (button == ButtonType.OK) {
+                String selectedX = xAxisComboBox.getValue();
+                String selectedY = yAxisComboBox.getValue();
+                if (selectedX != null && selectedY != null) {
+                    onGraphCreate.accept(selectedX, selectedY);  // קריאה ל-Consumer עם העמודות שנבחרו
+                }
+            }
+            return null;
+        });
+
+        dialog.showAndWait();
+    }
+
 
 }

@@ -32,7 +32,7 @@ public class Range implements Serializable {
 
         for (Cell cell : cells) {
             tmpVal = cell.getEffectiveValue();
-            if(tmpVal != null&&cell.getIsExist() && tmpVal.getCellType() == CellType.NUMERIC) {
+            if(tmpVal != null&&cell.isExist() && tmpVal.getCellType() == CellType.NUMERIC) {
               num = tmpVal.extractValueWithExpectation(Double.class);
               if(num!=Double.NaN) {
                   sum += num;
@@ -49,7 +49,7 @@ public class Range implements Serializable {
 
         for (Cell cell : cells) {
             tmpVal = cell.getEffectiveValue();
-            if(tmpVal != null&&cell.getIsExist() && tmpVal.getCellType() == CellType.NUMERIC) {
+            if(tmpVal != null&&cell.isExist() && tmpVal.getCellType() == CellType.NUMERIC) {
                 num = tmpVal.extractValueWithExpectation(Double.class);
                 if(num!=Double.NaN) {
                     numberOfCellsWithNumbers++;

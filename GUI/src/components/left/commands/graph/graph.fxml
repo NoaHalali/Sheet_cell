@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox prefHeight="115.0" prefWidth="179.0" spacing="5.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="components.left.commands.graph.GraphDialogController">
+<VBox prefHeight="115.0" prefWidth="179.0" spacing="5.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="components.left.commands.graph.GraphController">
     <Label prefHeight="17.0" prefWidth="145.0" text="Select Columns for Graph:" />
 
     <HBox spacing="5.0">

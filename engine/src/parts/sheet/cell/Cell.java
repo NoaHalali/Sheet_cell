@@ -278,8 +278,12 @@ public class Cell implements Serializable {
         return null;
     }
 
-
-    public boolean getIsExist() {
+    public boolean isExist() {
         return isExist;
     }
+
+    public static boolean isGhostCell(Cell cell) {
+        return cell != null && !cell.isExist();
+    }
+
 }

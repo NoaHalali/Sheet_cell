@@ -7,8 +7,7 @@ import components.center.cellsTable.TableController;
 import components.left.commands.filter.FilterPopupController;
 import components.left.commands.rowsAndCols.DialogManager;
 import javafx.beans.property.SimpleBooleanProperty;
-import components.left.commands.graph.GraphDialogController;
-import javafx.collections.FXCollections;
+import components.left.commands.graph.GraphController;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -21,7 +20,6 @@ import javafx.stage.Stage;
 import parts.SheetDTO;
 import parts.sheet.cell.expression.effectiveValue.EffectiveValue;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -279,18 +277,104 @@ public class CommandsController {
 
     @FXML
     private void handleCreateGraph() {
-        try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/components/left/commands/graph/GraphDialog.fxml"));
-            Parent root = fxmlLoader.load();
+        int numOfColumns = mainController.getNumberOfColumns();
 
-            Stage stage = new Stage();
-            stage.setTitle("Create Graph");
-            stage.setScene(new Scene(root));
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        String [] columns = createColumnsArray(numOfColumns);
+        // מראה את הדיאלוג לבחירת העמודות ליצירת הגרף
+        dialogManager.showGraphDialog(this::createGraphFromDialog,columns);
     }
+
+    private String[] createColumnsArray(int numOfColumns) {
+        String[] columnNames = new String[numOfColumns];
+        for (int i = 0; i < numOfColumns; i++) {
+            columnNames[i] = String.valueOf((char) ('A' + i));
+        }
+        return columnNames;
+    }
+
+    private void createGraphFromDialog(String xColumn, String yColumn) {
+        // נוודא שיש לנו GraphController ונקרא לפונקציה ליצירת הגרף
+        GraphController graphController = new GraphController();  // אם יש דרך ליצור את זה ב-FXML, עדיף
+        graphController.setMainController(mainController);  // העברת ה-mainController ל-GraphController
+        graphController.createGraph(xColumn, yColumn);  // יצירת הגרף עם העמודות הנבחרות
+    }
+
+//    private void createGraph(String xColumn, String yColumn) {
+//
+//        // נשלוף את הנתונים מהעמודות הנבחרות
+//        List<CellDTO> xData = mainController.getColumnData(xColumn);
+//        List<CellDTO> yData = mainController.getColumnData(yColumn);
+//
+//        if (xData.size() == yData.size()) {
+//            // יצירת גרף קווים לדוגמה
+//            NumberAxis xAxis = new NumberAxis();
+//            NumberAxis yAxis = new NumberAxis();
+//            LineChart<Number, Number> lineChart = new LineChart<>(xAxis, yAxis);
+//
+//            XYChart.Series<Number, Number> series = new XYChart.Series<>();
+//            for (int i = 0; i < xData.size(); i++) {
+//                double xValue = xData.get(i).getEffectiveValue().extractValueWithExpectation(Double.class);
+//                double yValue = yData.get(i).getEffectiveValue().extractValueWithExpectation(Double.class);
+//                series.getData().add(new XYChart.Data<>(xValue, yValue));
+//            }
+//
+//            lineChart.getData().add(series);
+//
+//            // הצגת הגרף בחלון חדש
+//            Stage stage = new Stage();
+//            Scene scene = new Scene(lineChart, 800, 600);
+//            stage.setScene(scene);
+//            stage.setTitle("Generated Graph");
+//            stage.show();
+//        } else {
+//            System.out.println("Mismatch in data sizes between X and Y columns.");
+//        }
+//    }
+
+//    private int getColumnIndex(String columnName) {
+//        SheetDTO sheet = mainController.getCurrentSheetDTO();
+//        return sheet.getColumnNames().indexOf(columnName);
+//    }
+
+
+//    @FXML
+//    private void handleCreateGraph() {
+//        try {
+//            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/components/left/commands/graph/GraphDialog.fxml"));
+//            Parent root = fxmlLoader.load();
+//
+//            Stage stage = new Stage();
+//            stage.setTitle("Create Graph");
+//            stage.setScene(new Scene(root));
+//            stage.show();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//    }
+
+//    @FXML
+//    private void handleCreateGraph() {
+//        dialogManager.showGraphDialog(this::openGraphController);  // מראה את דיאלוג הבחירה של העמודות
+//    }
+//
+//    private void openGraphController(String xColumn, String yColumn) {
+//        try {
+//            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/components/left/commands/graph/Graph.fxml"));
+//            Parent root = fxmlLoader.load();
+//
+//            GraphController graphController = fxmlLoader.getController();
+//            graphController.setMainController(mainController);
+//            graphController.createGraph(xColumn, yColumn);  // יצירת הגרף עם העמודות שנבחרו
+//
+//            Stage stage = new Stage();
+//            stage.setTitle("Generated Graph");
+//            stage.setScene(new Scene(root));
+//            stage.show();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//    }
+
 
 
 }

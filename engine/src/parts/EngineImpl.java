@@ -2,9 +2,11 @@ package parts;
 
 import XMLFile.FileManager;
 import parts.cell.*;
+import exceptions.SheetNotLoadedException;
 import parts.sheet.cell.Cell;
 import parts.sheet.cell.coordinate.Coordinate;
 import parts.sheet.Sheet;
+import parts.sheet.cell.coordinate.CoordinateImpl;
 import parts.sheet.cell.expression.effectiveValue.EffectiveValue;
 
 import java.io.*;
@@ -19,9 +21,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 
 
-
 public class EngineImpl implements Engine {
-
     private Sheet currentSheet = null;
     private FileManager fileManager = new FileManager();
     private List <Version> versionsList = new LinkedList<Version>();
@@ -47,22 +47,17 @@ public class EngineImpl implements Engine {
         }
     }
 
-
     //2
     @Override
-    public SheetDTO getCurrentSheetDTO() {
-        if (!sheetLoadad()) {
-            throw new IllegalStateException(SHEET_NOT_LOADED_MESSAGE);
-        }
+    public SheetDTO getCurrentSheetDTO() throws SheetNotLoadedException {
+        checkIfSheetHasBeenLoaded();
         return currentSheet.toSheetDTO(); //temp
     }
 
     //3
     @Override
-    public CellDTO getCellDTOByCoordinate(Coordinate coordinate) throws IllegalArgumentException {
-        if (!sheetLoadad()) {
-            throw new IllegalStateException(SHEET_NOT_LOADED_MESSAGE);
-        }
+    public CellDTO getCellDTOByCoordinate(Coordinate coordinate) throws IllegalArgumentException, SheetNotLoadedException {
+        checkIfSheetHasBeenLoaded();
 
         Cell cell = currentSheet.getCellByCoord(coordinate);
         if (cell != null)
@@ -70,25 +65,18 @@ public class EngineImpl implements Engine {
            return cell.toCellDTO();
         }
         return new EmptyCellDTO(coordinate, 0, List.of());
-
     }
-
 
     //4
     @Override
     public boolean updateCellValue(String newOriginalValue, Coordinate coord) throws Exception {
-        if (!sheetLoadad()) {
-            throw new IllegalStateException(SHEET_NOT_LOADED_MESSAGE);
-        }
+        checkIfSheetHasBeenLoaded();
         Sheet clonedSheet = currentSheet.cloneSheet();
         int numOfCellsChanged;
 
         if (clonedSheet != null) {
             Cell cell = clonedSheet.getCellByCoord(coord);
-            // clonedSheet.upgradeVersion(); //פה או בתוך התנאים?
-            boolean isDeleted = false;
             String oldOriginalValue;
-
             if (cell != null) {
                 oldOriginalValue = cell.getOriginalValue();
                 boolean originalValueChanged = !newOriginalValue.equals(oldOriginalValue);
@@ -103,7 +91,6 @@ public class EngineImpl implements Engine {
 
                     }
                 }
-
                 else{ // original value didn't change
                     if(tryToDeleteGhostCell){ //trying to delete ghost cell
                         throw new Exception("Cell at coordinate "+coord+" is already empty!");
@@ -126,29 +113,22 @@ public class EngineImpl implements Engine {
 
     //5
     @Override
-    public SheetDTO getSheetDTOByVersion(int versionNumber) throws IllegalArgumentException, IllegalStateException {
-        if (!sheetLoadad()) {
-            throw new IllegalStateException(SHEET_NOT_LOADED_MESSAGE);
-        }
-
+    public SheetDTO getSheetDTOByVersion(int versionNumber) throws IllegalArgumentException, SheetNotLoadedException {
+        checkIfSheetHasBeenLoaded();
         return getSheetByVersion(versionNumber).toSheetDTO();
     }
 
     //5 - לא באמת מחזיר גרסאות, יותר רשימה של מספרי תאים שהשתנו
     @Override
-    public List<Integer> getVersions(){
-        if (!sheetLoadad()) {
-            throw new IllegalStateException(SHEET_NOT_LOADED_MESSAGE);
-        }
+    public List<Integer> getVersions() throws SheetNotLoadedException {
+        checkIfSheetHasBeenLoaded();
         return getNumberOfCellsChangedListDeepClone();
     }
 
     //5
     @Override
-    public int getNumOfVersions(){
-        if (!sheetLoadad()) {
-            throw new IllegalStateException(SHEET_NOT_LOADED_MESSAGE);
-        }
+    public int getNumOfVersions() throws SheetNotLoadedException {
+        checkIfSheetHasBeenLoaded();
         return versionsList.size();
     }
 
@@ -182,9 +162,7 @@ public class EngineImpl implements Engine {
     //6
     @Override
     public void saveSystemState(String filePath) throws Exception {
-        if (!sheetLoadad()) {
-            throw new IllegalStateException(SHEET_NOT_LOADED_MESSAGE);
-        }
+        checkIfSheetHasBeenLoaded();
         String filePathWithEnding = filePath + ".dat";
 
         try (FileOutputStream fileOut = new FileOutputStream(filePathWithEnding);
@@ -200,7 +178,6 @@ public class EngineImpl implements Engine {
     //7
     @Override
     public void loadSystemState(String filePath) throws FileNotFoundException, IOException, ClassNotFoundException {
-
         String filePathWithEnding = filePath + ".dat";
 
         try (FileInputStream fileIn = new FileInputStream(filePathWithEnding);
@@ -219,10 +196,7 @@ public class EngineImpl implements Engine {
     @Override
     public void addRange(String rangeName, String rangeDefinition) throws Exception
     {
-        if (!sheetLoadad()) {
-            throw new IllegalStateException(SHEET_NOT_LOADED_MESSAGE);
-        }
-
+        checkIfSheetHasBeenLoaded();
         Coordinate[] rangeEdgeCoordinates=Range.parseRange(rangeDefinition);
         Coordinate topLeftCoord = rangeEdgeCoordinates[0];
         Coordinate bottomRightCoord = rangeEdgeCoordinates[1];
@@ -249,23 +223,36 @@ public class EngineImpl implements Engine {
     }
 
     @Override
-    public Set<EffectiveValue> getDistinctValuesOfColInRange(String col,String rangeDefinition) throws IllegalArgumentException {
+    public Set<EffectiveValue> getDistinctValuesOfColInRange(String colStr,String rangeDefinition) throws IllegalArgumentException {
         Coordinate[] rangeEdgeCoordinates =Range.parseRange(rangeDefinition);
         Coordinate topLeftCoord = rangeEdgeCoordinates[0];
         Coordinate bottomRightCoord = rangeEdgeCoordinates[1];
-        return currentSheet.getDistinctValuesOfColInRange(col, topLeftCoord, bottomRightCoord);
+        return currentSheet.getDistinctValuesOfColInRange(colStr, topLeftCoord, bottomRightCoord);
     }
 
     @Override
-    public SheetDTO getFilteredSheetDTO(Set<EffectiveValue> filteredValues, String col,String rangeDefinition) throws IllegalArgumentException {
+    public SheetDTO getFilteredSheetDTO(Set<EffectiveValue> filteredValues, String colStr,String rangeDefinition) throws IllegalArgumentException {
         Coordinate[] rangeEdgeCoordinates =Range.parseRange(rangeDefinition);
         Coordinate topLeftCoord = rangeEdgeCoordinates[0];
         Coordinate bottomRightCoord = rangeEdgeCoordinates[1];
 
-        return currentSheet.getFilteredSheetByColumnInRange(filteredValues, col, topLeftCoord, bottomRightCoord).toSheetDTO();
+        return currentSheet.getFilteredSheetByColumnInRange(filteredValues, colStr, topLeftCoord, bottomRightCoord).toSheetDTO();
 
     }
 
+    public List<CellDTO> getColumnData(String colStr){
+        int colIndex = CoordinateImpl.columnStringToIndex(colStr);
+        return currentSheet.getColumnCells(colIndex);
+    }
 
+    @Override
+    public void checkIfSheetHasBeenLoaded() throws SheetNotLoadedException {
+        if (!sheetLoadad()) {
+            throw new SheetNotLoadedException(SHEET_NOT_LOADED_MESSAGE);
+        }
+    }
 
+    public int getNumberOfColumns(){
+        return currentSheet.getNumberOfColumns();
+    }
 }

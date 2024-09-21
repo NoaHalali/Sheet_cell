@@ -88,14 +88,11 @@ public class Sheet implements Serializable {
                 .sum();
     }
 
-
     public void validateSheetExpressions() throws Exception {
         parseExpressions();
         checkForCircularDependencies();
         evaluateSheetValuesForRefCheck();
     }
-
-
 
 //    public void setVersion(int version) {
 //        this.version = version;
@@ -228,7 +225,7 @@ public class Sheet implements Serializable {
     public void parseExpressions() throws Exception {
         for(Cell[] cells : cellsMatrix){
             for(Cell cell : cells){
-                if(cell!=null&&cell.getIsExist()){
+                if(cell!=null&&cell.isExist()){
                     createNewCellValueForCommand1(cell);
                 }
             }
@@ -354,7 +351,6 @@ public class Sheet implements Serializable {
         ranges.put(rangeName, range);
     }
 
-    //TODO - add check if range is usued for function, maybe with boolean field
     public void deleteRange(String rangeName) throws IllegalArgumentException{
         if(!ranges.containsKey(rangeName)){
             throw new IllegalArgumentException("Range with the name " + rangeName + " does not exist.");
@@ -500,7 +496,7 @@ public class Sheet implements Serializable {
 
         for (int row = topRow; row <= bottomRow; row++) {
             Cell cell = cellsMatrix[row - 1][colIndex - 1];
-            if (cell != null && cell.getIsExist()) {
+            if (cell != null && cell.isExist()) {
                 EffectiveValue effectiveValue = cell.getEffectiveValue();
                 effectiveValues.add(effectiveValue); // יתווסף רק אם ייחודי
             }
@@ -571,6 +567,23 @@ public class Sheet implements Serializable {
         if (rowHeight <= 0) {
             throw new IllegalArgumentException("Row height must be a positive number.");
         }
+    }
+
+    public List<CellDTO> getColumnCells(int colIndex) {
+        List<CellDTO> columnData = new ArrayList<>();
+        //CellDTO[][] cellsMatrix = sheet.getCellsMatrix();
+
+        for (int row = 0; row < cellsMatrix.length; row++) {
+            Cell cell = cellsMatrix[row][colIndex];
+            if (cell != null && cell.isExist() && cell.getEffectiveValue() != null) {
+                columnData.add(cell.toCellDTO()); // הוספת CellDTO לרשימה
+            }
+        }
+        return columnData;
+    }
+
+    public int getNumberOfColumns() {
+        return numberOfCols;
     }
 }
 

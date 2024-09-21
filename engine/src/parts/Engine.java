@@ -1,5 +1,6 @@
 package parts;
 
+import exceptions.SheetNotLoadedException;
 import parts.cell.CellDTO;
 import parts.sheet.cell.coordinate.Coordinate;
 import parts.sheet.Sheet;
@@ -16,17 +17,17 @@ public interface Engine {
 
     public void readFileData(String filePath) throws Exception;
 
-    public SheetDTO getCurrentSheetDTO();
+    public SheetDTO getCurrentSheetDTO() throws SheetNotLoadedException;
 
-    public CellDTO getCellDTOByCoordinate(Coordinate coordinate) throws IllegalArgumentException;
+    public CellDTO getCellDTOByCoordinate(Coordinate coordinate) throws IllegalArgumentException, SheetNotLoadedException;
 
     public boolean updateCellValue(String value, Coordinate coordinate) throws Exception;
 
-    public SheetDTO getSheetDTOByVersion(int versionNumber) throws IllegalArgumentException, IllegalStateException;
+    public SheetDTO getSheetDTOByVersion(int versionNumber) throws IllegalArgumentException, SheetNotLoadedException;
 
-    public List<Integer> getVersions();
+    public List<Integer> getVersions() throws SheetNotLoadedException;
 
-    public int getNumOfVersions();
+    public int getNumOfVersions() throws SheetNotLoadedException;
 
     public Sheet getSheetByVersion(int version) throws IllegalArgumentException;
 
@@ -51,6 +52,12 @@ public interface Engine {
     public Set<EffectiveValue> getDistinctValuesOfColInRange(String col, String rangeDefinition) throws IllegalArgumentException;
 
     public SheetDTO getFilteredSheetDTO(Set<EffectiveValue> filteredValues, String col,String rangeDefinition) throws IllegalArgumentException;
+
+    public List<CellDTO> getColumnData(String colStr);
+
+    public void checkIfSheetHasBeenLoaded() throws SheetNotLoadedException;
+
+    public int getNumberOfColumns();
 }
 
 

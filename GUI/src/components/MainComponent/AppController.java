@@ -50,12 +50,12 @@ public class AppController {
     @FXML private GridPane actionLine;
     @FXML private GridPane fileChooser;
     @FXML private ScrollPane table;
-    @FXML private Button myButton=new Button();
-    @FXML private Label myLabel ;
+    //@FXML private Button myButton=new Button();
+    //@FXML private Label myLabel ;
     @FXML private ScrollPane commands;
     @FXML private VBox ranges;
     @FXML private HBox versionSelector;
-    @FXML private Button updateCell;
+    //@FXML private Button updateCell;
     @FXML private Label currentVersionLabel;
 
 
@@ -136,6 +136,10 @@ public class AppController {
         commandsController.InitializeCommandsController(cellSelected,rangeSelected, columnSelected,rowSelected);
         rangesController.initializeRangesController(sheet.getRangesNames(), rangeSelected);
     }
+
+//    public SheetDTO getCurrrentSheet() {
+//        return engine.getCurrentSheetDTO();
+//    }
 
 
     public void setPrimaryStage(Stage primaryStage) {
@@ -395,5 +399,14 @@ public class AppController {
 
     public int getFocusedColumnWidth() {
         return tableController.getFocusedColumnWidth();
+    }
+
+
+    public List<CellDTO> getColumnData(String colStr) {
+        return engine.getColumnData(colStr);
+    }
+
+    public int getNumberOfColumns() {
+        return engine.getNumberOfColumns();
     }
 }
