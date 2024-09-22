@@ -282,13 +282,13 @@ public class TableController {
         List<Coordinate> dependsOn = cell.getDependsOn();
         for (Coordinate coord : dependsOn) {
             CellController depCellController = coordToCellControllerMap.get(coord.toString());
-            depCellController.setBorder("blue", "2px");
+            depCellController.setBorder("#4d66cc", "2px");
         }
 
         List<Coordinate> influencingOn = cell.getInfluencingOn();
         for (Coordinate coord : influencingOn) {
             CellController infCellController = coordToCellControllerMap.get(coord.toString());
-            infCellController.setBorder("green", "2px");
+            infCellController.setBorder("#669966", "2px");
         }
 
     }
