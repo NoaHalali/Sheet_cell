@@ -12,6 +12,7 @@ import parts.sheet.cell.expression.effectiveValue.EffectiveValue;
 import java.io.*;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.io.FileInputStream;
@@ -227,7 +228,14 @@ public class EngineImpl implements Engine {
         Coordinate[] rangeEdgeCoordinates =Range.parseRange(rangeDefinition);
         Coordinate topLeftCoord = rangeEdgeCoordinates[0];
         Coordinate bottomRightCoord = rangeEdgeCoordinates[1];
-        return currentSheet.getDistinctValuesOfColInRange(colStr, topLeftCoord, bottomRightCoord);
+        return currentSheet.getDistinctValuesOfSingleColInRange(colStr, topLeftCoord, bottomRightCoord);
+    }
+    @Override
+    public Map<String,Set<EffectiveValue>> getDistinctValuesOfMultipleColsInRange(List<Character> columnsToFilterBy, String rangeDefinition) throws IllegalArgumentException {
+        Coordinate[] rangeEdgeCoordinates =Range.parseRange(rangeDefinition);
+        Coordinate topLeftCoord = rangeEdgeCoordinates[0];
+        Coordinate bottomRightCoord = rangeEdgeCoordinates[1];
+        return currentSheet.getDistinctValuesOfColumnsInRange(columnsToFilterBy,topLeftCoord,bottomRightCoord);
     }
 
     @Override
@@ -235,8 +243,18 @@ public class EngineImpl implements Engine {
         Coordinate[] rangeEdgeCoordinates =Range.parseRange(rangeDefinition);
         Coordinate topLeftCoord = rangeEdgeCoordinates[0];
         Coordinate bottomRightCoord = rangeEdgeCoordinates[1];
+        Sheet filteredSheet = currentSheet.cloneSheet();
 
-        return currentSheet.getFilteredSheetByColumnInRange(filteredValues, colStr, topLeftCoord, bottomRightCoord).toSheetDTO();
+        return filteredSheet.getFilteredSheetBySingleColumnInRange(filteredValues, colStr, topLeftCoord, bottomRightCoord).toSheetDTO();
+
+    }
+    @Override
+    public SheetDTO getFilteredSheetDTOFromMultipleCols(Map<String,Set<EffectiveValue>> filteredValues,String rangeDefinition) throws IllegalArgumentException {
+        Coordinate[] rangeEdgeCoordinates =Range.parseRange(rangeDefinition);
+        Coordinate topLeftCoord = rangeEdgeCoordinates[0];
+        Coordinate bottomRightCoord = rangeEdgeCoordinates[1];
+
+        return currentSheet.getFilteredSheetByMultipleColumnsInRange(filteredValues, topLeftCoord, bottomRightCoord).toSheetDTO();
 
     }
 

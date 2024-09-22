@@ -20,10 +20,7 @@ import javafx.stage.Stage;
 import parts.SheetDTO;
 import parts.sheet.cell.expression.effectiveValue.EffectiveValue;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -207,40 +204,187 @@ public class CommandsController {
     }
 
 
-    private SheetDTO openFilterOptionsPopupAndGetFilteredSheet() throws Exception {
-        // טוען את ה-FXML של הפופאפ
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/components/left/commands/filter/FilterPopup.fxml"));
-        Parent root = loader.load();
+//    private SheetDTO openFilterOptionsPopupAndGetFilteredSheet() throws Exception {
+//        // טוען את ה-FXML של הפופאפ
+//        FXMLLoader loader = new FXMLLoader(getClass().getResource("/components/left/commands/filter/FilterPopup.fxml"));
+//        Parent root = loader.load();
+//
+//        // קבל את הבקר של הפופאפ
+//        FilterPopupController filterPopupController = loader.getController();
+//        String col = filterColumnsTextField.getText();
+//        String rangeDefinition = filterRangeTextField.getText();
+//        Set<EffectiveValue> values = mainController.getDistinctValuesOfColInRange(col, rangeDefinition);
+//        Map<String, EffectiveValue> stringToEffectiveValueMap = getStringToEffectiveValueMap(values);
+//        Set<String> valuesSet = stringToEffectiveValueMap.keySet();
+//        filterPopupController.initializeFilterListView(valuesSet);
+//
+//        // יצירת הבמה (Stage) לפופאפ
+//        Stage popupStage = new Stage();
+//        popupStage.setTitle("Filter Values");
+//        popupStage.setScene(new Scene(root));
+//        popupStage.initModality(Modality.APPLICATION_MODAL); // פופאפ במצב מודאלי
+//
+//        // הצגת הפופאפ וחסימת חלון ראשי עד לסגירת הפופאפ
+//        popupStage.showAndWait();
+//
+//        // קבלת הערכים שנבחרו מהפופאפ לאחר שהמשתמש סיים את הבחירה
+//        //ObservableList<String> selectedItems = filterPopupController.getSelectedItems();
+//        List<Set<String>> selectedItems = filterPopupController.getSelectedItems();
+//
+//        System.out.println("Selected items from popup: " + selectedItems);
+//        Set<EffectiveValue> selectedValues = selectedItems.stream()
+//                .map(stringToEffectiveValueMap::get)
+//                .collect(Collectors.toSet());
+//
+//        // תוכל לקרוא לפונקציה filterData עם הערכים שנבחרו
+//        return mainController.filterData(selectedValues, col, rangeDefinition);
+//
+//    }
 
-        // קבל את הבקר של הפופאפ
-        FilterPopupController filterPopupController = loader.getController();
-        String col = filterColumnsTextField.getText();
-        String rangeDefinition = filterRangeTextField.getText();
-        Set<EffectiveValue> values = mainController.getDistinctValuesOfColInRange(col, rangeDefinition);
-        Map<String, EffectiveValue> stringToEffectiveValueMap = getStringToEffectiveValueMap(values);
-        Set<String> valuesSet = stringToEffectiveValueMap.keySet();
-        filterPopupController.initializeFilterListView(valuesSet);
 
-        // יצירת הבמה (Stage) לפופאפ
-        Stage popupStage = new Stage();
-        popupStage.setTitle("Filter Values");
-        popupStage.setScene(new Scene(root));
-        popupStage.initModality(Modality.APPLICATION_MODAL); // פופאפ במצב מודאלי
 
-        // הצגת הפופאפ וחסימת חלון ראשי עד לסגירת הפופאפ
-        popupStage.showAndWait();
+//    private SheetDTO openFilterOptionsPopupAndGetFilteredSheet() throws Exception {
+//        // טוען את ה-FXML של הפופאפ
+//        FXMLLoader loader = new FXMLLoader(getClass().getResource("/components/left/commands/filter/FilterPopup.fxml"));
+//        Parent root = loader.load();
+//
+//        // קבל את הבקר של הפופאפ
+//        FilterPopupController filterPopupController = loader.getController();
+//        String col = filterColumnsTextField.getText();
+//        String rangeDefinition = filterRangeTextField.getText();
+//        Set<EffectiveValue> values = mainController.getDistinctValuesOfColInRange(col, rangeDefinition);
+//        Map<String, EffectiveValue> stringToEffectiveValueMap = getStringToEffectiveValueMap(values);
+//        Set<String> valuesSet = stringToEffectiveValueMap.keySet();
+//        filterPopupController.initializeFilterListView(valuesSet);
+//
+//        // יצירת הבמה (Stage) לפופאפ
+//        Stage popupStage = new Stage();
+//        popupStage.setTitle("Filter Values");
+//        popupStage.setScene(new Scene(root));
+//        popupStage.initModality(Modality.APPLICATION_MODAL); // פופאפ במצב מודאלי
+//
+//        // הצגת הפופאפ וחסימת חלון ראשי עד לסגירת הפופאפ
+//        popupStage.showAndWait();
+//
+//        // קבלת הערכים שנבחרו מהפופאפ לאחר שהמשתמש סיים את הבחירה
+//        ObservableList<String> selectedItems = filterPopupController.getSelectedItems();
+//
+//
+//        System.out.println("Selected items from popup: " + selectedItems);
+//        Set<EffectiveValue> selectedValues = selectedItems.stream()
+//                .map(stringToEffectiveValueMap::get)
+//                .collect(Collectors.toSet());
+//
+//        // תוכל לקרוא לפונקציה filterData עם הערכים שנבחרו
+//        return mainController.filterData(selectedValues, col, rangeDefinition);
+//
+//    }
 
-        // קבלת הערכים שנבחרו מהפופאפ לאחר שהמשתמש סיים את הבחירה
-        ObservableList<String> selectedItems = filterPopupController.getSelectedItems();
+private SheetDTO openFilterOptionsPopupAndGetFilteredSheet() throws Exception {
+    List<Character> colsList = colsStringToCharList(filterColumnsTextField.getText());
+    String rangeDefinition = filterRangeTextField.getText();
+    Map<String,Set<EffectiveValue>> values = mainController.getDistinctValuesOfMultipleColsInRange(colsList, rangeDefinition);
 
-        System.out.println("Selected items from popup: " + selectedItems);
-        Set<EffectiveValue> selectedValues = selectedItems.stream()
-                .map(stringToEffectiveValueMap::get)
-                .collect(Collectors.toSet());
+    // קריאה למתודה שתפתח מספר פופאפים
+    Map<String,Set<EffectiveValue>> filteredValues = openMultipleFilterPopups(values);
 
-        // תוכל לקרוא לפונקציה filterData עם הערכים שנבחרו
-        return mainController.filterData(selectedValues, col, rangeDefinition);
+    // החזרת ערך מתאים
+    return mainController.filterData(filteredValues, rangeDefinition);
+}
 
+    private  Map<String,Set<EffectiveValue>> openMultipleFilterPopups(Map<String,Set<EffectiveValue>> allValues) throws Exception {
+        Map<String,Set<EffectiveValue>> filteredValues = new HashMap<>();
+        for (String key : allValues.keySet()) {
+            // טוען את ה-FXML של הפופאפ
+            Set<EffectiveValue> valueSet=allValues.get(key);
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/components/left/commands/filter/FilterPopup.fxml"));
+            Parent root = loader.load();
+            Map<String, EffectiveValue> stringToEffectiveValueMap = getStringToEffectiveValueMap(valueSet);
+            Set<String> valuesSetStr = stringToEffectiveValueMap.keySet();
+
+            // קבל את הבקר של הפופאפ
+            FilterPopupController filterPopupController = loader.getController();
+            filterPopupController.initializeFilterListView(valuesSetStr);
+
+            // יצירת הבמה (Stage) לפופאפ
+            Stage popupStage = new Stage();
+            popupStage.setWidth(300);
+            popupStage.setTitle("Filter Values for col - " + key);
+            popupStage.setScene(new Scene(root));
+            popupStage.initModality(Modality.APPLICATION_MODAL); // פופאפ במצב מודאלי
+
+            // הצגת הפופאפ וחסימת חלון ראשי עד לסגירת הפופאפ
+            popupStage.showAndWait();
+
+            // קבלת הערכים שנבחרו מהפופאפ לאחר שהמשתמש סיים את הבחירה
+            ObservableList<String> selectedItems = filterPopupController.getSelectedItems();
+            Set<EffectiveValue> selectedValues = selectedItems.stream()
+                    .map(stringToEffectiveValueMap::get)
+                    .collect(Collectors.toSet());
+           filteredValues.put(key,selectedValues);
+            // תוכל לקרוא לפונקציה filterData עם הערכים שנבחרו
+            //mainController.filterData(selectedValues, col, rangeDefinition);
+        }
+        return filteredValues;
+    }
+
+//    private SheetDTO openFilterOptionsPopupAndGetFilteredSheet() throws Exception {
+//    // טוען את ה-FXML של הפופאפ
+//    FXMLLoader loader = new FXMLLoader(getClass().getResource("/components/left/commands/filter/FilterPopup.fxml"));
+//    Parent root = loader.load();
+//
+//    // קבל את הבקר של הפופאפ
+//    FilterPopupController filterPopupController = loader.getController();
+//    List<Character> colsList = colsStringToCharList(filterColumnsTextField.getText());
+//    String rangeDefinition = filterRangeTextField.getText();
+//    List<Set<EffectiveValue>> values = mainController.getDistinctValuesOfMultipleColsInRange(colsList, rangeDefinition);
+//    List<Map<String, EffectiveValue>> stringToEffectiveValueMapList = getStringToEffectiveValueMapList(values);
+//    List<Set<String>> valuesSet = getStringEffectiveValueSetList(stringToEffectiveValueMapList);
+//
+//    for(Set<String> tmpSet : valuesSet) {
+//        filterPopupController.initializeFilterListView(tmpSet);
+//        Stage popupStage = new Stage();
+//        popupStage.setTitle("Filter Values");
+//        popupStage.setScene(new Scene(root));
+//        popupStage.initModality(Modality.APPLICATION_MODAL); // פופאפ במצב מודאלי
+//
+//        // הצגת הפופאפ וחסימת חלון ראשי עד לסגירת הפופאפ
+//        popupStage.showAndWait();
+//    }
+//
+//
+//    // יצירת הבמה (Stage) לפופאפ
+//
+//    // קבלת הערכים שנבחרו מהפופאפ לאחר שהמשתמש סיים את הבחירה
+//    //ObservableList<String> selectedItems = filterPopupController.getSelectedItems();
+//   // List<Set<String>> selectedItems = filterPopupController.getSelectedItems();
+//
+////  TODO  System.out.println("Selected items from popup: " + selectedItems);
+////    Set<EffectiveValue> selectedValues = selectedItems.stream()
+////            .map(stringToEffectiveValueMap::get)
+////            .collect(Collectors.toSet());
+//
+//    // תוכל לקרוא לפונקציה filterData עם הערכים שנבחרו
+//   // TODO return mainController.filterData(selectedValues, "A", rangeDefinition);
+//return null;
+//}
+
+    private List<Map<String, EffectiveValue>> getStringToEffectiveValueMapList(List<Set<EffectiveValue>> values) {
+        List<Map<String, EffectiveValue>> effectiveValueList = new ArrayList<>();
+        Map<String, EffectiveValue> stringToEffectiveValueMap ;
+        for (Set<EffectiveValue> value : values) {
+            stringToEffectiveValueMap=getStringToEffectiveValueMap(value);
+            effectiveValueList.add(stringToEffectiveValueMap);
+        }
+        return effectiveValueList;
+    }
+    public List<Set<String>> getStringEffectiveValueSetList(List<Map<String, EffectiveValue>> values) {
+        List<Set<String>> effectiveValueList = new ArrayList<>();
+        for (Map<String, EffectiveValue> stringToEffectiveValueMap : values) {
+            Set<String> stringSet = stringToEffectiveValueMap.keySet();
+            effectiveValueList.add(stringSet);
+        }
+        return effectiveValueList;
     }
 
     public Map<String, EffectiveValue> getStringToEffectiveValueMap(Set<EffectiveValue> values) {

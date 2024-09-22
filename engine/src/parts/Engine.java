@@ -9,6 +9,7 @@ import parts.sheet.cell.expression.effectiveValue.EffectiveValue;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public interface Engine {
@@ -58,6 +59,10 @@ public interface Engine {
     public void checkIfSheetHasBeenLoaded() throws SheetNotLoadedException;
 
     public int getNumberOfColumns();
+
+    public Map<String,Set<EffectiveValue>> getDistinctValuesOfMultipleColsInRange(List<Character> columnsToFilterBy, String rangeDefinition) throws IllegalArgumentException;
+
+    public SheetDTO getFilteredSheetDTOFromMultipleCols(Map<String,Set<EffectiveValue>> filteredValues,String rangeDefinition) throws IllegalArgumentException;
 }
 
 

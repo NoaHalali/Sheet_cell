@@ -1,5 +1,6 @@
 package components.left.commands.filter;
 
+
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -7,16 +8,15 @@ import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
 import javafx.scene.control.cell.CheckBoxListCell;
 import javafx.stage.Stage;
-import parts.sheet.cell.expression.effectiveValue.EffectiveValue;
 
 import java.util.Set;
 
 public class FilterPopupController {
     @FXML
     private ListView<String> filterListView;
-
+    private boolean isSelected = false;
     private ObservableList<String> selectedItems = FXCollections.observableArrayList();
-
+    private ObservableList<String> items ;
 //    public void initialize() {
 //        // אתחול ListView לסינון
 //        initializeFilterListView();
@@ -24,7 +24,7 @@ public class FilterPopupController {
 
     public void initializeFilterListView(Set<String> values) {
         // יצירת רשימה של פריטים מהערכים שהועברו ל-Set
-        ObservableList<String> items = FXCollections.observableArrayList(values);
+         items = FXCollections.observableArrayList(values);
 
         // הגדרת רשימת הפריטים ל-ListView
         filterListView.setItems(items);
@@ -51,13 +51,16 @@ public class FilterPopupController {
     private void applyFilterAction() {
         // כאן תוכל לבצע את הלוגיקה לסינון
         System.out.println("Selected items: " + selectedItems);
-
+        isSelected=true;
         // סגור את הפופאפ
         Stage stage = (Stage) filterListView.getScene().getWindow();
         stage.close();
     }
 
     public ObservableList<String> getSelectedItems() {
-        return selectedItems;
+        if(isSelected) {
+            return selectedItems;
+        }
+        return items;
     }
 }

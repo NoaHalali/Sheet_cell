@@ -369,9 +369,13 @@ public class AppController {
 //    }
 
 
-    public SheetDTO filterData(Set<EffectiveValue> selectedValues, String col, String rangeDefinition) {
-        return engine.getFilteredSheetDTO(selectedValues, col, rangeDefinition);
+//    public SheetDTO filterData(Set<EffectiveValue> selectedValues, String col, String rangeDefinition) {
+//        return engine.getFilteredSheetDTO(selectedValues, col, rangeDefinition);
+//    }
+    public SheetDTO filterData(Map<String,Set<EffectiveValue>> selectedValues, String rangeDefinition) {
+        return engine.getFilteredSheetDTOFromMultipleCols(selectedValues, rangeDefinition);
     }
+
 
     public Set<EffectiveValue> getDistinctValuesOfColInRange(String col,String rangeDefinition){
 //        Set<String>strValues=new HashSet<String>();
@@ -381,6 +385,10 @@ public class AppController {
 //                .collect(Collectors.toSet()); // המרת הזרם לסט
         return values;
     }
+    public Map<String,Set<EffectiveValue>> getDistinctValuesOfMultipleColsInRange(List<Character> cols,String rangeDefinition){
+        return engine.getDistinctValuesOfMultipleColsInRange(cols,rangeDefinition);
+    }
+
 
 
     public void setColumnWidth(int width) throws IllegalArgumentException {

@@ -10,6 +10,7 @@ import parts.sheet.cell.coordinate.CoordinateImpl;
 import parts.sheet.cell.expression.Expression;
 import parts.sheet.cell.expression.effectiveValue.EffectiveValue;
 
+import javax.print.DocFlavor;
 import java.io.*;
 import java.util.*;
 
@@ -488,7 +489,19 @@ public class Sheet implements Serializable {
             }
         }
     }
-    public Set<EffectiveValue> getDistinctValuesOfColInRange(String col, Coordinate rangeTopLeftCoord, Coordinate rangeBottomRightCoord){
+
+
+    public Map<String,Set<EffectiveValue>> getDistinctValuesOfColumnsInRange(List<Character> columnsToSortBy, Coordinate leftRangeColChar, Coordinate rightRangeColChar){
+        Map<String,Set<EffectiveValue>> distinctValuesFromCols =new HashMap<>();
+        Set<EffectiveValue> tmpSet;
+        for (char colChar : columnsToSortBy) {
+            String colString = String.valueOf(colChar);
+            tmpSet= getDistinctValuesOfSingleColInRange(colString, leftRangeColChar,  rightRangeColChar);
+            distinctValuesFromCols.put(colString,tmpSet);
+        }
+        return distinctValuesFromCols;
+    }
+    public Set<EffectiveValue> getDistinctValuesOfSingleColInRange(String col, Coordinate rangeTopLeftCoord, Coordinate rangeBottomRightCoord){
         Set<EffectiveValue> effectiveValues = new HashSet<EffectiveValue>();
         int topRow = rangeTopLeftCoord.getRow();
         int bottomRow = rangeBottomRightCoord.getRow();
@@ -504,10 +517,19 @@ public class Sheet implements Serializable {
 
         return effectiveValues;
     }
-
-    public Sheet getFilteredSheetByColumnInRange( Set<EffectiveValue> valuesToMatch, String colStr,Coordinate topLeftCoord, Coordinate bottomRightCoord) {
-        // שכפול הגיליון הנוכחי
+    public Sheet getFilteredSheetByMultipleColumnsInRange(Map<String,Set<EffectiveValue>> valuesToMatch,Coordinate topLeftCoord, Coordinate bottomRightCoord){
+        Set<EffectiveValue> valueSet;
         Sheet filteredSheet = this.cloneSheet();
+        for (String valuesStrKey : valuesToMatch.keySet()) {
+            valueSet=valuesToMatch.get(valuesStrKey);
+            filteredSheet.getFilteredSheetBySingleColumnInRange(valueSet,valuesStrKey,topLeftCoord,bottomRightCoord);
+        }
+        return filteredSheet;
+    }
+
+    public Sheet getFilteredSheetBySingleColumnInRange( Set<EffectiveValue> valuesToMatch, String colStr,Coordinate topLeftCoord, Coordinate bottomRightCoord) {
+        // שכפול הגיליון הנוכחי
+        //Sheet filteredSheet = this.cloneSheet();
 
         int colIndex =CoordinateImpl.columnStringToIndex(colStr);
 
@@ -526,7 +548,7 @@ public class Sheet implements Serializable {
 
             // נתחום את העמודות וניקח רק את התאים הנמצאים בטווח של העמודות
             for (int col = topLeftCoord.getCol(); col <= bottomRightCoord.getCol(); col++) {
-                Cell cell = filteredSheet.getCellsMatrix()[row - 1][col - 1];
+                Cell cell = this.getCellsMatrix()[row - 1][col - 1];
 
                 // בדיקה אם התא קיים ואם הערך מתאים לאחד הערכים מהרשימה
                 if (cell != null && valuesToMatch.contains(cell.getEffectiveValue())) {
@@ -542,11 +564,11 @@ public class Sheet implements Serializable {
         }
 
         // עדכון המטריצה של התאים בגיליון המשוכפל עם השורות המסוננות
-        filteredSheet.updateCellsMatrix(filteredRows, topLeftCoord, bottomRightCoord);
-        resetRemainingCells(filteredSheet, topLeftCoord, bottomRightCoord, filteredRows);
+        this.updateCellsMatrix(filteredRows, topLeftCoord, bottomRightCoord);
+        resetRemainingCells(this, topLeftCoord, bottomRightCoord, filteredRows);
 
         // החזרת הגיליון המסונן
-        return filteredSheet;
+        return this;
     }
 
     private void resetRemainingCells(Sheet filteredSheet, Coordinate topLeft, Coordinate bottomRight, List<SheetRow> filteredRows) {
