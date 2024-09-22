@@ -5,10 +5,18 @@
 
 /* Button Styling */
 .button {
-    -fx-background-color: #87cefa;
+    -fx-background-color: #1559bf;
     -fx-text-fill: navy;
     -fx-font-size: 16px;
     -fx-border-radius: 5;
+}
+
+/*.vbox, .hbox, .grid-pane, .scroll-pane {*/
+/*    -fx-background-color: #1e1e1e;*/
+/*}*/
+
+.subComponent {
+    -fx-background-color: #b2d1f2; /* צבע הרקע של Theme 2 */
 }
 
 /* Label Styling */
@@ -17,3 +25,9 @@
     -fx-font-size: 16px;
     -fx-text-fill: navy;
 }
+
+.list-cell {
+    -fx-text-fill: white; /* צבע טקסט */
+    -fx-background-color: #2b2b2b; /* רקע תואם */
+}
+

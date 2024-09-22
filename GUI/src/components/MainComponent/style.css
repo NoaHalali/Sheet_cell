@@ -6,3 +6,8 @@
     -fx-wrap-text: false;       /* ימנע שבירת שורה */
     -fx-max-width: Infinity;    /* מאפשר טקסט ארוך להתכווץ */
 }
+
+.list-cell {
+    -fx-text-fill: white; /* צבע טקסט */
+    -fx-background-color: #2b2b2b; /* רקע תואם */
+}

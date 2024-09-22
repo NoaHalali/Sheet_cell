@@ -1,0 +1,7 @@
+.root {
+    -fx-background-color: #2b2b2b; /* רקע אחיד לכל המסך */
+}
+
+.vbox, .hbox, .grid-pane, .border-pane, .scroll-pane {
+    -fx-background-color: #2b2b2b; /* רקע אחיד לכל הקומפוננטות */
+}

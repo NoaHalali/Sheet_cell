@@ -12,7 +12,16 @@
 <?import javafx.scene.text.Font?>
 
 <ScrollPane fitToWidth="true" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="components.left.commands.CommandsController">
-    <VBox spacing="7.0" style="-fx-background-color: #5a9ad3;">
+    <VBox spacing="7.0" styleClass="subComponent">
+      <HBox alignment="CENTER" layoutX="20.0" layoutY="205.0" prefHeight="0.0" prefWidth="303.0">
+         <children>
+            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="27.0" prefWidth="127.0" text="Commands">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+            </Label>
+         </children>
+      </HBox>
         <HBox prefHeight="5.0" prefWidth="303.0" spacing="5.0">
             <children>
                 <!-- כפתור להגדרת רוחב עמודות עם פופ-אפ -->
@@ -45,7 +54,7 @@
         <Separator prefWidth="200.0" />
       <HBox alignment="CENTER" prefHeight="0.0" prefWidth="303.0">
          <children>
-            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="17.0" prefWidth="45.0" style="-fx-background-color: #6c5ad3;" text="Sort">
+            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="17.0" prefWidth="45.0" text="Sort">
                <font>
                   <Font name="System Bold Italic" size="13.0" />
                </font>
@@ -66,7 +75,7 @@
       <Separator layoutX="20.0" layoutY="195.0" prefWidth="200.0" />
       <HBox alignment="CENTER" layoutX="20.0" layoutY="205.0" prefHeight="0.0" prefWidth="303.0">
          <children>
-            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="17.0" prefWidth="45.0" style="-fx-background-color: #6c5ad3;" text="Filter">
+            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="17.0" prefWidth="45.0" text="Filter">
                <font>
                   <Font name="System Bold Italic" size="13.0" />
                </font>

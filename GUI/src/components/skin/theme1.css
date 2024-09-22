@@ -10,9 +10,13 @@
     -fx-background-color: #1e1e1e; /* צבע כהה כרקע */
 }
 
-.vbox, .hbox, .grid-pane {
-    -fx-background-color: transparent; /* ודא שרקע הרכיבים הללו שקוף */
+.subComponent {
+    -fx-background-color: #2b2b2b; /* צבע הרקע של Theme 1 */
 }
+/*.vbox, .hbox, .grid-pane, .scroll-pane {*/
+/*    -fx-background-color: #2b2b2b;*/
+/*}*/
+
 /* Button Styling */
 .button {
     -fx-background-color: #3c3f41;
@@ -26,4 +30,9 @@
     -fx-font-family: "Verdana";
     -fx-font-size: 14px;
     -fx-text-fill: #777777;
+}
+
+.list-cell {
+    -fx-text-fill: white; /* צבע טקסט */
+    -fx-background-color: #2b2b2b; /* רקע תואם */
 }

@@ -22,12 +22,17 @@ public class Main extends Application {
 
         // יצירת סצנה
         Scene scene = new Scene(root, 1500, 700);
+
+        // הוספת קובץ ה-CSS
+        scene.getStylesheets().add(getClass().getResource("/main.css").toExternalForm()); // כאן מוסיפים את ה-CSS
+
         primaryStage.setScene(scene);
         controller.setScene(scene);  // העברת הסצנה ל-AppController לשימוש ב-SkinSelector
 
         primaryStage.setTitle("Shticell");
         primaryStage.show();
     }
+
 
     public static void main(String[] args) {
         Thread.currentThread().setName("main");
