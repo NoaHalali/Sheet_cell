@@ -11,6 +11,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
+<?import javafx.scene.control.Slider?>
 <ScrollPane fitToWidth="true" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="components.left.commands.CommandsController">
     <VBox spacing="7.0" styleClass="subComponent">
       <HBox alignment="CENTER" layoutX="20.0" layoutY="205.0" prefHeight="0.0" prefWidth="303.0">
@@ -50,6 +51,46 @@
 
         <!-- ביטול עיצוב תא מסוים -->
         <Button fx:id="resetCellStyleButton" onAction="#resetCellStyleAction" text="Reset Cell Style" />
+
+        <Separator prefWidth="200.0" />
+
+
+        <Separator prefWidth="200.0" />
+
+        <!-- What If Section -->
+        <HBox alignment="CENTER" prefHeight="0.0" prefWidth="303.0">
+            <children>
+                <Label alignment="CENTER" contentDisplay="CENTER" text="What If">
+                    <font>
+                        <Font name="System Bold Italic" size="13.0" />
+                    </font>
+                </Label>
+            </children>
+        </HBox>
+
+        <VBox fx:id="setWhatIfSettingsVBox" spacing="10.0">
+            <HBox alignment="CENTER_LEFT" spacing="5">
+                <Label  text="Minimum value:" />
+                <TextField fx:id="whatIfMinimumTextField" promptText="Please enter number" />
+            </HBox>
+            <HBox alignment="CENTER_LEFT" spacing="5">
+                <Label text="Maximum value:" />
+                <TextField fx:id="whatIfMaximumTextField" promptText="Please enter number" />
+            </HBox>
+            <Button fx:id="calculateWhatIfButton" onAction="#handleCalculateWhatIf" text="Calculate What If" />
+        </VBox>
+
+
+        <VBox fx:id="SliderSettingsVBox" spacing="10.0">
+            <HBox spacing="10.0">
+                <Label fx:id="minimumValueSliderLabel" text="0" />
+                <Slider fx:id="whatIfSlider"  />
+                <Label fx:id="maximumValueSliderLabel" text="100" />
+            </HBox>
+            <Button fx:id="exitWhatIfModeButton" text="Exit What If Mode" onAction="#handleExitWhatIfMode" />
+        </VBox>
+
+
 
         <Separator prefWidth="200.0" />
       <HBox alignment="CENTER" prefHeight="0.0" prefWidth="303.0">
