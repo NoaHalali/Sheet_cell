@@ -440,4 +440,8 @@ public class TableController {
     public int getFocusedColumnWidth() {
         return (int) dynamicGridPane.getColumnConstraints().get(currentColumnIndex).getPrefWidth();
     }
+    public Coordinate getFocusedCoord(){
+        return currentlyFocusedCoord;
+    }
+
 }

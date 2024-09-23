@@ -8,6 +8,7 @@ import parts.sheet.cell.coordinate.Coordinate;
 import parts.sheet.Sheet;
 import parts.sheet.cell.coordinate.CoordinateImpl;
 import parts.sheet.cell.expression.effectiveValue.EffectiveValue;
+import parts.sheet.cell.expression.impl.NumberExpression;
 
 import java.io.*;
 import java.util.LinkedList;
@@ -24,6 +25,7 @@ import java.io.FileOutputStream;
 
 public class EngineImpl implements Engine {
     private Sheet currentSheet = null;
+    public Sheet whatIfSheet=null;
     private FileManager fileManager = new FileManager();
     private List <Version> versionsList = new LinkedList<Version>();
     private static final String SHEET_NOT_LOADED_MESSAGE = "Sheet is not loaded. Please load a sheet before attempting to access it.";
@@ -268,6 +270,12 @@ public class EngineImpl implements Engine {
         if (!sheetLoadad()) {
             throw new SheetNotLoadedException(SHEET_NOT_LOADED_MESSAGE);
         }
+    }
+    @Override
+    public SheetDTO calculateWhatIfValueForCell(double value,Coordinate coord){
+        Cell cell =whatIfSheet.getCellByCoord(coord);
+        cell.setExpression(new NumberExpression(value));
+        return whatIfSheet.toSheetDTO();
     }
 
     public int getNumberOfColumns(){

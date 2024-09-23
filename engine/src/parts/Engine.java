@@ -63,6 +63,8 @@ public interface Engine {
     public Map<String,Set<EffectiveValue>> getDistinctValuesOfMultipleColsInRange(List<Character> columnsToFilterBy, String rangeDefinition) throws IllegalArgumentException;
 
     public SheetDTO getFilteredSheetDTOFromMultipleCols(Map<String,Set<EffectiveValue>> filteredValues,String rangeDefinition) throws IllegalArgumentException;
+
+    public SheetDTO calculateWhatIfValueForCell(double value,Coordinate coord);
 }
 
 

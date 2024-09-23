@@ -90,12 +90,25 @@ public class Range implements Serializable {
          }
     }
     public static Coordinate[] parseRange(String rangeDefinition) {
+        if (rangeDefinition == null || rangeDefinition.trim().isEmpty()) {
+            throw new IllegalArgumentException("Range definition cannot be null or empty.");
+        }
         String[] parts = rangeDefinition.split("\\.\\.");
-        Coordinate topLeftCoord = CoordinateImpl.parseCoordinate(parts[0]);
-        Coordinate bottomRightCoord = CoordinateImpl.parseCoordinate(parts[1]);
+        // Ensure there are exactly two parts after the split
+        if (parts.length != 2) {
+            throw new IllegalArgumentException("Invalid range format. The range must contain two coordinates separated by '..'. Example: 'A1..B2'.");
+        }
+        try {
+            Coordinate topLeftCoord = CoordinateImpl.parseCoordinate(parts[0]);
+            Coordinate bottomRightCoord = CoordinateImpl.parseCoordinate(parts[1]);
+            return new Coordinate[] {topLeftCoord, bottomRightCoord};
+        }
+        catch (Exception e) {
+            throw new IllegalArgumentException("Invalid range definition. Range must be seperated by 2 valid coordinates");
+        }
 
-        // מחזיר מערך עם שתי הקואורדינטות
-        return new Coordinate[] {topLeftCoord, bottomRightCoord};
+
+
     }
 
 

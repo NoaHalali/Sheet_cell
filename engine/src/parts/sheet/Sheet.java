@@ -491,12 +491,13 @@ public class Sheet implements Serializable {
     }
 
 
-    public Map<String,Set<EffectiveValue>> getDistinctValuesOfColumnsInRange(List<Character> columnsToSortBy, Coordinate leftRangeColChar, Coordinate rightRangeColChar){
+    public Map<String,Set<EffectiveValue>> getDistinctValuesOfColumnsInRange(List<Character> columnsToSortBy, Coordinate leftRangeCoord, Coordinate rightRangeCoord){
         Map<String,Set<EffectiveValue>> distinctValuesFromCols =new HashMap<>();
+        validateSelectedColumnsInRange(columnsToSortBy, leftRangeCoord.getColChar(), rightRangeCoord.getColChar());
         Set<EffectiveValue> tmpSet;
         for (char colChar : columnsToSortBy) {
             String colString = String.valueOf(colChar);
-            tmpSet= getDistinctValuesOfSingleColInRange(colString, leftRangeColChar,  rightRangeColChar);
+            tmpSet= getDistinctValuesOfSingleColInRange(colString, leftRangeCoord,  rightRangeCoord);
             distinctValuesFromCols.put(colString,tmpSet);
         }
         return distinctValuesFromCols;

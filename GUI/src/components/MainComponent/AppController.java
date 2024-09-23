@@ -388,6 +388,12 @@ public class AppController {
     public Map<String,Set<EffectiveValue>> getDistinctValuesOfMultipleColsInRange(List<Character> cols,String rangeDefinition){
         return engine.getDistinctValuesOfMultipleColsInRange(cols,rangeDefinition);
     }
+    public void calculateWhatIfValueForCell(double value){
+        SheetDTO sheet=engine.calculateWhatIfValueForCell(value, tableController.getFocusedCoord());
+        setCells(sheet);
+
+
+    }
 
 
 

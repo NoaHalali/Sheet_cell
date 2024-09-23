@@ -14,6 +14,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -29,6 +30,7 @@ public class CommandsController {
 
     private AppController mainController;
     private DialogManager dialogManager = new DialogManager();
+    private SimpleBooleanProperty showWhatIfSlider = new SimpleBooleanProperty(false);
 
     //@FXML private Button setColumnRowWidthButton;
     @FXML private Button setColumnWidthButton;
@@ -45,9 +47,19 @@ public class CommandsController {
     @FXML private Button displaySortButton;
     @FXML private TextField sortRangeTextField;
     @FXML private TextField sortColumnsTextField;
+    @FXML private TextField whatIfMinimumTextField;
+    @FXML private TextField whatIfMaximumTextField;
+    @FXML private Button calculateWhatIfButton;
+//    @FXML private Label minimumSelectionNumberLabel;
+//    @FXML private Label maximumSelectionNumberLabel;
 
     @FXML private TextField filterRangeTextField;
     @FXML private TextField filterColumnsTextField;
+    @FXML private Slider whatIfSlider;
+    @FXML private Label minimumValueSliderLabel;
+    @FXML private Label maximumValueSliderLabel;
+    @FXML private VBox setWhatIfSettingsVBox;
+    @FXML private VBox SliderSettingsVBox;
 
     @FXML private Button calcValuesToFilterButton;
     @FXML private ListView<String> filterListView; // הוספת ListView לסינון
@@ -67,6 +79,15 @@ public class CommandsController {
         backgroundColorPicker.disableProperty().bind(cellSelected.not());
         applyTextColorButton.disableProperty().bind(cellSelected.not());
         applyBackgroundColorButton.disableProperty().bind(cellSelected.not());
+        calculateWhatIfButton.disableProperty().bind(cellSelected.not());
+        SliderSettingsVBox.visibleProperty().bind(showWhatIfSlider);
+        SliderSettingsVBox.managedProperty().bind(showWhatIfSlider);
+
+        setWhatIfSettingsVBox.visibleProperty().bind(showWhatIfSlider.not());
+        setWhatIfSettingsVBox.managedProperty().bind(showWhatIfSlider.not());
+        whatIfSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
+                handleCalculateWhatIf();
+        });
 
 
         // אתחול ListView לסינון
@@ -180,6 +201,7 @@ public class CommandsController {
 
     private List<Character> colsStringToCharList(String input) {
         String[] charArray = input.toUpperCase().split(",");
+        validateColsSeperatedInput(input);
         List<Character> charList = new ArrayList<>();
 
         for (String s : charArray) {
@@ -189,6 +211,26 @@ public class CommandsController {
         }
         return charList;
     }
+    public void validateColsSeperatedInput(String input) throws IllegalArgumentException {
+        if (input == null || input.trim().isEmpty()) {
+            throw new IllegalArgumentException(
+                    "Input cannot be empty."
+            );
+        }
+        // Regular expression to validate letters (lowercase or uppercase) separated by commas
+        String regex = "^[a-zA-Z](,[a-zA-Z])*$";
+
+        // Check if the input matches the required format
+        if (!input.matches(regex)) {
+            throw new IllegalArgumentException(
+                    "Input must be letters (a-z, A-Z) separated by ',' " +
+                            "with no spaces. Example: 'a,b,C' or 'A,B,C'."
+            );
+        }
+
+
+    }
+
 
     @FXML
     private void OnCalcValuesToFilterButtonClicked() {
@@ -198,87 +240,13 @@ public class CommandsController {
 
        }
          catch (Exception e) {
-             e.printStackTrace();
+             //e.printStackTrace();
              StageUtils.showAlert("Error", e.getMessage());
          }
     }
 
 
-//    private SheetDTO openFilterOptionsPopupAndGetFilteredSheet() throws Exception {
-//        // טוען את ה-FXML של הפופאפ
-//        FXMLLoader loader = new FXMLLoader(getClass().getResource("/components/left/commands/filter/FilterPopup.fxml"));
-//        Parent root = loader.load();
-//
-//        // קבל את הבקר של הפופאפ
-//        FilterPopupController filterPopupController = loader.getController();
-//        String col = filterColumnsTextField.getText();
-//        String rangeDefinition = filterRangeTextField.getText();
-//        Set<EffectiveValue> values = mainController.getDistinctValuesOfColInRange(col, rangeDefinition);
-//        Map<String, EffectiveValue> stringToEffectiveValueMap = getStringToEffectiveValueMap(values);
-//        Set<String> valuesSet = stringToEffectiveValueMap.keySet();
-//        filterPopupController.initializeFilterListView(valuesSet);
-//
-//        // יצירת הבמה (Stage) לפופאפ
-//        Stage popupStage = new Stage();
-//        popupStage.setTitle("Filter Values");
-//        popupStage.setScene(new Scene(root));
-//        popupStage.initModality(Modality.APPLICATION_MODAL); // פופאפ במצב מודאלי
-//
-//        // הצגת הפופאפ וחסימת חלון ראשי עד לסגירת הפופאפ
-//        popupStage.showAndWait();
-//
-//        // קבלת הערכים שנבחרו מהפופאפ לאחר שהמשתמש סיים את הבחירה
-//        //ObservableList<String> selectedItems = filterPopupController.getSelectedItems();
-//        List<Set<String>> selectedItems = filterPopupController.getSelectedItems();
-//
-//        System.out.println("Selected items from popup: " + selectedItems);
-//        Set<EffectiveValue> selectedValues = selectedItems.stream()
-//                .map(stringToEffectiveValueMap::get)
-//                .collect(Collectors.toSet());
-//
-//        // תוכל לקרוא לפונקציה filterData עם הערכים שנבחרו
-//        return mainController.filterData(selectedValues, col, rangeDefinition);
-//
-//    }
 
-
-
-//    private SheetDTO openFilterOptionsPopupAndGetFilteredSheet() throws Exception {
-//        // טוען את ה-FXML של הפופאפ
-//        FXMLLoader loader = new FXMLLoader(getClass().getResource("/components/left/commands/filter/FilterPopup.fxml"));
-//        Parent root = loader.load();
-//
-//        // קבל את הבקר של הפופאפ
-//        FilterPopupController filterPopupController = loader.getController();
-//        String col = filterColumnsTextField.getText();
-//        String rangeDefinition = filterRangeTextField.getText();
-//        Set<EffectiveValue> values = mainController.getDistinctValuesOfColInRange(col, rangeDefinition);
-//        Map<String, EffectiveValue> stringToEffectiveValueMap = getStringToEffectiveValueMap(values);
-//        Set<String> valuesSet = stringToEffectiveValueMap.keySet();
-//        filterPopupController.initializeFilterListView(valuesSet);
-//
-//        // יצירת הבמה (Stage) לפופאפ
-//        Stage popupStage = new Stage();
-//        popupStage.setTitle("Filter Values");
-//        popupStage.setScene(new Scene(root));
-//        popupStage.initModality(Modality.APPLICATION_MODAL); // פופאפ במצב מודאלי
-//
-//        // הצגת הפופאפ וחסימת חלון ראשי עד לסגירת הפופאפ
-//        popupStage.showAndWait();
-//
-//        // קבלת הערכים שנבחרו מהפופאפ לאחר שהמשתמש סיים את הבחירה
-//        ObservableList<String> selectedItems = filterPopupController.getSelectedItems();
-//
-//
-//        System.out.println("Selected items from popup: " + selectedItems);
-//        Set<EffectiveValue> selectedValues = selectedItems.stream()
-//                .map(stringToEffectiveValueMap::get)
-//                .collect(Collectors.toSet());
-//
-//        // תוכל לקרוא לפונקציה filterData עם הערכים שנבחרו
-//        return mainController.filterData(selectedValues, col, rangeDefinition);
-//
-//    }
 
 private SheetDTO openFilterOptionsPopupAndGetFilteredSheet() throws Exception {
     List<Character> colsList = colsStringToCharList(filterColumnsTextField.getText());
@@ -328,64 +296,7 @@ private SheetDTO openFilterOptionsPopupAndGetFilteredSheet() throws Exception {
         return filteredValues;
     }
 
-//    private SheetDTO openFilterOptionsPopupAndGetFilteredSheet() throws Exception {
-//    // טוען את ה-FXML של הפופאפ
-//    FXMLLoader loader = new FXMLLoader(getClass().getResource("/components/left/commands/filter/FilterPopup.fxml"));
-//    Parent root = loader.load();
-//
-//    // קבל את הבקר של הפופאפ
-//    FilterPopupController filterPopupController = loader.getController();
-//    List<Character> colsList = colsStringToCharList(filterColumnsTextField.getText());
-//    String rangeDefinition = filterRangeTextField.getText();
-//    List<Set<EffectiveValue>> values = mainController.getDistinctValuesOfMultipleColsInRange(colsList, rangeDefinition);
-//    List<Map<String, EffectiveValue>> stringToEffectiveValueMapList = getStringToEffectiveValueMapList(values);
-//    List<Set<String>> valuesSet = getStringEffectiveValueSetList(stringToEffectiveValueMapList);
-//
-//    for(Set<String> tmpSet : valuesSet) {
-//        filterPopupController.initializeFilterListView(tmpSet);
-//        Stage popupStage = new Stage();
-//        popupStage.setTitle("Filter Values");
-//        popupStage.setScene(new Scene(root));
-//        popupStage.initModality(Modality.APPLICATION_MODAL); // פופאפ במצב מודאלי
-//
-//        // הצגת הפופאפ וחסימת חלון ראשי עד לסגירת הפופאפ
-//        popupStage.showAndWait();
-//    }
-//
-//
-//    // יצירת הבמה (Stage) לפופאפ
-//
-//    // קבלת הערכים שנבחרו מהפופאפ לאחר שהמשתמש סיים את הבחירה
-//    //ObservableList<String> selectedItems = filterPopupController.getSelectedItems();
-//   // List<Set<String>> selectedItems = filterPopupController.getSelectedItems();
-//
-////  TODO  System.out.println("Selected items from popup: " + selectedItems);
-////    Set<EffectiveValue> selectedValues = selectedItems.stream()
-////            .map(stringToEffectiveValueMap::get)
-////            .collect(Collectors.toSet());
-//
-//    // תוכל לקרוא לפונקציה filterData עם הערכים שנבחרו
-//   // TODO return mainController.filterData(selectedValues, "A", rangeDefinition);
-//return null;
-//}
 
-    private List<Map<String, EffectiveValue>> getStringToEffectiveValueMapList(List<Set<EffectiveValue>> values) {
-        List<Map<String, EffectiveValue>> effectiveValueList = new ArrayList<>();
-        Map<String, EffectiveValue> stringToEffectiveValueMap ;
-        for (Set<EffectiveValue> value : values) {
-            stringToEffectiveValueMap=getStringToEffectiveValueMap(value);
-            effectiveValueList.add(stringToEffectiveValueMap);
-        }
-        return effectiveValueList;
-    }
-    public List<Set<String>> getStringEffectiveValueSetList(List<Map<String, EffectiveValue>> values) {
-        List<Set<String>> effectiveValueList = new ArrayList<>();
-        for (Map<String, EffectiveValue> stringToEffectiveValueMap : values) {
-            Set<String> stringSet = stringToEffectiveValueMap.keySet();
-            effectiveValueList.add(stringSet);
-        }
-        return effectiveValueList;
-    }
 
     public Map<String, EffectiveValue> getStringToEffectiveValueMap(Set<EffectiveValue> values) {
         return values.stream()
@@ -441,6 +352,33 @@ private SheetDTO openFilterOptionsPopupAndGetFilteredSheet() throws Exception {
         GraphController graphController = new GraphController();  // אם יש דרך ליצור את זה ב-FXML, עדיף
         graphController.setMainController(mainController);  // העברת ה-mainController ל-GraphController
         graphController.createGraph(xColumn, yColumn);  // יצירת הגרף עם העמודות הנבחרות
+    }
+    @FXML
+    private void handleCalculateWhatIf() {
+        try {
+            double min = Double.parseDouble(whatIfMinimumTextField.getText());
+            double max = Double.parseDouble(whatIfMaximumTextField.getText());
+
+            // Perform your "What If" calculation here
+            showWhatIfSlider.set(true);
+            minimumValueSliderLabel.setText(whatIfMinimumTextField.getText());// Example calculation
+            maximumValueSliderLabel.setText(whatIfMaximumTextField.getText());
+            whatIfSlider.setMin(min);
+            whatIfSlider.setMax(max);
+
+            // Display the result to the user
+
+        } catch (NumberFormatException e) {
+            StageUtils.showAlert("Input Error", "Please enter valid numbers.");
+        }
+    }
+    @FXML
+    private void handlesWhatIfSliderMove() {
+        mainController.calculateWhatIfValueForCell(whatIfSlider.getValue());
+    }
+
+    public void handleExitWhatIfMode() {
+        showWhatIfSlider.set(false);
     }
 
 //    private void createGraph(String xColumn, String yColumn) {
