@@ -596,7 +596,7 @@ public class Sheet implements Serializable {
         //CellDTO[][] cellsMatrix = sheet.getCellsMatrix();
 
         for (int row = 0; row < cellsMatrix.length; row++) {
-            Cell cell = cellsMatrix[row][colIndex];
+            Cell cell = cellsMatrix[row][colIndex-1];
             if (cell != null && cell.isExist() && cell.getEffectiveValue() != null) {
                 columnData.add(cell.toCellDTO()); // הוספת CellDTO לרשימה
             }
