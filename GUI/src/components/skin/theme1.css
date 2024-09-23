@@ -13,9 +13,6 @@
 .subComponent {
     -fx-background-color: #2b2b2b; /* צבע הרקע של Theme 1 */
 }
-/*.vbox, .hbox, .grid-pane, .scroll-pane {*/
-/*    -fx-background-color: #2b2b2b;*/
-/*}*/
 
 /* Button Styling */
 .button {
@@ -32,7 +29,14 @@
     -fx-text-fill: #777777;
 }
 
-.list-cell {
-    -fx-text-fill: white; /* צבע טקסט */
-    -fx-background-color: #2b2b2b; /* רקע תואם */
+
+/* ComboBox popup styling */
+.combo-box-popup .list-view .list-cell:hover {
+    -fx-background-color: #009cbf; /* צבע רקע במצב hover */
 }
+
+.list-cell {
+    -fx-background-color: #FFFFFF; /* צבע לבן */
+    -fx-text-fill: #000000; /* צבע טקסט שחור */
+}
+

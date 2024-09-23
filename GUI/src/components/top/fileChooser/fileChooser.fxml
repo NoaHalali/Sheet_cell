@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<GridPane prefHeight="25.0" prefWidth="463.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="components.top.fileChooser.FileChooserController">
+<GridPane prefHeight="25.0" prefWidth="463.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="components.top.fileChooser.FileChooserController" styleClass="subComponent">
     <!-- הגדרת טורים ב-GridPane -->
     <columnConstraints>
         <ColumnConstraints hgrow="NEVER" maxWidth="120.0" minWidth="60.0" />

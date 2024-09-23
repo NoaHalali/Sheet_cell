@@ -19,7 +19,7 @@ public class SkinSelectorController {
 
     // אתחול הבחירה ב-SkinSelector
     public void initializeSkinSelector() {
-        skinComboBox.getItems().addAll("Default", "Theme 1", "Theme 2", "neoTech");
+        skinComboBox.getItems().addAll("Default", "Theme 1", "Theme 2", "NeoTech");
         skinComboBox.getSelectionModel().selectFirst();
 
         skinComboBox.setOnAction(event -> {
@@ -40,7 +40,7 @@ public class SkinSelectorController {
             case "Theme 2":
                 applyTheme2();
                 break;
-            case "neoTech":
+            case "NeoTech":
                 applyNeoTech();
                 break;
         }
@@ -53,7 +53,7 @@ public class SkinSelectorController {
 
     public void applyDefaultSkin() {
         scene.getStylesheets().clear();
-        scene.getStylesheets().add(getClass().getResource("default.css").toExternalForm());
+        //scene.getStylesheets().add(getClass().getResource("default.css").toExternalForm());
     }
 
     public void applyTheme1() {
@@ -64,6 +64,11 @@ public class SkinSelectorController {
     public void applyTheme2() {
         scene.getStylesheets().clear();
         scene.getStylesheets().add(getClass().getResource("theme2.css").toExternalForm());
+    }
+
+    public void applyClassic() {
+        scene.getStylesheets().clear();
+        scene.getStylesheets().add(getClass().getResource("cyberWave.css").toExternalForm());
     }
 
     public void setMainController(AppController mainController) {
