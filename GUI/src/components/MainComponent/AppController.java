@@ -418,11 +418,20 @@ public class AppController {
     }
 
 
-    public List<CellDTO> getColumnData(String colStr) {
-        return engine.getColumnData(colStr);
+    public List<CellDTO> getColumnDataInRange(String rangeDefinition) {
+        return engine.getColumnDataInRange(rangeDefinition);
     }
 
-    public int getNumberOfColumns() {
-        return engine.getNumberOfColumns();
-    }
+    //public int getNumberOfColumns() {
+   //     return engine.getNumberOfColumns();
+    //}
+
+//    public String[] createColumnsArray() {
+//        int numOfColumns = engine.getNumberOfColumns();
+//        String[] columnNames = new String[numOfColumns];
+//        for (int i = 0; i < numOfColumns; i++) {
+//            columnNames[i] = String.valueOf((char) ('A' + i));
+//        }
+//        return columnNames;
+//    }
 }

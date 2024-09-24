@@ -592,13 +592,15 @@ public class Sheet implements Serializable {
         }
     }
 
-    public List<CellDTO> getColumnCellsInRange(String colStr, Coordinate topLeftCoord, Coordinate bottomRightCoord) {
+    public List<CellDTO> getColumnCellsInRange(Coordinate topLeftCoord, Coordinate bottomRightCoord) throws IllegalArgumentException {
 
         Range.isValidRange(topLeftCoord, bottomRightCoord);
-        checkIfRangeInColumn(colStr, topLeftCoord, bottomRightCoord);
-        checkIfRangeInColumn(colStr, topLeftCoord, bottomRightCoord);
+        checkIfRangeInOneColumn(topLeftCoord, bottomRightCoord);
+        //checkIfRangeInColumn(colStr, topLeftCoord, bottomRightCoord);
 
-        int colIndex = CoordinateImpl.columnStringToIndex(colStr);
+        //int colIndex = CoordinateImpl.columnStringToIndex(colStr);
+        int colIndex = topLeftCoord.getCol();
+        char colChar = topLeftCoord.getColChar();
         List<CellDTO> columnData = new ArrayList<>();
         //CellDTO[][] cellsMatrix = sheet.getCellsMatrix();
         int topRow = topLeftCoord.getRow();
@@ -606,7 +608,8 @@ public class Sheet implements Serializable {
         for (int row = topRow; row <= bottomRow; row++) {
             Cell cell = cellsMatrix[row-1][colIndex-1];
             if (cell == null || !cell.isExist() || cell.getEffectiveValue() == null) {
-                throw new IllegalArgumentException("One or more cells in column" + colStr+ "is empty, and therefore cant create graph from column.");
+                System.out.println(colIndex);
+                throw new IllegalArgumentException("One or more cells in column " +colChar+ " is empty, and therefore cant create graph from column.");
             }
             else {
                 columnData.add(cell.toCellDTO());
@@ -615,12 +618,11 @@ public class Sheet implements Serializable {
         return columnData;
     }
 
-    private void checkIfRangeInColumn(String colStr, Coordinate topLeftCoord, Coordinate bottomRightCoord) throws IllegalArgumentException {
-        char colChar = colStr.charAt(0);
+    private void checkIfRangeInOneColumn(Coordinate topLeftCoord, Coordinate bottomRightCoord) throws IllegalArgumentException {
         char leftRangeColChar = topLeftCoord.getColChar();
         char rightRangeColChar = bottomRightCoord.getColChar();
-        if (colChar != leftRangeColChar || colChar != rightRangeColChar) {
-            throw new IllegalArgumentException("Column " + colChar + " is not in the selected range.");
+        if (leftRangeColChar != rightRangeColChar) {
+            throw new IllegalArgumentException("Range must be in one column.");
         }
     }
 

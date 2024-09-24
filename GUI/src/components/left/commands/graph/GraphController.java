@@ -1,9 +1,11 @@
 package components.left.commands.graph;
 import components.MainComponent.AppController;
+import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
+import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import parts.cell.CellDTO;
 
@@ -11,19 +13,56 @@ import java.util.List;
 
 public class GraphController {
 
+//    @FXML
+//    private ComboBox<String> xAxisComboBox;
+//
+//    @FXML
+//    private ComboBox<String> yAxisComboBox;
+
+    @FXML
+    private TextField xRangeTextField;
+
+    @FXML
+    private TextField yRangeTextField;
+
     private AppController mainController;
 
     public void setMainController(AppController mainController) {
         this.mainController = mainController;
     }
+//
+//    public void GraphController( AppController mainController, String xRange, String yRange) {
+//        this.mainController = mainController;
+//
+//
+//    }
+//    public void initializeGraphsController() {
+//
+//        //int numOfColumns = mainController.getNumberOfColumns();
+//        String[] columnsNames = mainController.createColumnsArray();
+//        //dialogManager.showGraphDialog(this::createGraphFromDialog,columnsNames);
+//        xAxisComboBox.setItems(FXCollections.observableArrayList(columnsNames));
+//        yAxisComboBox.setItems(FXCollections.observableArrayList(columnsNames));
+//    }
 
-    public void createGraph(String xColumn, String yColumn) {
+//    @FXML
+//    private void handleCreateGraph() {
+//        //String xColumn = xAxisComboBox.getValue();
+//        //String yColumn = yAxisComboBox.getValue();
+////        String xRange = xColRangeTextField.getText();
+////        String yRange = yColRangeTextField.getText();
+//
+//    }
+
+    public void createGraph(String xRange, String yRange) throws Exception {
         // שליפת הנתונים מהגיליון דרך המנוע
-        //SheetDTO sheet = mainController.getCurrentSheet();
-        List<CellDTO> xData = mainController.getColumnData(xColumn);
-        List<CellDTO> yData = mainController.getColumnData(yColumn);
+        if (xRange.isEmpty() || yRange.isEmpty()) {
+            System.out.println("Please select columns and enter valid ranges.");
+        }
 
-        // וידוא שהעמודות מכילות את אותו מספר נתונים
+        List<CellDTO> xData = mainController.getColumnDataInRange(xRange);
+        List<CellDTO> yData = mainController.getColumnDataInRange(yRange);
+
         if (xData.size() == yData.size()) {
             NumberAxis xAxis = new NumberAxis();
             NumberAxis yAxis = new NumberAxis();
@@ -48,4 +87,30 @@ public class GraphController {
             System.out.println("Mismatch in data sizes between X and Y columns.");
         }
     }
+
+    // פתיחת הדיאלוג
+//    public void openGraphDialog(String[] columns) {
+//        try {
+//            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/components/left/commands/graph/GraphDialog.fxml"));
+//            Parent root = fxmlLoader.load();
+//
+//            GraphsController controller = fxmlLoader.getController();
+//            controller.setMainController(mainController);
+//            controller.setColumns(columns);
+//
+//            Stage stage = new Stage();
+//            stage.setTitle("Select Columns and Ranges for Graph");
+//            stage.setScene(new Scene(root));
+//            stage.show();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//    }
+
+//    // הגדרת העמודות בדיאלוג
+//    private void setColumns(String[] columns) {
+//        xAxisComboBox.setItems(FXCollections.observableArrayList(columns));
+//        yAxisComboBox.setItems(FXCollections.observableArrayList(columns));
+//    }
+
 }

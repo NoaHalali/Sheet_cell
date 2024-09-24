@@ -52,6 +52,8 @@ public class CommandsController {
     @FXML private Button calculateWhatIfButton;
 //    @FXML private Label minimumSelectionNumberLabel;
 //    @FXML private Label maximumSelectionNumberLabel;
+    //@FXML private GridPane graphs;
+   // @FXML private GraphsController graphsController;
 
     @FXML private TextField filterRangeTextField;
     @FXML private TextField filterColumnsTextField;
@@ -60,14 +62,13 @@ public class CommandsController {
     @FXML private Label maximumValueSliderLabel;
     @FXML private VBox setWhatIfSettingsVBox;
     @FXML private VBox SliderSettingsVBox;
-
     @FXML private Button calcValuesToFilterButton;
     @FXML private ListView<String> filterListView; // הוספת ListView לסינון
     @FXML private Button applyFilterButton; // כפתור לסינון
+
+    @FXML private TextField xColRangeTextField;
+    @FXML private TextField yColRangeTextField;
     @FXML private Button createGraphButton;
-
-
-//    private ObservableList<String> selectedItems = FXCollections.observableArrayList(); // רשימת פריטים נבחרים
 
     public void InitializeCommandsController(SimpleBooleanProperty cellSelected, SimpleBooleanProperty rangeSelected,
                                              SimpleBooleanProperty columnSelected, SimpleBooleanProperty rowSelected) {
@@ -82,6 +83,10 @@ public class CommandsController {
         calculateWhatIfButton.disableProperty().bind(cellSelected.not());
         SliderSettingsVBox.visibleProperty().bind(showWhatIfSlider);
         SliderSettingsVBox.managedProperty().bind(showWhatIfSlider);
+//        if (graphsController != null) {
+//            graphsController.setMainController(mainController);
+//            graphsController.initializeGraphsController();
+//        }
 
         setWhatIfSettingsVBox.visibleProperty().bind(showWhatIfSlider.not());
         setWhatIfSettingsVBox.managedProperty().bind(showWhatIfSlider.not());
@@ -89,43 +94,8 @@ public class CommandsController {
                 handleCalculateWhatIf();
         });
 
-
-        // אתחול ListView לסינון
-        //initializeFilterListView();
-
-        //applyFilterButton.setOnAction(event -> applyFilterAction());
     }
 
-    // פונקציה לאתחול ListView לסינון
-//    private void initializeFilterListView() {
-//        // יצירת רשימה של פריטים להוספה ל-ListView
-//        ObservableList<String> items = FXCollections.observableArrayList("Value 1", "Value 2", "Value 3", "Value 4");
-//
-//        // הגדרת רשימת הפריטים ל-ListView
-//        filterListView.setItems(items);
-//
-//        // יצירת CheckBox עבור כל פריט ברשימה
-//        filterListView.setCellFactory(CheckBoxListCell.forListView(item -> {
-//            SimpleBooleanProperty selected = new SimpleBooleanProperty(false);
-//
-//            // הוספת מאזין כדי לעדכן את רשימת הפריטים הנבחרים
-//            selected.addListener((obs, wasSelected, isNowSelected) -> {
-//                if (isNowSelected) {
-//                    selectedItems.add(item);
-//                } else {
-//                    selectedItems.remove(item);
-//                }
-//            });
-//
-//            return selected;
-//        }));
-//    }
-
-//    @FXML
-////    private void applyFilterAction() {
-////        // יישום לוגיקת הסינון לפי הערכים שנבחרו
-////        mainController.filterData(selectedItems);
-////    }
 
     @FXML
     public void setColumnRowWidthAction() {
@@ -167,7 +137,6 @@ public class CommandsController {
     @FXML
     private void displaySortAction() {
         try {
-
             List<Character> colsList = colsStringToCharList(sortColumnsTextField.getText());
             SheetDTO sheet = mainController.getSortedSheetDTO(sortRangeTextField.getText(), colsList);
             previewSheetDTOWithPrevStyleInPopup(sheet,"Sorted Sheet Preview");
@@ -227,8 +196,6 @@ public class CommandsController {
                             "with no spaces. Example: 'a,b,C' or 'A,B,C'."
             );
         }
-
-
     }
 
 
@@ -329,30 +296,39 @@ private SheetDTO openFilterOptionsPopupAndGetFilteredSheet() throws Exception {
                 alignment -> mainController.setColumnAlignment(alignment)  // פונקציה לעדכון יישור עמודה
         );
     }
+//
+//    @FXML
+//    private void handleCreateGraph() {
+//        int numOfColumns = mainController.getNumberOfColumns();
+//
+//        String [] columns = createColumnsArray(numOfColumns);
+//        // מראה את הדיאלוג לבחירת העמודות ליצירת הגרף
+//        dialogManager.showGraphDialog(this::createGraphFromDialog,columns);
+//    }
 
     @FXML
-    private void handleCreateGraph() {
-        int numOfColumns = mainController.getNumberOfColumns();
-
-        String [] columns = createColumnsArray(numOfColumns);
-        // מראה את הדיאלוג לבחירת העמודות ליצירת הגרף
-        dialogManager.showGraphDialog(this::createGraphFromDialog,columns);
-    }
-
-    private String[] createColumnsArray(int numOfColumns) {
-        String[] columnNames = new String[numOfColumns];
-        for (int i = 0; i < numOfColumns; i++) {
-            columnNames[i] = String.valueOf((char) ('A' + i));
+    private void OnCreateGraphButtonCliked()
+    {
+        try {
+            GraphController graphsController = new GraphController();
+            graphsController.setMainController(mainController);
+            String xRange = xColRangeTextField.getText();
+            String yRange = yColRangeTextField.getText();
+            graphsController.createGraph(xRange, yRange);
         }
-        return columnNames;
+        catch (Exception e) {
+            StageUtils.showAlert("Error", e.getMessage());
+        }
     }
 
-    private void createGraphFromDialog(String xColumn, String yColumn) {
-        // נוודא שיש לנו GraphController ונקרא לפונקציה ליצירת הגרף
-        GraphController graphController = new GraphController();  // אם יש דרך ליצור את זה ב-FXML, עדיף
-        graphController.setMainController(mainController);  // העברת ה-mainController ל-GraphController
-        graphController.createGraph(xColumn, yColumn);  // יצירת הגרף עם העמודות הנבחרות
-    }
+
+//    private void createGraphFromDialog(String xColumn, String yColumn) {
+//        // נוודא שיש לנו GraphController ונקרא לפונקציה ליצירת הגרף
+//        GraphController graphController = new GraphController();  // אם יש דרך ליצור את זה ב-FXML, עדיף
+//        graphController.setMainController(mainController);  // העברת ה-mainController ל-GraphController
+//        graphController.createGraph(xColumn, yColumn);  // יצירת הגרף עם העמודות הנבחרות
+//    }
+
     @FXML
     private void handleCalculateWhatIf() {
         try {
@@ -380,83 +356,4 @@ private SheetDTO openFilterOptionsPopupAndGetFilteredSheet() throws Exception {
     public void handleExitWhatIfMode() {
         showWhatIfSlider.set(false);
     }
-
-//    private void createGraph(String xColumn, String yColumn) {
-//
-//        // נשלוף את הנתונים מהעמודות הנבחרות
-//        List<CellDTO> xData = mainController.getColumnData(xColumn);
-//        List<CellDTO> yData = mainController.getColumnData(yColumn);
-//
-//        if (xData.size() == yData.size()) {
-//            // יצירת גרף קווים לדוגמה
-//            NumberAxis xAxis = new NumberAxis();
-//            NumberAxis yAxis = new NumberAxis();
-//            LineChart<Number, Number> lineChart = new LineChart<>(xAxis, yAxis);
-//
-//            XYChart.Series<Number, Number> series = new XYChart.Series<>();
-//            for (int i = 0; i < xData.size(); i++) {
-//                double xValue = xData.get(i).getEffectiveValue().extractValueWithExpectation(Double.class);
-//                double yValue = yData.get(i).getEffectiveValue().extractValueWithExpectation(Double.class);
-//                series.getData().add(new XYChart.Data<>(xValue, yValue));
-//            }
-//
-//            lineChart.getData().add(series);
-//
-//            // הצגת הגרף בחלון חדש
-//            Stage stage = new Stage();
-//            Scene scene = new Scene(lineChart, 800, 600);
-//            stage.setScene(scene);
-//            stage.setTitle("Generated Graph");
-//            stage.show();
-//        } else {
-//            System.out.println("Mismatch in data sizes between X and Y columns.");
-//        }
-//    }
-
-//    private int getColumnIndex(String columnName) {
-//        SheetDTO sheet = mainController.getCurrentSheetDTO();
-//        return sheet.getColumnNames().indexOf(columnName);
-//    }
-
-
-//    @FXML
-//    private void handleCreateGraph() {
-//        try {
-//            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/components/left/commands/graph/GraphDialog.fxml"));
-//            Parent root = fxmlLoader.load();
-//
-//            Stage stage = new Stage();
-//            stage.setTitle("Create Graph");
-//            stage.setScene(new Scene(root));
-//            stage.show();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//    }
-
-//    @FXML
-//    private void handleCreateGraph() {
-//        dialogManager.showGraphDialog(this::openGraphController);  // מראה את דיאלוג הבחירה של העמודות
-//    }
-//
-//    private void openGraphController(String xColumn, String yColumn) {
-//        try {
-//            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/components/left/commands/graph/Graph.fxml"));
-//            Parent root = fxmlLoader.load();
-//
-//            GraphController graphController = fxmlLoader.getController();
-//            graphController.setMainController(mainController);
-//            graphController.createGraph(xColumn, yColumn);  // יצירת הגרף עם העמודות שנבחרו
-//
-//            Stage stage = new Stage();
-//            stage.setTitle("Generated Graph");
-//            stage.setScene(new Scene(root));
-//            stage.show();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//    }
-
-
-
 }

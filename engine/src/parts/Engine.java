@@ -54,7 +54,7 @@ public interface Engine {
 
     public SheetDTO getFilteredSheetDTO(Set<EffectiveValue> filteredValues, String col,String rangeDefinition) throws IllegalArgumentException;
 
-    public List<CellDTO> getColumnDataInRange(String colStr, String rangeDefinition) throws IllegalArgumentException;
+    public List<CellDTO> getColumnDataInRange(String rangeDefinition) throws IllegalArgumentException;
 
     public void checkIfSheetHasBeenLoaded() throws SheetNotLoadedException;
 

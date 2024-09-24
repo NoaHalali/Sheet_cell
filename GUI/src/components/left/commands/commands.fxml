@@ -6,13 +6,13 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.Slider?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<?import javafx.scene.control.Slider?>
-<ScrollPane fitToWidth="true" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="components.left.commands.CommandsController">
+<ScrollPane fitToWidth="true" prefHeight="817.0" prefWidth="338.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="components.left.commands.CommandsController">
     <VBox spacing="7.0" styleClass="subComponent">
       <HBox alignment="CENTER" layoutX="20.0" layoutY="205.0" prefHeight="0.0" prefWidth="303.0">
          <children>
@@ -70,7 +70,7 @@
 
         <VBox fx:id="setWhatIfSettingsVBox" spacing="10.0">
             <HBox alignment="CENTER_LEFT" spacing="5">
-                <Label  text="Minimum value:" />
+                <Label text="Minimum value:" />
                 <TextField fx:id="whatIfMinimumTextField" promptText="Please enter number" />
             </HBox>
             <HBox alignment="CENTER_LEFT" spacing="5">
@@ -84,12 +84,11 @@
         <VBox fx:id="SliderSettingsVBox" spacing="10.0">
             <HBox spacing="10.0">
                 <Label fx:id="minimumValueSliderLabel" text="0" />
-                <Slider fx:id="whatIfSlider"  />
+                <Slider fx:id="whatIfSlider" />
                 <Label fx:id="maximumValueSliderLabel" text="100" />
             </HBox>
-            <Button fx:id="exitWhatIfModeButton" text="Exit What If Mode" onAction="#handleExitWhatIfMode" />
+            <Button fx:id="exitWhatIfModeButton" onAction="#handleExitWhatIfMode" text="Exit What If Mode" />
         </VBox>
-
 
 
         <Separator prefWidth="200.0" />
@@ -135,7 +134,29 @@
         </HBox>
         <Button fx:id="calcValuesToFilterButton" onAction="#OnCalcValuesToFilterButtonClicked" text="Calculate Values to Filter" />
       <Separator layoutX="20.0" layoutY="327.0" prefWidth="200.0" />
-      <Button fx:id="createGraphButton" mnemonicParsing="false" onAction="#handleCreateGraph" text="Create Graph" />
+      <HBox alignment="CENTER" layoutX="20.0" layoutY="446.0" prefHeight="0.0" prefWidth="303.0">
+         <children>
+            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="17.0" prefWidth="45.0" text="Graph">
+               <font>
+                  <Font name="System Bold Italic" size="13.0" />
+               </font>
+            </Label>
+         </children>
+      </HBox>
+      <HBox alignment="CENTER_LEFT" layoutX="20.0" layoutY="472.0" spacing="5">
+         <children>
+            <Label text="X column Range:" />
+            <TextField prefHeight="25.0" prefWidth="193.0" promptText="Enter Range for X (e.g. F2..F5):" fx:id="xColRangeTextField" />
+         </children>
+      </HBox>
+      <HBox layoutX="20.0" layoutY="504.0" spacing="5.0">
+         <children>
+            <Label text="Y column Range:" />
+            <TextField fx:id="yColRangeTextField" prefHeight="25.0" prefWidth="194.0" promptText="Enter Range for X (e.g. G2..G5):" />
+         </children>
+      </HBox>
+      <Button fx:id="createGraphButton" layoutX="20.0" layoutY="536.0" onAction="#OnCreateGraphButtonCliked" text="Create Graph" />
+<!--      <fx:include fx:id="graphs" source="graph/graphs.fxml" />-->
 
         <padding>
             <Insets bottom="5.0" left="10.0" right="10.0" top="5.0" />
