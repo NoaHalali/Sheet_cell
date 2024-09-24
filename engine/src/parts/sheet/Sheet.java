@@ -594,6 +594,8 @@ public class Sheet implements Serializable {
 
     public List<CellDTO> getColumnCellsInRange(Coordinate topLeftCoord, Coordinate bottomRightCoord) throws IllegalArgumentException {
 
+        validateCoordinateBounds(topLeftCoord);
+        validateCoordinateBounds(bottomRightCoord);
         Range.isValidRange(topLeftCoord, bottomRightCoord);
         checkIfRangeInOneColumn(topLeftCoord, bottomRightCoord);
         //checkIfRangeInColumn(colStr, topLeftCoord, bottomRightCoord);

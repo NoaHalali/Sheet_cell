@@ -1,5 +1,6 @@
 package components.left.commands.graph;
 import components.MainComponent.AppController;
+import components.Utils.StageUtils;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.chart.LineChart;
@@ -57,7 +58,7 @@ public class GraphController {
     public void createGraph(String xRange, String yRange) throws Exception {
         // שליפת הנתונים מהגיליון דרך המנוע
         if (xRange.isEmpty() || yRange.isEmpty()) {
-            System.out.println("Please select columns and enter valid ranges.");
+            throw new IllegalArgumentException("Please enter valid ranges.");
         }
 
         List<CellDTO> xData = mainController.getColumnDataInRange(xRange);
@@ -84,7 +85,7 @@ public class GraphController {
             stage.setTitle("Generated Graph");
             stage.show();
         } else {
-            System.out.println("Mismatch in data sizes between X and Y columns.");
+            throw new IllegalArgumentException("Mismatch in data sizes between X and Y columns.");
         }
     }
 
