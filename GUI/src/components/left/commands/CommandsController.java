@@ -325,6 +325,7 @@ private SheetDTO openFilterOptionsPopupAndGetFilteredSheet() throws Exception {
         }
         catch (Exception e) {
             StageUtils.showAlert("Error", e.getMessage());
+            e.printStackTrace();
         }
     }
 
