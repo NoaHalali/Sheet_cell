@@ -267,11 +267,21 @@ public class EngineImpl implements Engine {
         return currentSheet.getColumnCellsInRange(topCoord, bottomCoord);
     }
 
+
     @Override
     public void checkIfSheetHasBeenLoaded() throws SheetNotLoadedException {
         if (!sheetLoadad()) {
             throw new SheetNotLoadedException(SHEET_NOT_LOADED_MESSAGE);
         }
+    }
+    @Override
+    public void setEngineInWhatIfMode(Coordinate coord)throws IllegalStateException {
+        boolean isCellValidForWhatIf = currentSheet.getCellByCoord(coord).IsCellExpressionIsNumber();
+        if(!isCellValidForWhatIf){
+            throw new IllegalStateException ("must select cell with simple number original value");
+        }
+        whatIfSheet=currentSheet.cloneSheet();
+
     }
     @Override
     public SheetDTO calculateWhatIfValueForCell(double value,Coordinate coord){

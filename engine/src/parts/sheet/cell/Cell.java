@@ -7,6 +7,7 @@ import parts.cell.NonEmptyCellDTO;
 import parts.sheet.cell.coordinate.Coordinate;
 import parts.sheet.cell.expression.Expression;
 import parts.sheet.cell.expression.effectiveValue.EffectiveValue;
+import parts.sheet.cell.expression.impl.NumberExpression;
 
 import java.io.Serializable;
 import java.util.*;
@@ -276,6 +277,9 @@ public class Cell implements Serializable {
             return cellValue.calculateEffectiveValue();
         }
         return null;
+    }
+    public boolean IsCellExpressionIsNumber() {
+        return cellValue instanceof NumberExpression;
     }
 
     public boolean isExist() {

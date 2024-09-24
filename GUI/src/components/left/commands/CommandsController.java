@@ -91,7 +91,7 @@ public class CommandsController {
         setWhatIfSettingsVBox.visibleProperty().bind(showWhatIfSlider.not());
         setWhatIfSettingsVBox.managedProperty().bind(showWhatIfSlider.not());
         whatIfSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
-                handleCalculateWhatIf();
+            handlesWhatIfSliderMove();
         });
 
     }
@@ -334,7 +334,7 @@ private SheetDTO openFilterOptionsPopupAndGetFilteredSheet() throws Exception {
         try {
             double min = Double.parseDouble(whatIfMinimumTextField.getText());
             double max = Double.parseDouble(whatIfMaximumTextField.getText());
-
+            mainController.setEngineInWhatIfMode();
             // Perform your "What If" calculation here
             showWhatIfSlider.set(true);
             minimumValueSliderLabel.setText(whatIfMinimumTextField.getText());// Example calculation
@@ -344,7 +344,10 @@ private SheetDTO openFilterOptionsPopupAndGetFilteredSheet() throws Exception {
 
             // Display the result to the user
 
-        } catch (NumberFormatException e) {
+        } catch (IllegalStateException e){
+            StageUtils.showAlert("Error",e.getMessage());
+        }
+        catch (NumberFormatException e) {
             StageUtils.showAlert("Input Error", "Please enter valid numbers.");
         }
     }
@@ -355,5 +358,6 @@ private SheetDTO openFilterOptionsPopupAndGetFilteredSheet() throws Exception {
 
     public void handleExitWhatIfMode() {
         showWhatIfSlider.set(false);
+        mainController.showCurrentSheet();
     }
 }
