@@ -27,5 +27,5 @@
     <Button fx:id="deleteRangeButton" onAction="#deleteRangeAction" text="Delete Range" />
 
     <!-- שימוש ב-MenuButton להצגת אפשרויות הטווחים -->
-    <MenuButton fx:id="rangeMenuButton" text="Choose range to display" />
+    <MenuButton fx:id="rangeMenuButton" text="Choose range: " />
 </VBox>

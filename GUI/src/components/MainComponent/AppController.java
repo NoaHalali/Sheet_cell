@@ -8,6 +8,8 @@ import components.center.cellsTable.TableController;
 import components.top.fileChooser.FileChooserController;
 import components.top.versions.VersionSelectorController;
 import components.skin.SkinSelectorController;
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -68,6 +70,7 @@ public class AppController {
     private SimpleBooleanProperty rangeSelected;
     private SimpleBooleanProperty columnSelected;
     private SimpleBooleanProperty rowSelected;
+    private SimpleBooleanProperty showWhatIfMode;
 
     @FXML
     private void initialize() {
@@ -99,15 +102,22 @@ public class AppController {
         rowSelected=new SimpleBooleanProperty(false);
         cellSelected = new SimpleBooleanProperty(false);
         rangeSelected = new SimpleBooleanProperty(false);
+        showWhatIfMode = new SimpleBooleanProperty(false);
     }
 
     private void bindUIComponents() {
+        BooleanBinding whatIfAndFileBinding = Bindings.or(fileSelectedProperty.not(), showWhatIfMode);
+
         table.disableProperty().bind(fileSelectedProperty.not());
-        actionLine.disableProperty().bind(fileSelectedProperty.not());
+       // actionLine.disableProperty().bind(fileSelectedProperty.not());
         versionSelector.disableProperty().bind(fileSelectedProperty.not());
         commands.disableProperty().bind(fileSelectedProperty.not());
-        ranges.disableProperty().bind(fileSelectedProperty.not());
+        //ranges.disableProperty().bind(fileSelectedProperty.not());
         currentVersionLabel.textProperty().bind(versionProperty.asString());
+
+        //what to disable in whatIfMode
+        actionLine.disableProperty().bind(whatIfAndFileBinding);
+        ranges.disableProperty().bind(whatIfAndFileBinding);
     }
 
     public void initializeComponentsAfterLoad() {
@@ -115,13 +125,13 @@ public class AppController {
         clearSelectionStates();
         fileSelectedProperty.set(true);
         // עדכון ה-UI במקרה של הצלחה
-        fileSelectedProperty.set(true);
         SheetDTO sheet = engine.getCurrentSheetDTO();
         tableController.initializeGrid(sheet);
         versionSelectorController.initializeVersionSelector(sheet.getVersion());
         actionLineController.initializeActionLine(cellSelected);
-        commandsController.InitializeCommandsController(cellSelected,rangeSelected, columnSelected,rowSelected);
+        commandsController.InitializeCommandsController(cellSelected,rangeSelected, columnSelected,rowSelected,showWhatIfMode);
         rangesController.initializeRangesController(sheet.getRangesNames(), rangeSelected);
+
         versionProperty.set(1);
     }
 
@@ -239,6 +249,9 @@ public class AppController {
         String colorStr = formatColorToString(color);
         tableController.setCellBackgroundColor(colorStr);
     }
+    public void changeWhatIfMode(boolean flag){
+        showWhatIfMode.set(flag);
+    }
 
     private String formatColorToString(Color color) {
         if (color != null) {
@@ -277,7 +290,7 @@ public class AppController {
             actionLineController.setActionLine(null); // איפוס השורה
         }
         else {
-            if(rangeSelected.get() || columnSelected.get()||rowSelected.get()) {
+            if(rangeSelected.get() || columnSelected.get() || rowSelected.get()) {
                 columnSelected.set(false);
                 rowSelected.set(false);
                 rangeSelected.set(false);
@@ -328,6 +341,9 @@ public class AppController {
         //clearBorderMarkOfCells(); // ניקוי סימוני תאים קודם
         columnSelected.set(true); // עדכון מצב בחירת עמודה
     }
+    public Coordinate getCurrentlyFocusedCellCoord() {
+        return tableController.getCurrentlyFocusedCoord();
+    }
     public void handleRowSelection() {
         // If a cell or range is selected, clear their selection
         if (cellSelected.get() || columnSelected.get() || rangeSelected.get()) {
@@ -353,6 +369,7 @@ public class AppController {
         rangeSelected.set(false);
         columnSelected.set(false);
         rowSelected.set(false);
+        showWhatIfMode.set(false);
     }
 
     public BooleanProperty cellSelectedProperty() {
@@ -392,7 +409,7 @@ public class AppController {
         engine.setEngineInWhatIfMode(tableController.getFocusedCoord());
     }
     public void calculateWhatIfValueForCell(double value){
-        SheetDTO sheet=engine.calculateWhatIfValueForCell(value, tableController.getFocusedCoord());
+        SheetDTO sheet=engine.calculateWhatIfValueForCell(value);
         setCells(sheet);
 
 

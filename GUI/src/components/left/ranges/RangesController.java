@@ -105,7 +105,7 @@ public class RangesController {
 
     public void clearSelectedRangeOption() {
         lastSelectedRange = null; // איפוס שם הטווח שנבחר לאחרונה
-        rangeMenuButton.setText("Choose range to display"); // איפוס שם ה-MenuButton
+        rangeMenuButton.setText("Choose range: "); // איפוס שם ה-MenuButton
         //deleteRangeButton.disableProperty()
 
     }

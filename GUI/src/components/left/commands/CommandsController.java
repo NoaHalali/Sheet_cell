@@ -19,6 +19,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import parts.SheetDTO;
+import parts.sheet.cell.coordinate.Coordinate;
 import parts.sheet.cell.expression.effectiveValue.EffectiveValue;
 
 import java.util.*;
@@ -30,7 +31,7 @@ public class CommandsController {
 
     private AppController mainController;
     private DialogManager dialogManager = new DialogManager();
-    private SimpleBooleanProperty showWhatIfSlider = new SimpleBooleanProperty(false);
+    //private SimpleBooleanProperty showWhatIfSlider = new SimpleBooleanProperty(false);
 
     //@FXML private Button setColumnRowWidthButton;
     @FXML private Button setColumnWidthButton;
@@ -62,6 +63,7 @@ public class CommandsController {
     @FXML private Label maximumValueSliderLabel;
     @FXML private VBox setWhatIfSettingsVBox;
     @FXML private VBox SliderSettingsVBox;
+    @FXML private Label whatIfCoordinateLabel;
     @FXML private Button calcValuesToFilterButton;
     @FXML private ListView<String> filterListView; // הוספת ListView לסינון
     @FXML private Button applyFilterButton; // כפתור לסינון
@@ -71,7 +73,7 @@ public class CommandsController {
     @FXML private Button createGraphButton;
 
     public void InitializeCommandsController(SimpleBooleanProperty cellSelected, SimpleBooleanProperty rangeSelected,
-                                             SimpleBooleanProperty columnSelected, SimpleBooleanProperty rowSelected) {
+                                             SimpleBooleanProperty columnSelected, SimpleBooleanProperty rowSelected,SimpleBooleanProperty showWhatIfMode) {
         setColumnWidthButton.disableProperty().bind(columnSelected.not());
         setRowHeightButton.disableProperty().bind(rowSelected.not());
         setColumnAlignmentButton.disableProperty().bind(columnSelected.not());
@@ -81,18 +83,23 @@ public class CommandsController {
         applyTextColorButton.disableProperty().bind(cellSelected.not());
         applyBackgroundColorButton.disableProperty().bind(cellSelected.not());
         calculateWhatIfButton.disableProperty().bind(cellSelected.not());
-        SliderSettingsVBox.visibleProperty().bind(showWhatIfSlider);
-        SliderSettingsVBox.managedProperty().bind(showWhatIfSlider);
+        SliderSettingsVBox.visibleProperty().bind(showWhatIfMode);
+        SliderSettingsVBox.managedProperty().bind(showWhatIfMode);
+
 //        if (graphsController != null) {
 //            graphsController.setMainController(mainController);
 //            graphsController.initializeGraphsController();
 //        }
 
-        setWhatIfSettingsVBox.visibleProperty().bind(showWhatIfSlider.not());
-        setWhatIfSettingsVBox.managedProperty().bind(showWhatIfSlider.not());
+        setWhatIfSettingsVBox.visibleProperty().bind(showWhatIfMode.not());
+        setWhatIfSettingsVBox.managedProperty().bind(showWhatIfMode.not());
         whatIfSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
             handlesWhatIfSliderMove();
         });
+        //sections disable in what if mode
+        displaySortButton.disableProperty().bind(showWhatIfMode);
+        calcValuesToFilterButton.disableProperty().bind(showWhatIfMode);
+        createGraphButton.disableProperty().bind(showWhatIfMode);
 
     }
 
@@ -334,9 +341,17 @@ private SheetDTO openFilterOptionsPopupAndGetFilteredSheet() throws Exception {
         try {
             double min = Double.parseDouble(whatIfMinimumTextField.getText());
             double max = Double.parseDouble(whatIfMaximumTextField.getText());
+            if(max<=min){
+                throw new IllegalArgumentException("max must be greater than min");
+            }
+
             mainController.setEngineInWhatIfMode();
             // Perform your "What If" calculation here
-            showWhatIfSlider.set(true);
+            mainController.changeWhatIfMode(true);
+            Coordinate focusedCoord =mainController.getCurrentlyFocusedCellCoord();
+            StageUtils.showInfo("Attention","Entered to WHAT- IF mode.\n" +
+                    "To cancel press 'Exit What If Mode' button.");
+            whatIfCoordinateLabel.setText(focusedCoord.toString());
             minimumValueSliderLabel.setText(whatIfMinimumTextField.getText());// Example calculation
             maximumValueSliderLabel.setText(whatIfMaximumTextField.getText());
             whatIfSlider.setMin(min);
@@ -344,12 +359,16 @@ private SheetDTO openFilterOptionsPopupAndGetFilteredSheet() throws Exception {
 
             // Display the result to the user
 
-        } catch (IllegalStateException e){
-            StageUtils.showAlert("Error",e.getMessage());
-        }
-        catch (NumberFormatException e) {
+        }  catch (NumberFormatException e) {
             StageUtils.showAlert("Input Error", "Please enter valid numbers.");
         }
+        catch (IllegalStateException e){
+            StageUtils.showAlert("Error",e.getMessage());
+        }
+        catch (IllegalArgumentException e){
+            StageUtils.showAlert("Error",e.getMessage());
+        }
+
     }
     @FXML
     private void handlesWhatIfSliderMove() {
@@ -357,7 +376,7 @@ private SheetDTO openFilterOptionsPopupAndGetFilteredSheet() throws Exception {
     }
 
     public void handleExitWhatIfMode() {
-        showWhatIfSlider.set(false);
+        mainController.changeWhatIfMode(false);
         mainController.showCurrentSheet();
     }
 }

@@ -82,6 +82,14 @@
 
 
         <VBox fx:id="SliderSettingsVBox" spacing="10.0">
+
+            <HBox spacing="10.0">
+                <Label fx:id="coordLabel" text="Cell: " />
+                <!-- Label to display value -->
+                <Label fx:id="whatIfCoordinateLabel" text=" " />
+            </HBox>
+
+
             <HBox spacing="10.0">
                 <Label fx:id="minimumValueSliderLabel" text="0" />
                 <Slider fx:id="whatIfSlider" />
