@@ -378,7 +378,7 @@ public class AppController {
         engine.setEngineInWhatIfMode(tableController.getFocusedCoord());
     }
     public void calculateWhatIfValueForCell(double value){
-        SheetDTO sheet=engine.calculateWhatIfValueForCell(value);
+        SheetDTO sheet = engine.calculateWhatIfValueForCell(value);
         setCells(sheet);
 
 

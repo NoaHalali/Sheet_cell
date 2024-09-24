@@ -18,13 +18,10 @@ public class Range implements Serializable {
     private boolean isUsed;//todo - check if needed
     private List<Cell> cells;
     private List<Coordinate> influencingOnCoordinates;//התאים שמשתמשים בטווח \ה
+    public Range(){}
 
     public Range(Coordinate topLeftCellID, Coordinate bottomRightCellID,List<Cell> cells ) {
-        this.topLeftCellID = topLeftCellID;
-        this.bottomRightCellID = bottomRightCellID;
-        isUsed = false;
-        this.cells = cells;
-        influencingOnCoordinates = new ArrayList<>();
+       setRange(topLeftCellID,bottomRightCellID,cells);
     }
     public double calculateCellsSum () {
         double sum = 0 ,num;
@@ -60,6 +57,13 @@ public class Range implements Serializable {
 
         }
         return sum/numberOfCellsWithNumbers;
+    }
+    public void setRange(Coordinate topLeftCellID, Coordinate bottomRightCellID,List<Cell> cells ){
+        this.topLeftCellID = topLeftCellID;
+        this.bottomRightCellID = bottomRightCellID;
+        isUsed = false;
+        this.cells = cells;
+        influencingOnCoordinates = new ArrayList<>();
     }
 
 
