@@ -1,6 +1,7 @@
 package components.top.fileChooser;
 
 import components.MainComponent.AppController;
+import components.Utils.StageUtils;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -67,9 +68,25 @@ public class FileChooserController {
             protected void failed() {
                 super.failed();
                 // טיפול בשגיאה במקרה של כשל בטעינת הקובץ
-                System.out.println("Failed to load file: " + getException().getMessage());
+                Throwable exception = getException();
+                if (exception != null) {
+                    StageUtils.showAlert("Error", exception.getMessage());
+                } else {
+                    StageUtils.showAlert("Error", "Unknown error occurred.");
+                }
                 progressBar.setVisible(false); // הסתרת ProgressIndicator
             }
+//            @Override
+//            protected void failed() {
+//
+//
+//                super.failed();
+//                // טיפול בשגיאה במקרה של כשל בטעינת הקובץ
+//                //System.out.println("Failed to load file: " + getException().getMessage());
+//                StageUtils.showAlert("Error", getException().getMessage());
+//                progressBar.setVisible(false); // הסתרת ProgressIndicator
+//            }
+
         };
 
         // קישור ה-ProgressIndicator להתקדמות המשימה

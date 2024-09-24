@@ -10,7 +10,6 @@ import parts.sheet.cell.coordinate.CoordinateImpl;
 import parts.sheet.cell.expression.Expression;
 import parts.sheet.cell.expression.effectiveValue.EffectiveValue;
 
-import javax.print.DocFlavor;
 import java.io.*;
 import java.util.*;
 
@@ -403,28 +402,21 @@ public class Sheet implements Serializable {
         Range.isValidRange(topLeftCoord, bottomRightCoord);
 
         validateSelectedColumnsInRange(columnsToSortBy, leftRangeColChar, rightRangeColChar);
-
-        // המרת המטריצה לרשימה של תאים בטווח שנבחר
-        List<SheetRow> rowsToSort = convertMatrixToRowList(sortedSheet.getCellsMatrix(), topLeftCoord, bottomRightCoord);
+        List<SheetRow> rowsInRangeToSort = convertMatrixInRangeToRowList(sortedSheet.getCellsMatrix(), topLeftCoord, bottomRightCoord);
 
         try {
             // מיון השורות לפי העמודות שנבחרו
-            rowsToSort.sort(createMultiLevelComparator(columnsToSortBy, leftRangeColChar));
+            rowsInRangeToSort.sort(createMultiLevelComparator(columnsToSortBy, leftRangeColChar));
         } catch (NullPointerException e) {
             throw new IllegalArgumentException("One or more cells in the selected columns to sort are empty, and can't be sorted.");
         }
-//        // מיון השורות לפי העמודות שנבחרו
-//        rowsToSort.sort(createMultiLevelComparator(columnsToSortBy, leftRangeColChar));
 
-        // עדכון המטריצה של התאים בעותק הממוין
-        sortedSheet.updateCellsMatrix(rowsToSort, topLeftCoord, bottomRightCoord);
+        sortedSheet.updateCellsMatrix(rowsInRangeToSort, topLeftCoord, bottomRightCoord);
 
         return sortedSheet;
     }
 
-
-    // פונקציה להמרת המטריצה לרשימה של שורות בטווח שנבחר
-    private List<SheetRow> convertMatrixToRowList(Cell[][] cellsMatrix, Coordinate topLeft, Coordinate bottomRight) {
+    private List<SheetRow> convertMatrixInRangeToRowList(Cell[][] cellsMatrix, Coordinate topLeft, Coordinate bottomRight) {
         List<SheetRow> rows = new ArrayList<>();
         for (int i = topLeft.getRow() - 1; i <= bottomRight.getRow() - 1; i++) {
             List<Cell> cells = new ArrayList<>();
@@ -436,7 +428,6 @@ public class Sheet implements Serializable {
         return rows;
     }
 
-    // פונקציה ליצירת Comparator רב-שלבי
     private Comparator<SheetRow> createMultiLevelComparator(List<Character> columnsToSortBy,
                                                             char leftRangeColChar) throws IllegalArgumentException {
         return (row1, row2) -> {
@@ -465,7 +456,6 @@ public class Sheet implements Serializable {
 //        }
 //    }
 
-
     // עדכון מטריצת התאים בגיליון לאחר המיון
     private void updateCellsMatrix(List<SheetRow> sortedRows, Coordinate topLeft, Coordinate bottomRight) {
         int startRow = topLeft.getRow() - 1;
@@ -489,7 +479,6 @@ public class Sheet implements Serializable {
             }
         }
     }
-
 
     public Map<String,Set<EffectiveValue>> getDistinctValuesOfColumnsInRange(List<Character> columnsToSortBy, Coordinate leftRangeCoord, Coordinate rightRangeCoord){
         Map<String,Set<EffectiveValue>> distinctValuesFromCols =new HashMap<>();
@@ -529,8 +518,6 @@ public class Sheet implements Serializable {
     }
 
     public Sheet getFilteredSheetBySingleColumnInRange( Set<EffectiveValue> valuesToMatch, String colStr,Coordinate topLeftCoord, Coordinate bottomRightCoord) {
-        // שכפול הגיליון הנוכחי
-        //Sheet filteredSheet = this.cloneSheet();
 
         int colIndex =CoordinateImpl.columnStringToIndex(colStr);
 
@@ -551,7 +538,7 @@ public class Sheet implements Serializable {
             for (int col = topLeftCoord.getCol(); col <= bottomRightCoord.getCol(); col++) {
                 Cell cell = this.getCellsMatrix()[row - 1][col - 1];
 
-                // בדיקה אם התא קיים ואם הערך מתאים לאחד הערכים מהרשימה
+
                 if (cell != null && valuesToMatch.contains(cell.getEffectiveValue())) {
                     rowMatches = true;
                 }
@@ -598,15 +585,13 @@ public class Sheet implements Serializable {
         validateCoordinateBounds(bottomRightCoord);
         Range.isValidRange(topLeftCoord, bottomRightCoord);
         checkIfRangeInOneColumn(topLeftCoord, bottomRightCoord);
-        //checkIfRangeInColumn(colStr, topLeftCoord, bottomRightCoord);
 
-        //int colIndex = CoordinateImpl.columnStringToIndex(colStr);
         int colIndex = topLeftCoord.getCol();
         char colChar = topLeftCoord.getColChar();
         List<CellDTO> columnData = new ArrayList<>();
-        //CellDTO[][] cellsMatrix = sheet.getCellsMatrix();
         int topRow = topLeftCoord.getRow();
         int bottomRow = bottomRightCoord.getRow();
+
         for (int row = topRow; row <= bottomRow; row++) {
             Cell cell = cellsMatrix[row-1][colIndex-1];
             if (cell == null || !cell.isExist() || cell.getEffectiveValue() == null) {
@@ -632,14 +617,3 @@ public class Sheet implements Serializable {
         return numberOfCols;
     }
 }
-
-
-
-//    // פונקציה עזר לפרש ערכים מספריים
-//    private Double parseNumericValue(String value) {
-//        try {
-//            return Double.parseDouble(value);
-//        } catch (NumberFormatException e) {
-//            return null; // מחזיר null אם לא מדובר במספר
-//        }
-//    }

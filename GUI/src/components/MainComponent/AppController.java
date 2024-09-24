@@ -204,12 +204,8 @@ public class AppController {
     public SheetDTO getSheetDTOByVersion(String version) {
         return engine.getSheetDTOByVersion(Integer.parseInt(version));
     }
-    public void loadFileToSystem(String absolutePath) {
-        try {
-            engine.readFileData(absolutePath);
-        } catch (Exception e) {
-            StageUtils.showAlert( "Error" ,e.getMessage());
-        }
+    public void loadFileToSystem(String absolutePath) throws Exception {
+        engine.readFileData(absolutePath);
     }
 
     //Ranges
@@ -278,7 +274,6 @@ public class AppController {
 
     public void clearBorderMarkOfCells()
     {
-        //tableController.removeMarksFocusingOfFocusedCell();
         tableController.clearMarkOfCells();
     }
 
@@ -302,17 +297,6 @@ public class AppController {
             actionLineController.setActionLine(cell); // עדכון השורה עם התא החדש
         }
     }
-
-//    public void updateActionLine(Coordinate coord) {
-//
-//        actionLineController.setActionLine(c); // איפוס השורה
-//        } else {
-//            isCellSelectedProperty.set(true);
-//            CellDTO cell = engine.getCellDTOByCoordinate(coord);
-//            actionLineController.setActionLine(cell); // עדכון השורה עם התא החדש
-//
-//        }
-//    }
 
     public void handleRangeSelection(String rangeName) {
         // אם תא נבחר או עמודה נבחרה, בטל את הסימון שלהם
@@ -353,15 +337,8 @@ public class AppController {
             actionLineController.setActionLine(null); // Reset the action line
         }
 
-       // clearBorderMarkOfCells(); // Clear any existing cell highlights
         rowSelected.set(true); // Update the row selection state
     }
-
-//
-//    public void highlightColumn(String rangeName) {
-//        List<Coordinate> rangeCoordinates = engine.getRangeCoordinates(rangeName);
-//        tableController.highlightRange(rangeCoordinates);
-//    }
 
     // פונקציה לאיפוס כל הסימונים
     public void clearSelectionStates() {
@@ -381,27 +358,19 @@ public class AppController {
         return rangeSelected;
     }
 
-//    public BooleanProperty columnSelectedProperty() {
-//        return columnSelected;
-//    }
-
-
-//    public SheetDTO filterData(Set<EffectiveValue> selectedValues, String col, String rangeDefinition) {
-//        return engine.getFilteredSheetDTO(selectedValues, col, rangeDefinition);
-//    }
     public SheetDTO filterData(Map<String,Set<EffectiveValue>> selectedValues, String rangeDefinition) {
         return engine.getFilteredSheetDTOFromMultipleCols(selectedValues, rangeDefinition);
     }
 
+//    public Set<EffectiveValue> getDistinctValuesOfColInRange(String col,String rangeDefinition){
+////        Set<String>strValues=new HashSet<String>();
+//        Set<EffectiveValue> values=engine.getDistinctValuesOfColInRange(col,rangeDefinition);
+////        strValues = values.stream()
+////                .map(value -> tableController.calcValueToString(value)) // המרה למחרוזת//todo להוסיף את CALCVALUE למקום אחר
+////                .collect(Collectors.toSet()); // המרת הזרם לסט
+//        return values;
+//    }
 
-    public Set<EffectiveValue> getDistinctValuesOfColInRange(String col,String rangeDefinition){
-//        Set<String>strValues=new HashSet<String>();
-        Set<EffectiveValue> values=engine.getDistinctValuesOfColInRange(col,rangeDefinition);
-//        strValues = values.stream()
-//                .map(value -> tableController.calcValueToString(value)) // המרה למחרוזת//todo להוסיף את CALCVALUE למקום אחר
-//                .collect(Collectors.toSet()); // המרת הזרם לסט
-        return values;
-    }
     public Map<String,Set<EffectiveValue>> getDistinctValuesOfMultipleColsInRange(List<Character> cols,String rangeDefinition){
         return engine.getDistinctValuesOfMultipleColsInRange(cols,rangeDefinition);
     }
@@ -418,8 +387,6 @@ public class AppController {
         SheetDTO sheet=engine.getCurrentSheetDTO();
         setCells(sheet);
     }
-
-
 
     public void setColumnWidth(int width) throws IllegalArgumentException {
         tableController.setColumnWidth(width);

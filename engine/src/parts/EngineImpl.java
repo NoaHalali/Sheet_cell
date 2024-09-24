@@ -39,16 +39,10 @@ public class EngineImpl implements Engine {
     //1
     @Override
     public void readFileData(String filePath) throws Exception {
-        try {
-            //Sheet lastSheet = currentSheet;
-            currentSheet = fileManager.processFile(filePath);
-            versionsList.clear();
-            addVersion(currentSheet, currentSheet.howManyActiveCellsInSheet());
-        }
-        catch (Exception e) {
-           e.printStackTrace();
-            throw new Exception(e.getMessage());
-        }
+        //Sheet lastSheet = currentSheet;
+        currentSheet = fileManager.processFile(filePath);
+        versionsList.clear();
+        addVersion(currentSheet, currentSheet.howManyActiveCellsInSheet());
     }
 
     //2
