@@ -411,7 +411,7 @@ public class Sheet implements Serializable {
             // מיון השורות לפי העמודות שנבחרו
             rowsToSort.sort(createMultiLevelComparator(columnsToSortBy, leftRangeColChar));
         } catch (NullPointerException e) {
-            throw new IllegalArgumentException("One or more cells in the selected columns to sort are empty, and can't be sortd.");
+            throw new IllegalArgumentException("One or more cells in the selected columns to sort are empty, and can't be sorted.");
         }
 //        // מיון השורות לפי העמודות שנבחרו
 //        rowsToSort.sort(createMultiLevelComparator(columnsToSortBy, leftRangeColChar));
@@ -592,17 +592,36 @@ public class Sheet implements Serializable {
         }
     }
 
-    public List<CellDTO> getColumnCells(int colIndex) {
+    public List<CellDTO> getColumnCellsInRange(String colStr, Coordinate topLeftCoord, Coordinate bottomRightCoord) {
+
+        Range.isValidRange(topLeftCoord, bottomRightCoord);
+        checkIfRangeInColumn(colStr, topLeftCoord, bottomRightCoord);
+        checkIfRangeInColumn(colStr, topLeftCoord, bottomRightCoord);
+
+        int colIndex = CoordinateImpl.columnStringToIndex(colStr);
         List<CellDTO> columnData = new ArrayList<>();
         //CellDTO[][] cellsMatrix = sheet.getCellsMatrix();
-
-        for (int row = 0; row < cellsMatrix.length; row++) {
-            Cell cell = cellsMatrix[row][colIndex-1];
-            if (cell != null && cell.isExist() && cell.getEffectiveValue() != null) {
-                columnData.add(cell.toCellDTO()); // הוספת CellDTO לרשימה
+        int topRow = topLeftCoord.getRow();
+        int bottomRow = bottomRightCoord.getRow();
+        for (int row = topRow; row <= bottomRow; row++) {
+            Cell cell = cellsMatrix[row-1][colIndex-1];
+            if (cell == null || !cell.isExist() || cell.getEffectiveValue() == null) {
+                throw new IllegalArgumentException("One or more cells in column" + colStr+ "is empty, and therefore cant create graph from column.");
+            }
+            else {
+                columnData.add(cell.toCellDTO());
             }
         }
         return columnData;
+    }
+
+    private void checkIfRangeInColumn(String colStr, Coordinate topLeftCoord, Coordinate bottomRightCoord) throws IllegalArgumentException {
+        char colChar = colStr.charAt(0);
+        char leftRangeColChar = topLeftCoord.getColChar();
+        char rightRangeColChar = bottomRightCoord.getColChar();
+        if (colChar != leftRangeColChar || colChar != rightRangeColChar) {
+            throw new IllegalArgumentException("Column " + colChar + " is not in the selected range.");
+        }
     }
 
     public int getNumberOfColumns() {

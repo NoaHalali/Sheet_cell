@@ -260,9 +260,11 @@ public class EngineImpl implements Engine {
 
     }
 
-    public List<CellDTO> getColumnData(String colStr){
-        int colIndex = CoordinateImpl.columnStringToIndex(colStr);
-        return currentSheet.getColumnCells(colIndex);
+    public List<CellDTO> getColumnDataInRange(String colStr, String rangeDefinition) throws IllegalArgumentException {
+        Coordinate[] rangeEdgeCoordinates =Range.parseRange(rangeDefinition);
+        Coordinate topCoord = rangeEdgeCoordinates[0];
+        Coordinate bottomCoord = rangeEdgeCoordinates[1];
+        return currentSheet.getColumnCellsInRange(colStr, topCoord, bottomCoord);
     }
 
     @Override
