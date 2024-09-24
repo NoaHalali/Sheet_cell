@@ -15,7 +15,9 @@ public class And extends BinaryExpression{
         try {
             EffectiveValue leftValue = left.calculateEffectiveValue();
             EffectiveValue rightValue = right.calculateEffectiveValue();
-            boolean flag = leftValue.extractValueWithExpectation(Boolean.class) && rightValue.extractValueWithExpectation(Boolean.class);
+            boolean leftFlag = leftValue.extractValueWithExpectation(Boolean.class);
+            boolean rightFlag = rightValue.extractValueWithExpectation(Boolean.class);
+            boolean flag = leftFlag && rightFlag;
             return new EffectiveValueImpl(CellType.BOOLEAN,flag);
         } catch (Exception e) {
             return new EffectiveValueImpl(CellType.STRING,"UNKNOWN");

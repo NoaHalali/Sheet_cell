@@ -37,9 +37,7 @@ public class Range implements Serializable {
               if(num!=Double.NaN) {
                   sum += num;
               }
-
             }
-
         }
         return sum;
     }
@@ -55,9 +53,10 @@ public class Range implements Serializable {
                     numberOfCellsWithNumbers++;
                     sum += num;
                 }
-
             }
-
+        }
+        if(numberOfCellsWithNumbers==0) {
+           return Double.NaN;
         }
         return sum/numberOfCellsWithNumbers;
     }
