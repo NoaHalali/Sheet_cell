@@ -23,6 +23,7 @@ public class Sheet implements Serializable {
     private final int rowHeight;
     private Cell[][] cellsMatrix; // מערך דו-ממדי של תאים
     private Map<String, Range> ranges = new HashMap<String,Range>();
+    private Map<String, Range> nonRealRanges=new HashMap<String,Range>();
     private static final char MIN_COL = 'A';
     private static final int MIN_ROW = 1;
     private final char maxCol;
@@ -482,6 +483,7 @@ public class Sheet implements Serializable {
             }
         }
     }
+   // private void validate
 
     public Map<String,Set<EffectiveValue>> getDistinctValuesOfColumnsInRange(List<Character> columnsToSortBy, Coordinate leftRangeCoord, Coordinate rightRangeCoord){
         Map<String,Set<EffectiveValue>> distinctValuesFromCols =new HashMap<>();
