@@ -106,6 +106,13 @@ public class Cell implements Serializable {
         }
         return fullList;
     }
+    public List<Cell>getFullDependsOnCellList(){
+        List<Cell> fullList= new LinkedList<Cell>(dependsOn);
+        for(Range range : rangesDependsOn){
+            fullList.addAll(range.getCellsInRange());
+        }
+        return fullList;
+    }
     public CellDTO toCellDTO() {
         if (isExist)
         {
@@ -239,22 +246,24 @@ public class Cell implements Serializable {
     }
 
 
-    public void checkForCircularDependencyWrapper(Coordinate coordinate, List<Cell> dependsOn) {
+    public void checkForCircularDependencyWrapper(Coordinate coordinate ) {
         HashSet<String> coordSet = new HashSet<>();
+
         coordSet.add(coordinate.toString());
-        checkForCircularDependency(coordSet, dependsOn);
+        checkForCircularDependency(coordSet, getFullDependsOnCellList());
 
     }
 
     public void checkForCircularDependency(Set<String> coordSet, List<Cell> dependsOn) {
         Set<String> ClonedSet ;
+
         for (Cell cell : dependsOn) {
             ClonedSet = new HashSet<String>(coordSet);
             if (coordSet.contains(cell.getCoordinate().toString())) {
                 throw new RuntimeException("Circular dependency found");//לחפור וזה
             }
             ClonedSet.add(cell.getCoordinate().toString());
-            cell.checkForCircularDependency(ClonedSet, cell.getDependsOn());
+            cell.checkForCircularDependency(ClonedSet,cell.getFullDependsOnCellList());
         }
 
     }

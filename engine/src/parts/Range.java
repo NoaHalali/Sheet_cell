@@ -79,6 +79,9 @@ public class Range implements Serializable {
     public boolean isBeingUsed() {
         return influencingOnCoordinates.size() > 0;
     }
+    public List<Cell> getCellsInRange(){
+        return cells;
+    }
 
     public static void isValidRange(Coordinate topLeftCoord, Coordinate bottomRightCoord) throws IllegalArgumentException {
         // בדוק אם השורה והעמודה של הקואורדינטה העליונה השמאלית קטנים או שווים לאלו של הקואורדינטה התחתונה הימנית

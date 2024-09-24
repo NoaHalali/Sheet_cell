@@ -184,7 +184,10 @@ public class Sheet implements Serializable {
             Expression expression = FunctionParser.getExpressionOfCell(originalValue, dependsOnCellList,rangesDependsOnList,this);;
             //changeCell = getCellByCoord(coord);
             Expression oldExpression = changeCell.getCellValue();
-            changeCell.checkForCircularDependencyWrapper(changeCell.getCoordinate(), dependsOnCellList);
+            changeCell.setDependsOn(dependsOnCellList);
+
+            changeCell.setRangesDependsOnList(rangesDependsOnList);
+            changeCell.checkForCircularDependencyWrapper(changeCell.getCoordinate());
             changeCell.setExpression(expression);
 
             try {
@@ -246,7 +249,7 @@ public class Sheet implements Serializable {
         for (Cell[] cells : cellsMatrix) {
             for (Cell cell : cells) {
                 if (cell != null) {
-                    cell.checkForCircularDependencyWrapper(cell.getCoordinate(), cell.getDependsOn());
+                    cell.checkForCircularDependencyWrapper(cell.getCoordinate());
 
                 }
             }
