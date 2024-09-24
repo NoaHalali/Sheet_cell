@@ -65,6 +65,8 @@ public interface Engine {
     public SheetDTO getFilteredSheetDTOFromMultipleCols(Map<String,Set<EffectiveValue>> filteredValues,String rangeDefinition) throws IllegalArgumentException;
 
     public SheetDTO calculateWhatIfValueForCell(double value,Coordinate coord);
+
+    public void setEngineInWhatIfMode(Coordinate coord)throws IllegalStateException ;
 }
 
 
