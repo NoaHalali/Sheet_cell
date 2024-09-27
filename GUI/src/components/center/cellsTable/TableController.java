@@ -1,6 +1,7 @@
 package components.center.cellsTable;
 
 import components.MainComponent.AppController;
+import components.Utils.StageUtils;
 import components.center.cell.CellController;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -91,7 +92,7 @@ public class TableController {
                     dynamicGridPane.add(cellPane, col, row);
                     coordToCellControllerMap.put(coord.toString(), cellController);
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    StageUtils.showAlert("Error", e.getMessage());
                 }
             }
         }
@@ -141,12 +142,6 @@ public class TableController {
         }
         styleMap.put(CoordinateImpl.notExists.toString(),basicCellStyle);
 
-//        for (String coordStr : coordToCellControllerMap.keySet()) {
-//            CellController cellController = coordToCellControllerMap.get(coordStr);
-//            styleMap.put(cellController.getCoord().toString(),cellController.copyPreviewStyle());
-//
-//        }
-
         return styleMap;
     }
 
@@ -161,15 +156,6 @@ public class TableController {
                 cell.setCellStyle(prevCoordStyle); //set cell style to its new place after sort
             }
         }
-
-
-//        for (String coordStr : prevStyleMap.keySet()) {
-//
-//            CellController cellToChangeStyle = coordToCellControllerMap.get(coordStr);
-//            cellToChangeStyle.setCellStyle(prevStyleMap.get(sheet.getCell(CoordinateImpl.parseCoordinate(coordStr)).getCoord().toString()));
-//
-//
-//        }
     }
 
     public String calcValueToPrint(EffectiveValue effectiveValue) {
@@ -197,16 +183,10 @@ public class TableController {
     private void handleCellClick(String newCoord) {
 
         boolean isNewCoordSelected = newCoord != null;
-
-        // עדכון מצב הבחירה ב-AppController
-//        mainController.rangeSelectedProperty().set(false);
-//        mainController.cellSelectedProperty().set(isNewCoordSelected);
-
-        boolean isDoubleClick = currentlyFocusedCoord != null && currentlyFocusedCoord.toString().equals(newCoord)/*&&mainController.cellSelectedProperty().get()*/;
+        boolean isDoubleClick = currentlyFocusedCoord != null && currentlyFocusedCoord.toString().equals(newCoord);
 
         if (isDoubleClick) {
             removeMarksOfFocusedCell();
-            //setFocusedCoord(null);
             mainController.handleCellClick(null); // ביטול בחירת תא
 
         } else if (isNewCoordSelected) {
@@ -220,16 +200,7 @@ public class TableController {
 
 
     private void handleColumnClick(int colIndex) {
-        // נקה סימונים קודמים
-
         clearMarkOfCells();
-
-        // עדכן את ה-AppController על סימון העמודה
-//        mainController.clearSelectionStates(); // נקה סימונים קודמים ב-AppController
-//        mainController.setColumnSelected(true); // עדכן שסומן עמודה
-
-        // יצירת רשימה חדשה עבור העמודה הנוכחית
-
         currentColumnIndex = colIndex;
         currentlyHighlightedColumn = new ArrayList<>();
 
@@ -248,14 +219,8 @@ public class TableController {
     }
 
     private void handleRowClick(int rowIndex) {
-        // Clear previous cell highlights
         clearMarkOfCells();
 
-        // Notify the AppController about the row selection
-        // mainController.clearSelectionStates();
-        // mainController.setRowSelected(true);
-
-        // Create a list for the currently highlighted row
         currentRowIndex=rowIndex;
         currentlyHighlightedRow = new ArrayList<>();
 
@@ -294,7 +259,6 @@ public class TableController {
     }
 
     public void removeMarksOfFocusedCell() {
-        //CellController currentlyFocusedCellController = coordToCellControllerMap.get(oldCellCoordinate);
         if (currentlyFocusedCellController != null) {
             currentlyFocusedCellController.resetBorder();
             Coordinate cellCoord = currentlyFocusedCellController.getCoord();
@@ -354,12 +318,6 @@ public class TableController {
             currentlyFocusedCellController.setTextColor(colorStr);
         }
     }
-
-//    public void setCellBorderColor(String colorStr) {
-//        if (currentlyFocusedCellController != null) {
-//            currentlyFocusedCellController.setBorderColor(colorStr);
-//        }
-//    }
 
     public void setCellBackgroundColor(String colorStr) {
         if (currentlyFocusedCellController != null) {

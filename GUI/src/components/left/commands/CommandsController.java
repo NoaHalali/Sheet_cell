@@ -86,11 +86,6 @@ public class CommandsController {
         SliderSettingsVBox.visibleProperty().bind(showWhatIfMode);
         SliderSettingsVBox.managedProperty().bind(showWhatIfMode);
 
-//        if (graphsController != null) {
-//            graphsController.setMainController(mainController);
-//            graphsController.initializeGraphsController();
-//        }
-
         setWhatIfSettingsVBox.visibleProperty().bind(showWhatIfMode.not());
         setWhatIfSettingsVBox.managedProperty().bind(showWhatIfMode.not());
         whatIfSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
@@ -150,7 +145,6 @@ public class CommandsController {
 
         } catch (Exception e) {
             StageUtils.showAlert("Error", e.getMessage());
-            e.printStackTrace();
         }
     }
     public void previewSheetDTOWithPrevStyleInPopup(SheetDTO sheet,String popUpName) throws Exception {
@@ -214,7 +208,6 @@ public class CommandsController {
 
        }
          catch (Exception e) {
-             //e.printStackTrace();
              StageUtils.showAlert("Error", e.getMessage());
          }
     }
@@ -325,7 +318,6 @@ private SheetDTO openFilterOptionsPopupAndGetFilteredSheet() throws Exception {
         }
         catch (Exception e) {
             StageUtils.showAlert("Error", e.getMessage());
-            e.printStackTrace();
         }
     }
 

@@ -1,6 +1,7 @@
 package components.top.versions;
 
 import components.MainComponent.AppController;
+import components.Utils.StageUtils;
 import components.center.cellsTable.TableController;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -24,7 +25,6 @@ public class VersionSelectorController {
     // במקום initialize
     public void initializeVersionSelector(int numOfVersions) {
         versionMenuButton.getItems().clear(); // מנקה את כל הפריטים הקיימים בתפריט
-
         setVersionSelectorOptions(numOfVersions);
     }
 
@@ -70,8 +70,7 @@ public class VersionSelectorController {
             popupStage.showAndWait();
 
         } catch (IOException e) {
-            e.printStackTrace();
-            // טיפול בשגיאה אם טעינת ה-FXML נכשלת
+            StageUtils.showAlert("Error", e.getMessage());
         }
     }
 

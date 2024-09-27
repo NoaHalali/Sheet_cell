@@ -40,31 +40,6 @@ public class DialogManager {
     public void showRowHeightDialog(int currentRowHeight, Consumer<Integer> setRowHeight) {
 
         showDialog(currentRowHeight, setRowHeight, "Set Row Height", "Row Height");
-//        Dialog<ButtonType> dialog = new Dialog<>();
-//        dialog.setTitle("Set Row Height");
-//
-//        GridPane dialogGrid = new GridPane();
-//        dialogGrid.setHgap(10);
-//        dialogGrid.setVgap(10);
-//
-//        TextField rowHeightField = new TextField();
-//        rowHeightField.setPromptText("Row Height");
-//
-//        dialogGrid.add(new Label("Row Height:"), 0, 0);
-//        dialogGrid.add(rowHeightField, 1, 0);
-//
-//        dialog.getDialogPane().setContent(dialogGrid);
-//        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
-//
-//        dialog.setResultConverter(button -> {
-//            if (button == ButtonType.OK) {
-//                double rowHeight = Double.parseDouble(rowHeightField.getText());
-//                setRowHeight.accept(rowHeight);  // קריאה לפונקציה לעדכון גובה שורה
-//            }
-//            return null;
-//        });
-//
-//        dialog.showAndWait();
     }
 
     public void showDialog(int currentValue, Consumer<Integer> setMeasureMethod, String dialogTitle, String dialogMessageInfo) {

@@ -135,9 +135,6 @@ public class AppController {
         versionProperty.set(1);
     }
 
-//    public SheetDTO getCurrrentSheet() {
-//        return engine.getCurrentSheetDTO();
-//    }
     
     public void setPrimaryStage(Stage primaryStage) {
         this.primaryStage = primaryStage;

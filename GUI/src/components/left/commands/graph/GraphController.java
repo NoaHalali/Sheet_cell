@@ -31,29 +31,6 @@ public class GraphController {
     public void setMainController(AppController mainController) {
         this.mainController = mainController;
     }
-//
-//    public void GraphController( AppController mainController, String xRange, String yRange) {
-//        this.mainController = mainController;
-//
-//
-//    }
-//    public void initializeGraphsController() {
-//
-//        //int numOfColumns = mainController.getNumberOfColumns();
-//        String[] columnsNames = mainController.createColumnsArray();
-//        //dialogManager.showGraphDialog(this::createGraphFromDialog,columnsNames);
-//        xAxisComboBox.setItems(FXCollections.observableArrayList(columnsNames));
-//        yAxisComboBox.setItems(FXCollections.observableArrayList(columnsNames));
-//    }
-
-//    @FXML
-//    private void handleCreateGraph() {
-//        //String xColumn = xAxisComboBox.getValue();
-//        //String yColumn = yAxisComboBox.getValue();
-////        String xRange = xColRangeTextField.getText();
-////        String yRange = yColRangeTextField.getText();
-//
-//    }
 
     public void createGraph(String xRange, String yRange) throws Exception {
         // שליפת הנתונים מהגיליון דרך המנוע
@@ -89,29 +66,27 @@ public class GraphController {
         }
     }
 
-    // פתיחת הדיאלוג
-//    public void openGraphDialog(String[] columns) {
-//        try {
-//            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/components/left/commands/graph/GraphDialog.fxml"));
-//            Parent root = fxmlLoader.load();
+    //
+//    public void GraphController( AppController mainController, String xRange, String yRange) {
+//        this.mainController = mainController;
 //
-//            GraphsController controller = fxmlLoader.getController();
-//            controller.setMainController(mainController);
-//            controller.setColumns(columns);
 //
-//            Stage stage = new Stage();
-//            stage.setTitle("Select Columns and Ranges for Graph");
-//            stage.setScene(new Scene(root));
-//            stage.show();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
+//    }
+//    public void initializeGraphsController() {
+//
+//        //int numOfColumns = mainController.getNumberOfColumns();
+//        String[] columnsNames = mainController.createColumnsArray();
+//        //dialogManager.showGraphDialog(this::createGraphFromDialog,columnsNames);
+//        xAxisComboBox.setItems(FXCollections.observableArrayList(columnsNames));
+//        yAxisComboBox.setItems(FXCollections.observableArrayList(columnsNames));
 //    }
 
-//    // הגדרת העמודות בדיאלוג
-//    private void setColumns(String[] columns) {
-//        xAxisComboBox.setItems(FXCollections.observableArrayList(columns));
-//        yAxisComboBox.setItems(FXCollections.observableArrayList(columns));
+//    @FXML
+//    private void handleCreateGraph() {
+//        //String xColumn = xAxisComboBox.getValue();
+//        //String yColumn = yAxisComboBox.getValue();
+////        String xRange = xColRangeTextField.getText();
+////        String yRange = yColRangeTextField.getText();
+//
 //    }
-
 }

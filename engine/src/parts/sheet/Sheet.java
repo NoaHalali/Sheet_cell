@@ -299,7 +299,6 @@ public class Sheet implements Serializable {
             ObjectInputStream ois = new ObjectInputStream(bis);
             return (Sheet) ois.readObject();
         } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
             return null;
         }
     }
