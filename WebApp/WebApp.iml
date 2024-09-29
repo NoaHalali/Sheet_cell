@@ -20,5 +20,6 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" exported="" scope="PROVIDED" name="Tomcat 10.1.30" level="application_server_libraries" />
+    <orderEntry type="module" module-name="engine" />
   </component>
 </module>

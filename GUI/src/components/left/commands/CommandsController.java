@@ -98,7 +98,6 @@ public class CommandsController {
 
     }
 
-
     @FXML
     public void setColumnRowWidthAction() {
         String width = columnRowWidthTextField.getText();

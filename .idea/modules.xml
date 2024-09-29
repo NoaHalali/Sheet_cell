@@ -5,6 +5,7 @@
       <module fileurl="file://$PROJECT_DIR$/DTO/DTO.iml" filepath="$PROJECT_DIR$/DTO/DTO.iml" />
       <module fileurl="file://$PROJECT_DIR$/GUI/GUI.iml" filepath="$PROJECT_DIR$/GUI/GUI.iml" />
       <module fileurl="file://$PROJECT_DIR$/Shticell.iml" filepath="$PROJECT_DIR$/Shticell.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ShticellClient/ShticellClient.iml" filepath="$PROJECT_DIR$/ShticellClient/ShticellClient.iml" />
       <module fileurl="file://$PROJECT_DIR$/UI/UI.iml" filepath="$PROJECT_DIR$/UI/UI.iml" />
       <module fileurl="file://$PROJECT_DIR$/webApp/WebApp.iml" filepath="$PROJECT_DIR$/webApp/WebApp.iml" />
       <module fileurl="file://$PROJECT_DIR$/engine/engine.iml" filepath="$PROJECT_DIR$/engine/engine.iml" />
