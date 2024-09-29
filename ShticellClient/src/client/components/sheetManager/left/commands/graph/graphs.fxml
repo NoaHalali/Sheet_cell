@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.GridPane?>
+
+<GridPane fx:controller="components.left.commands.graph.GraphController"
+          xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.171"
+          alignment="CENTER" hgap="10" vgap="10" styleClass="subComponent">
+
+    <!-- הגדרות הפריסה -->
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+
+    <!-- תוויות והסברים -->
+    <Label text="Select Column for X:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+    <Label text="Enter Range for X (e.g. F2..F5):" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+    <Label text="Select Column for Y:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+    <Label text="Enter Range for Y (e.g. G2..G5):" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+
+    <!-- ComboBox לבחירת עמודה עבור ציר X -->
+    <ComboBox fx:id="xAxisComboBox" GridPane.rowIndex="0" GridPane.columnIndex="1" prefWidth="150"/>
+
+    <!-- שדה טקסט לטווח עבור ציר X -->
+    <TextField fx:id="xRangeTextField" GridPane.rowIndex="1" GridPane.columnIndex="1" prefWidth="150"/>
+
+    <!-- ComboBox לבחירת עמודה עבור ציר Y -->
+    <ComboBox fx:id="yAxisComboBox" GridPane.rowIndex="2" GridPane.columnIndex="1" prefWidth="150"/>
+
+    <!-- שדה טקסט לטווח עבור ציר Y -->
+    <TextField fx:id="yRangeTextField" GridPane.rowIndex="3" GridPane.columnIndex="1" prefWidth="150"/>
+
+    <!-- כפתור יצירת הגרף -->
+    <Button text="Create Graph" onAction="#handleCreateGraph" GridPane.rowIndex="4" GridPane.columnIndex="0" GridPane.columnSpan="2" prefWidth="200"/>
+
+</GridPane>

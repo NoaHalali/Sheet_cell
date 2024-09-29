@@ -1,0 +1,13 @@
+.transparent-border {
+    -fx-border-width: 0;
+}
+.ellipsis-text {
+    -fx-text-overrun: ellipsis; /* יפעיל שלוש נקודות כאשר יש חוסר מקום */
+    -fx-wrap-text: false;       /* ימנע שבירת שורה */
+    -fx-max-width: Infinity;    /* מאפשר טקסט ארוך להתכווץ */
+}
+
+.list-cell {
+    -fx-text-fill: white; /* צבע טקסט */
+    -fx-background-color: #2b2b2b; /* רקע תואם */
+}

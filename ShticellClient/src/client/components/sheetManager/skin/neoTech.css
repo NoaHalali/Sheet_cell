@@ -1,0 +1,67 @@
+/* General background for the entire app */
+.root {
+    -fx-background-color: #1e1e1e;
+}
+
+/* Style for buttons */
+.button {
+    -fx-background-color: #3a3a3a;
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 14px;
+    -fx-border-color: #5b9bd5;
+    -fx-border-width: 2px;
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 10, 0, 2, 2);
+}
+
+.button:hover {
+    -fx-background-color: #5b9bd5;
+    -fx-text-fill: #ffffff;
+}
+
+/*!* neotech.css *!*/
+/*.vbox, .hbox, .grid-pane, .scroll-pane {*/
+/*    -fx-background-color: #3c3c3c;*/
+/*}*/
+
+.subComponent {
+    -fx-background-color: #4a4a4a;
+}
+
+.button:pressed {
+    -fx-background-color: #4a89c7;
+    -fx-text-fill: #ffffff;
+}
+
+/* Labels styling */
+.label {
+    -fx-text-fill: #000000;
+    -fx-font-family: "Segoe UI";
+    -fx-font-size: 16px;
+}
+
+/* TextField styling */
+.text-field {
+    -fx-background-color: #2a2a2a;
+    -fx-text-fill: #000000;
+    -fx-border-color: #5b9bd5;
+    -fx-border-radius: 5;
+    -fx-padding: 5px;
+    -fx-font-size: 14px;
+}
+
+/* ScrollPane and other containers */
+.scroll-pane {
+    -fx-background-color: #2e2e2e;
+    -fx-border-color: #5b9bd5;
+}
+
+.vbox, .hbox {
+    -fx-spacing: 10px;
+}
+
+.list-cell {
+    -fx-text-fill: white; /* צבע טקסט */
+    -fx-background-color: #2b2b2b; /* רקע תואם */
+}

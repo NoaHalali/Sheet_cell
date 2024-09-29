@@ -7,5 +7,9 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="JavaFX- Noa" level="project" />
+    <orderEntry type="library" name="OK Http" level="project" />
+    <orderEntry type="module" module-name="engine" />
+    <orderEntry type="library" name="Gson" level="project" />
   </component>
 </module>

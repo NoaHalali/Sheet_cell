@@ -1,0 +1,151 @@
+/*!* עיצוב כללי עבור הרכיבים *!*/
+/*.subComponent {*/
+/*    -fx-background-color: linear-gradient(to bottom, #2a2d32, #1b1d21);*/
+/*    -fx-border-color: #00d8ff;*/
+/*    -fx-border-width: 2px;*/
+/*    -fx-border-radius: 10;*/
+/*    -fx-background-radius: 10;*/
+/*    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 10, 0, 2, 2);*/
+/*    -fx-padding: 10;*/
+/*}*/
+
+/*!* עיצוב כפתורים *!*/
+/*.button.subComponent {*/
+/*    -fx-background-color: #00d8ff;*/
+/*    -fx-text-fill: white;*/
+/*    -fx-font-size: 14px;*/
+/*    -fx-border-color: #00b8d8;*/
+/*    -fx-border-width: 2px;*/
+/*    -fx-border-radius: 10;*/
+/*    -fx-background-radius: 10;*/
+/*}*/
+
+/*.button.subComponent:hover {*/
+/*    -fx-background-color: #00b8d8;*/
+/*    -fx-text-fill: white;*/
+/*}*/
+
+/*.button.subComponent:pressed {*/
+/*    -fx-background-color: #009cbf;*/
+/*    -fx-text-fill: white;*/
+/*}*/
+
+/*!* עיצוב תוויות (Label) *!*/
+/*.label {*/
+/*    -fx-text-fill: #ffffff; !* שינוי לצבע לבן *!*/
+/*    -fx-font-family: "Roboto", sans-serif;*/
+/*    -fx-font-size: 16px;*/
+/*    -fx-effect: dropshadow(gaussian, rgb(178, 209, 242), 3, 0, 2, 2);*/
+/*}*/
+
+/*!* עיצוב שדות טקסט (TextField) *!*/
+/*.text-field.subComponent {*/
+/*    -fx-background-color: #b2d1f2;*/
+/*    -fx-text-fill: #ffffff;  !* שינוי לצבע לבן *!*/
+/*    -fx-border-color: #00d8ff;*/
+/*    -fx-border-radius: 5;*/
+/*    -fx-padding: 5px;*/
+/*    -fx-font-size: 14px;*/
+/*}*/
+
+/*!* עיצוב עבור ScrollPane *!*/
+/*.scroll-pane.subComponent {*/
+/*    -fx-background-color: #1f1f1f;*/
+/*    -fx-border-color: #00d8ff;*/
+/*}*/
+
+/*!* עיצוב רשימות (ListCell) *!*/
+/*.list-cell.subComponent {*/
+/*    -fx-background-color: #1b1d21;*/
+/*    -fx-text-fill: #ffffff; !* שינוי לצבע לבן *!*/
+/*}*/
+
+/*!* עיצוב עבור HBox, VBox ושאר הקומפוננטות *!*/
+/*.hbox.subComponent, .vbox.subComponent, .grid-pane.subComponent {*/
+/*    -fx-background-color: transparent;*/
+/*}*/
+
+/*!* עיצוב עבור ComboBox *!*/
+/*.combo-box.subComponent {*/
+/*    -fx-background-color: #b2d1f2;*/
+/*    -fx-text-fill: #000000;*/
+/*    -fx-border-color: #00d8ff;*/
+/*}*/
+
+/*!* שדה טקסט לחיפוש בתוך ComboBox *!*/
+/*.combo-box .list-cell.subComponent {*/
+/*    -fx-background-color: #fff0f0;*/
+/*    -fx-text-fill: #000000;*/
+/*}*/
+
+/*.color-picker {*/
+/*    -fx-background-color: #b2d1f2; !* רקע תואם *!*/
+/*    -fx-text-fill: #000000; !* טקסט כהה *!*/
+/*}*/
+
+/*!* עיצוב עבור שדה הבחירה של ColorPicker *!*/
+/*.color-picker .combo-box-base {*/
+/*    -fx-background-color: #b2d1f2;*/
+/*    -fx-text-fill: #000000; !* שינוי צבע הטקסט *!*/
+/*}*/
+
+/*!* עיצוב עבור הפריט הנבחר בתוך ה-ColorPicker *!*/
+/*.color-picker .label {*/
+/*    -fx-text-fill: #000000; !* טקסט כהה עבור הפריט הנבחר *!*/
+/*}*/
+
+/*!* עיצוב התפריט הנפתח של הצבעים *!*/
+/*.color-picker .list-cell {*/
+/*    -fx-background-color: #ffffff; !* צבע רקע נפתח *!*/
+/*    -fx-text-fill: #000000; !* טקסט כהה *!*/
+/*}*/
+
+/*!* עיצוב החץ בתוך ColorPicker *!*/
+/*.color-picker .arrow-button {*/
+/*    -fx-background-color: #b2d1f2; !* רקע החץ *!*/
+/*}*/
+
+/*!* עיצוב כללי עבור טבלת ה-TableView *!*/
+/*.custom-table {*/
+/*    -fx-background-color: #f4f4f4; !* צבע רקע כללי *!*/
+/*}*/
+
+/*!* עיצוב עבור כותרות העמודות *!*/
+/*.custom-table .column-header-background {*/
+/*    -fx-background-color: #ffffff; !* רקע בהיר לכותרות *!*/
+/*    -fx-border-color: #cccccc; !* גבול קל *!*/
+/*}*/
+
+/*!* עיצוב הטקסט של כותרות העמודות *!*/
+/*.custom-table .label {*/
+/*    -fx-text-fill: #000000; !* צבע טקסט כהה *!*/
+/*    -fx-font-weight: bold; !* טקסט מודגש *!*/
+/*}*/
+
+/*!* עיצוב כללי עבור MenuButton *!*/
+/*.menu-button {*/
+/*    -fx-background-color: #b2d1f2; !* צבע רקע בהיר *!*/
+/*    -fx-text-fill: #000000; !* טקסט כהה *!*/
+/*    -fx-font-size: 14px; !* גודל גופן מותאם *!*/
+/*    -fx-border-color: #00b8d8; !* צבע גבול *!*/
+/*    -fx-border-radius: 5; !* עיגול גבולות *!*/
+/*    -fx-background-radius: 5; !* עיגול רקע *!*/
+/*}*/
+
+/*!* עיצוב עבור MenuButton במצב hover *!*/
+/*.menu-button:hover {*/
+/*    -fx-background-color: #00b8d8; !* רקע במצב hover *!*/
+/*    -fx-text-fill: #ffffff; !* טקסט לבן במצב hover *!*/
+/*}*/
+
+/*!* עיצוב עבור MenuButton במצב pressed *!*/
+/*.menu-button:pressed {*/
+/*    -fx-background-color: #009cbf; !* רקע במצב pressed *!*/
+/*    -fx-text-fill: #ffffff; !* טקסט לבן במצב pressed *!*/
+/*}*/
+
+/*!* עיצוב התפריט הנפתח בתוך MenuButton *!*/
+/*.menu-button .menu-item {*/
+/*    -fx-background-color: #ffffff; !* רקע פריטים בתפריט *!*/
+/*    -fx-text-fill: #000000; !* טקסט כהה לפריטים בתפריט *!*/
+/*}*/

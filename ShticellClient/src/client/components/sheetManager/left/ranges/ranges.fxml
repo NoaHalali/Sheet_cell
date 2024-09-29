@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox spacing="10" styleClass="subComponent" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.components.sheetManager.left.ranges.RangesController">
+   <HBox alignment="CENTER" prefHeight="0.0" prefWidth="303.0">
+      <children>
+         <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="27.0" prefWidth="127.0" text="Ranges">
+            <font>
+               <Font name="System Bold" size="18.0" />
+            </font>
+         </Label>
+      </children>
+   </HBox>
+    <!-- אזור ניהול ה-Ranges -->
+    <TextField fx:id="rangeNameField" promptText="Enter unique range name" />
+    <TextField fx:id="rangeDefinitionField" promptText="Enter range (e.g., A1..A4)" />
+
+    <!-- כפתורים לניהול טווחים -->
+    <Button fx:id="addRangeButton" onAction="#addRangeButtonAction" text="Add Range" />
+    <Button fx:id="deleteRangeButton" onAction="#deleteRangeAction" text="Delete Range" />
+
+    <!-- שימוש ב-MenuButton להצגת אפשרויות הטווחים -->
+    <MenuButton fx:id="rangeMenuButton" text="Choose range: " />
+</VBox>
