@@ -8,8 +8,12 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="JavaFX- Noa" level="project" />
-    <orderEntry type="library" name="OK Http" level="project" />
+    <orderEntry type="library" name="OK Http noa" level="project" />
     <orderEntry type="module" module-name="engine" />
-    <orderEntry type="library" name="Gson" level="project" />
+    <orderEntry type="library" name="Gson noa" level="project" />
+    <orderEntry type="library" name="okHttp" level="project" />
+    <orderEntry type="library" exported="" name="javaFXAmir" level="project" />
+    <orderEntry type="library" exported="" name="gson amir" level="project" />
+    <orderEntry type="library" exported="" name="okHttp amir" level="project" />
   </component>
 </module>

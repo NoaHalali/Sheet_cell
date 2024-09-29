@@ -20,6 +20,10 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" exported="" scope="PROVIDED" name="Tomcat 10.1.30" level="application_server_libraries" />
-    <orderEntry type="module" module-name="engine" />
+    <orderEntry type="module" module-name="engine" exported="" />
+    <orderEntry type="library" name="google-gson-2" level="project" />
+    <orderEntry type="library" exported="" name="javaFXAmir" level="project" />
+    <orderEntry type="library" exported="" name="modAmir" level="project" />
+    <orderEntry type="library" exported="" scope="PROVIDED" name="Tomcat 10.1.26" level="application_server_libraries" />
   </component>
 </module>

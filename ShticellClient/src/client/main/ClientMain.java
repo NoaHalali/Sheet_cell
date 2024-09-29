@@ -44,11 +44,11 @@ public class ClientMain extends Application {
 
     }
 
-//    @Override
-//    public void stop() throws Exception {
+    @Override
+    public void stop() throws Exception {
 //        HttpClientUtil.shutdown();
 //        appController.close();
-//    }
+    }
 
     public static void main(String[] args) {
         launch(args);
