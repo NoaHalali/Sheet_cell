@@ -1,7 +1,7 @@
 package parts.cell;
 
-import parts.sheet.cell.coordinate.Coordinate;
-import parts.sheet.cell.expression.effectiveValue.EffectiveValue;
+import engine.parts.sheet.cell.coordinate.Coordinate;
+import engine.parts.sheet.cell.expression.effectiveValue.EffectiveValue;
 
 import java.util.List;
 

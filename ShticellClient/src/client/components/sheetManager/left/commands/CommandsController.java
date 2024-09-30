@@ -19,8 +19,8 @@ import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import parts.SheetDTO;
-import parts.sheet.cell.coordinate.Coordinate;
-import parts.sheet.cell.expression.effectiveValue.EffectiveValue;
+import engine.parts.sheet.cell.coordinate.Coordinate;
+import engine.parts.sheet.cell.expression.effectiveValue.EffectiveValue;
 
 import java.util.*;
 import java.util.stream.Collectors;

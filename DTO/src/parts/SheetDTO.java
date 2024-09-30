@@ -3,7 +3,7 @@ package parts;
 
 import parts.cell.CellDTO;
 import parts.cell.EmptyCellDTO;
-import parts.sheet.cell.coordinate.Coordinate;
+import engine.parts.sheet.cell.coordinate.Coordinate;
 
 import java.util.List;
 

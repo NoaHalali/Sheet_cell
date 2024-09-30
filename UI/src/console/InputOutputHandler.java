@@ -2,10 +2,10 @@ package console;
 
 import parts.cell.CellDTO;
 import parts.SheetDTO;
-import parts.sheet.cell.coordinate.Coordinate;
-import parts.sheet.cell.coordinate.CoordinateImpl;
-import parts.sheet.cell.expression.effectiveValue.CellType;
-import parts.sheet.cell.expression.effectiveValue.EffectiveValue;
+import engine.parts.sheet.cell.coordinate.Coordinate;
+import engine.parts.sheet.cell.coordinate.CoordinateImpl;
+import engine.parts.sheet.cell.expression.effectiveValue.CellType;
+import engine.parts.sheet.cell.expression.effectiveValue.EffectiveValue;
 
 import java.util.List;
 import java.util.Scanner;

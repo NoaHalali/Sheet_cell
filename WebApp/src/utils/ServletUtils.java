@@ -3,7 +3,7 @@ package utils;
 
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.http.HttpServletRequest;
-import users.UserManager;
+import engine.users.UserManager;
 
 import static constant.Constants.INT_PARAMETER_ERROR;
 

@@ -1,10 +1,10 @@
 package console;
 
-import parts.Engine;
-import parts.EngineImpl;
+import engine.api.Engine;
+import engine.impl.EngineImpl;
 import parts.SheetDTO;
 import parts.cell.CellDTO;
-import parts.sheet.cell.coordinate.Coordinate;
+import engine.parts.sheet.cell.coordinate.Coordinate;
 
 import java.util.List;
 

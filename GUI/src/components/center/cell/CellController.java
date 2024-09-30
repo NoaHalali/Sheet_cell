@@ -3,9 +3,8 @@ package components.center.cell;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.effect.DropShadow;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
-import parts.sheet.cell.coordinate.Coordinate;
+import engine.parts.sheet.cell.coordinate.Coordinate;
 
 public class CellController {
 
