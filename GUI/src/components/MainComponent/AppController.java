@@ -24,13 +24,13 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import engine.api.Engine;
+import shticell.engine.api.Engine;
 import parts.cell.CellDTO;
-import engine.impl.EngineImpl;
+import shticell.engine.impl.EngineImpl;
 import parts.SheetDTO;
-import engine.parts.sheet.cell.coordinate.Coordinate;
-import engine.parts.sheet.cell.coordinate.CoordinateImpl;
-import engine.parts.sheet.cell.expression.effectiveValue.EffectiveValue;
+import shticell.sheets.sheet.parts.cell.coordinate.Coordinate;
+import shticell.sheets.sheet.parts.cell.coordinate.CoordinateImpl;
+import shticell.sheets.sheet.parts.cell.expression.effectiveValue.EffectiveValue;
 
 
 import java.io.File;

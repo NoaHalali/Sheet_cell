@@ -1,6 +1,6 @@
 package components.Utils;
 
-import engine.parts.sheet.cell.expression.effectiveValue.EffectiveValue;
+import shticell.sheets.sheet.parts.cell.expression.effectiveValue.EffectiveValue;
 
 public class EffectiveValueUtils {
     public static String calcValueToString(EffectiveValue effectiveValue) {

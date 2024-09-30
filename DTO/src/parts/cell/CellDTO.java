@@ -1,8 +1,8 @@
 package parts.cell;
 //import engine.parts.Version;
 
-import engine.parts.sheet.cell.coordinate.Coordinate;
-import engine.parts.sheet.cell.expression.effectiveValue.EffectiveValue;
+import shticell.sheets.sheet.parts.cell.coordinate.Coordinate;
+import shticell.sheets.sheet.parts.cell.expression.effectiveValue.EffectiveValue;
 
 import java.util.List;
 

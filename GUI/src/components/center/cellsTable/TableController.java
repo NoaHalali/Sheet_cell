@@ -12,9 +12,9 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import parts.cell.CellDTO;
 import parts.SheetDTO;
-import engine.parts.sheet.cell.coordinate.Coordinate;
-import engine.parts.sheet.cell.coordinate.CoordinateImpl;
-import engine.parts.sheet.cell.expression.effectiveValue.EffectiveValue;
+import shticell.sheets.sheet.parts.cell.coordinate.Coordinate;
+import shticell.sheets.sheet.parts.cell.coordinate.CoordinateImpl;
+import shticell.sheets.sheet.parts.cell.expression.effectiveValue.EffectiveValue;
 
 import java.io.IOException;
 import java.util.ArrayList;

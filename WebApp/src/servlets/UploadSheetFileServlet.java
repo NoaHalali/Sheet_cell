@@ -1,7 +1,7 @@
 package servlets;
 
-import engine.XMLFile.FileManager;
-import engine.parts.sheet.Sheet;
+import shticell.files.FileManager;
+import shticell.sheets.sheet.Sheet;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;

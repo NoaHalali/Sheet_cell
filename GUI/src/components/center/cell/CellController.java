@@ -4,7 +4,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.paint.Color;
-import engine.parts.sheet.cell.coordinate.Coordinate;
+import shticell.sheets.sheet.parts.cell.coordinate.Coordinate;
 
 public class CellController {
 

@@ -1,10 +1,10 @@
 package utils;
 
 
-import engine.sheets.manager.SharedSheetManager;
+import shticell.sheets.manager.SharedSheetManager;
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.http.HttpServletRequest;
-import engine.users.UserManager;
+import shticell.users.UserManager;
 
 import static constant.Constants.INT_PARAMETER_ERROR;
 
