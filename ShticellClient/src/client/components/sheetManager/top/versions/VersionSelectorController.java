@@ -55,7 +55,7 @@ public class VersionSelectorController {
             popupStage.setTitle("Version Preview: " + versionNumberStr);
 
             // טעינת FXML או יצירת ממשק באופן דינמי
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/components/center/cellsTable/table.fxml")); // Adjust the path
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/client/components/sheetManager/center/cellsTable/table.fxml")); // Adjust the path
             Parent root = loader.load();
 
             // קבלת ה-TableController ואתחולו עם הגרסה הנבחרת של הגיליון

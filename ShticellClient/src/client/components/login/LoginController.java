@@ -76,10 +76,10 @@ public class LoginController {
                 } else {
                     System.out.println("Login successful");
 
-//                    Platform.runLater(() -> {
-//                        mainController.updateUserName(userName);
-//                        mainController.switchToChatRoom();
-//                    });
+                    Platform.runLater(() -> {
+                        mainController.updateUserName(userName);
+                        mainController.switchToChatRoom();
+                    });
                 }
             }
         });

@@ -25,8 +25,8 @@ import java.io.FileOutputStream;
 
 public class EngineImpl implements Engine {
     private Sheet currentSheet = null;
-    public Sheet whatIfSheet=null;
-    public Coordinate whatIfCSelectedCoordinate=null;
+    public Sheet whatIfSheet = null;
+    public Coordinate whatIfCSelectedCoordinate = null;
     private FileManager fileManager = new FileManager();
     private List <Version> versionsList = new LinkedList<Version>();
     private static final String SHEET_NOT_LOADED_MESSAGE = "Sheet is not loaded. Please load a sheet before attempting to access it.";

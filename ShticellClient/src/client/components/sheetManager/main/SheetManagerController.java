@@ -1,6 +1,7 @@
 package client.components.sheetManager.main;
 
 import client.components.Utils.StageUtils;
+import client.components.mainAppController.AppController;
 import client.components.sheetManager.center.cellsTable.TableController;
 import client.components.sheetManager.left.commands.CommandsController;
 import client.components.sheetManager.left.ranges.RangesController;
@@ -43,6 +44,7 @@ public class SheetManagerController{
     private int count;
     private Coordinate coordinate;
     private Engine engine;
+    AppController mainController;
 
     //Components
     @FXML private GridPane actionLine;
@@ -409,6 +411,12 @@ public class SheetManagerController{
     public List<CellDTO> getColumnDataInRange(String rangeDefinition) {
         return engine.getColumnDataInRange(rangeDefinition);
     }
+    public void setMainController(AppController mainController) {
+        this.mainController = mainController;
+    }
+
+
+
 
     //public int getNumberOfColumns() {
     //     return engine.getNumberOfColumns();

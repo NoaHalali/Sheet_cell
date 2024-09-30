@@ -4,7 +4,7 @@
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.GridPane?>
 
-<ScrollPane maxWidth="1.7976931348623157E308" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="components.center.cellsTable.TableController">
+<ScrollPane maxWidth="1.7976931348623157E308" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.components.sheetManager.center.cellsTable.TableController">
     <content>
         <GridPane fx:id="dynamicGridPane" alignment="TOP_RIGHT" hgap="5.0" vgap="10.0">
             <!-- Column and row constraints will be dynamically added in the controller -->

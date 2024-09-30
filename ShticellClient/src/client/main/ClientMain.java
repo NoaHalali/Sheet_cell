@@ -17,7 +17,7 @@ import static client.components.Utils.Constants.MAIN_PAGE_FXML_RESOURCE_LOCATION
 
 public class ClientMain extends Application {
 
-    //private AppController mainController;
+    private AppController mainController;
     private LoginController loginController;
 
     @Override
@@ -28,15 +28,16 @@ public class ClientMain extends Application {
         primaryStage.setTitle("Chat App Client");
 
         //URL loginPage = getClass().getResource(MAIN_PAGE_FXML_RESOURCE_LOCATION);
-        URL loginPage = getClass().getResource(LOGIN_PAGE_FXML_RESOURCE_LOCATION);
+        URL loginPage = getClass().getResource(MAIN_PAGE_FXML_RESOURCE_LOCATION);
         try {
             FXMLLoader fxmlLoader = new FXMLLoader();
             fxmlLoader.setLocation(loginPage);
             Parent root = fxmlLoader.load();
-            loginController = fxmlLoader.getController();
+            mainController = fxmlLoader.getController();
 
             Scene scene = new Scene(root, 700, 600);
             primaryStage.setScene(scene);
+           // mainController.setScene(scene);  // העברת הסצנה ל-AppController לשימוש ב-SkinSelector
             primaryStage.show();
         } catch (IOException e) {
             e.printStackTrace();

@@ -71,7 +71,7 @@ public class TableController {
             for (int col = 1; col <= sheet.getNumberOfCols(); col++) {
                 CoordinateImpl coord = new CoordinateImpl(row, col);
                 try {
-                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/components/center/cell/cell.fxml"));
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/client/components/sheetManager/center/cell/cell.fxml"));
                     BorderPane cellPane = loader.load();
                     CellController cellController = loader.getController();
 
