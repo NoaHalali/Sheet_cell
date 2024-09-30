@@ -31,6 +31,7 @@ public class HttpClientUtil {
 
         Call call = HttpClientUtil.HTTP_CLIENT.newCall(request);
 
+        System.out.println("Launching new request for: " + finalUrl);
         call.enqueue(callback);
     }
 

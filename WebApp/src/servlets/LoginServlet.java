@@ -14,15 +14,17 @@ import utils.SessionUtils;
 
 import static constant.Constants.USERNAME;
 
-@WebServlet("/login")
+@WebServlet(name = "LoginServlet",urlPatterns={"/login"})
 public class LoginServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+
         response.setContentType("text/plain;charset=UTF-8");
 
         String usernameFromSession = SessionUtils.getUsername(request);
         UserManager userManager = ServletUtils.getUserManager(getServletContext());
+        System.out.println("Servlet Checking if user exists: " + usernameFromSession);
 
         if (usernameFromSession == null) { //user is not logged in yet
 
