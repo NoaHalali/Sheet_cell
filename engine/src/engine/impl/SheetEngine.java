@@ -36,12 +36,15 @@ public class SheetEngine implements Engine {
     //1
     @Override
     public void readFileData(String filePath) throws Exception {
+
+    }
+
+    public void readFileData(InputStream inputStream) throws Exception {
         //Sheet lastSheet = currentSheet;
-        currentSheet = fileManager.processFile(filePath);
+        currentSheet = fileManager.processFile(inputStream);
         versionsList.clear();
         addVersion(currentSheet, currentSheet.howManyActiveCellsInSheet());
     }
-
     //2
     @Override
     public SheetDTO getCurrentSheetDTO() throws SheetNotLoadedException {

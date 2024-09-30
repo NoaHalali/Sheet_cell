@@ -43,7 +43,9 @@ public class EngineImpl implements Engine {
     @Override
     public void readFileData(String filePath) throws Exception {
         //Sheet lastSheet = currentSheet;
-        currentSheet = fileManager.processFile(filePath);
+        validatePath(filePath);
+        InputStream inputStream = new FileInputStream(new File(filePath));
+        currentSheet = fileManager.processFile(inputStream);
         versionsList.clear();
         addVersion(currentSheet, currentSheet.howManyActiveCellsInSheet());
     }
@@ -291,5 +293,17 @@ public class EngineImpl implements Engine {
 
     public int getNumberOfColumns(){
         return currentSheet.getNumberOfColumns();
+    }
+
+    public void validatePath(String filePath) throws FileNotFoundException, IllegalArgumentException {
+        File file = new File(filePath);
+
+        if (!file.exists()) {
+            throw new FileNotFoundException("File does not exist: " + filePath);
+        }
+
+        if (!filePath.endsWith(".xml")) {
+            throw new IllegalArgumentException("The file is not an XML file: " + filePath);
+        }
     }
 }

@@ -1,7 +1,9 @@
 package engine.sheets.manager;
 
+import engine.api.Engine;
 import engine.impl.SheetEngine;
 
+import java.io.File;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -12,16 +14,22 @@ public class SharedSheetManager {
     public SharedSheetManager() {
         this.sheetEngines = new HashMap<>();
     }
-
-//    public void addSheet(String sheetId, Sheet initialSheet) {
+//
+//    public synchronized void  addSheet(String sheetId, File initialSheet) {
+//        SheetEngine engine = new SheetEngine();
+//        try{
+//            engine.readFileData(initialSheet);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//
 //        sheetEngines.put(sheetId, new SheetEngine(initialSheet));
 //    }
 
-    public SheetEngine getSheetEngine(String sheetId) {
+    public synchronized SheetEngine getSheetEngine(String sheetId) {
         return sheetEngines.get(sheetId);
     }
 
-    public void removeSheet(String sheetId) {
+    public synchronized void removeSheet(String sheetId) {
         sheetEngines.remove(sheetId);
     }
 

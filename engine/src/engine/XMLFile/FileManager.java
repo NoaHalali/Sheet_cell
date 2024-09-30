@@ -27,10 +27,10 @@ public class FileManager {
     private static final char minCol = 'A';
     private static final int minRow = 1;
 
-    public Sheet processFile(String filePath) throws Exception {
+    public Sheet processFile(InputStream inputStream) throws Exception {
 
-        validatePath(filePath);
-        STLSheet XMLSheet = loadXML(filePath);
+        //validatePath(filePath);
+        STLSheet XMLSheet = loadXML(inputStream);
         validateSheetSize(XMLSheet);
         vaidateCells(XMLSheet);
 
@@ -41,23 +41,23 @@ public class FileManager {
         return sheet;
     }
 
-    public void validatePath(String filePath) throws FileNotFoundException, IllegalArgumentException {
-        File file = new File(filePath);
+//    public void validatePath(String filePath) throws FileNotFoundException, IllegalArgumentException {
+//        File file = new File(filePath);
+//
+//        if (!file.exists()) {
+//            throw new FileNotFoundException("File does not exist: " + filePath);
+//        }
+//
+//        if (!filePath.endsWith(".xml")) {
+//            throw new IllegalArgumentException("The file is not an XML file: " + filePath);
+//        }
+//    }
 
-        if (!file.exists()) {
-            throw new FileNotFoundException("File does not exist: " + filePath);
-        }
-
-        if (!filePath.endsWith(".xml")) {
-            throw new IllegalArgumentException("The file is not an XML file: " + filePath);
-        }
-    }
-
-    public STLSheet loadXML(String filePath) {
+    public STLSheet loadXML(InputStream inputStream) {
         try {
-            InputStream inputStream = new FileInputStream(new File(filePath));
+            //InputStream inputStream = new FileInputStream(new File(filePath));
             return deserializeFrom(inputStream);
-        } catch (JAXBException | FileNotFoundException e) {
+        } catch (JAXBException e) {
             throw new RuntimeException("Failed to load XML file", e);
         }
     }

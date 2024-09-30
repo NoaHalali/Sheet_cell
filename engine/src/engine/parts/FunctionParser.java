@@ -9,7 +9,6 @@ import engine.parts.sheet.cell.expression.Expression;
 import engine.parts.sheet.cell.expression.impl.BoolExpression;
 import engine.parts.sheet.cell.expression.impl.NumberExpression;
 import engine.parts.sheet.cell.expression.impl.StringExpression;
-import parts.function.*;
 
 import java.util.ArrayList;
 import java.util.List;

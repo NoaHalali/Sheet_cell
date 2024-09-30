@@ -1,7 +1,4 @@
 package servlets;
-
-
-
 import java.io.IOException;
 
 import jakarta.servlet.annotation.WebServlet;
@@ -56,7 +53,9 @@ public class LoginServlet extends HttpServlet {
 
                         // stands for unauthorized as there is already such user with this name
                         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                        response.getOutputStream().print(errorMessage);
+                        //response.getOutputStream().print(errorMessage);
+                        response.getWriter().println(errorMessage);
+
                     }
                     else {
                         //add the new user to the users list
@@ -73,6 +72,7 @@ public class LoginServlet extends HttpServlet {
                 }
             }
         } else {
+            //TODO
             //user is already logged in
             response.setStatus(HttpServletResponse.SC_OK);
         }
