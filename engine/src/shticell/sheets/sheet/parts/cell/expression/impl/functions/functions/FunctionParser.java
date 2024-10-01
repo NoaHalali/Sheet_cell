@@ -1,6 +1,6 @@
 package shticell.sheets.sheet.parts.cell.expression.impl.functions.functions;
 
-import shticell.parts.function.*;
+
 import shticell.sheets.sheet.Sheet;
 import shticell.sheets.sheet.parts.Range;
 import shticell.sheets.sheet.parts.cell.Cell;

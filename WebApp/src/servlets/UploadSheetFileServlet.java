@@ -1,5 +1,6 @@
 package servlets;
 
+import jakarta.servlet.annotation.WebServlet;
 import shticell.files.FileManager;
 import shticell.sheets.sheet.Sheet;
 import jakarta.servlet.ServletException;
@@ -11,7 +12,7 @@ import jakarta.servlet.http.Part;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
-
+@WebServlet("/upload-file")
 public class UploadSheetFileServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

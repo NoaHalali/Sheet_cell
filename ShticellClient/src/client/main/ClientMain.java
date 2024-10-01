@@ -17,8 +17,7 @@ import static client.components.Utils.Constants.MAIN_PAGE_FXML_RESOURCE_LOCATION
 
 public class ClientMain extends Application {
 
-    private AppController mainController;
-    private LoginController loginController;
+    //private LoginController loginController;
 
     @Override
     public void start(Stage primaryStage) {
@@ -33,7 +32,9 @@ public class ClientMain extends Application {
             FXMLLoader fxmlLoader = new FXMLLoader();
             fxmlLoader.setLocation(loginPage);
             Parent root = fxmlLoader.load();
-            mainController = fxmlLoader.getController();
+            AppController mainController = fxmlLoader.getController();
+            mainController.setPrimaryStage(primaryStage); // העברת ה-Stage ל-AppController
+
 
             Scene scene = new Scene(root, 700, 600);
             primaryStage.setScene(scene);

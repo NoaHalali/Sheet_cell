@@ -14,6 +14,7 @@ public class Constants {
     public final static String MAIN_PAGE_FXML_RESOURCE_LOCATION = "/client/components/mainAppController/app-main.fxml";
     public final static String LOGIN_PAGE_FXML_RESOURCE_LOCATION = "/client/components/login/login.fxml";
     public final static String SHEET_MANAGER_FXML_RESOURCE_LOCATION = "/client/components/sheetManager/main/sheetManager.fxml";
+    public final static String SHEETS_AND_PERMISSIONS_FXML_RESOURCE_LOCATION = "/client/components/sharedSheets/sheetsAndPermissionsManager.fxml";
 
     // Server resources locations
     public final static String BASE_DOMAIN = "localhost";
@@ -21,7 +22,9 @@ public class Constants {
     private final static String CONTEXT_PATH = "/shticell";
     private final static String FULL_SERVER_PATH = BASE_URL + CONTEXT_PATH;
 
+
     public final static String LOGIN_PAGE = FULL_SERVER_PATH + "/login";
+    public static final String UPLOAD_FILE = FULL_SERVER_PATH + "/upload-file";
     public final static String USERS_LIST = FULL_SERVER_PATH + "/userslist";
     public final static String LOGOUT = FULL_SERVER_PATH + "/chat/logout";
     public final static String SEND_CHAT_LINE = FULL_SERVER_PATH + "/pages/chatroom/sendChat";

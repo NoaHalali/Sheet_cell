@@ -1,6 +1,7 @@
 package client.components.mainAppController;
 
 import client.components.login.LoginController;
+import client.components.sharedSheets.SheetsAndPermissionsManagerController;
 import client.components.sheetManager.main.SheetManagerController;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
@@ -9,11 +10,12 @@ import javafx.beans.property.StringProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
@@ -29,11 +31,15 @@ public class AppController {
     //private Parent chatRoomComponent;
     private ScrollPane sheetManagerComponent;
     private SheetManagerController sheetManagerController;
+    
+    private BorderPane  sheetsAndPermissionsManagerComponent;
+    private SheetsAndPermissionsManagerController sheetsAndPermissionsManagerController;
 
     @FXML private Label userGreetingLabel;
     @FXML private AnchorPane mainPanel;
 
     private final StringProperty currentUserName;
+    private Stage stage;
 
     public AppController() {
         currentUserName = new SimpleStringProperty(JHON_DOE);
@@ -46,7 +52,11 @@ public class AppController {
         // prepare components
         loadLoginPage();
         loadSheetManagerPage();
+        loadSheetAndPermissionManager();
+        
     }
+
+
 
     public void updateUserName(String userName) {
         currentUserName.set(userName);
@@ -65,6 +75,21 @@ public class AppController {
 //    public void close() throws IOException {
 //        chatRoomComponentController.close();
 //    }
+    private void loadSheetAndPermissionManager() {
+        URL SheetAndPermissionManagerPageUrl = getClass().getResource(SHEETS_AND_PERMISSIONS_FXML_RESOURCE_LOCATION);
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader();
+            fxmlLoader.setLocation(SheetAndPermissionManagerPageUrl);
+            sheetsAndPermissionsManagerComponent = fxmlLoader.load();
+            sheetsAndPermissionsManagerController = fxmlLoader.getController();
+            sheetsAndPermissionsManagerController.setMainController(this);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
 
     private void loadLoginPage() {
         URL loginPageUrl = getClass().getResource(LOGIN_PAGE_FXML_RESOURCE_LOCATION);
@@ -74,6 +99,7 @@ public class AppController {
             loginComponent = fxmlLoader.load();
             logicController = fxmlLoader.getController();
             logicController.setChatAppMainController(this);
+
             setMainPanelTo(loginComponent);
         } catch (IOException e) {
             e.printStackTrace();
@@ -88,6 +114,7 @@ public class AppController {
             sheetManagerComponent = fxmlLoader.load();
             sheetManagerController = fxmlLoader.getController();
             sheetManagerController.setMainController(this);
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -102,6 +129,9 @@ public class AppController {
         setMainPanelTo(sheetManagerComponent);
        // chatRoomComponentController.setActive();
     }
+    public void switchToSheetsAndPermissionsManager() {
+        setMainPanelTo(sheetsAndPermissionsManagerComponent);
+    }
 
     public void switchToLogin() {
         Platform.runLater(() -> {
@@ -112,4 +142,9 @@ public class AppController {
     }
 
 
+    public void setPrimaryStage(Stage primaryStage) {
+        this.stage = primaryStage;
+//        sheetsAndPermissionsManagerController.setPrimaryStage(primaryStage);
+//        sheetManagerController.setPrimaryStage(primaryStage);
+    }
 }
