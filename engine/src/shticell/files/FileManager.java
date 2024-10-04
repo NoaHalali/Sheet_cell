@@ -12,22 +12,28 @@ import shticell.sheets.sheet.parts.cell.Cell;
 import shticell.sheets.sheet.parts.cell.coordinate.Coordinate;
 import shticell.sheets.sheet.parts.cell.coordinate.CoordinateImpl;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.InputStream;
 
 public class FileManager {
 
-    private static final String JAXB_XML_GAME_PACKAGE_NAME = "XMLFile.GeneratedFiles";
+    private static final String JAXB_XML_GAME_PACKAGE_NAME = "shticell.files.GeneratedFiles";
     private static final int maxRows = 50;
     private static final int minRows = 1;
     private static final int maxCols = 20;
     private static final int minCols = 1;
     private static final char minCol = 'A';
     private static final int minRow = 1;
+    public FileManager() {
 
-    public Sheet processFile(InputStream inputStream) throws Exception {
+    }
+
+    public synchronized Sheet processFile(InputStream inputStream) throws Exception {
 
         //validatePath(filePath);
-        STLSheet XMLSheet = loadXML(inputStream);
+
+        STLSheet XMLSheet= loadXML(inputStream);
         validateSheetSize(XMLSheet);
         vaidateCells(XMLSheet);
 
@@ -50,23 +56,24 @@ public class FileManager {
 //        }
 //    }
 
-    public STLSheet loadXML(InputStream inputStream) {
-        try {
+    public synchronized STLSheet loadXML(InputStream inputStream)throws JAXBException {//TODO USED TO THROW RUNTIME EXEP
+//        try {
             //InputStream inputStream = new FileInputStream(new File(filePath));
+
             return deserializeFrom(inputStream);
-        } catch (JAXBException e) {
-            throw new RuntimeException("Failed to load XML file", e);
-        }
+//        } catch (JAXBException e) {
+//            throw new RuntimeException("Failed to load XML file", e);
+//        }
     }
 
-    private STLSheet deserializeFrom(InputStream in) throws JAXBException {
+    private synchronized STLSheet deserializeFrom(InputStream in) throws JAXBException {
 
         JAXBContext context = JAXBContext.newInstance(JAXB_XML_GAME_PACKAGE_NAME);
         Unmarshaller unmarshaller = context.createUnmarshaller();
         return (STLSheet) unmarshaller.unmarshal(in);
     }
 
-    public void validateSheetSize(STLSheet sheet) throws IllegalArgumentException {
+    public synchronized void validateSheetSize(STLSheet sheet) throws IllegalArgumentException {
 
         int rows = sheet.getSTLLayout().getRows();
         int cols = sheet.getSTLLayout().getColumns();
@@ -85,10 +92,10 @@ public class FileManager {
         }
     }
 
-    private void vaidateCells(STLSheet xmlSheet) {
+    private synchronized void vaidateCells(STLSheet xmlSheet) {
         checkCellInBoardRange(xmlSheet);
     }
-    public void validateAndAddRanges(Sheet Sheet,STLSheet xmlSheet) {
+    public synchronized void validateAndAddRanges(Sheet Sheet,STLSheet xmlSheet) {
         String rangeName;
         //String CoordFormat;
         for (STLRange range:xmlSheet.getSTLRanges().getSTLRange() ){
@@ -100,7 +107,7 @@ public class FileManager {
         }
     }
 
-    public void checkCellInBoardRange(STLSheet sheet) throws IllegalArgumentException {
+    public synchronized void checkCellInBoardRange(STLSheet sheet) throws IllegalArgumentException {
 
         int numberOfRows = sheet.getSTLLayout().getRows();
         int numberOfCols = sheet.getSTLLayout().getColumns();
@@ -126,7 +133,7 @@ public class FileManager {
     }
 
 
-    private Sheet convertSLTSheetToSheet(STLSheet xmlSheet) {
+    private synchronized Sheet convertSLTSheetToSheet(STLSheet xmlSheet) {
         STLLayout layout = xmlSheet.getSTLLayout();
         int rows = layout.getRows();
         int columns = layout.getColumns();

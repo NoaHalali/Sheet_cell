@@ -6,10 +6,12 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import okhttp3.*;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.jetbrains.annotations.NotNull;
+import shticell.files.FileManager;
 
 import static client.components.Utils.Constants.UPLOAD_FILE;
 
@@ -20,7 +22,7 @@ public class LoadSheetFilesController {
     private Button loadSheetFileButton;
 
     @FXML
-    public void loadFileButtonClicked() throws IOException {
+    public void loadFileButtonClicked() throws Exception {
      File file =pickFile();
          uploadFile(file);
     }
@@ -31,24 +33,72 @@ public class LoadSheetFilesController {
         File file = parentController.showFileChooser(fileChooser);
         return file;
     }
-    public void uploadFile(File file) {
+//    public void uploadFile(File file) throws Exception {
+//       // FileManager fileManager = new FileManager();
+//        //    fileManager.processFile(new FileInputStream(file));
+//        if (file != null) {
+//            OkHttpClient client = new OkHttpClient();
+//
+//            // יצירת גוף הבקשה עם הקובץ שנבחר
+//            RequestBody fileBody = RequestBody.create(file, MediaType.parse("application/xml"));
+//
+//
+//            // יצירת בקשה מרובת חלקים (multipart) עם הקובץ
+//            MultipartBody requestBody = new MultipartBody.Builder()
+//                    .setType(MultipartBody.FORM)
+//                    .addFormDataPart("file", file.getName(), fileBody)
+//                    .build();
+//
+//            // בניית בקשת POST לשרת
+//            Request request = new Request.Builder()
+//                    .url(UPLOAD_FILE)
+//                    .post(requestBody)
+//                    .build();
+//
+//            // שליחת הבקשה לשרת בצורה אסינכרונית
+//            client.newCall(request).enqueue(new Callback() {
+//
+//                @Override
+//                public void onFailure(@NotNull Call call, @NotNull IOException e) {
+//                    Platform.runLater(() ->
+//                            System.out.println("File upload failed: " + e.getMessage())
+//                    );
+//                }
+//
+//                @Override
+//                public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+//                    if (response.isSuccessful()) {
+//                        String responseBody = response.body().string();
+//                        Platform.runLater(() ->
+//                                System.out.println("File uploaded successfully: " + responseBody)
+//                        );
+//                    } else {
+//                        Platform.runLater(() ->
+//                                System.out.println("File upload failed: " + response.code())
+//                        );
+//                    }
+//                }
+//            });
+//        } else {
+//            System.out.println("No file selected.");
+//        }
+//    }
+    public void uploadFile(File file) throws Exception {
+        // FileManager fileManager = new FileManager();
+        //    fileManager.processFile(new FileInputStream(file));
         if (file != null) {
             OkHttpClient client = new OkHttpClient();
 
             // יצירת גוף הבקשה עם הקובץ שנבחר
-            RequestBody fileBody = RequestBody.create(file, MediaType.parse("application/xml"));
+            RequestBody body =
+                    new MultipartBody.Builder()
+                            .addFormDataPart("file", file.getName(), RequestBody.create(file, MediaType.parse("application/xml")))
+                            //.addFormDataPart("key1", "value1") // you can add multiple, different parts as needed
+                            .build();
 
-
-            // יצירת בקשה מרובת חלקים (multipart) עם הקובץ
-            MultipartBody requestBody = new MultipartBody.Builder()
-                    .setType(MultipartBody.FORM)
-                    .addFormDataPart("file", file.getName(), fileBody)
-                    .build();
-
-            // בניית בקשת POST לשרת
             Request request = new Request.Builder()
                     .url(UPLOAD_FILE)
-                    .post(requestBody)
+                    .post(body)
                     .build();
 
             // שליחת הבקשה לשרת בצורה אסינכרונית

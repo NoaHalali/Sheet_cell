@@ -1,6 +1,7 @@
 package utils;
 
 
+import shticell.files.FileManager;
 import shticell.sheets.manager.SharedSheetManager;
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.http.HttpServletRequest;
@@ -13,6 +14,7 @@ public class ServletUtils {
 	private static final String USER_MANAGER_ATTRIBUTE_NAME = "userManager";
 	//private static final String CHAT_MANAGER_ATTRIBUTE_NAME = "chatManager";
 	private static final String SHARED_SHEET_MANAGER_ATTRIBUTE_NAME = "sharedSheetManager";
+	private static final  String FILE_MANAGER_ATTRIBUTE_NAME = "fileManager";
 
 	/*
 	Note how the synchronization is done only on the question and\or creation of the relevant managers and once they exists -
@@ -20,6 +22,7 @@ public class ServletUtils {
 	 */
 	private static final Object userManagerLock = new Object();
 	private static final Object sharedSheetManagerLock = new Object();
+	private static final Object fileManagerLock = new Object();
 	//private static final Object chatManagerLock = new Object();
 
 	public static UserManager getUserManager(ServletContext servletContext) {
@@ -30,6 +33,14 @@ public class ServletUtils {
 			}
 		}
 		return (UserManager) servletContext.getAttribute(USER_MANAGER_ATTRIBUTE_NAME);
+	}
+	public static FileManager getFileManager(ServletContext servletContext) {
+		synchronized (fileManagerLock) {
+			if (servletContext.getAttribute(FILE_MANAGER_ATTRIBUTE_NAME) == null) {
+				servletContext.setAttribute(FILE_MANAGER_ATTRIBUTE_NAME, new FileManager());
+			}
+		}
+		return (FileManager) servletContext.getAttribute(FILE_MANAGER_ATTRIBUTE_NAME);
 	}
 //	public static ChatManager getChatManager(ServletContext servletContext) {
 //		synchronized (chatManagerLock) {
