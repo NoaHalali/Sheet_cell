@@ -8,6 +8,8 @@
         </element>
         <element id="directory" name="lib">
           <element id="artifact" artifact-name="Engine" />
+          <element id="library" level="project" name="JAXB - Noa" />
+          <element id="artifact" artifact-name="DTO" />
         </element>
       </element>
       <element id="javaee-facet-resources" facet="WebApp/web/Web" />

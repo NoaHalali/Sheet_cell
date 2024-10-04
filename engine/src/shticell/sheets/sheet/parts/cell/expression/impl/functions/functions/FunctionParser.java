@@ -12,6 +12,8 @@ import shticell.sheets.sheet.parts.cell.expression.impl.NumberExpression;
 import shticell.sheets.sheet.parts.cell.expression.impl.StringExpression;
 import shticell.sheets.sheet.parts.cell.expression.impl.functions.functions.logic.*;
 import shticell.sheets.sheet.parts.cell.expression.impl.functions.functions.math.*;
+import shticell.sheets.sheet.parts.cell.expression.impl.functions.functions.math.Average;
+import shticell.sheets.sheet.parts.cell.expression.impl.functions.functions.math.Plus;
 import shticell.sheets.sheet.parts.cell.expression.impl.functions.functions.string.Concat;
 import shticell.sheets.sheet.parts.cell.expression.impl.functions.functions.string.Sub;
 
