@@ -2,9 +2,8 @@ package servlets;
 
 import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.xml.bind.JAXB;
-import jakarta.xml.bind.JAXBContext;
 import shticell.files.FileManager;
+import shticell.sheets.manager.MultiSheetEngineManager;
 import shticell.sheets.sheet.Sheet;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
@@ -77,11 +76,35 @@ public class UploadSheetFileServlet extends HttpServlet  {
             try {
                 FileManager fileManager = ServletUtils.getFileManager(getServletContext());
                 Sheet sheet = fileManager.processFile(concatenatedStream);//fail here because load xml method wont even enter !!!
-                out.println("File processed successfully.");
+                String sheetName = sheet.getSheetName();
+                MultiSheetEngineManager multiSheetEngineManager = ServletUtils.getSharedSheetManager(getServletContext());
+                synchronized (this) {
+                    if (multiSheetEngineManager.isSheetNameExists(sheetName)) {
+                        String errorMessage = "sheet " + sheetName + " already exists. Please enter a different sheet.";
+
+                        // stands for unauthorized as there is already such user with this name
+                        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                        //response.getOutputStream().print(errorMessage);
+                        response.getWriter().println(errorMessage);
+
+                    } else {
+                        //add the new sheet to the multiSheetEngineManager
+                        multiSheetEngineManager.addSheetEngine(sheet);
+
+                        out.println("File processed successfully."); //print to client
+                        System.out.println("On adding sheet, request URI is: " + request.getRequestURI()); //print to server
+                        response.setStatus(HttpServletResponse.SC_OK);
+                    }
+                }
+
+
 
             } catch (Exception e) {
-                e.printStackTrace();
-                out.println("Error processing file: " + e.getMessage());
+//                e.printStackTrace();
+//                out.println("Error processing file: " + e.getMessage());
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                //response.getOutputStream().print(errorMessage);
+                response.getWriter().println(e.getMessage());
             }
         }
         else

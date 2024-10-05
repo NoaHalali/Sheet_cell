@@ -80,7 +80,7 @@ public class LoadSheetFilesController {
                     System.out.println(response.body().string());
                 } else {
                     // טיפול במקרה שהבקשה לא הצליחה
-                    System.out.println("Request failed: " + response.code());
+                    System.out.println("Request failed: " + response.body().string());
                 }
             }
         });

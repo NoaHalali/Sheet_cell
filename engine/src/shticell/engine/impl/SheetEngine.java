@@ -38,13 +38,18 @@ public class SheetEngine implements Engine {
     public void readFileData(String filePath) throws Exception {
 
     }
-
-    public void readFileData(InputStream inputStream) throws Exception {
-        //Sheet lastSheet = currentSheet;
-        currentSheet = fileManager.processFile(inputStream);
-        versionsList.clear();
+    public SheetEngine(Sheet sheet) {
+        currentSheet = sheet;
+        //versionsList.clear();
         addVersion(currentSheet, currentSheet.howManyActiveCellsInSheet());
     }
+
+//    public void readFileData(InputStream inputStream) throws Exception {
+//        //Sheet lastSheet = currentSheet;
+//        currentSheet = fileManager.processFile(inputStream);
+//        versionsList.clear();
+//        addVersion(currentSheet, currentSheet.howManyActiveCellsInSheet());
+//    }
     //2
     @Override
     public SheetDTO getCurrentSheetDTO() throws SheetNotLoadedException {

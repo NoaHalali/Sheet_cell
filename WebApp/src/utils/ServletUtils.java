@@ -2,7 +2,7 @@ package utils;
 
 
 import shticell.files.FileManager;
-import shticell.sheets.manager.SharedSheetManager;
+import shticell.sheets.manager.MultiSheetEngineManager;
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.http.HttpServletRequest;
 import shticell.users.UserManager;
@@ -62,12 +62,12 @@ public class ServletUtils {
 		return INT_PARAMETER_ERROR;
 	}
 
-	public static SharedSheetManager getSharedSheetManager(ServletContext servletContext) {
+	public static MultiSheetEngineManager getSharedSheetManager(ServletContext servletContext) {
 		synchronized (sharedSheetManagerLock) {
 			if (servletContext.getAttribute(SHARED_SHEET_MANAGER_ATTRIBUTE_NAME) == null) {
-				servletContext.setAttribute(SHARED_SHEET_MANAGER_ATTRIBUTE_NAME, new SharedSheetManager());
+				servletContext.setAttribute(SHARED_SHEET_MANAGER_ATTRIBUTE_NAME, new MultiSheetEngineManager());
 			}
 		}
-		return (SharedSheetManager) servletContext.getAttribute(SHARED_SHEET_MANAGER_ATTRIBUTE_NAME);
+		return (MultiSheetEngineManager) servletContext.getAttribute(SHARED_SHEET_MANAGER_ATTRIBUTE_NAME);
 	}
 }
