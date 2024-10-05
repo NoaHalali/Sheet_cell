@@ -1,7 +1,7 @@
 package client.components.mainAppController;
 
 import client.components.login.LoginController;
-import client.components.sharedSheets.SheetsAndPermissionsManagerController;
+import client.components.multiSheetsScreen.MultiSheetsScreenController;
 import client.components.sheetManager.main.SheetManagerController;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
@@ -33,7 +33,7 @@ public class AppController {
     private SheetManagerController sheetManagerController;
     
     private BorderPane  sheetsAndPermissionsManagerComponent;
-    private SheetsAndPermissionsManagerController sheetsAndPermissionsManagerController;
+    private MultiSheetsScreenController multiSheetsScreenController;
 
     @FXML private Label userGreetingLabel;
     @FXML private AnchorPane mainPanel;
@@ -81,8 +81,8 @@ public class AppController {
             FXMLLoader fxmlLoader = new FXMLLoader();
             fxmlLoader.setLocation(SheetAndPermissionManagerPageUrl);
             sheetsAndPermissionsManagerComponent = fxmlLoader.load();
-            sheetsAndPermissionsManagerController = fxmlLoader.getController();
-            sheetsAndPermissionsManagerController.setMainController(this);
+            multiSheetsScreenController = fxmlLoader.getController();
+            multiSheetsScreenController.setMainController(this);
 
         } catch (IOException e) {
             e.printStackTrace();

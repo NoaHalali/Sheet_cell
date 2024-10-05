@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+
+<ScrollPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="339.0" prefWidth="458.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/22" fx:controller="client.components.multiSheetsScreen.availableSheetsTable.AvailableSheetsTableController">
+   <content>
+      <TableView prefHeight="340.0" prefWidth="459.0">
+        <columns>
+          <TableColumn prefWidth="116.0" text="Uploaded By user" />
+          <TableColumn prefWidth="137.0" text="Sheet Name" />
+            <TableColumn prefWidth="93.0" text="Sheet Size" />
+            <TableColumn prefWidth="98.0" text="Permission" />
+        </columns>
+      </TableView>
+   </content>
+</ScrollPane>

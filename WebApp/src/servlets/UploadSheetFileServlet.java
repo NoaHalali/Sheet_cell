@@ -22,27 +22,6 @@ import java.util.*;
 @MultipartConfig(fileSizeThreshold = 1024 * 1024, maxFileSize = 1024 * 1024 * 5, maxRequestSize = 1024 * 1024 * 5 * 5)
 
 public class UploadSheetFileServlet extends HttpServlet  {
-//    @Override
-//    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-//        response.setContentType("text/plain");
-//        PrintWriter out = response.getWriter();
-//
-//        // קבלת חלקי הבקשה (הקובץ)
-//        Part filePart = request.getPart("file");
-//        InputStream fileContent = filePart.getInputStream();
-//        System.out.println("hola");
-//        // שימוש במנהל הקבצים שלך
-//
-//        try {
-//
-//            FileManager fileManager = ServletUtils.getFileManager(getServletContext());
-//            Sheet sheet = fileManager.processFile(fileContent);//fail here because load xml method wont even enter !!!
-//            out.println("File processed successfully.");
-//
-//        } catch (Exception e) {
-//            out.println("Error processing file: " + e.getMessage());
-//        }
-//    }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -50,24 +29,23 @@ public class UploadSheetFileServlet extends HttpServlet  {
         PrintWriter out = response.getWriter();
 
         Collection<Part> parts = request.getParts();
-        out.println("Total parts : " + parts.size());
+        //out.println("Total parts : " + parts.size());
 
         List<InputStream> streams = new ArrayList<>(); //new
         StringBuilder fileStringContent = new StringBuilder();
 
         for (Part part : parts) {
-            printPart(part, out);
+            //printPart(part, out);
 
             //to write the content of the file to an actual file in the system (will be created at c:\samplefile)
             //part.write("samplefile");
 
             //to write the content of the file to a string
             fileStringContent.append(readFromInputStream(part.getInputStream()));
-
             streams.add(part.getInputStream()); //new
         }
         System.out.println("On upload file, request URI is: " + request.getRequestURI());
-        printFileContent(fileStringContent.toString(), out);
+        //printFileContent(fileStringContent.toString(), out);
 
         if (!streams.isEmpty()) {
             // מיזוג כל הזרמים לזרם אחד
@@ -78,14 +56,16 @@ public class UploadSheetFileServlet extends HttpServlet  {
                 Sheet sheet = fileManager.processFile(concatenatedStream);//fail here because load xml method wont even enter !!!
                 String sheetName = sheet.getSheetName();
                 MultiSheetEngineManager multiSheetEngineManager = ServletUtils.getSharedSheetManager(getServletContext());
+
                 synchronized (this) {
                     if (multiSheetEngineManager.isSheetNameExists(sheetName)) {
-                        String errorMessage = "sheet " + sheetName + " already exists. Please enter a different sheet.";
+                        String errorMessage = "Sheet with name: '" + sheetName + "' already exists. Please choose a file with different sheet name.";
 
                         // stands for unauthorized as there is already such user with this name
                         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                         //response.getOutputStream().print(errorMessage);
                         response.getWriter().println(errorMessage);
+
 
                     } else {
                         //add the new sheet to the multiSheetEngineManager
@@ -96,12 +76,7 @@ public class UploadSheetFileServlet extends HttpServlet  {
                         response.setStatus(HttpServletResponse.SC_OK);
                     }
                 }
-
-
-
             } catch (Exception e) {
-//                e.printStackTrace();
-//                out.println("Error processing file: " + e.getMessage());
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 //response.getOutputStream().print(errorMessage);
                 response.getWriter().println(e.getMessage());

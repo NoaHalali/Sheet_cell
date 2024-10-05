@@ -1,6 +1,7 @@
-package client.components.sharedSheets.loadFiles;
+package client.components.multiSheetsScreen.loadFiles;
 
-import client.components.sharedSheets.SheetsAndPermissionsManagerController;
+import client.components.Utils.StageUtils;
+import client.components.multiSheetsScreen.MultiSheetsScreenController;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -8,14 +9,13 @@ import okhttp3.*;
 import java.io.File;
 import java.io.IOException;
 import javafx.stage.FileChooser;
-import org.jetbrains.annotations.NotNull;
 
 import static client.components.Utils.Constants.UPLOAD_FILE;
 //import static jdk.internal.vm.vector.VectorSupport.test;
 
 public class LoadSheetFilesController {
 
-    private SheetsAndPermissionsManagerController parentController;
+    private MultiSheetsScreenController parentController;
     @FXML
     private Button loadSheetFileButton;
 
@@ -75,12 +75,17 @@ public class LoadSheetFilesController {
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
+                String responseBody = response.body().string();
                 if (response.isSuccessful()) {
-                    // טיפול במקרה שהבקשה הצליחה
-                    System.out.println(response.body().string());
+                    Platform.runLater(() -> {
+                        // טיפול במקרה שהבקשה הצליחה
+                        System.out.println("Upload successful: " + responseBody);
+                    });
+
                 } else {
-                    // טיפול במקרה שהבקשה לא הצליחה
-                    System.out.println("Request failed: " + response.body().string());
+                    Platform.runLater(() ->
+                            StageUtils.showAlert("Error", "Error uploading file" + responseBody)
+                    );
                 }
             }
         });
@@ -95,7 +100,7 @@ public class LoadSheetFilesController {
         return file;
     }
 
-    public void setParentController(SheetsAndPermissionsManagerController parentController) {
+    public void setParentController(MultiSheetsScreenController parentController) {
         this.parentController = parentController;
     }
 
