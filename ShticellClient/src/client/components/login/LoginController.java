@@ -78,7 +78,7 @@ public class LoginController {
 
                     Platform.runLater(() -> {
                         mainController.updateUserName(userName);
-                        //mainController.switchToChatRoom();
+                        //mainController.switchToSheetManager();
                         mainController.switchToSheetsAndPermissionsManager();
                     });
                 }

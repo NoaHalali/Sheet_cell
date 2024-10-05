@@ -80,6 +80,7 @@ public class LoadSheetFilesController {
                     Platform.runLater(() -> {
                         // טיפול במקרה שהבקשה הצליחה
                         System.out.println("Upload successful: " + responseBody);
+                        //parentController.switchToSheetsAndPermissionsManager();
                     });
 
                 } else {
@@ -90,7 +91,6 @@ public class LoadSheetFilesController {
             }
         });
     }
-
 
     public File pickFile() {
         FileChooser fileChooser = new FileChooser();

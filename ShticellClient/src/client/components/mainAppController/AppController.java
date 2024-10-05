@@ -16,6 +16,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
+import shticell.engine.api.Engine;
 
 import java.io.IOException;
 import java.net.URL;
@@ -125,9 +126,12 @@ public class AppController {
 //        httpStatusComponentController.addHttpStatusLine(line);
 //    }
 
-    public void switchToChatRoom() {
-        setMainPanelTo(sheetManagerComponent);
-       // chatRoomComponentController.setActive();
+    public void switchToSheetManager(Engine engine) {
+        Platform.runLater(() -> {
+            //sheetManagerController.setActive();
+            setMainPanelTo(sheetManagerComponent);
+            //sheetManagerController.setEngine(engine);
+        });
     }
     public void switchToSheetsAndPermissionsManager() {
         setMainPanelTo(sheetsAndPermissionsManagerComponent);

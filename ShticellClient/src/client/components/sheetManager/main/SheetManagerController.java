@@ -29,6 +29,7 @@ import shticell.engine.api.Engine;
 import parts.cell.CellDTO;
 import shticell.engine.impl.EngineImpl;
 import parts.SheetDTO;
+import shticell.engine.impl.SheetEngine;
 import shticell.sheets.sheet.parts.cell.coordinate.Coordinate;
 import shticell.sheets.sheet.parts.cell.coordinate.CoordinateImpl;
 import shticell.sheets.sheet.parts.cell.expression.effectiveValue.EffectiveValue;
@@ -43,7 +44,8 @@ public class SheetManagerController{
     private Scene scene;
     private int count;
     private Coordinate coordinate;
-    private Engine engine;
+    //private Engine engine;
+    private String
     AppController mainController;
 
     //Components
@@ -79,7 +81,7 @@ public class SheetManagerController{
         if (actionLineController != null && tableController != null && fileChooserController != null
                 && versionSelectorController != null && commandsController != null && rangesController != null && skinSelectorController != null) {
 
-            engine = new EngineImpl();
+            //engine = new SheetEngine();
             setMainControllerForComponents();
             initializeProperties();
             bindUIComponents();
@@ -149,6 +151,11 @@ public class SheetManagerController{
             skinSelectorController.initializeSkinSelector();  // אתחול ערכות הנושא
         }
     }
+
+//    public void setEngine(Engine engine) {
+//        this.engine = engine;
+//        initializeComponentsAfterLoad();
+//    }
 
     public File showFileChooser(FileChooser fileChooser) {
         return fileChooser.showOpenDialog(primaryStage);
