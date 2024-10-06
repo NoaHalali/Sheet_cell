@@ -16,7 +16,20 @@ public class EffectiveValueDeserializer implements JsonDeserializer<EffectiveVal
         // שולף את סוג התא והערך מתוך ה-JSON
         String cellTypeStr = jsonObject.get("cellType").getAsString();
         CellType cellType = CellType.valueOf(cellTypeStr); // assuming CellType is an enum
-        Object value = jsonObject.get("value").getAsString(); // אם הערך הוא מחרוזת, התאימי את זה לסוג המתקבל
+        //Object value = jsonObject.get("value").getAsString(); // אם הערך הוא מחרוזת, התאימי את זה לסוג המתקבל
+        Object value = null;
+
+        switch (cellType) {
+            case NUMERIC:
+                value = jsonObject.get("value").getAsDouble();
+                break;
+            case BOOLEAN:
+                value = jsonObject.get("value").getAsBoolean();
+                break;
+            case STRING:
+                value = jsonObject.get("value").getAsString();
+                break;
+        }
 
         // מחזיר את המימוש של EffectiveValueImpl
         return new EffectiveValueImpl(cellType, value);

@@ -48,7 +48,7 @@ public class SheetManagerController{
     private Engine engine;
     private String sheetName="beginner";
     private AppController mainController;
-    private RequestsManager requestsManager;
+    private final RequestsManager requestsManager = new RequestsManager();
 
     //Components
     @FXML private GridPane actionLine;

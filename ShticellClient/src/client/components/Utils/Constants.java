@@ -24,8 +24,8 @@ public class Constants {
 
 
     public final static String LOGIN_PAGE = FULL_SERVER_PATH + "/login";
-    public static final String UPLOAD_FILE = FULL_SERVER_PATH + "/upload-file";
-    public static final String GET_SHEET_DTO = FULL_SERVER_PATH + "/get-sheet-dto";
+    public static final String UPLOAD_FILE = FULL_SERVER_PATH + "/uploadFile";
+    public static final String GET_SHEET_DTO = FULL_SERVER_PATH + "/getSheetDTO";
 
 //    public final static String USERS_LIST = FULL_SERVER_PATH + "/userslist";
 //    public final static String LOGOUT = FULL_SERVER_PATH + "/chat/logout";

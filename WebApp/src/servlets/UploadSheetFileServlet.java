@@ -18,7 +18,7 @@ import java.io.PrintWriter;
 import java.io.SequenceInputStream;
 import java.util.*;
 
-@WebServlet("/upload-file")
+@WebServlet("/uploadFile")
 @MultipartConfig(fileSizeThreshold = 1024 * 1024, maxFileSize = 1024 * 1024 * 5, maxRequestSize = 1024 * 1024 * 5 * 5)
 
 public class UploadSheetFileServlet extends HttpServlet  {
