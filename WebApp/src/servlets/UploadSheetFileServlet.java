@@ -55,7 +55,7 @@ public class UploadSheetFileServlet extends HttpServlet  {
                 FileManager fileManager = ServletUtils.getFileManager(getServletContext());
                 Sheet sheet = fileManager.processFile(concatenatedStream);//fail here because load xml method wont even enter !!!
                 String sheetName = sheet.getSheetName();
-                MultiSheetEngineManager multiSheetEngineManager = ServletUtils.getSharedSheetManager(getServletContext());
+                MultiSheetEngineManager multiSheetEngineManager = ServletUtils.getMultiSheetEngineManager(getServletContext());
 
                 synchronized (this) {
                     if (multiSheetEngineManager.isSheetNameExists(sheetName)) {

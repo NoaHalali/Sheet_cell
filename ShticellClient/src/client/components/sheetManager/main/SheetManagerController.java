@@ -130,16 +130,21 @@ public class SheetManagerController{
 
         clearSelectionStates();
         fileSelectedProperty.set(true);
-        // עדכון ה-UI במקרה של הצלחה
-        SheetDTO sheet = engine.getCurrentSheetDTO();
-        SheetDTO sheet = requestsManager.getSheetDTO(sheetName);
-        tableController.initializeGrid(sheet);
-        versionSelectorController.initializeVersionSelector(sheet.getVersion());
-        actionLineController.initializeActionLine(cellSelected);
-        commandsController.InitializeCommandsController(cellSelected,rangeSelected, columnSelected,rowSelected,showWhatIfMode);
-        rangesController.initializeRangesController(sheet.getRangesNames(), rangeSelected);
 
-        versionProperty.set(1);
+// שולחים את הבקשה לשרת ומעבירים את ה-Consumers המתאימים
+        requestsManager.getSheetDTO(sheetName, sheet -> {
+            // פעולה במקרה של הצלחה: עדכון ה-UI
+            tableController.initializeGrid(sheet);
+            versionSelectorController.initializeVersionSelector(sheet.getVersion());
+            actionLineController.initializeActionLine(cellSelected);
+            commandsController.InitializeCommandsController(cellSelected, rangeSelected, columnSelected, rowSelected, showWhatIfMode);
+            rangesController.initializeRangesController(sheet.getRangesNames(), rangeSelected);
+
+            versionProperty.set(1);
+        }, errorMessage -> {
+            // פעולה במקרה של כשל
+            StageUtils.showAlert("Error", errorMessage);
+        });
     }
 
 

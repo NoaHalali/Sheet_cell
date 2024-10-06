@@ -27,5 +27,7 @@
     <orderEntry type="library" exported="" scope="PROVIDED" name="Tomcat 10.1.26" level="application_server_libraries" />
     <orderEntry type="library" exported="" name="JAXB - Noa" level="project" />
     <orderEntry type="module" module-name="DTO" />
+    <orderEntry type="library" name="Gson noa" level="project" />
+    <orderEntry type="library" name="gson amir" level="project" />
   </component>
 </module>

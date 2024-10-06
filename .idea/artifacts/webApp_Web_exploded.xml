@@ -11,6 +11,8 @@
           <element id="library" level="project" name="JAXB - Noa" />
           <element id="artifact" artifact-name="DTO" />
           <element id="library" level="project" name="modAmir" />
+          <element id="library" level="project" name="gson amir" />
+          <element id="library" level="project" name="Gson noa" />
         </element>
       </element>
       <element id="javaee-facet-resources" facet="WebApp/web/Web" />
