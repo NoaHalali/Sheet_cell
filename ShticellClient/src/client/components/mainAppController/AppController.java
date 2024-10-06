@@ -130,6 +130,7 @@ public class AppController {
         Platform.runLater(() -> {
             //sheetManagerController.setActive();
             setMainPanelTo(sheetManagerComponent);
+            sheetManagerController.initializeComponentsAfterLoad();
             //sheetManagerController.setEngine(engine);
         });
     }

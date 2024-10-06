@@ -3,6 +3,7 @@ package client.components.sheetManager.main;
 import client.components.Utils.StageUtils;
 import client.components.mainAppController.AppController;
 import client.components.sheetManager.center.cellsTable.TableController;
+import client.components.sheetManager.http.RequestsManager;
 import client.components.sheetManager.left.commands.CommandsController;
 import client.components.sheetManager.left.ranges.RangesController;
 import client.components.sheetManager.skin.SkinSelectorController;
@@ -44,9 +45,10 @@ public class SheetManagerController{
     private Scene scene;
     private int count;
     private Coordinate coordinate;
-    //private Engine engine;
+    private Engine engine;
     private String sheetName="beginner";
-    AppController mainController;
+    private AppController mainController;
+    private RequestsManager requestsManager;
 
     //Components
     @FXML private GridPane actionLine;
@@ -130,6 +132,7 @@ public class SheetManagerController{
         fileSelectedProperty.set(true);
         // עדכון ה-UI במקרה של הצלחה
         SheetDTO sheet = engine.getCurrentSheetDTO();
+        SheetDTO sheet = requestsManager.getSheetDTO(sheetName);
         tableController.initializeGrid(sheet);
         versionSelectorController.initializeVersionSelector(sheet.getVersion());
         actionLineController.initializeActionLine(cellSelected);

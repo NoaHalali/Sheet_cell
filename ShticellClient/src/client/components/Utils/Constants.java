@@ -25,10 +25,12 @@ public class Constants {
 
     public final static String LOGIN_PAGE = FULL_SERVER_PATH + "/login";
     public static final String UPLOAD_FILE = FULL_SERVER_PATH + "/upload-file";
-    public final static String USERS_LIST = FULL_SERVER_PATH + "/userslist";
-    public final static String LOGOUT = FULL_SERVER_PATH + "/chat/logout";
-    public final static String SEND_CHAT_LINE = FULL_SERVER_PATH + "/pages/chatroom/sendChat";
-    public final static String CHAT_LINES_LIST = FULL_SERVER_PATH + "/chat";
+    public static final String GET_SHEET_DTO = FULL_SERVER_PATH + "/get-sheet-dto";
+
+//    public final static String USERS_LIST = FULL_SERVER_PATH + "/userslist";
+//    public final static String LOGOUT = FULL_SERVER_PATH + "/chat/logout";
+//    public final static String SEND_CHAT_LINE = FULL_SERVER_PATH + "/pages/chatroom/sendChat";
+//    public final static String CHAT_LINES_LIST = FULL_SERVER_PATH + "/chat";
 
     // GSON instance
     public final static Gson GSON_INSTANCE = new Gson();
