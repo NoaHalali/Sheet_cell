@@ -67,7 +67,7 @@ public class EngineImpl implements Engine {
         {
            return cell.toCellDTO();
         }
-        return new EmptyCellDTO(coordinate, 0, List.of());
+        return new CellDTO(coordinate,null,null, 0,List.of(), List.of());
     }
 
     //4

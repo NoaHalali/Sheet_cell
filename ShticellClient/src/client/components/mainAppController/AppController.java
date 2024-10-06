@@ -126,7 +126,7 @@ public class AppController {
 //        httpStatusComponentController.addHttpStatusLine(line);
 //    }
 
-    public void switchToSheetManager(Engine engine) {
+    public void switchToSheetManager() {
         Platform.runLater(() -> {
             //sheetManagerController.setActive();
             setMainPanelTo(sheetManagerComponent);

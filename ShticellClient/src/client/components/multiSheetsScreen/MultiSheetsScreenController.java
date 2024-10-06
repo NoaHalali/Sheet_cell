@@ -33,6 +33,10 @@ public class MultiSheetsScreenController {
         this.mainController = mainController;
     }
 
+    public void switchToSheetManager() {
+        mainController.switchToSheetManager();
+    }
+
 //    public void switchToSheetManager() {
 //        mainController.switchToSheetManager();
 //    }

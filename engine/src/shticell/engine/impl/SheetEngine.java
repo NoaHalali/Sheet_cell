@@ -13,7 +13,7 @@ import shticell.sheets.sheet.parts.cell.expression.effectiveValue.EffectiveValue
 import shticell.sheets.sheet.parts.cell.expression.impl.NumberExpression;
 import parts.SheetDTO;
 import parts.cell.CellDTO;
-import parts.cell.EmptyCellDTO;
+//import parts.cell.EmptyCellDTO;
 
 import java.io.*;
 import java.util.*;
@@ -67,7 +67,7 @@ public class SheetEngine implements Engine {
         {
             return cell.toCellDTO();
         }
-        return new EmptyCellDTO(coordinate, 0, List.of());
+        return new CellDTO(coordinate,null,null, 0,List.of(), List.of());
     }
 
     //4

@@ -45,7 +45,7 @@ public class SheetManagerController{
     private int count;
     private Coordinate coordinate;
     //private Engine engine;
-    private String
+    private String sheetName="beginner";
     AppController mainController;
 
     //Components

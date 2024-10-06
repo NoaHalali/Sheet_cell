@@ -2,7 +2,6 @@ package parts;
 
 
 import parts.cell.CellDTO;
-import parts.cell.EmptyCellDTO;
 import shticell.sheets.sheet.parts.cell.coordinate.Coordinate;
 
 import java.util.List;
@@ -61,7 +60,7 @@ public class SheetDTO {
         if(cell != null){
             return cell;
         }else{
-           return new EmptyCellDTO(coordinate, 0, List.of());
+           return new CellDTO(coordinate,null,null, 0,List.of(), List.of());
         }
     }
 

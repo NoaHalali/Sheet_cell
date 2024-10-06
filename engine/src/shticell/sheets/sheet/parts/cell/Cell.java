@@ -6,8 +6,6 @@ import shticell.sheets.sheet.parts.cell.expression.effectiveValue.EffectiveValue
 import shticell.sheets.sheet.parts.cell.expression.impl.NumberExpression;
 import shticell.sheets.sheet.parts.Range;
 import parts.cell.CellDTO;
-import parts.cell.EmptyCellDTO;
-import parts.cell.NonEmptyCellDTO;
 
 import java.io.Serializable;
 import java.util.*;
@@ -86,19 +84,6 @@ public class Cell implements Serializable {
         this.originalValue = originalValue;
     }
 
-//    public NonEmptyCellDTO toNonEmptyCellDTO() {
-//        return new NonEmptyCellDTO(
-//                coordinate, //"A4"
-//                originalValue,
-//                getAndUpdateEffectiveValue(),
-//                lastUpdatedVersion,
-//                getInfluencingOnCoordinates(),
-//                getDependsOnCoordinates()
-//        );
-//    }
-//    public EmptyCellDTO toEmptyCellDTO() {
-//
-//    }
     public List<Coordinate> getFullDependsOnCoordList(){
         List<Coordinate> fullList = getDependsOnCoordinates();
         for(Range range : rangesDependsOn){
@@ -116,7 +101,7 @@ public class Cell implements Serializable {
     public CellDTO toCellDTO() {
         if (isExist)
         {
-            return new NonEmptyCellDTO(
+            return new CellDTO(
                     coordinate, //"A4"
                     originalValue,
                     getAndUpdateEffectiveValue(),
@@ -126,10 +111,13 @@ public class Cell implements Serializable {
             );
         }
         else {
-            return new EmptyCellDTO(
+            return new CellDTO(
                     coordinate, //"A4"
+                    null,
+                    null,
                     lastUpdatedVersion,
-                   getFullInfluencingOnCoordinates()
+                   getFullInfluencingOnCoordinates(),
+                    List.of()
             );
         }
 

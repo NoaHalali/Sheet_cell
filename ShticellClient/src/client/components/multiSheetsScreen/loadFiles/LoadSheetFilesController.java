@@ -80,6 +80,7 @@ public class LoadSheetFilesController {
                     Platform.runLater(() -> {
                         // טיפול במקרה שהבקשה הצליחה
                         System.out.println("Upload successful: " + responseBody);
+                        parentController.switchToSheetManager();
                         //parentController.switchToSheetsAndPermissionsManager();
                     });
 
