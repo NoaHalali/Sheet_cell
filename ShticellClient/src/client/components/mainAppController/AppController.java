@@ -2,7 +2,7 @@ package client.components.mainAppController;
 
 import client.components.login.LoginController;
 import client.components.multiSheetsScreen.MultiSheetsScreenController;
-import client.components.sheetManager.main.SheetManagerController;
+import client.components.sheetManager.SheetManagerController;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleStringProperty;

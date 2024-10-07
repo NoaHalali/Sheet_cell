@@ -4,7 +4,6 @@ package client.components.login;
 import client.components.Utils.Constants;
 import client.components.Utils.http.HttpClientUtil;
 import client.components.mainAppController.AppController;
-import client.components.sheetManager.main.SheetManagerController;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -57,7 +56,7 @@ public class LoginController {
 
         updateHttpStatusLine("New request is launched for: " + finalUrl);
 
-        HttpClientUtil.runAsync(finalUrl, new Callback() {
+        HttpClientUtil.runAsyncByUrl(finalUrl, new Callback() {
 
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+
+<GridPane prefHeight="25.0" prefWidth="463.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.components.sheetManager.parts.top.fileChooser.FileChooserController" styleClass="subComponent">
+    <!-- הגדרת טורים ב-GridPane -->
+    <columnConstraints>
+        <ColumnConstraints hgrow="NEVER" maxWidth="120.0" minWidth="60.0" />
+        <ColumnConstraints hgrow="ALWAYS" minWidth="100.0" />
+        <ColumnConstraints hgrow="NEVER" />
+    </columnConstraints>
+
+    <Button fx:id="loadFileButton" onAction="#openFileButtonAction" text="Load File" GridPane.columnIndex="0">
+      <GridPane.margin>
+         <Insets bottom="2.0" left="2.0" top="2.0" />
+      </GridPane.margin></Button>
+
+    <HBox alignment="CENTER_LEFT" spacing="5" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS">
+        <Label text="Currently Loaded File path:">
+         <padding>
+            <Insets left="10.0" />
+         </padding></Label>
+        <Label fx:id="filePathLabel" text="" />
+      <GridPane.margin>
+         <Insets />
+      </GridPane.margin>
+    </HBox>
+
+    <ProgressBar fx:id="progressBar" prefHeight="18.0" prefWidth="150.0" progress="0.0" visible="false" GridPane.columnIndex="2">
+      <padding>
+         <Insets right="5.0" />
+      </padding></ProgressBar>
+
+    <rowConstraints>
+        <RowConstraints />
+    </rowConstraints>
+</GridPane>

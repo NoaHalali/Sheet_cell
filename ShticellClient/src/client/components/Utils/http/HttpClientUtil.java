@@ -24,7 +24,7 @@ public class HttpClientUtil {
         simpleCookieManager.removeCookiesOf(domain);
     }
 
-    public static void runAsync(String finalUrl, Callback callback) {
+    public static void runAsyncByUrl(String finalUrl, Callback callback) {
         Request request = new Request.Builder()
                 .url(finalUrl)
                 .build();
@@ -34,6 +34,13 @@ public class HttpClientUtil {
         System.out.println("Launching new request for: " + finalUrl);
         call.enqueue(callback);
     }
+
+    public static void runAsyncByRequest(Request request, Callback callback) {
+        Call call = HTTP_CLIENT.newCall(request);
+        System.out.println("Launching new request for: " + request.url());
+        call.enqueue(callback);
+    }
+
 
     public static void shutdown() {
         System.out.println("Shutting down HTTP CLIENT");

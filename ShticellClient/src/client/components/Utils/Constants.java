@@ -13,9 +13,9 @@ public class Constants {
     // fxml locations
     public final static String MAIN_PAGE_FXML_RESOURCE_LOCATION = "/client/components/mainAppController/app-main.fxml";
     public final static String LOGIN_PAGE_FXML_RESOURCE_LOCATION = "/client/components/login/login.fxml";
-    public final static String SHEET_MANAGER_FXML_RESOURCE_LOCATION = "/client/components/sheetManager/main/sheetManager.fxml";
+    public final static String SHEET_MANAGER_FXML_RESOURCE_LOCATION = "/client/components/sheetManager/sheetManager.fxml";
     public final static String SHEETS_AND_PERMISSIONS_FXML_RESOURCE_LOCATION = "/client/components/multiSheetsScreen/multiSheetsScreen.fxml";
-
+    public final static String CELL_FXML_RESOURCE_LOCATION = "/client/components/sheetManager/parts/center/cell/cell.fxml";
     // Server resources locations
     public final static String BASE_DOMAIN = "localhost";
     private final static String BASE_URL = "http://" + BASE_DOMAIN + ":8080";

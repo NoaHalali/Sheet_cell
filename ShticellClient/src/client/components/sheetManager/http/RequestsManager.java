@@ -1,5 +1,4 @@
 package client.components.sheetManager.http;
-import client.components.Utils.StageUtils;
 import client.components.Utils.deserializer.CoordinateDeserializer;
 import client.components.Utils.deserializer.EffectiveValueDeserializer;
 import client.components.Utils.http.HttpClientUtil;
@@ -19,7 +18,7 @@ import static client.components.Utils.Constants.*;
 public class RequestsManager {
 
     public void getSheetDTO(String sheetName, Consumer<SheetDTO> onSuccess, Consumer<String> onFailure) {
-        OkHttpClient client = new OkHttpClient().newBuilder().build();
+        //OkHttpClient client = new OkHttpClient().newBuilder().build();
 
         String finalUrl = HttpUrl
                 .parse(GET_SHEET_DTO)
@@ -30,7 +29,7 @@ public class RequestsManager {
 
         System.out.println("New request is launched for: " + GET_SHEET_DTO);
 
-        HttpClientUtil.runAsync(finalUrl, new Callback() {
+        HttpClientUtil.runAsyncByUrl(finalUrl, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 // במקרה של כשל, נפעיל את ה-Consumer של onFailure
@@ -61,29 +60,25 @@ public class RequestsManager {
             }
         });
     }
-    public void updateCell(String sheetName, String coordinateStr, String newValue, Consumer<Boolean> onSuccess, Consumer<String> onFailure) {
-        // Create OkHttpClient
-        OkHttpClient client = new OkHttpClient();
-
-        // Create request body with the new cell data
+    public void updateCell(String sheetName, String cellID, String newValue, Consumer<Boolean> onSuccess, Consumer<String> onFailure) {
+        //public void updateCell(String sheetName, String coordinateStr, String newValue, Consumer<SheetDTO> onSuccess, Consumer<String> onFailure) {
         RequestBody formBody = new FormBody.Builder()
-                .add("coordinate", coordinateStr) // Cell identifier
-                .add("newValue", newValue) // New value for the cell
                 .add("sheetName", sheetName)
+                .add("cellID", cellID)
+                .add("newValue", newValue) // הערך החדש לתא
                 .build();
 
-        // Create the PUT request to your server
+        // יצירת ה-Request עם URL של השרת וה-RequestBody
         Request request = new Request.Builder()
-                .url(UPDATE_CELL) // Your Servlet URL
-                .put(formBody) // Adding the request body in PUT
+                .url(UPDATE_CELL) // כתובת ה-Servlet שלך
+                .put(formBody) // הוספת ה-RequestBody לבקשה ב-HTTP PUT
                 .build();
 
-        // Send the request and handle the response
-        System.out.println("New request is launched for: " + UPDATE_CELL);
-        client.newCall(request).enqueue(new Callback() {
+        // שליחת הבקשה באמצעות HttpClientUtil.runAsync
+        HttpClientUtil.runAsyncByRequest(request, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                // Handle failure case
+                // טיפול במקרה של כשל
                 Platform.runLater(() -> onFailure.accept("Error: " + e.getMessage()));
             }
 
@@ -91,14 +86,13 @@ public class RequestsManager {
             public void onResponse(Call call, Response response) throws IOException {
                 String responseBody = response.body().string();
                 if (response.isSuccessful()) {
+                    // המרת התשובה ל-Boolean (true/false)
                     Boolean isUpdated = GSON_INSTANCE.fromJson(responseBody, Boolean.class);
                     Platform.runLater(() -> onSuccess.accept(isUpdated));
                 } else {
-                    Platform.runLater(() -> onFailure.accept( responseBody));
+                    Platform.runLater(() -> onFailure.accept(responseBody));
                 }
             }
         });
     }
-
-
 }
