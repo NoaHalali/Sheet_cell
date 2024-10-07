@@ -26,11 +26,9 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import shticell.engine.api.Engine;
+import shticell.engines.engine.Engine;
 import parts.cell.CellDTO;
-import shticell.engine.impl.EngineImpl;
 import parts.SheetDTO;
-import shticell.engine.impl.SheetEngine;
 import shticell.sheets.sheet.parts.cell.coordinate.Coordinate;
 import shticell.sheets.sheet.parts.cell.coordinate.CoordinateImpl;
 import shticell.sheets.sheet.parts.cell.expression.effectiveValue.EffectiveValue;
@@ -173,6 +171,7 @@ public class SheetManagerController{
         try {
             Coordinate coordinate = tableController.getCurrentlyFocusedCoord();
             tableController.removeMarksOfFocusedCell(); //temp - bette to do only if updated but insie it takes the updated cell from engine
+
             boolean isUpdated = engine.updateCellValue(value, coordinate);
 
             if (isUpdated) {

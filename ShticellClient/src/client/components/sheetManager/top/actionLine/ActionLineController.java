@@ -7,7 +7,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import parts.cell.CellDTO;
-import shticell.engine.impl.EngineImpl;
+import shticell.engines.engine.EngineImpl;
 
 public class ActionLineController {
 

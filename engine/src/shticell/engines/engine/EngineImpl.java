@@ -1,7 +1,6 @@
-package shticell.engine.impl;
+package shticell.engines.engine;
 
 import shticell.files.FileManager;
-import shticell.engine.api.Engine;
 import shticell.exceptions.SheetNotLoadedException;
 import shticell.sheets.sheet.parts.Range;
 import shticell.sheets.sheet.parts.Version;

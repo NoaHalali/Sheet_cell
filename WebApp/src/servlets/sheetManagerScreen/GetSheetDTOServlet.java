@@ -6,17 +6,14 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import parts.SheetDTO;
-import shticell.engine.impl.SheetEngine;
+import shticell.engines.sheetEngine.SheetEngine;
+import shticell.engines.sheetEngine.SheetEngineImpl;
 import shticell.sheets.manager.MultiSheetEngineManager;
-import shticell.users.UserManager;
 import utils.ServletUtils;
-import utils.SessionUtils;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Set;
 
-import static constant.Constants.USERNAME;
 @WebServlet("/getSheetDTO")
 public class GetSheetDTOServlet extends HttpServlet {
 
