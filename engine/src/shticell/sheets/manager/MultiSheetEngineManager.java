@@ -1,6 +1,7 @@
 package shticell.sheets.manager;
 
-import shticell.engine.impl.SheetEngine;
+import shticell.engines.sheetEngine.SheetEngine;
+import shticell.engines.sheetEngine.SheetEngineImpl;
 import shticell.sheets.sheet.Sheet;
 
 import java.util.Collection;
@@ -27,7 +28,7 @@ public class MultiSheetEngineManager {
 //        if (this.sheetEngines.containsKey(sheet.getSheetName())) {
 //            throw new IllegalArgumentException("Sheet already exists");
 //        }
-        this.sheetEngines.put(sheet.getSheetName(), new SheetEngine(sheet));
+        this.sheetEngines.put(sheet.getSheetName(), new SheetEngineImpl(sheet));
     }
     public boolean isSheetNameExists(String sheetName) {
         return this.sheetEngines.containsKey(sheetName);

@@ -1,7 +1,7 @@
 package console;
 
-import shticell.engine.api.Engine;
-import shticell.engine.impl.EngineImpl;
+import shticell.engines.engine.Engine;
+import shticell.engines.engine.EngineImpl;
 import parts.SheetDTO;
 import parts.cell.CellDTO;
 import shticell.sheets.sheet.parts.cell.coordinate.Coordinate;

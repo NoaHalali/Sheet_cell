@@ -1,4 +1,4 @@
-import shticell.engine.impl.EngineImpl;
+import shticell.engines.engine.EngineImpl;
 
 public class Test {
     public void foo(){

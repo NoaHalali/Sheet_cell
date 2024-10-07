@@ -1,6 +1,5 @@
-package shticell.engine.impl;
+package shticell.engines.sheetEngine;
 
-import shticell.engines.engine.Engine;
 import shticell.files.FileManager;
 import shticell.exceptions.SheetNotLoadedException;
 import shticell.sheets.sheet.parts.Range;
@@ -12,13 +11,11 @@ import shticell.sheets.sheet.parts.cell.expression.effectiveValue.EffectiveValue
 import shticell.sheets.sheet.parts.cell.expression.impl.NumberExpression;
 import parts.SheetDTO;
 import parts.cell.CellDTO;
-//import parts.cell.EmptyCellDTO;
-
 import java.io.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class SheetEngine implements Engine {
+public class SheetEngineImpl implements SheetEngine {
 
     private Sheet currentSheet = null;
     public Sheet whatIfSheet = null;
@@ -32,23 +29,13 @@ public class SheetEngine implements Engine {
         return currentSheet != null;
     }
 
-    //1
-    @Override
-    public void readFileData(String filePath) throws Exception {
-
-    }
-    public SheetEngine(Sheet sheet) {
+    public SheetEngineImpl(Sheet sheet) {
         currentSheet = sheet;
         //versionsList.clear();
         addVersion(currentSheet, currentSheet.howManyActiveCellsInSheet());
     }
 
-//    public void readFileData(InputStream inputStream) throws Exception {
-//        //Sheet lastSheet = currentSheet;
-//        currentSheet = fileManager.processFile(inputStream);
-//        versionsList.clear();
-//        addVersion(currentSheet, currentSheet.howManyActiveCellsInSheet());
-//    }
+
     //2
     @Override
     public SheetDTO getCurrentSheetDTO() throws SheetNotLoadedException {
@@ -160,40 +147,6 @@ public class SheetEngine implements Engine {
                 .collect(Collectors.toList());
     }
 
-
-    //6
-    @Override
-    public void saveSystemState(String filePath) throws Exception {
-        checkIfSheetHasBeenLoaded();
-        String filePathWithEnding = filePath + ".dat";
-
-        try (FileOutputStream fileOut = new FileOutputStream(filePathWithEnding);
-             ObjectOutputStream oos = new ObjectOutputStream(fileOut)) {
-            oos.writeObject(currentSheet);
-            oos.writeObject(versionsList);
-        } catch (IOException e) {
-            throw new RuntimeException("Failed to save system state to file: " + filePath, e);
-        }
-    }
-
-
-    //7
-    @Override
-    public void loadSystemState(String filePath) throws FileNotFoundException, IOException, ClassNotFoundException {
-        String filePathWithEnding = filePath + ".dat";
-
-        try (FileInputStream fileIn = new FileInputStream(filePathWithEnding);
-             ObjectInputStream ois = new ObjectInputStream(fileIn)) {
-            currentSheet = (Sheet) ois.readObject();
-            versionsList = (List<Version>) ois.readObject();
-        } catch (FileNotFoundException e) {
-            throw new FileNotFoundException("File not found: " + filePath);
-        } catch (IOException e) {
-            throw new IOException("Error reading the file: " + filePath, e);
-        } catch (ClassNotFoundException e) {
-            throw new ClassNotFoundException("Class not found while loading the system state", e);
-        }
-    }
     //8
     @Override
     public void addRange(String rangeName, String rangeDefinition) throws Exception
@@ -273,6 +226,7 @@ public class SheetEngine implements Engine {
             throw new SheetNotLoadedException(SHEET_NOT_LOADED_MESSAGE);
         }
     }
+
     @Override
     public void setEngineInWhatIfMode(Coordinate coord)throws IllegalStateException {
         boolean isCellValidForWhatIf = currentSheet.getCellByCoord(coord).IsCellExpressionIsNumber();
