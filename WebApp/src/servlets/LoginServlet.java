@@ -56,6 +56,7 @@ public class LoginServlet extends HttpServlet {
                         //response.getOutputStream().print(errorMessage);
                         response.getWriter().println(errorMessage);
 
+
                     }
                     else {
                         //add the new user to the users list

@@ -46,7 +46,7 @@ public class SheetManagerController{
     private int count;
     private Coordinate coordinate;
     private Engine engine;
-    private String sheetName="beginner";
+    private String sheetName = "beginner";
     private AppController mainController;
     private final RequestsManager requestsManager = new RequestsManager();
 
@@ -146,6 +146,30 @@ public class SheetManagerController{
             StageUtils.showAlert("Error", errorMessage);
         });
     }
+    public void updateCellValue(String value) {
+
+            Coordinate coordinate = tableController.getCurrentlyFocusedCoord();
+            tableController.removeMarksOfFocusedCell(); //temp - bette to do only if updated but insie it takes the updated cell from engine
+            //boolean isUpdated = engine.updateCellValue(value, coordinate);
+            requestsManager.updateCell(sheetName,coordinate.toString(),value, isUpdated-> {
+
+                if (isUpdated) {
+                    SheetDTO sheet = engine.getCurrentSheetDTO();
+                    setCells(sheet);
+                    actionLineController.setActionLine(engine.getCellDTOByCoordinate(coordinate));
+                    setVersion(sheet.getVersion());
+
+                }
+                tableController.addMarksOfFocusingToCell(coordinate);
+            },errorMessege -> {
+                StageUtils.showAlert("Error:", "Failed to update cell: " + errorMessege);
+                tableController.removeMarksOfFocusedCell();
+                actionLineController.setActionLine(null);
+                cellSelected.set(false);
+            });
+
+
+    }
 
 
     public void setPrimaryStage(Stage primaryStage) {
@@ -169,28 +193,7 @@ public class SheetManagerController{
         return fileChooser.showOpenDialog(primaryStage);
     }
 
-    public void updateCellValue(String value) {
-        try {
-            Coordinate coordinate = tableController.getCurrentlyFocusedCoord();
-            tableController.removeMarksOfFocusedCell(); //temp - bette to do only if updated but insie it takes the updated cell from engine
-            boolean isUpdated = engine.updateCellValue(value, coordinate);
 
-            if (isUpdated) {
-                SheetDTO sheet = engine.getCurrentSheetDTO();
-                setCells(sheet);
-                actionLineController.setActionLine(engine.getCellDTOByCoordinate(coordinate));
-                setVersion(sheet.getVersion());
-
-            }
-            tableController.addMarksOfFocusingToCell(coordinate);
-        }
-        catch (Exception e) {
-            StageUtils.showAlert("Error:", "Failed to update cell: " + e.getMessage());
-            tableController.removeMarksOfFocusedCell();
-            actionLineController.setActionLine(null);
-            cellSelected.set(false);
-        }
-    }
 
     private void setCells(SheetDTO sheet) {
         CellDTO[][] cells = sheet.getCellsMatrix();
