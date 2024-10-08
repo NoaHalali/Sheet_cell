@@ -36,6 +36,7 @@ import shticell.sheets.sheet.parts.cell.expression.effectiveValue.EffectiveValue
 
 import java.io.File;
 import java.util.*;
+import java.util.function.Consumer;
 
 public class SheetManagerController{
 
@@ -46,7 +47,7 @@ public class SheetManagerController{
     private Engine engine;
     private String sheetName = "beginner";
     private AppController mainController;
-    private final RequestsManager requestsManager = new RequestsManager();
+    private final RequestsManager requestsManager = new RequestsManager(sheetName);
 
     //Components
     @FXML private GridPane actionLine;
@@ -130,7 +131,7 @@ public class SheetManagerController{
         fileSelectedProperty.set(true);
 
 // שולחים את הבקשה לשרת ומעבירים את ה-Consumers המתאימים
-        requestsManager.getSheetDTO(sheetName, sheet -> {
+        requestsManager.getSheetDTO(sheet -> {
             // פעולה במקרה של הצלחה: עדכון ה-UI
             tableController.initializeGrid(sheet);
             versionSelectorController.initializeVersionSelector(sheet.getVersion());
@@ -141,6 +142,7 @@ public class SheetManagerController{
             versionProperty.set(1);
         }, errorMessage -> {
             // פעולה במקרה של כשל
+            System.out.println("Error to get sheetDTO: " + errorMessage);
             StageUtils.showAlert("Error to get sheetDTO", errorMessage);
         });
     }
@@ -149,7 +151,7 @@ public class SheetManagerController{
             Coordinate coordinate = tableController.getCurrentlyFocusedCoord();
             tableController.removeMarksOfFocusedCell(); //temp - bette to do only if updated but insie it takes the updated cell from engine
             //boolean isUpdated = engine.updateCellValue(value, coordinate);
-            requestsManager.updateCell(sheetName,coordinate.toString(),value, isUpdated-> {
+            requestsManager.updateCell(coordinate.toString(),value, isUpdated-> {
                 if (isUpdated) {
                     updateUIComponentsAfterCellChange(coordinate);
                 }
@@ -164,7 +166,7 @@ public class SheetManagerController{
     }
 
     private void updateUIComponentsAfterCellChange(Coordinate coordinate) {
-        requestsManager.getSheetDTO(sheetName, sheet -> {
+        requestsManager.getSheetDTO(sheet -> {
             // פעולה במקרה של הצלחה: עדכון ה-UI
             //SheetDTO sheet = engine.getCurrentSheetDTO();
             setCells(sheet);
@@ -215,10 +217,14 @@ public class SheetManagerController{
         versionSelectorController.setVersionSelectorOptions(version);
     }
 
-
-    public CellDTO getCellDTO(String coord) {
-        Coordinate coordinate = CoordinateImpl.parseCoordinate(coord);
-        return engine.getCellDTOByCoordinate(coordinate);
+    public void getCellDTO(Coordinate coord, Consumer<CellDTO> callback) {
+        String coordStr = coord.toString();
+        requestsManager.getCellDTO(coordStr, cellDTO -> {
+            // מעבירים את התשובה מהשרת לקונטרולרים הקטנים
+            callback.accept(cellDTO);
+        }, errorMessage -> {
+            StageUtils.showAlert("Error:", "Failed to get cell: " + errorMessage);
+        });
     }
 
 
@@ -307,7 +313,7 @@ public class SheetManagerController{
             actionLineController.setActionLine(null); // איפוס השורה
         }
         else {
-            if(rangeSelected.get() || columnSelected.get() || rowSelected.get()) {
+            if (rangeSelected.get() || columnSelected.get() || rowSelected.get()) {
                 columnSelected.set(false);
                 rowSelected.set(false);
                 rangeSelected.set(false);
@@ -315,8 +321,12 @@ public class SheetManagerController{
             }
 
             cellSelected.set(true);
-            CellDTO cell = engine.getCellDTOByCoordinate(coord);
-            actionLineController.setActionLine(cell); // עדכון השורה עם התא החדש
+            //CellDTO cell = engine.getCellDTOByCoordinate(coord);
+            requestsManager.getCellDTO(coord.toString(), cell -> {
+                actionLineController.setActionLine(cell);
+            }, errorMessage -> {
+                StageUtils.showAlert("Error:", "Failed to get cell: " + errorMessage);
+            });
         }
     }
 

@@ -7,6 +7,7 @@ import com.google.gson.GsonBuilder;
 import javafx.application.Platform;
 import okhttp3.*;
 import parts.SheetDTO;
+import parts.cell.CellDTO;
 import shticell.sheets.sheet.parts.cell.coordinate.Coordinate;
 import shticell.sheets.sheet.parts.cell.expression.effectiveValue.EffectiveValue;
 
@@ -17,7 +18,12 @@ import static client.components.Utils.Constants.*;
 
 public class RequestsManager {
 
-    public void getSheetDTO(String sheetName, Consumer<SheetDTO> onSuccess, Consumer<String> onFailure) {
+    private final String sheetName;
+
+    public RequestsManager(String sheetName) {
+        this.sheetName = sheetName;
+    }
+    public void getSheetDTO(Consumer<SheetDTO> onSuccess, Consumer<String> onFailure) {
         //OkHttpClient client = new OkHttpClient().newBuilder().build();
 
         String finalUrl = HttpUrl
@@ -60,25 +66,27 @@ public class RequestsManager {
             }
         });
     }
-    public void updateCell(String sheetName, String cellID, String newValue, Consumer<Boolean> onSuccess, Consumer<String> onFailure) {
-        //public void updateCell(String sheetName, String coordinateStr, String newValue, Consumer<SheetDTO> onSuccess, Consumer<String> onFailure) {
-        RequestBody formBody = new FormBody.Builder()
-                .add("sheetName", sheetName)
-                .add("cellID", cellID)
-                .add("newValue", newValue) // הערך החדש לתא
-                .build();
 
-        // יצירת ה-Request עם URL של השרת וה-RequestBody
+    public void updateCell(String cellID, String newValue, Consumer<Boolean> onSuccess, Consumer<String> onFailure) {
+        // יצירת ה-URL עם הפרמטרים (Query Parameters)
+        String finalUrl = HttpUrl.parse(UPDATE_CELL)
+                .newBuilder()
+                .addQueryParameter("sheetName", sheetName)  // הוספת שם הגיליון
+                .addQueryParameter("cellID", cellID)        // הוספת ID של התא
+                .addQueryParameter("newValue", newValue)    // הוספת הערך החדש
+                .build()
+                .toString();
+
+        // יצירת הבקשה
         Request request = new Request.Builder()
-                .url(UPDATE_CELL) // כתובת ה-Servlet שלך
-                .put(formBody) // הוספת ה-RequestBody לבקשה ב-HTTP PUT
+                .url(finalUrl) // ה-URL עם הפרמטרים
+                .put(RequestBody.create("", null)) // HTTP PUT עם גוף ריק, מכיוון שאנחנו שולחים את הכל ב-Query Parameters
                 .build();
 
         // שליחת הבקשה באמצעות HttpClientUtil.runAsync
         HttpClientUtil.runAsyncByRequest(request, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                // טיפול במקרה של כשל
                 Platform.runLater(() -> onFailure.accept("Error: " + e.getMessage()));
             }
 
@@ -86,9 +94,44 @@ public class RequestsManager {
             public void onResponse(Call call, Response response) throws IOException {
                 String responseBody = response.body().string();
                 if (response.isSuccessful()) {
-                    // המרת התשובה ל-Boolean (true/false)
                     Boolean isUpdated = GSON_INSTANCE.fromJson(responseBody, Boolean.class);
                     Platform.runLater(() -> onSuccess.accept(isUpdated));
+                } else {
+                    Platform.runLater(() -> onFailure.accept(responseBody));
+                }
+            }
+        });
+    }
+
+
+    public void getCellDTO(String cellID, Consumer<CellDTO> onSuccess, Consumer<String> onFailure) {
+        String finalUrl = HttpUrl.parse(GET_CELL_DTO_URL)
+                .newBuilder()
+                .addQueryParameter("sheetName", sheetName)
+                .addQueryParameter("cellID", cellID)
+                .build()
+                .toString();
+
+        HttpClientUtil.runAsyncByUrl(finalUrl, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Platform.runLater(() -> onFailure.accept("Error: " + e.getMessage()));
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String responseBody = response.body().string();
+
+                if (response.isSuccessful()) {
+                    // שימוש ב-GsonBuilder עם ה-TypeAdapterים המותאמים
+                    Gson gson = new GsonBuilder()
+                            .registerTypeAdapter(Coordinate.class, new CoordinateDeserializer())
+                            .registerTypeAdapter(EffectiveValue.class, new EffectiveValueDeserializer())
+                            .create();
+
+                    // המרת ה-JSON חזרה ל-CellDTO
+                    CellDTO cellDTO = gson.fromJson(responseBody, CellDTO.class);
+                    Platform.runLater(() -> onSuccess.accept(cellDTO));
                 } else {
                     Platform.runLater(() -> onFailure.accept(responseBody));
                 }

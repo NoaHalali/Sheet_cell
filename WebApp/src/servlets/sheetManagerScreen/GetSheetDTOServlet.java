@@ -29,6 +29,7 @@ public class GetSheetDTOServlet extends HttpServlet {
             return;
         }
 
+        System.out.println("Getting sheetDTO, request URI is: " + request.getRequestURI());
         try (PrintWriter out = response.getWriter()) {
             Gson gson = new Gson();
 

@@ -1,4 +1,4 @@
-package servlets;
+package servlets.multiSheetsScreen;
 
 import jakarta.servlet.http.HttpServlet;
 

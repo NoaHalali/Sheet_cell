@@ -1,6 +1,7 @@
 package servlets.sheetManagerScreen;
 
 import com.google.gson.Gson;
+import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -12,9 +13,10 @@ import utils.ServletUtils;
 
 import java.io.IOException;
 
+@WebServlet("/updateCell")
 public class UpdateCellServlet extends HttpServlet {
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    protected void doPut(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setContentType("application/json");
 
         try {

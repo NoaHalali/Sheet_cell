@@ -246,39 +246,59 @@ public class TableController {
         setFocusedCoord(newFocusedCoord);
         currentlyFocusedCellController.setBorder("red", "3px");
 
-        CellDTO cell = mainController.getCellDTO(currentlyFocusedCoord.toString());
-        List<Coordinate> dependsOn = cell.getDependsOn();
-        for (Coordinate coord : dependsOn) {
-            CellController depCellController = coordToCellControllerMap.get(coord.toString());
-            depCellController.setBorder("#4d66cc", "2px");
-        }
+        //CellDTO cell = mainController.getCellDTO(currentlyFocusedCoord.toString());
+        mainController.getCellDTO(currentlyFocusedCoord, cell -> {
+            List<Coordinate> dependsOn = cell.getDependsOn();
+            for (Coordinate coord : dependsOn) {
+                CellController depCellController = coordToCellControllerMap.get(coord.toString());
+                depCellController.setBorder("#4d66cc", "2px");
+            }
 
-        List<Coordinate> influencingOn = cell.getInfluencingOn();
-        for (Coordinate coord : influencingOn) {
-            CellController infCellController = coordToCellControllerMap.get(coord.toString());
-            infCellController.setBorder("#669966", "2px");
-        }
+            List<Coordinate> influencingOn = cell.getInfluencingOn();
+            for (Coordinate coord : influencingOn) {
+                CellController infCellController = coordToCellControllerMap.get(coord.toString());
+                infCellController.setBorder("#669966", "2px");
+            }
+        });
+
 
     }
 
     public void removeMarksOfFocusedCell() {
         if (currentlyFocusedCellController != null) {
             currentlyFocusedCellController.resetBorder();
-            Coordinate cellCoord = currentlyFocusedCellController.getCoord();
-            CellDTO cell = mainController.getCellDTO(cellCoord.toString());
-            List<Coordinate> dependsOn = cell.getDependsOn();
 
-            for (Coordinate coord : dependsOn) {
-                CellController depCellController = coordToCellControllerMap.get(coord.toString());
-                depCellController.resetBorder();
-            }
+            //Coordinate cellCoord = currentlyFocusedCellController.getCoord();
+            //String coordStr = currentlyFocusedCellController.getCoord().toString();
+            //CellDTO cell = mainController.getCellDTO(cellCoord.toString());
+            mainController.getCellDTO(currentlyFocusedCoord, cell -> {
+                List<Coordinate> dependsOn = cell.getDependsOn();
+                for (Coordinate coord : dependsOn) {
+                    CellController depCellController = coordToCellControllerMap.get(coord.toString());
+                    depCellController.resetBorder();
+                }
 
-            List<Coordinate> influencingOn = cell.getInfluencingOn();
-            for (Coordinate coord : influencingOn) {
-                CellController infCellController = coordToCellControllerMap.get(coord.toString());
-                infCellController.resetBorder();
-            }
-            setFocusedCoord(null);
+                List<Coordinate> influencingOn = cell.getInfluencingOn();
+                for (Coordinate coord : influencingOn) {
+                    CellController infCellController = coordToCellControllerMap.get(coord.toString());
+                    infCellController.resetBorder();
+                }
+                setFocusedCoord(null);
+            });
+//            List<Coordinate> dependsOn = cell.getDependsOn();
+//
+//            for (Coordinate coord : dependsOn) {
+//                CellController depCellController = coordToCellControllerMap.get(coord.toString());
+//                depCellController.resetBorder();
+//            }
+//
+//            List<Coordinate> influencingOn = cell.getInfluencingOn();
+//            for (Coordinate coord : influencingOn) {
+//                CellController infCellController = coordToCellControllerMap.get(coord.toString());
+//                infCellController.resetBorder();
+//            }
+//            setFocusedCoord(null);
+//        }
         }
     }
 
