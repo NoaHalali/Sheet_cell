@@ -16,6 +16,7 @@ public class Constants {
     public final static String SHEET_MANAGER_FXML_RESOURCE_LOCATION = "/client/components/sheetManager/sheetManager.fxml";
     public final static String SHEETS_AND_PERMISSIONS_FXML_RESOURCE_LOCATION = "/client/components/multiSheetsScreen/multiSheetsScreen.fxml";
     public final static String CELL_FXML_RESOURCE_LOCATION = "/client/components/sheetManager/parts/center/cell/cell.fxml";
+    public final static String TABLE_FXML_RESOURCE_LOCATION = "/client/components/sheetManager/parts/center/cellsTable/table.fxml";
     // Server resources locations
     public final static String BASE_DOMAIN = "localhost";
     private final static String BASE_URL = "http://" + BASE_DOMAIN + ":8080";
@@ -30,6 +31,7 @@ public class Constants {
     public static final String UPDATE_CELL = FULL_SERVER_PATH + "/updateCell";
     public static final String GET_CELL_DTO_URL = FULL_SERVER_PATH + "/getCellDTO";
     public static final String ADD_RANGE_URL = FULL_SERVER_PATH + "/addRange";
+    public static final String GET_RANGE_COORDINATES = FULL_SERVER_PATH + "/getRangeCoordinates";
 
     // GSON instance
     public final static Gson GSON_INSTANCE = new Gson();

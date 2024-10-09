@@ -10,6 +10,7 @@ import client.components.sheetManager.parts.skin.SkinSelectorController;
 import client.components.sheetManager.parts.top.actionLine.ActionLineController;
 import client.components.sheetManager.parts.top.fileChooser.FileChooserController;
 import client.components.sheetManager.parts.top.versions.VersionSelectorController;
+import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.BooleanProperty;
@@ -44,7 +45,7 @@ public class SheetManagerController {
     private Scene scene;
     private int count;
     private Coordinate coordinate;
-   // private Engine engine;
+    private Engine engine;
     private String sheetName = "beginner";
     private AppController mainController;
     private final RequestsManager requestsManager = new RequestsManager(sheetName);
@@ -299,8 +300,15 @@ public class SheetManagerController {
     }
 
     public void highlightRange(String rangeName) {
-        List<Coordinate> rangeCoordinates = engine.getRangeCoordinates(rangeName);
-        tableController.highlightRange(rangeCoordinates);
+        requestsManager.getRangeCoordinates(rangeName,rangeCoordinates->{
+            Platform.runLater(() -> {
+                tableController.highlightRange(rangeCoordinates);
+            });
+        },errorMessage -> {
+            System.out.println("Error to get sheetDTO: " + errorMessage);
+            StageUtils.showAlert("Error to get Range Coordinates", errorMessage);
+        } );
+
     }
 
     public void clearCurrSelectedRangeHighlight() {
