@@ -164,7 +164,7 @@ public class SheetEngineImpl implements SheetEngine {
     }
 
     @Override
-    public void deleteRange(String selectedRangeName) {
+    public void deleteRange(String selectedRangeName) throws IllegalArgumentException {
         currentSheet.deleteRange(selectedRangeName);
     }
 

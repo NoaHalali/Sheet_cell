@@ -39,7 +39,7 @@ public interface SheetEngine {
 
     public List<Coordinate> getRangeCoordinates(String rangeName);
 
-    public void deleteRange(String selectedRangeName);
+    public void deleteRange(String selectedRangeName) throws IllegalArgumentException;
 
     public List<String> getRangesNames();
 

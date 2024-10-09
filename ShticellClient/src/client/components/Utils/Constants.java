@@ -30,6 +30,8 @@ public class Constants {
     public static final String UPDATE_CELL = FULL_SERVER_PATH + "/updateCell";
     public static final String GET_CELL_DTO_URL = FULL_SERVER_PATH + "/getCellDTO";
     public static final String ADD_RANGE_URL = FULL_SERVER_PATH + "/addRange";
+    public static final String DELETE_RANGE_URL = FULL_SERVER_PATH + "/deleteRange";
+
 
     // GSON instance
     public final static Gson GSON_INSTANCE = new Gson();

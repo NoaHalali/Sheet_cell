@@ -70,9 +70,10 @@ public class RangesController {
         }
 
         try {
-            mainController.handleDeleteRange(lastSelectedRange);
-            refreshMenuButton(mainController.getRanges());
-            clearSelectedRangeOption();
+            mainController.handleDeleteRange(lastSelectedRange,rangeNames->{
+                refreshMenuButton(rangeNames);
+                clearSelectedRangeOption();
+            });
 
         } catch (Exception e) {
             StageUtils.showAlert("Error", e.getMessage());

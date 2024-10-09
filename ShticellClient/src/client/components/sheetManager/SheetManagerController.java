@@ -44,7 +44,7 @@ public class SheetManagerController {
     private Scene scene;
     private int count;
     private Coordinate coordinate;
-   // private Engine engine;
+    private Engine engine;
     private String sheetName = "beginner";
     private AppController mainController;
     private final RequestsManager requestsManager = new RequestsManager(sheetName);
@@ -308,11 +308,17 @@ public class SheetManagerController {
         tableController.clearCurrentHighlightRange();
     }
 
-    public void handleDeleteRange(String selectedRangeName) {
+    public void handleDeleteRange(String rangeName,Consumer<List<String>> callBack) {
 
         rangeSelectedProperty().set(false); // עדכון מצב בחירת טווח
         tableController.clearCurrentHighlightRange(); //? this or remove marks
-        engine.deleteRange(selectedRangeName);
+        requestsManager.deleteRange(rangeName ,rangeNames->{
+            callBack.accept(rangeNames);
+        },errorMessage -> {
+            System.out.println("Error to get sheetDTO: " + errorMessage);
+            StageUtils.showAlert("Error to get sheetDTO", errorMessage);
+        });
+
     }
 
     public Map<String,String> getStylesFromMainSheet() {

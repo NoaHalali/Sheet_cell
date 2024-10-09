@@ -222,6 +222,44 @@ public class RequestsManager {
             }
         });
     }
+
+    public void deleteRange(String rangeName, Consumer<List<String>> onSuccess, Consumer<String> onFailure) {
+        String finalUrl = HttpUrl.parse(DELETE_RANGE_URL)
+                .newBuilder()
+                .addQueryParameter("sheetName", sheetName)
+                .addQueryParameter("rangeName", rangeName)
+                .build()
+                .toString();
+
+        Request request = new Request.Builder()
+                .url(finalUrl)
+                .delete() // בקשת DELETE
+                .build();
+
+        HttpClientUtil.runAsyncByRequest(request, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Platform.runLater(() -> {
+                    StageUtils.showAlert("Error:", "Failed to delete range: " + e.getMessage());
+                });
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String responseBody = response.body().string();
+
+                if (response.isSuccessful()) {
+                    Type listOfStringType = new TypeToken<List<String>>() {}.getType();
+                    List<String> rangeNames = GSON_INSTANCE.fromJson(responseBody, listOfStringType);
+                    Platform.runLater(() -> onSuccess.accept(rangeNames));
+                } else {
+                    Platform.runLater(() -> onFailure.accept("Error uploading file: " + responseBody));
+                }
+            }
+        });
+    }
+
+
 //    public void getRangeNames(Consumer<List<String>> onSuccess, Consumer<String> onFailure){
 //        String finalUrl = HttpUrl.parse(GET_CELL_DTO_URL)
 //                .newBuilder()
