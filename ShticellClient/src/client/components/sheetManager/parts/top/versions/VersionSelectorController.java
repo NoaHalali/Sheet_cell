@@ -3,6 +3,7 @@ package client.components.sheetManager.parts.top.versions;
 import client.components.Utils.StageUtils;
 import client.components.sheetManager.parts.center.cellsTable.TableController;
 import client.components.sheetManager.SheetManagerController;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -16,6 +17,8 @@ import parts.SheetDTO;
 import java.io.IOException;
 import java.util.List;
 import java.util.stream.IntStream;
+
+import static client.components.Utils.Constants.TABLE_FXML_RESOURCE_LOCATION;
 
 public class VersionSelectorController {
 
@@ -55,18 +58,17 @@ public class VersionSelectorController {
             popupStage.setTitle("Version Preview: " + versionNumberStr);
 
             // טעינת FXML או יצירת ממשק באופן דינמי
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/client/components/sheetManager/center/cellsTable/table.fxml")); // Adjust the path
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(TABLE_FXML_RESOURCE_LOCATION)); // Adjust the path
             Parent root = loader.load();
 
             // קבלת ה-TableController ואתחולו עם הגרסה הנבחרת של הגיליון
             TableController tableController = loader.getController();
              mainController.getSheetDTOByVersion(versionNumberStr,sheet->{
-                 tableController.showSheetPreview(sheet);
-
-            Scene scene = new Scene(root);
-            popupStage.setScene(scene);
-            popupStage.initModality(Modality.APPLICATION_MODAL);
-            popupStage.showAndWait();
+               tableController.showSheetPreview(sheet);
+                     Scene scene = new Scene(root);
+                     popupStage.setScene(scene);
+                     popupStage.initModality(Modality.APPLICATION_MODAL);
+                     popupStage.showAndWait();
         });
 
         } catch (IOException e) {

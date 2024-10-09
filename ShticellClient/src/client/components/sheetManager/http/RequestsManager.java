@@ -260,6 +260,47 @@ public class RequestsManager {
     }
 
 
+    public void getRangeCoordinates( String rangeName,Consumer<List<Coordinate>> onSuccess,Consumer<String> onFailure){
+        String finalUrl = HttpUrl
+                .parse(GET_RANGE_COORDINATES)
+                .newBuilder()
+                .addQueryParameter("sheetName", sheetName)
+                .addQueryParameter("rangeName" ,rangeName)
+                .build()
+                .toString();
+
+        System.out.println("New request is launched for: " + GET_RANGE_COORDINATES);
+
+        HttpClientUtil.runAsyncByUrl(finalUrl, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                // במקרה של כשל, נפעיל את ה-Consumer של onFailure
+                Platform.runLater(() -> onFailure.accept("Error: " + e.getMessage()));
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String responseBody = response.body().string();
+
+                if (response.isSuccessful()) {
+                    Gson gson = new GsonBuilder()
+                            .registerTypeAdapter(Coordinate.class, new CoordinateDeserializer())
+                            .create();
+
+                    Type listOfCoordinateType = new TypeToken<List<Coordinate>>() {}.getType();
+                        List<Coordinate> rangeCoordinates = gson.fromJson(responseBody, listOfCoordinateType);
+
+
+
+                    // מעבירים את ה-DTO ל-UI באמצעות ה-Consumer של onSuccess
+                    Platform.runLater(() -> onSuccess.accept(rangeCoordinates));
+                } else {
+                    // במקרה של שגיאה נציג הודעה
+                    Platform.runLater(() -> onFailure.accept("Error uploading file: " + responseBody));
+                }
+            }
+        });
+    }
 //    public void getRangeNames(Consumer<List<String>> onSuccess, Consumer<String> onFailure){
 //        String finalUrl = HttpUrl.parse(GET_CELL_DTO_URL)
 //                .newBuilder()
