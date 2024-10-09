@@ -44,7 +44,7 @@ public class SheetManagerController {
     private Scene scene;
     private int count;
     private Coordinate coordinate;
-    private Engine engine;
+   // private Engine engine;
     private String sheetName = "beginner";
     private AppController mainController;
     private final RequestsManager requestsManager = new RequestsManager(sheetName);
@@ -268,6 +268,9 @@ public class SheetManagerController {
             StageUtils.showAlert("Error:", "Failed to get cell: " + errorMessage);
         });
     }
+//    public List<String> getRanges() {
+//        return engine.getRangesNames();
+//    }
 
 
     public void getSheetDTOByVersion(String version, Consumer<SheetDTO> callback) {
@@ -286,8 +289,13 @@ public class SheetManagerController {
 //    }
 
     //Ranges
-    public void addRange(String rangeName, String rangeDefinition) throws Exception {
-        requestsManager.addRange(rangeName, rangeDefinition);
+    public void addRange(String rangeName, String rangeDefinition,Consumer<List<String>> callBack) throws Exception {
+        requestsManager.addRange(rangeName, rangeDefinition,rangeNames->{
+            callBack.accept(rangeNames);
+        },errorMessage -> {
+            System.out.println("Error to get sheetDTO: " + errorMessage);
+            StageUtils.showAlert("Error to get sheetDTO", errorMessage);
+        });
     }
 
     public void highlightRange(String rangeName) {
@@ -337,9 +345,6 @@ public class SheetManagerController {
         return "#000000"; // צבע ברירת מחדל אם הצבע הוא null
     }
 
-    public List<String> getRanges() {
-        return engine.getRangesNames();
-    }
 
     public void resetCellStyle() {
         tableController.resetCellStyle();

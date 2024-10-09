@@ -5,6 +5,7 @@ import client.components.Utils.deserializer.EffectiveValueDeserializer;
 import client.components.Utils.http.HttpClientUtil;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 import javafx.application.Platform;
 import okhttp3.*;
 import parts.SheetDTO;
@@ -13,6 +14,8 @@ import shticell.sheets.sheet.parts.cell.coordinate.Coordinate;
 import shticell.sheets.sheet.parts.cell.expression.effectiveValue.EffectiveValue;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
+import java.util.List;
 import java.util.function.Consumer;
 
 import static client.components.Utils.Constants.*;
@@ -184,7 +187,7 @@ public class RequestsManager {
         });
     }//get
 
-    public void addRange(String rangeName, String rangeDefinition) throws Exception {
+    public void addRange(String rangeName, String rangeDefinition,Consumer<List<String>> onSuccess,Consumer<String> onFailure) throws Exception {
         String RESOURCE = "/api/add-range"; // שינוי ה-RESOURCE בהתאם לצורך שלך
 
         // יצירת ה-body בצורה של טקסט רגיל עם מפריד שורות "\n"
@@ -210,15 +213,41 @@ public class RequestsManager {
             public void onResponse(Call call, Response response) throws IOException {
                 String responseBody = response.body().string();
                 if (response.isSuccessful()) {
-                    Platform.runLater(() -> {
-                        StageUtils.showAlert("Success:", "Range added successfully.");
-                    });
+                    Type listOfStringType = new TypeToken<List<String>>() {}.getType();
+                    List<String> rangeNames = GSON_INSTANCE.fromJson(responseBody, listOfStringType);
+                    Platform.runLater(() -> onSuccess.accept(rangeNames));
                 } else {
-                    Platform.runLater(() -> {
-                        StageUtils.showAlert("Error:", "Failed to add range: " + responseBody);
-                    });
+                    Platform.runLater(() -> onFailure.accept("Error uploading file: " + responseBody));
                 }
             }
         });
     }
+//    public void getRangeNames(Consumer<List<String>> onSuccess, Consumer<String> onFailure){
+//        String finalUrl = HttpUrl.parse(GET_CELL_DTO_URL)
+//                .newBuilder()
+//                .addQueryParameter("sheetName", sheetName)
+//                .build()
+//                .toString();
+//
+//        HttpClientUtil.runAsyncByUrl(finalUrl, new Callback() {
+//            @Override
+//            public void onFailure(Call call, IOException e) {
+//                Platform.runLater(() -> onFailure.accept("Error: " + e.getMessage()));
+//            }
+//
+//            @Override
+//            public void onResponse(Call call, Response response) throws IOException {
+//                String responseBody = response.body().string();
+//
+//                if (response.isSuccessful()) {
+//                    Type listOfStringType = new TypeToken<List<String>>() {}.getType();
+//                    List<String> rangeNames = GSON_INSTANCE.fromJson(responseBody, listOfStringType);
+//                    Platform.runLater(() -> onSuccess.accept(rangeNames));
+//
+//                } else {
+//                    Platform.runLater(() -> onFailure.accept(responseBody));
+//                }
+//            }
+//        });
+//    }
 }

@@ -1,4 +1,5 @@
 package servlets.sheetManagerScreen;
+import com.google.gson.Gson;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -12,6 +13,7 @@ import java.io.IOException;
 
 import java.io.InputStream;
 import java.io.PrintWriter;
+import java.util.List;
 import java.util.Properties;
 
 @WebServlet("/addRange")
@@ -19,51 +21,58 @@ public class AddRangeServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        // הגדרת סוג התגובה ל-JSON
+        // Set the response type to JSON
         resp.setContentType("application/json");
         resp.setCharacterEncoding("UTF-8");
+        PrintWriter out = resp.getWriter();
 
-        // טעינת הפרמטרים מתוך ה-body של הבקשה באמצעות Properties
+        // Load parameters from the request body using Properties
         Properties prop = new Properties();
         try (InputStream inputStream = req.getInputStream()) {
             prop.load(inputStream);
         }
 
-        // קריאת הערכים מתוך ה-Properties
+        // Read values from the Properties
         String sheetName = prop.getProperty("sheetName");
         String rangeName = prop.getProperty("rangeName");
         String rangeDefinition = prop.getProperty("rangeDefinition");
 
-        // בדיקה שהפרמטרים התקבלו
+        // Validate parameters
         if (rangeName == null || rangeDefinition == null) {
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             resp.getWriter().write("{\"error\": \"Missing rangeName or rangeDefinition\"}");
             return;
         }
 
-        // כאן תבצעי את הפעולה במנוע (נניח שיש לך מחלקה שנקראת 'engine' עם מתודה 'addRange')
+        // Process the request and add the range using the engine
         try {
-            // קריאה למנוע להוספת הטווח
-           addRange(sheetName, rangeName, rangeDefinition);
+            // Call the engine to add the range and get the updated list of ranges
+            List<String> rangeNames = addRange(sheetName, rangeName, rangeDefinition);
 
-            // החזרת תגובה מוצלחת
+            // Convert the list of range names to JSON and send it as the response
+            Gson gson = new Gson();
+            String json = gson.toJson(rangeNames);
+            out.println(json);  // This is the only valid JSON response
+
+            // Set the response status as successful (optional, since 200 OK is the default)
             resp.setStatus(HttpServletResponse.SC_OK);
-            resp.getWriter().write("{\"message\": \"Range added successfully\"}");
+
         } catch (IllegalArgumentException e) {
-            // טיפול במקרה של שגיאה בקלט
+            // Handle invalid input error
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             resp.getWriter().write("{\"error\": \"Failed to add range: " + e.getMessage() + "\"}");
-        }
-        catch(Exception e) {
-            // טיפול במקרה של שגיאה במנוע
+        } catch (Exception e) {
+            // Handle server error
             resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             resp.getWriter().write("{\"error\": \"Failed to add range: " + e.getMessage() + "\"}");
         }
     }
 
-    private void addRange(String sheetName, String rangeName, String rangeDefinition) throws IllegalArgumentException {
+    private List<String> addRange(String sheetName, String rangeName, String rangeDefinition) throws IllegalArgumentException {
         MultiSheetEngineManager engineManager = ServletUtils.getMultiSheetEngineManager(getServletContext());
         SheetEngine sheetEngine = engineManager.getSheetEngine(sheetName);
         sheetEngine.addRange(rangeName, rangeDefinition);
+        return sheetEngine.getRangesNames();
     }
 }
+

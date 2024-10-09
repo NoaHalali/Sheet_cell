@@ -53,8 +53,9 @@ public class RangesController {
         String rangeDefinition = rangeDefinitionField.getText();
 
         try {
-            mainController.addRange(rangeName, rangeDefinition);
-            refreshMenuButton(mainController.getRanges());
+            mainController.addRange(rangeName, rangeDefinition,rangeNames->{
+                        refreshMenuButton(rangeNames);
+                    });
         } catch (Exception e) {
             StageUtils.showAlert("Error", e.getMessage());
             clearSelectedRangeOption();

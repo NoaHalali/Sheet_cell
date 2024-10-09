@@ -42,7 +42,7 @@ public class FileChooserController {
                 updateProgress(0, 100); // התחלת התקדמות ב-0%
 
                 // קריאת נתוני הקובץ
-                mainController.loadFileToSystem(absolutePath);
+                //mainController.loadFileToSystem(absolutePath);
 
                 // ניתן להוסיף השהיה קטנה כדי לסמלץ התקדמות
                 for (int i = 0; i <= 100; i++) {
