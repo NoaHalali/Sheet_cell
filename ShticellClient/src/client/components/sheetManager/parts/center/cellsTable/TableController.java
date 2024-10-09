@@ -4,6 +4,7 @@ import client.components.Utils.StageUtils;
 
 import client.components.sheetManager.parts.center.cell.CellController;
 import client.components.sheetManager.SheetManagerController;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
@@ -183,124 +184,239 @@ public class TableController {
         this.mainController = mainController;
     }
 
-    private void handleCellClick(String newCoord) {
+//    private void handleCellClick(String newCoord) {
+//
+//        boolean isNewCoordSelected = newCoord != null;
+//        boolean isDoubleClick = currentlyFocusedCoord != null && currentlyFocusedCoord.toString().equals(newCoord);
+//
+//        if (isDoubleClick) {
+//            removeMarksOfFocusedCell();
+//            mainController.handleCellClick(null); // ביטול בחירת תא
+//
+//        } else if (isNewCoordSelected) {
+//            clearMarkOfCells(); // ניקוי הדגשות תאים ישנות
+//            addMarksOfFocusingToCell(CoordinateImpl.parseCoordinate(newCoord));
+//            setFocusedCoord(CoordinateImpl.parseCoordinate(newCoord));
+//            mainController.handleCellClick(currentlyFocusedCoord); // עדכון בחירת תא
+//        }
+//    }
 
-        boolean isNewCoordSelected = newCoord != null;
-        boolean isDoubleClick = currentlyFocusedCoord != null && currentlyFocusedCoord.toString().equals(newCoord);
+//    private void handleCellClick(String newCoord) {
+//
+//        boolean isNewCoordSelected = newCoord != null;
+//        boolean isDoubleClick = currentlyFocusedCoord != null && currentlyFocusedCoord.toString().equals(newCoord);
+//
+//        Platform.runLater(() -> {
+//            if (isDoubleClick) {
+//                removeMarksOfFocusedCell(); // הסרת ההדגשות מהתא הממוקד
+//                mainController.handleCellClick(null); // ביטול בחירת תא
+//            } else if (isNewCoordSelected) {
+//                clearMarkOfCells(); // ניקוי הדגשות תאים ישנות
+//                addMarksOfFocusingToCell(CoordinateImpl.parseCoordinate(newCoord)); // הוספת הדגשה לתא החדש
+//                setFocusedCoord(CoordinateImpl.parseCoordinate(newCoord)); // עדכון הקואורדינטה הממוקדת
+//                mainController.handleCellClick(currentlyFocusedCoord); // עדכון בחירת תא
+//            }
+//        });
+//    }
 
-        if (isDoubleClick) {
-            removeMarksOfFocusedCell();
-            mainController.handleCellClick(null); // ביטול בחירת תא
+private void handleCellClick(String newCoord) {
+    boolean isNewCoordSelected = newCoord != null;
+    boolean isDoubleClick = currentlyFocusedCoord != null && currentlyFocusedCoord.toString().equals(newCoord);
 
-        } else if (isNewCoordSelected) {
-            clearMarkOfCells(); // ניקוי הדגשות תאים ישנות
-            addMarksOfFocusingToCell(CoordinateImpl.parseCoordinate(newCoord));
+    if (isDoubleClick) {
+        removeMarksOfFocusedCell(() -> {
+            mainController.handleCellClick(null); // ביטול בחירת תא לאחר הסרת הסימונים
+        });
+    } else if (isNewCoordSelected) {
+        clearMarkOfCells(() -> {
+            addMarksOfFocusingToCell(CoordinateImpl.parseCoordinate(newCoord), () -> {
+                setFocusedCoord(CoordinateImpl.parseCoordinate(newCoord)); // עדכון הקואורדינטה הממוקדת
+                mainController.handleCellClick(currentlyFocusedCoord); // עדכון בחירת תא לאחר הוספת סימונים
+            });
+        });
+    }
+}
 
-            mainController.handleCellClick(currentlyFocusedCoord); // עדכון בחירת תא
+    public void clearMarkOfCells(Runnable onComplete) {
+        // ניקוי כל הסימונים בתאים (בהתאם למפה שלך)
+        for (Map.Entry<String, CellController> entry : coordToCellControllerMap.entrySet()) {
+            CellController cellController = entry.getValue();
+            if (cellController != null) {
+                cellController.resetBorder(); // הסרת הסימון
+            }
+        }
+
+        // קריאה ל-onComplete אחרי ניקוי הסימונים
+        if (onComplete != null) {
+            onComplete.run();
         }
     }
+
+
+    public void removeMarksOfFocusedCell(Runnable onComplete) {
+        if (currentlyFocusedCellController != null) {
+            currentlyFocusedCellController.resetBorder();
+
+            mainController.getCellDTO(currentlyFocusedCoord, cell -> {
+                Platform.runLater(() -> {
+                    List<Coordinate> dependsOn = cell.getDependsOn();
+                    for (Coordinate coord : dependsOn) {
+                        CellController depCellController = coordToCellControllerMap.get(coord.toString());
+                        if (depCellController != null) {
+                            depCellController.resetBorder();
+                        }
+                    }
+
+                    List<Coordinate> influencingOn = cell.getInfluencingOn();
+                    for (Coordinate coord : influencingOn) {
+                        CellController infCellController = coordToCellControllerMap.get(coord.toString());
+                        if (infCellController != null) {
+                            infCellController.resetBorder();
+                        }
+                    }
+                    setFocusedCoord(null);
+
+                    // קריאה ל-callback כשהפעולה הסתיימה
+                    if (onComplete != null) {
+                        onComplete.run();
+                    }
+                });
+            });
+        }
+    }
+
+    public void addMarksOfFocusingToCell(Coordinate newFocusedCoord, Runnable onComplete) {
+        setFocusedCoord(newFocusedCoord); // עדכון הקואורדינטה הממוקדת
+        currentlyFocusedCellController.setBorder("red", "3px"); // סימון הגבול של התא הנוכחי
+
+        // בקשה אסינכרונית ל-CellDTO עבור התא הממוקד
+        mainController.getCellDTO(currentlyFocusedCoord, cell -> {
+            Platform.runLater(() -> {
+                // סימון התאים שתלויים בתא הממוקד
+                List<Coordinate> dependsOn = cell.getDependsOn();
+                for (Coordinate coord : dependsOn) {
+                    CellController depCellController = coordToCellControllerMap.get(coord.toString());
+                    if (depCellController != null) {
+                        depCellController.setBorder("#4d66cc", "2px");
+                    }
+                }
+
+                // סימון התאים שמשפיעים על התא הממוקד
+                List<Coordinate> influencingOn = cell.getInfluencingOn();
+                for (Coordinate coord : influencingOn) {
+                    CellController infCellController = coordToCellControllerMap.get(coord.toString());
+                    if (infCellController != null) {
+                        infCellController.setBorder("#669966", "2px");
+                    }
+                }
+
+                // קריאה ל-onComplete כשהסימונים הסתיימו
+                if (onComplete != null) {
+                    onComplete.run();
+                }
+            });
+        });
+    }
+
+
+//    private void deselectPreviousCell(Coordinate coord) {
+//        // הסרת הסימון מהתא שהיה ממוקד קודם
+//        Platform.runLater(() -> {
+//            CellController previousCellController = coordToCellControllerMap.get(coord.toString());
+//            if (previousCellController != null) {
+//                previousCellController.resetBorder(); // הסרת סימון גבול
+//            }
+//        });
+//    }
 
 
 
     private void handleColumnClick(int colIndex) {
-        clearMarkOfCells();
-        currentColumnIndex = colIndex;
-        currentlyHighlightedColumn = new ArrayList<>();
+        clearMarkOfCells(() -> {
+            currentColumnIndex = colIndex;
+            currentlyHighlightedColumn = new ArrayList<>();
 
-        // עבור על כל התאים בעמודה עם האינדקס שנבחר
-        //TODO - maybe get the column from the engine
-        for (int row = 1; row <= dynamicGridPane.getRowConstraints().size(); row++) {
-            CoordinateImpl coord = new CoordinateImpl(row, colIndex);
-            CellController cellController = coordToCellControllerMap.get(coord.toString());
+            // עבור על כל התאים בעמודה עם האינדקס שנבחר
+            //TODO - maybe get the column from the engine
+            for (int row = 1; row <= dynamicGridPane.getRowConstraints().size(); row++) {
+                CoordinateImpl coord = new CoordinateImpl(row, colIndex);
+                CellController cellController = coordToCellControllerMap.get(coord.toString());
 
-            if (cellController != null) {
-                cellController.setBorder("#FFA500", "2px"); // הדגש את התא בצבע כתום
-                currentlyHighlightedColumn.add(coord); // הוסף את התא לרשימת התאים בעמודה הנבחרת
+                if (cellController != null) {
+                    cellController.setBorder("#FFA500", "2px"); // הדגש את התא בצבע כתום
+                    currentlyHighlightedColumn.add(coord); // הוסף את התא לרשימת התאים בעמודה הנבחרת
+                }
             }
-        }
-        mainController.handleColumnSelection();
-    }
-
-    private void handleRowClick(int rowIndex) {
-        clearMarkOfCells();
-
-        currentRowIndex=rowIndex;
-        currentlyHighlightedRow = new ArrayList<>();
-
-        // Highlight all cells in the selected row
-        for (int col = 1; col <= dynamicGridPane.getColumnConstraints().size(); col++) {
-            CoordinateImpl coord = new CoordinateImpl(rowIndex, col);
-            CellController cellController = coordToCellControllerMap.get(coord.toString());
-
-            if (cellController != null) {
-                cellController.setBorder("#FFA500", "2px"); // Highlight the cell with orange
-                currentlyHighlightedRow.add(coord); // Add the cell to the highlighted row list
-            }
-        }
-
-        mainController.handleRowSelection(); // Notify the main controller about the row selection
-    }
-
-
-    public void addMarksOfFocusingToCell(Coordinate newFocusedCoord) {
-        setFocusedCoord(newFocusedCoord);
-        currentlyFocusedCellController.setBorder("red", "3px");
-
-        //CellDTO cell = mainController.getCellDTO(currentlyFocusedCoord.toString());
-        mainController.getCellDTO(currentlyFocusedCoord, cell -> {
-            List<Coordinate> dependsOn = cell.getDependsOn();
-            for (Coordinate coord : dependsOn) {
-                CellController depCellController = coordToCellControllerMap.get(coord.toString());
-                depCellController.setBorder("#4d66cc", "2px");
-            }
-
-            List<Coordinate> influencingOn = cell.getInfluencingOn();
-            for (Coordinate coord : influencingOn) {
-                CellController infCellController = coordToCellControllerMap.get(coord.toString());
-                infCellController.setBorder("#669966", "2px");
-            }
+            mainController.handleColumnSelection();
         });
-
-
     }
 
-    public void removeMarksOfFocusedCell() {
-        if (currentlyFocusedCellController != null) {
-            currentlyFocusedCellController.resetBorder();
+    private void handleRowClick(int rowIndex){
+            clearMarkOfCells(() -> {
+                currentRowIndex = rowIndex;
+                currentlyHighlightedRow = new ArrayList<>();
 
-            //Coordinate cellCoord = currentlyFocusedCellController.getCoord();
-            //String coordStr = currentlyFocusedCellController.getCoord().toString();
-            //CellDTO cell = mainController.getCellDTO(cellCoord.toString());
-            mainController.getCellDTO(currentlyFocusedCoord, cell -> {
-                List<Coordinate> dependsOn = cell.getDependsOn();
-                for (Coordinate coord : dependsOn) {
-                    CellController depCellController = coordToCellControllerMap.get(coord.toString());
-                    depCellController.resetBorder();
+                // Highlight all cells in the selected row
+                for (int col = 1; col <= dynamicGridPane.getColumnConstraints().size(); col++) {
+                    CoordinateImpl coord = new CoordinateImpl(rowIndex, col);
+                    CellController cellController = coordToCellControllerMap.get(coord.toString());
+
+                    if (cellController != null) {
+                        cellController.setBorder("#FFA500", "2px"); // Highlight the cell with orange
+                        currentlyHighlightedRow.add(coord); // Add the cell to the highlighted row list
+                    }
                 }
 
-                List<Coordinate> influencingOn = cell.getInfluencingOn();
-                for (Coordinate coord : influencingOn) {
-                    CellController infCellController = coordToCellControllerMap.get(coord.toString());
-                    infCellController.resetBorder();
-                }
-                setFocusedCoord(null);
+                mainController.handleRowSelection(); // Notify the main controller about the row selection
             });
-//            List<Coordinate> dependsOn = cell.getDependsOn();
+        }
+
+
+//    public void addMarksOfFocusingToCell(Coordinate newFocusedCoord) {
+//        setFocusedCoord(newFocusedCoord);
+//        currentlyFocusedCellController.setBorder("red", "3px");
 //
+//        //CellDTO cell = mainController.getCellDTO(currentlyFocusedCoord.toString());
+//        mainController.getCellDTO(currentlyFocusedCoord, cell -> {
+//            List<Coordinate> dependsOn = cell.getDependsOn();
 //            for (Coordinate coord : dependsOn) {
 //                CellController depCellController = coordToCellControllerMap.get(coord.toString());
-//                depCellController.resetBorder();
+//                depCellController.setBorder("#4d66cc", "2px");
 //            }
 //
 //            List<Coordinate> influencingOn = cell.getInfluencingOn();
 //            for (Coordinate coord : influencingOn) {
 //                CellController infCellController = coordToCellControllerMap.get(coord.toString());
-//                infCellController.resetBorder();
+//                infCellController.setBorder("#669966", "2px");
 //            }
-//            setFocusedCoord(null);
+//        });
+//
+//
+//    }
+//
+//    public void removeMarksOfFocusedCell() {
+//        if (currentlyFocusedCellController != null) {
+//            currentlyFocusedCellController.resetBorder();
+//
+//            //Coordinate cellCoord = currentlyFocusedCellController.getCoord();
+//            //String coordStr = currentlyFocusedCellController.getCoord().toString();
+//            //CellDTO cell = mainController.getCellDTO(cellCoord.toString());
+//            mainController.getCellDTO(currentlyFocusedCoord, cell -> {
+//                List<Coordinate> dependsOn = cell.getDependsOn();
+//                for (Coordinate coord : dependsOn) {
+//                    CellController depCellController = coordToCellControllerMap.get(coord.toString());
+//                    depCellController.resetBorder();
+//                }
+//
+//                List<Coordinate> influencingOn = cell.getInfluencingOn();
+//                for (Coordinate coord : influencingOn) {
+//                    CellController infCellController = coordToCellControllerMap.get(coord.toString());
+//                    infCellController.resetBorder();
+//                }
+//                setFocusedCoord(null);
+//            });
 //        }
-        }
-    }
+//    }
 
     public void setFocusedCoord(Coordinate coord) {
         currentlyFocusedCoord = coord;
@@ -316,13 +432,14 @@ public class TableController {
     }
 
     public void highlightRange(List<Coordinate> rangeCoordinates) {
-        clearMarkOfCells();
-        for (Coordinate coord : rangeCoordinates) {
-            CellController cellController = coordToCellControllerMap.get(coord.toString());
-            cellController.setRangeHighlight();
-            //cellController.setBackgroundColor("red");
-        }
-        currentlyHighlightedRange = rangeCoordinates;
+        clearMarkOfCells(() -> {
+            for (Coordinate coord : rangeCoordinates) {
+                CellController cellController = coordToCellControllerMap.get(coord.toString());
+                cellController.setRangeHighlight();
+                //cellController.setBackgroundColor("red");
+            }
+            currentlyHighlightedRange = rangeCoordinates;
+        });
     }
 
     public void clearCurrentHighlightRange() {
@@ -354,13 +471,13 @@ public class TableController {
         }
     }
 
-    public void clearMarkOfCells() {
-        clearCurrentHighlightRange();
-        removeMarksOfFocusedCell();
-        clearColumnHighlight();
-        clearRowHighlight();
-
-    }
+//    public void clearMarkOfCells() {
+//        clearCurrentHighlightRange();
+//        removeMarksOfFocusedCell();
+//        clearColumnHighlight();
+//        clearRowHighlight();
+//
+//    }
     public void clearRowHighlight() {
         if (currentlyHighlightedRow != null) {
             for (Coordinate coord : currentlyHighlightedRow) {

@@ -146,23 +146,48 @@ public class SheetManagerController{
             StageUtils.showAlert("Error to get sheetDTO", errorMessage);
         });
     }
+//    public void updateCellValue(String value) {
+//
+//            Coordinate coordinate = tableController.getCurrentlyFocusedCoord();
+//            tableController.removeMarksOfFocusedCell(); //temp - bette to do only if updated but insie it takes the updated cell from engine
+//            //boolean isUpdated = engine.updateCellValue(value, coordinate);
+//            requestsManager.updateCell(coordinate.toString(),value, isUpdated-> {
+//                if (isUpdated) {
+//                    updateUIComponentsAfterCellChange(coordinate);
+//                }
+//                tableController.addMarksOfFocusingToCell(coordinate); //TODO - maybe do it only if cell was updated
+//
+//            },errorMessege -> {
+//                StageUtils.showAlert("Error:", "Failed to update cell: " + errorMessege);
+//                tableController.removeMarksOfFocusedCell();
+//                actionLineController.setActionLine(null);
+//                cellSelected.set(false);
+//            });
+//    }
+
     public void updateCellValue(String value) {
 
-            Coordinate coordinate = tableController.getCurrentlyFocusedCoord();
-            tableController.removeMarksOfFocusedCell(); //temp - bette to do only if updated but insie it takes the updated cell from engine
-            //boolean isUpdated = engine.updateCellValue(value, coordinate);
-            requestsManager.updateCell(coordinate.toString(),value, isUpdated-> {
+        Coordinate coordinate = tableController.getFocusedCoord();
+
+        // הסרת סימונים לפני עדכון התא
+        tableController.removeMarksOfFocusedCell(() -> {
+            // לאחר הסרת הסימונים, נבצע את עדכון התא
+            requestsManager.updateCell(coordinate.toString(), value, isUpdated -> {
                 if (isUpdated) {
+                    // אם התא עודכן בהצלחה, נעדכן את ה-UI
                     updateUIComponentsAfterCellChange(coordinate);
+
+                    // נוסיף סימונים חדשים לתא המעודכן
+                    tableController.addMarksOfFocusingToCell(coordinate, null); // אין צורך ב-callback לאחר הפעולה
                 }
-                tableController.addMarksOfFocusingToCell(coordinate); //TODO - maybe do it only if cell was updated
-                
-            },errorMessege -> {
-                StageUtils.showAlert("Error:", "Failed to update cell: " + errorMessege);
-                tableController.removeMarksOfFocusedCell();
+            }, errorMessage -> {
+                // במקרה של שגיאה, נטפל בה בהתאם
+                StageUtils.showAlert("Error:", "Failed to update cell: " + errorMessage);
+                tableController.removeMarksOfFocusedCell(null);
                 actionLineController.setActionLine(null);
                 cellSelected.set(false);
             });
+        });
     }
 
     private void updateUIComponentsAfterCellChange(Coordinate coordinate) {
@@ -170,7 +195,10 @@ public class SheetManagerController{
             // פעולה במקרה של הצלחה: עדכון ה-UI
             //SheetDTO sheet = engine.getCurrentSheetDTO();
             setCells(sheet);
-            actionLineController.setActionLine(engine.getCellDTOByCoordinate(coordinate));
+            //actionLineController.setActionLine(engine.getCellDTOByCoordinate(coordinate));
+            getCellDTO(coordinate, cell -> {
+                actionLineController.setActionLine(cell);
+            });
             setVersion(sheet.getVersion());
 
         }, errorMessage -> {
@@ -300,11 +328,12 @@ public class SheetManagerController{
         return engine.getSortedSheetDTO(rangeDefinition, columnsToSortBy);
     }
 
-    public void clearBorderMarkOfCells()
-    {
-        tableController.clearMarkOfCells();
+    public void clearBorderMarkOfCells() {
+        tableController.clearMarkOfCells(() -> {
+            // אפשר להוסיף כאן פעולה אם צריך לאחר סיום ניקוי הסימונים
+            System.out.println("Cell borders cleared");
+        });
     }
-
 
     public void handleCellClick(Coordinate coord)
     {
