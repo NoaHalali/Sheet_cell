@@ -29,11 +29,7 @@ public class Constants {
     public static final String GET_SHEET_DTO_BY_VERSION = FULL_SERVER_PATH + "/getSheetDTOByVersion";
     public static final String UPDATE_CELL = FULL_SERVER_PATH + "/updateCell";
     public static final String GET_CELL_DTO_URL = FULL_SERVER_PATH + "/getCellDTO";
-
-//    public final static String USERS_LIST = FULL_SERVER_PATH + "/userslist";
-//    public final static String LOGOUT = FULL_SERVER_PATH + "/chat/logout";
-//    public final static String SEND_CHAT_LINE = FULL_SERVER_PATH + "/pages/chatroom/sendChat";
-//    public final static String CHAT_LINES_LIST = FULL_SERVER_PATH + "/chat";
+    public static final String ADD_RANGE_URL = FULL_SERVER_PATH + "/addRange";
 
     // GSON instance
     public final static Gson GSON_INSTANCE = new Gson();

@@ -339,7 +339,7 @@ public class Sheet implements Serializable {
             throw new IllegalArgumentException("Range name cannot be empty.");
         }
         if(ranges.containsKey(rangeName)){
-            throw new IllegalArgumentException("Range with the name " + rangeName + " already exists.");
+            throw new IllegalArgumentException("Range with the name '" + rangeName + "' already exists.");
         }
 
         validateCoordinateBounds(topLeftCoord);

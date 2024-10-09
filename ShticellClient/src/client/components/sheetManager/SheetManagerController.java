@@ -287,7 +287,7 @@ public class SheetManagerController {
 
     //Ranges
     public void addRange(String rangeName, String rangeDefinition) throws Exception {
-        engine.addRange(rangeName, rangeDefinition);
+        requestsManager.addRange(rangeName, rangeDefinition);
     }
 
     public void highlightRange(String rangeName) {

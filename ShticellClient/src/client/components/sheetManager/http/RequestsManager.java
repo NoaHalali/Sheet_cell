@@ -1,4 +1,5 @@
 package client.components.sheetManager.http;
+import client.components.Utils.StageUtils;
 import client.components.Utils.deserializer.CoordinateDeserializer;
 import client.components.Utils.deserializer.EffectiveValueDeserializer;
 import client.components.Utils.http.HttpClientUtil;
@@ -138,6 +139,7 @@ public class RequestsManager {
             }
         });
     }
+
     public void getSheetDtoByVersion(String version, Consumer<SheetDTO> onSuccess, Consumer<String> onFailure) {
 
         String finalUrl = HttpUrl
@@ -182,5 +184,41 @@ public class RequestsManager {
         });
     }//get
 
-    public void addRange(String rangeName ,String rangeDefinition, Consumer<SheetDTO> onSuccess, Consumer<String> onFailure){}//post
+    public void addRange(String rangeName, String rangeDefinition) throws Exception {
+        String RESOURCE = "/api/add-range"; // שינוי ה-RESOURCE בהתאם לצורך שלך
+
+        // יצירת ה-body בצורה של טקסט רגיל עם מפריד שורות "\n"
+        String body = "sheetName=" + sheetName + "\n" +
+                "rangeName=" + rangeName + "\n" +
+                "rangeDefinition=" + rangeDefinition;
+
+        // יצירת בקשת POST עם ה-body
+        Request request = new Request.Builder()
+                .url(ADD_RANGE_URL) // ה-URL של הבקשה
+                .post(RequestBody.create(body.getBytes())) // שליחת ה-body בפורמט טקסט
+                .build();
+
+        HttpClientUtil.runAsyncByRequest(request, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Platform.runLater(() -> {
+                    StageUtils.showAlert("Error:", "Failed to add range: " + e.getMessage());
+                });
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String responseBody = response.body().string();
+                if (response.isSuccessful()) {
+                    Platform.runLater(() -> {
+                        StageUtils.showAlert("Success:", "Range added successfully.");
+                    });
+                } else {
+                    Platform.runLater(() -> {
+                        StageUtils.showAlert("Error:", "Failed to add range: " + responseBody);
+                    });
+                }
+            }
+        });
+    }
 }

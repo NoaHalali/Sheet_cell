@@ -35,7 +35,7 @@ public interface SheetEngine {
 
     public List<Integer> getNumberOfCellsChangedListDeepClone();
 
-    public void addRange(String rangeName, String rangeDefinition) throws Exception;
+    public void addRange(String rangeName, String rangeDefinition) throws IllegalArgumentException;
 
     public List<Coordinate> getRangeCoordinates(String rangeName);
 

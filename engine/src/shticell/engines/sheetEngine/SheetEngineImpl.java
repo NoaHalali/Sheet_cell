@@ -149,7 +149,7 @@ public class SheetEngineImpl implements SheetEngine {
 
     //8
     @Override
-    public void addRange(String rangeName, String rangeDefinition) throws Exception
+    public void addRange(String rangeName, String rangeDefinition) throws IllegalArgumentException
     {
         checkIfSheetHasBeenLoaded();
         Coordinate[] rangeEdgeCoordinates= Range.parseRange(rangeDefinition);
