@@ -38,7 +38,7 @@ import java.io.File;
 import java.util.*;
 import java.util.function.Consumer;
 
-public class SheetManagerController{
+public class SheetManagerController {
 
     private Stage primaryStage;
     private Scene scene;
@@ -50,23 +50,38 @@ public class SheetManagerController{
     private final RequestsManager requestsManager = new RequestsManager(sheetName);
 
     //Components
-    @FXML private GridPane actionLine;
-    @FXML private GridPane fileChooser;
-    @FXML private ScrollPane table;
-    @FXML private ScrollPane commands;
-    @FXML private VBox ranges;
-    @FXML private HBox versionSelector;
-    @FXML private Label currentVersionLabel;
-    @FXML private HBox skinSelector;
+    @FXML
+    private GridPane actionLine;
+    @FXML
+    private GridPane fileChooser;
+    @FXML
+    private ScrollPane table;
+    @FXML
+    private ScrollPane commands;
+    @FXML
+    private VBox ranges;
+    @FXML
+    private HBox versionSelector;
+    @FXML
+    private Label currentVersionLabel;
+    @FXML
+    private HBox skinSelector;
 
     //Controllers
-    @FXML private ActionLineController actionLineController;
-    @FXML private TableController tableController;
-    @FXML private FileChooserController fileChooserController;
-    @FXML private CommandsController commandsController;
-    @FXML private RangesController rangesController;
-    @FXML private VersionSelectorController versionSelectorController;
-    @FXML private SkinSelectorController skinSelectorController;
+    @FXML
+    private ActionLineController actionLineController;
+    @FXML
+    private TableController tableController;
+    @FXML
+    private FileChooserController fileChooserController;
+    @FXML
+    private CommandsController commandsController;
+    @FXML
+    private RangesController rangesController;
+    @FXML
+    private VersionSelectorController versionSelectorController;
+    @FXML
+    private SkinSelectorController skinSelectorController;
 
     //Properties
     private SimpleBooleanProperty fileSelectedProperty;
@@ -104,7 +119,7 @@ public class SheetManagerController{
         fileSelectedProperty = new SimpleBooleanProperty(false);
         versionProperty = new SimpleIntegerProperty(1);
         columnSelected = new SimpleBooleanProperty(false);
-        rowSelected=new SimpleBooleanProperty(false);
+        rowSelected = new SimpleBooleanProperty(false);
         cellSelected = new SimpleBooleanProperty(false);
         rangeSelected = new SimpleBooleanProperty(false);
         showWhatIfMode = new SimpleBooleanProperty(false);
@@ -229,7 +244,6 @@ public class SheetManagerController{
     }
 
 
-
     private void setCells(SheetDTO sheet) {
         CellDTO[][] cells = sheet.getCellsMatrix();
 
@@ -256,13 +270,20 @@ public class SheetManagerController{
     }
 
 
+    public void getSheetDTOByVersion(String version, Consumer<SheetDTO> callback) {
+        requestsManager.getSheetDtoByVersion(version, sheet -> {
+            callback.accept(sheet);
+        }, errorMessage -> {
+            // פעולה במקרה של כשל
+            System.out.println("Error to get sheetDTO: " + errorMessage);
+            StageUtils.showAlert("Error to get sheetDTO", errorMessage);
+        });
+    }
 
-    public SheetDTO getSheetDTOByVersion(String version) {
-        return engine.getSheetDTOByVersion(Integer.parseInt(version));
-    }
-    public void loadFileToSystem(String absolutePath) throws Exception {
-        engine.readFileData(absolutePath);
-    }
+
+//    public void loadFileToSystem(String absolutePath) throws Exception {
+//        engine.readFileData(absolutePath);
+//    }
 
     //Ranges
     public void addRange(String rangeName, String rangeDefinition) throws Exception {

@@ -60,14 +60,14 @@ public class VersionSelectorController {
 
             // קבלת ה-TableController ואתחולו עם הגרסה הנבחרת של הגיליון
             TableController tableController = loader.getController();
-            SheetDTO sheet = mainController.getSheetDTOByVersion(versionNumberStr);
-            tableController.showSheetPreview(sheet);
-
+             mainController.getSheetDTOByVersion(versionNumberStr,sheet->{
+                 tableController.showSheetPreview(sheet);
 
             Scene scene = new Scene(root);
             popupStage.setScene(scene);
             popupStage.initModality(Modality.APPLICATION_MODAL);
             popupStage.showAndWait();
+        });
 
         } catch (IOException e) {
             StageUtils.showAlert("Error", e.getMessage());

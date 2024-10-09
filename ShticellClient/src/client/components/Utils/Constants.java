@@ -26,6 +26,7 @@ public class Constants {
     public final static String LOGIN_PAGE = FULL_SERVER_PATH + "/login";
     public static final String UPLOAD_FILE = FULL_SERVER_PATH + "/uploadFile";
     public static final String GET_SHEET_DTO = FULL_SERVER_PATH + "/getSheetDTO";
+    public static final String GET_SHEET_DTO_BY_VERSION = FULL_SERVER_PATH + "/getSheetDTOByVersion";
     public static final String UPDATE_CELL = FULL_SERVER_PATH + "/updateCell";
     public static final String GET_CELL_DTO_URL = FULL_SERVER_PATH + "/getCellDTO";
 
