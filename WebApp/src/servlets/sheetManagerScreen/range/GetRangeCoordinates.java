@@ -1,15 +1,12 @@
-package servlets.sheetManagerScreen;
+package servlets.sheetManagerScreen.range;
 
 import com.google.gson.Gson;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import parts.cell.CellDTO;
 import shticell.engines.sheetEngine.SheetEngine;
-import shticell.sheets.manager.MultiSheetEngineManager;
 import shticell.sheets.sheet.parts.cell.coordinate.Coordinate;
-import shticell.sheets.sheet.parts.cell.coordinate.CoordinateImpl;
 import utils.ServletUtils;
 
 import java.io.IOException;
@@ -52,8 +49,12 @@ public class GetRangeCoordinates extends HttpServlet{
         }
 
         private List<Coordinate> getRangeCoordinates(String sheetName ,String  rangeName) {
-            MultiSheetEngineManager engineManager = ServletUtils.getMultiSheetEngineManager(getServletContext());
-            SheetEngine sheetEngine = engineManager.getSheetEngine(sheetName);
+            SheetEngine sheetEngine = ServletUtils.getSheetEngineByName(sheetName, getServletContext());
             return sheetEngine.getRangeCoordinates(rangeName);
         }
+//        private List<Coordinate> getRangeCoordinates(String sheetName ,String  rangeName) {
+//            MultiSheetEngineManager engineManager = ServletUtils.getMultiSheetEngineManager(getServletContext());
+//            SheetEngine sheetEngine = engineManager.getSheetEngine(sheetName);
+//            return sheetEngine.getRangeCoordinates(rangeName);
+//        }
 }

@@ -139,8 +139,14 @@ public class CommandsController {
     private void displaySortAction() {
         try {
             List<Character> colsList = colsStringToCharList(sortColumnsTextField.getText());
-            SheetDTO sheet = mainController.getSortedSheetDTO(sortRangeTextField.getText(), colsList);
-            previewSheetDTOWithPrevStyleInPopup(sheet,"Sorted Sheet Preview");
+
+            mainController.getSortedSheetDTO(sortRangeTextField.getText(), colsList, sheet -> {
+                try {
+                    previewSheetDTOWithPrevStyleInPopup(sheet,"Sorted Sheet Preview");
+                } catch (Exception e) {
+                    StageUtils.showAlert("Error", e.getMessage());
+                }
+            });
 
         } catch (Exception e) {
             StageUtils.showAlert("Error", e.getMessage());

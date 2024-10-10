@@ -51,38 +51,23 @@ public class SheetManagerController {
     private final RequestsManager requestsManager = new RequestsManager(sheetName);
 
     //Components
-    @FXML
-    private GridPane actionLine;
-    @FXML
-    private GridPane fileChooser;
-    @FXML
-    private ScrollPane table;
-    @FXML
-    private ScrollPane commands;
-    @FXML
-    private VBox ranges;
-    @FXML
-    private HBox versionSelector;
-    @FXML
-    private Label currentVersionLabel;
-    @FXML
-    private HBox skinSelector;
+    @FXML private GridPane actionLine;
+    @FXML private GridPane fileChooser;
+    @FXML private ScrollPane table;
+    @FXML private ScrollPane commands;
+    @FXML private VBox ranges;
+    @FXML private HBox versionSelector;
+    @FXML private Label currentVersionLabel;
+    @FXML private HBox skinSelector;
 
     //Controllers
-    @FXML
-    private ActionLineController actionLineController;
-    @FXML
-    private TableController tableController;
-    @FXML
-    private FileChooserController fileChooserController;
-    @FXML
-    private CommandsController commandsController;
-    @FXML
-    private RangesController rangesController;
-    @FXML
-    private VersionSelectorController versionSelectorController;
-    @FXML
-    private SkinSelectorController skinSelectorController;
+    @FXML private ActionLineController actionLineController;
+    @FXML private TableController tableController;
+    @FXML private FileChooserController fileChooserController;
+    @FXML private CommandsController commandsController;
+    @FXML private RangesController rangesController;
+    @FXML private VersionSelectorController versionSelectorController;
+    @FXML private SkinSelectorController skinSelectorController;
 
     //Properties
     private SimpleBooleanProperty fileSelectedProperty;
@@ -162,24 +147,6 @@ public class SheetManagerController {
             StageUtils.showAlert("Error to get sheetDTO", errorMessage);
         });
     }
-//    public void updateCellValue(String value) {
-//
-//            Coordinate coordinate = tableController.getCurrentlyFocusedCoord();
-//            tableController.removeMarksOfFocusedCell(); //temp - bette to do only if updated but insie it takes the updated cell from engine
-//            //boolean isUpdated = engine.updateCellValue(value, coordinate);
-//            requestsManager.updateCell(coordinate.toString(),value, isUpdated-> {
-//                if (isUpdated) {
-//                    updateUIComponentsAfterCellChange(coordinate);
-//                }
-//                tableController.addMarksOfFocusingToCell(coordinate); //TODO - maybe do it only if cell was updated
-//
-//            },errorMessege -> {
-//                StageUtils.showAlert("Error:", "Failed to update cell: " + errorMessege);
-//                tableController.removeMarksOfFocusedCell();
-//                actionLineController.setActionLine(null);
-//                cellSelected.set(false);
-//            });
-//    }
 
     public void updateCellValue(String value) {
 
@@ -364,8 +331,15 @@ public class SheetManagerController {
         tableController.resetCellStyle();
     }
 
-    public SheetDTO getSortedSheetDTO(String rangeDefinition, List<Character> columnsToSortBy) throws IllegalArgumentException {
-        return engine.getSortedSheetDTO(rangeDefinition, columnsToSortBy);
+    public void getSortedSheetDTO(String rangeDefinition, List<Character> columnsToSortBy, Consumer<SheetDTO> callback ) throws IllegalArgumentException {
+        //return engine.getSortedSheetDTO(rangeDefinition, columnsToSortBy);
+        requestsManager.getSortedSheetDTO(rangeDefinition, columnsToSortBy, sheet -> {
+            callback.accept(sheet);
+        }, errorMessage -> {
+            // פעולה במקרה של כשל
+            System.out.println("Error to get sheetDTO: " + errorMessage);
+            StageUtils.showAlert("Error to get sheetDTO", errorMessage);
+        });
     }
 
     public void clearBorderMarkOfCells() {
@@ -426,9 +400,11 @@ public class SheetManagerController {
         //clearBorderMarkOfCells(); // ניקוי סימוני תאים קודם
         columnSelected.set(true); // עדכון מצב בחירת עמודה
     }
+
     public Coordinate getCurrentlyFocusedCellCoord() {
         return tableController.getCurrentlyFocusedCoord();
     }
+
     public void handleRowSelection() {
         // If a cell or range is selected, clear their selection
         if (cellSelected.get() || columnSelected.get() || rangeSelected.get()) {
@@ -441,7 +417,6 @@ public class SheetManagerController {
         rowSelected.set(true); // Update the row selection state
     }
 
-    // פונקציה לאיפוס כל הסימונים
     public void clearSelectionStates() {
         cellSelected.set(false);
         rangeSelected.set(false);
@@ -481,9 +456,8 @@ public class SheetManagerController {
     public void calculateWhatIfValueForCell(double value){
         SheetDTO sheet = engine.calculateWhatIfValueForCell(value);
         setCells(sheet);
-
-
     }
+
     public void showCurrentSheet(){
         SheetDTO sheet=engine.getCurrentSheetDTO();
         setCells(sheet);
@@ -510,26 +484,15 @@ public class SheetManagerController {
     }
 
 
-    public List<CellDTO> getColumnDataInRange(String rangeDefinition) {
-        return engine.getColumnDataInRange(rangeDefinition);
+    public void getColumnDataInRange(String rangeDefinitioncallback ,Consumer<List<CellDTO>> callBack) {
+        requestsManager.getColumnDataInRange(rangeDefinitioncallback, columnData -> {
+            callBack.accept(columnData);
+        }, errorMessage -> {
+            StageUtils.showAlert("Error to get column data", errorMessage);
+        });
     }
+
     public void setMainController(AppController mainController) {
         this.mainController = mainController;
     }
-
-
-
-
-    //public int getNumberOfColumns() {
-    //     return engine.getNumberOfColumns();
-    //}
-
-//    public String[] createColumnsArray() {
-//        int numOfColumns = engine.getNumberOfColumns();
-//        String[] columnNames = new String[numOfColumns];
-//        for (int i = 0; i < numOfColumns; i++) {
-//            columnNames[i] = String.valueOf((char) ('A' + i));
-//        }
-//        return columnNames;
-//    }
 }

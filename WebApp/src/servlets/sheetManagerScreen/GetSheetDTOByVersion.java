@@ -34,7 +34,7 @@ public class GetSheetDTOByVersion extends HttpServlet {
             Gson gson = new Gson();
 
             // כאן תוכל לחלץ את ה-SheetDTO לפי השם מה-Engine שלך
-            SheetDTO sheetDTO = getSheetDTOByNameAndName(sheetName, Integer.parseInt(version));  // זהו המקום בו תבצע את הלוגיקה שלך
+            SheetDTO sheetDTO = getSheetDTOByNameAndVersion(sheetName, Integer.parseInt(version));  // זהו המקום בו תבצע את הלוגיקה שלך
 
             if (sheetDTO == null) {
                 // אם ה-sheet לא נמצא, נחזיר שגיאה מתאימה
@@ -51,10 +51,14 @@ public class GetSheetDTOByVersion extends HttpServlet {
         }
     }
 
-    // זו רק דוגמה איך לחלץ את ה-SheetDTO לפי השם. תצטרך להתאים את השיטה הזו לצרכים שלך.
-    private SheetDTO getSheetDTOByNameAndName(String sheetName,int sheetVersion) {
-        MultiSheetEngineManager engineManager = ServletUtils.getMultiSheetEngineManager(getServletContext());
-        SheetEngine sheetEngine = engineManager.getSheetEngine(sheetName);
+    private SheetDTO getSheetDTOByNameAndVersion(String sheetName, int sheetVersion) {
+        SheetEngine sheetEngine = ServletUtils.getSheetEngineByName(sheetName, getServletContext());
         return sheetEngine.getSheetDTOByVersion(sheetVersion);
     }
+//    // זו רק דוגמה איך לחלץ את ה-SheetDTO לפי השם. תצטרך להתאים את השיטה הזו לצרכים שלך.
+//    private SheetDTO getSheetDTOByNameAndVersion(String sheetName,int sheetVersion) {
+//        MultiSheetEngineManager engineManager = ServletUtils.getMultiSheetEngineManager(getServletContext());
+//        SheetEngine sheetEngine = engineManager.getSheetEngine(sheetName);
+//        return sheetEngine.getSheetDTOByVersion(sheetVersion);
+//    }
 }

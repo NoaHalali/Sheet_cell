@@ -53,9 +53,15 @@ public class GetSheetDTOServlet extends HttpServlet {
 
     // זו רק דוגמה איך לחלץ את ה-SheetDTO לפי השם. תצטרך להתאים את השיטה הזו לצרכים שלך.
     private SheetDTO getSheetDTOByName(String sheetName) {
-        MultiSheetEngineManager engineManager = ServletUtils.getMultiSheetEngineManager(getServletContext());
-        SheetEngine sheetEngine = engineManager.getSheetEngine(sheetName);
+        SheetEngine sheetEngine = ServletUtils.getSheetEngineByName(sheetName, getServletContext());
         return sheetEngine.getCurrentSheetDTO();
     }
+
+//    }// זו רק דוגמה איך לחלץ את ה-SheetDTO לפי השם. תצטרך להתאים את השיטה הזו לצרכים שלך.
+//    private SheetDTO getSheetDTOByName(String sheetName) {
+//        MultiSheetEngineManager engineManager = ServletUtils.getMultiSheetEngineManager(getServletContext());
+//        SheetEngine sheetEngine = engineManager.getSheetEngine(sheetName);
+//        return sheetEngine.getCurrentSheetDTO();
+//    }
 
 }

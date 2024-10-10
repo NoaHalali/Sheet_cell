@@ -1,18 +1,14 @@
-package servlets.sheetManagerScreen;
+package servlets.sheetManagerScreen.cell;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import parts.cell.CellDTO;
 import shticell.engines.sheetEngine.SheetEngine;
-import shticell.sheets.manager.MultiSheetEngineManager;
-import shticell.sheets.sheet.Sheet;
 import shticell.sheets.sheet.parts.cell.coordinate.Coordinate;
 import shticell.sheets.sheet.parts.cell.coordinate.CoordinateImpl;
-import shticell.sheets.sheet.parts.cell.expression.effectiveValue.EffectiveValue;
 import utils.ServletUtils;
 
 import java.io.IOException;
@@ -52,8 +48,7 @@ public class GetCellDTOServlet extends HttpServlet {
     }
 
     private CellDTO getCellDTOByCoordinate(String sheetName ,Coordinate coordinate) {
-        MultiSheetEngineManager engineManager = ServletUtils.getMultiSheetEngineManager(getServletContext());
-        SheetEngine sheetEngine = engineManager.getSheetEngine(sheetName);
+        SheetEngine sheetEngine = ServletUtils.getSheetEngineByName(sheetName, getServletContext());
         return sheetEngine.getCellDTOByCoordinate(coordinate);
     }
 

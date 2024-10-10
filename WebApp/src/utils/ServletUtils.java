@@ -1,6 +1,7 @@
 package utils;
 
 
+import shticell.engines.sheetEngine.SheetEngine;
 import shticell.files.FileManager;
 import shticell.sheets.manager.MultiSheetEngineManager;
 import jakarta.servlet.ServletContext;
@@ -54,6 +55,10 @@ public class ServletUtils {
 		return (MultiSheetEngineManager) servletContext.getAttribute(MULTI_SHEET_ENGINE_MANAGER_ATTRIBUTE_NAME);
 	}
 
+	public static SheetEngine getSheetEngineByName(String sheetName, ServletContext servletContext) {
+		MultiSheetEngineManager engineManager = getMultiSheetEngineManager(servletContext);
+		return engineManager.getSheetEngine(sheetName);
+	}
 
 
 	//	public static int getIntParameter(HttpServletRequest request, String name) {

@@ -1,4 +1,4 @@
-package servlets.sheetManagerScreen;
+package servlets.sheetManagerScreen.range;
 
 import com.google.gson.Gson;
 import jakarta.servlet.annotation.WebServlet;
@@ -6,7 +6,6 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import shticell.engines.sheetEngine.SheetEngine;
-import shticell.sheets.manager.MultiSheetEngineManager;
 import utils.ServletUtils;
 
 import java.io.IOException;
@@ -63,8 +62,7 @@ public class DeleteRangeServlet extends HttpServlet {
     }
 
     private List<String> deleteRangeInSheet (String sheetName, String range) throws IllegalArgumentException {
-        MultiSheetEngineManager engineManager = ServletUtils.getMultiSheetEngineManager(getServletContext());
-        SheetEngine sheetEngine = engineManager.getSheetEngine(sheetName);
+        SheetEngine sheetEngine = ServletUtils.getSheetEngineByName(sheetName, getServletContext());
         sheetEngine.deleteRange(range);
         return sheetEngine.getRangesNames();
     }

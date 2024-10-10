@@ -1,4 +1,4 @@
-package servlets.sheetManagerScreen;
+package servlets.sheetManagerScreen.cell;
 
 import com.google.gson.Gson;
 import jakarta.servlet.annotation.WebServlet;
@@ -6,7 +6,6 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import shticell.engines.sheetEngine.SheetEngine;
-import shticell.sheets.manager.MultiSheetEngineManager;
 import shticell.sheets.sheet.parts.cell.coordinate.Coordinate;
 import shticell.sheets.sheet.parts.cell.coordinate.CoordinateImpl;
 import utils.ServletUtils;
@@ -55,10 +54,15 @@ public class UpdateCellServlet extends HttpServlet {
 
     }
 
+//    private boolean updateCellInSheet(String sheetName, Coordinate coordinate, String newValue) throws Exception {
+//        MultiSheetEngineManager engineManager = ServletUtils.getMultiSheetEngineManager(getServletContext());
+//        SheetEngine sheetEngine = engineManager.getSheetEngine(sheetName);
+//        return sheetEngine.updateCellValue(newValue, coordinate); // המתודה שלך מה-Engine
+//    }
+
     private boolean updateCellInSheet(String sheetName, Coordinate coordinate, String newValue) throws Exception {
-        MultiSheetEngineManager engineManager = ServletUtils.getMultiSheetEngineManager(getServletContext());
-        SheetEngine sheetEngine = engineManager.getSheetEngine(sheetName);
-        return sheetEngine.updateCellValue(newValue, coordinate); // המתודה שלך מה-Engine
+        SheetEngine sheetEngine = ServletUtils.getSheetEngineByName(sheetName, getServletContext());
+        return sheetEngine.updateCellValue(newValue, coordinate);
     }
 }
 

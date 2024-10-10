@@ -1,4 +1,4 @@
-package servlets.sheetManagerScreen;
+package servlets.sheetManagerScreen.range;
 import com.google.gson.Gson;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -6,7 +6,6 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import shticell.engines.sheetEngine.SheetEngine;
-import shticell.sheets.manager.MultiSheetEngineManager;
 import utils.ServletUtils;
 
 import java.io.IOException;
@@ -69,10 +68,16 @@ public class AddRangeServlet extends HttpServlet {
     }
 
     private List<String> addRange(String sheetName, String rangeName, String rangeDefinition) throws IllegalArgumentException {
-        MultiSheetEngineManager engineManager = ServletUtils.getMultiSheetEngineManager(getServletContext());
-        SheetEngine sheetEngine = engineManager.getSheetEngine(sheetName);
+        SheetEngine sheetEngine = ServletUtils.getSheetEngineByName(sheetName, getServletContext());
         sheetEngine.addRange(rangeName, rangeDefinition);
         return sheetEngine.getRangesNames();
     }
+
+//    private List<String> addRange(String sheetName, String rangeName, String rangeDefinition) throws IllegalArgumentException {
+//        MultiSheetEngineManager engineManager = ServletUtils.getMultiSheetEngineManager(getServletContext());
+//        SheetEngine sheetEngine = engineManager.getSheetEngine(sheetName);
+//        sheetEngine.addRange(rangeName, rangeDefinition);
+//        return sheetEngine.getRangesNames();
+//    }
 }
 

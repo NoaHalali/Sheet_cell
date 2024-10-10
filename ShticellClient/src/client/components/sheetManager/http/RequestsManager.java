@@ -10,6 +10,7 @@ import javafx.application.Platform;
 import okhttp3.*;
 import parts.SheetDTO;
 import parts.cell.CellDTO;
+import shticell.sheets.sheet.parts.cell.Cell;
 import shticell.sheets.sheet.parts.cell.coordinate.Coordinate;
 import shticell.sheets.sheet.parts.cell.expression.effectiveValue.EffectiveValue;
 
@@ -106,7 +107,6 @@ public class RequestsManager {
             }
         });
     }
-
 
     public void getCellDTO(String cellID, Consumer<CellDTO> onSuccess, Consumer<String> onFailure) {
         String finalUrl = HttpUrl.parse(GET_CELL_DTO_URL)
@@ -260,7 +260,7 @@ public class RequestsManager {
     }
 
 
-    public void getRangeCoordinates( String rangeName,Consumer<List<Coordinate>> onSuccess,Consumer<String> onFailure){
+    public void getRangeCoordinates(String rangeName,Consumer<List<Coordinate>> onSuccess,Consumer<String> onFailure){
         String finalUrl = HttpUrl
                 .parse(GET_RANGE_COORDINATES)
                 .newBuilder()
@@ -301,6 +301,95 @@ public class RequestsManager {
             }
         });
     }
+
+    public void getColumnDataInRange(String rangeDefinition, Consumer<List<CellDTO>> onSuccess, Consumer<String> onFailure) {
+        // יצירת URL עם הפרמטרים
+        String finalUrl = HttpUrl.parse(GET_COLUMN_DATA_IN_RANGE)
+                .newBuilder()
+                .addQueryParameter("sheetName", sheetName)
+                .addQueryParameter("rangeDefinition", rangeDefinition)
+                .build()
+                .toString();
+
+        // יצירת בקשת GET
+        Request request = new Request.Builder()
+                .url(finalUrl)
+                .get()
+                .build();
+
+        // קריאה אסינכרונית לשרת
+        HttpClientUtil.runAsyncByUrl(finalUrl, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Platform.runLater(() -> onFailure.accept("Failed to fetch column data: " + e.getMessage()));
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String responseBody = response.body().string();
+                if (response.isSuccessful()) {
+                    // המרת ה-JSON חזרה לרשימת CellDTO
+                    Gson gson = new GsonBuilder()
+                            .registerTypeAdapter(Coordinate.class, new CoordinateDeserializer())
+                            .registerTypeAdapter(EffectiveValue.class, new EffectiveValueDeserializer())
+                            .create();
+                    List<CellDTO> columnData = gson.fromJson(responseBody, new TypeToken<List<CellDTO>>(){}.getType());
+                    Platform.runLater(() -> onSuccess.accept(columnData));
+                } else {
+                    Platform.runLater(() -> onFailure.accept("Error fetching data: " + responseBody));
+                }
+            }
+        });
+    }
+
+    public void getSortedSheetDTO(String rangeDefinition, List<Character> columnsToSortBy, Consumer<SheetDTO> onSuccess, Consumer<String> onFailure) {
+        // יצירת URL עם פרמטרים מתאימים ל-batch של ה-GET
+        HttpUrl.Builder urlBuilder = HttpUrl.parse(GET_SORTED_SHEET_DTO)
+                .newBuilder()
+                .addQueryParameter("sheetName", sheetName)
+                .addQueryParameter("rangeDefinition", rangeDefinition);
+
+        // המרת רשימת העמודות לרשימה ב-query parameter
+        for (Character column : columnsToSortBy) {
+            urlBuilder.addQueryParameter("columnsToSortBy", column.toString());
+        }
+
+        String finalUrl = urlBuilder.build().toString();
+
+        // יצירת בקשת GET
+        Request request = new Request.Builder()
+                .url(finalUrl)
+                .get()
+                .build();
+
+        // קריאה אסינכרונית לשרת
+        HttpClientUtil.runAsyncByRequest(request, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+                Platform.runLater(() -> onFailure.accept("Failed to get sorted sheetDTO: " + e.getMessage()));
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String responseBody = response.body().string();
+                if (response.isSuccessful()) {
+                    // המרת ה-JSON ל-SheetDTO
+                    Gson gson = new GsonBuilder()
+                            .registerTypeAdapter(Coordinate.class, new CoordinateDeserializer())
+                            .registerTypeAdapter(EffectiveValue.class, new EffectiveValueDeserializer())
+                            .create();
+                    SheetDTO sortedSheet = gson.fromJson(responseBody, SheetDTO.class);
+                    Platform.runLater(() -> onSuccess.accept(sortedSheet));
+                } else {
+                    Platform.runLater(() -> onFailure.accept("Error fetching sorted sheetDTO: " + responseBody));
+                }
+            }
+        });
+    }
+
+
+
 //    public void getRangeNames(Consumer<List<String>> onSuccess, Consumer<String> onFailure){
 //        String finalUrl = HttpUrl.parse(GET_CELL_DTO_URL)
 //                .newBuilder()
