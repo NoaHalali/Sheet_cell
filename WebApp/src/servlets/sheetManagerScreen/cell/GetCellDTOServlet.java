@@ -1,6 +1,7 @@
 package servlets.sheetManagerScreen.cell;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -9,6 +10,8 @@ import parts.cell.CellDTO;
 import shticell.engines.sheetEngine.SheetEngine;
 import shticell.sheets.sheet.parts.cell.coordinate.Coordinate;
 import shticell.sheets.sheet.parts.cell.coordinate.CoordinateImpl;
+import shticell.sheets.sheet.parts.cell.expression.effectiveValue.EffectiveValue;
+import utils.EffectiveValueSerializer;
 import utils.ServletUtils;
 
 import java.io.IOException;
@@ -38,7 +41,9 @@ public class GetCellDTOServlet extends HttpServlet {
                 response.sendError(HttpServletResponse.SC_NOT_FOUND, "Cell not found for coordinate: " + coordStr);
             } else {
                 // סידור ה-CellDTO ל-JSON (לא צריך Deserializers כאן)
-                Gson gson = new Gson();
+                Gson gson = new GsonBuilder()
+                        .registerTypeAdapter(EffectiveValue.class, new EffectiveValueSerializer())
+                        .create();
                 String json = gson.toJson(cellDTO);
                 response.getWriter().write(json);
             }

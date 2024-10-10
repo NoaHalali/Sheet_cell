@@ -1,6 +1,7 @@
 package servlets.sheetManagerScreen;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -8,6 +9,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import parts.SheetDTO;
 import shticell.engines.sheetEngine.SheetEngine;
+import shticell.sheets.sheet.parts.cell.expression.effectiveValue.EffectiveValue;
+import utils.EffectiveValueSerializer;
 import utils.ServletUtils;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -58,7 +61,9 @@ public class GetSortedSheetDTOServlet extends HttpServlet {
             SheetDTO sortedSheet = sheetEngine.getSortedSheetDTO(rangeDefinition, columnsToSortBy);
 
             // המרת התוצאה ל-JSON
-            Gson gson = new Gson();
+            Gson gson = new GsonBuilder()
+                    .registerTypeAdapter(EffectiveValue.class, new EffectiveValueSerializer())
+                    .create();
             String jsonResponse = gson.toJson(sortedSheet);
 
             // שליחת התשובה בחזרה ללקוח

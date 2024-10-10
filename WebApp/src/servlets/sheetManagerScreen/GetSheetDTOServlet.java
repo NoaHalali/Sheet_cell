@@ -1,6 +1,7 @@
 package servlets.sheetManagerScreen;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -9,6 +10,8 @@ import parts.SheetDTO;
 import shticell.engines.sheetEngine.SheetEngine;
 import shticell.engines.sheetEngine.SheetEngineImpl;
 import shticell.sheets.manager.MultiSheetEngineManager;
+import shticell.sheets.sheet.parts.cell.expression.effectiveValue.EffectiveValue;
+import utils.EffectiveValueSerializer;
 import utils.ServletUtils;
 
 import java.io.IOException;
@@ -31,8 +34,9 @@ public class GetSheetDTOServlet extends HttpServlet {
 
         System.out.println("Getting sheetDTO, request URI is: " + request.getRequestURI());
         try (PrintWriter out = response.getWriter()) {
-            Gson gson = new Gson();
-
+            Gson gson = new GsonBuilder()
+                    .registerTypeAdapter(EffectiveValue.class, new EffectiveValueSerializer())
+                    .create();
             // כאן תוכל לחלץ את ה-SheetDTO לפי השם מה-Engine שלך
             SheetDTO sheetDTO = getSheetDTOByName(sheetName);  // זהו המקום בו תבצע את הלוגיקה שלך
 

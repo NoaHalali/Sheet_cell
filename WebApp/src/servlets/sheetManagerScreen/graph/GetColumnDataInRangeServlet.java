@@ -1,6 +1,7 @@
 package servlets.sheetManagerScreen.graph;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -8,6 +9,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import parts.cell.CellDTO;
 import shticell.engines.sheetEngine.SheetEngine;
+import shticell.sheets.sheet.parts.cell.expression.effectiveValue.EffectiveValue;
+import utils.EffectiveValueSerializer;
 import utils.ServletUtils;
 
 import java.io.IOException;
@@ -38,7 +41,9 @@ public class GetColumnDataInRangeServlet extends HttpServlet {
             List<CellDTO> columnData = sheetEngine.getColumnDataInRange(rangeDefinition);
 
             // המרת התוצאה ל-JSON והחזרתה
-            Gson gson = new Gson();
+            Gson gson = new GsonBuilder()
+                    .registerTypeAdapter(EffectiveValue.class, new EffectiveValueSerializer())
+                    .create();
             String jsonResponse = gson.toJson(columnData);
 
             PrintWriter out = response.getWriter();
