@@ -62,6 +62,7 @@ public interface SheetEngine {
     public SheetDTO calculateWhatIfValueForCell(double value);
 
     public void setEngineInWhatIfMode(Coordinate coord)throws IllegalStateException ;
+    public Sheet getClonedSheet();
 }
 
 

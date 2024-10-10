@@ -243,6 +243,10 @@ public class SheetEngineImpl implements SheetEngine {
         cell.setExpression(new NumberExpression(value));
         return whatIfSheet.toSheetDTO();
     }
+    @Override
+    public Sheet getClonedSheet(){
+        return currentSheet.cloneSheet();
+    }
 
     public int getNumberOfColumns(){
         return currentSheet.getNumberOfColumns();

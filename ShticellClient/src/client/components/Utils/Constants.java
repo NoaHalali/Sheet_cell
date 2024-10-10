@@ -29,6 +29,7 @@ public class Constants {
     public static final String UPLOAD_FILE = FULL_SERVER_PATH + "/uploadFile";
 
     public static final String GET_SHEET_DTO = FULL_SERVER_PATH + "/getSheetDTO";
+    public static final String GET_CLONED_SHEET = FULL_SERVER_PATH + "/getClonedSheet";
     public static final String GET_SHEET_DTO_BY_VERSION = FULL_SERVER_PATH + "/getSheetDTOByVersion";
 
     //cells

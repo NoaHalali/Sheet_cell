@@ -10,6 +10,7 @@ import javafx.application.Platform;
 import okhttp3.*;
 import parts.SheetDTO;
 import parts.cell.CellDTO;
+import shticell.sheets.sheet.Sheet;
 import shticell.sheets.sheet.parts.cell.Cell;
 import shticell.sheets.sheet.parts.cell.coordinate.Coordinate;
 import shticell.sheets.sheet.parts.cell.expression.effectiveValue.EffectiveValue;
@@ -383,6 +384,49 @@ public class RequestsManager {
                     Platform.runLater(() -> onSuccess.accept(sortedSheet));
                 } else {
                     Platform.runLater(() -> onFailure.accept("Error fetching sorted sheetDTO: " + responseBody));
+                }
+            }
+        });
+    }
+    public void getClonedSheet(Consumer<Sheet> onSuccess, Consumer<String> onFailure) {
+        //OkHttpClient client = new OkHttpClient().newBuilder().build();
+
+        String finalUrl = HttpUrl
+                .parse(GET_CLONED_SHEET)
+                .newBuilder()
+                .addQueryParameter("sheetName", sheetName)
+                .build()
+                .toString();
+
+        System.out.println("New request is launched for: " + GET_CLONED_SHEET);
+
+        HttpClientUtil.runAsyncByUrl(finalUrl, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                // במקרה של כשל, נפעיל את ה-Consumer של onFailure
+                Platform.runLater(() -> onFailure.accept("Error: " + e.getMessage()));
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String responseBody = response.body().string();
+
+                if (response.isSuccessful()) {
+                    Gson gson = new GsonBuilder()
+                            .registerTypeAdapter(Coordinate.class, new CoordinateDeserializer())
+                            .registerTypeAdapter(EffectiveValue.class, new EffectiveValueDeserializer())
+                            .create();
+
+                    // ממירים את ה-Response ל-SheetDTO
+                    Sheet sheet = gson.fromJson(responseBody, Sheet.class);
+                    System.out.println("Sheet constructor from json string: " + sheet);
+
+
+                    // מעבירים את ה-DTO ל-UI באמצעות ה-Consumer של onSuccess
+                    Platform.runLater(() -> onSuccess.accept(sheet));
+                } else {
+                    // במקרה של שגיאה נציג הודעה
+                    Platform.runLater(() -> onFailure.accept("Error uploading file: " + responseBody));
                 }
             }
         });

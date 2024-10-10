@@ -30,6 +30,8 @@ import javafx.stage.Stage;
 import parts.cell.CellDTO;
 import parts.SheetDTO;
 import shticell.engines.engine.Engine;
+import shticell.engines.sheetEngine.SheetEngine;
+import shticell.engines.sheetEngine.SheetEngineImpl;
 import shticell.sheets.sheet.parts.cell.coordinate.Coordinate;
 import shticell.sheets.sheet.parts.cell.coordinate.CoordinateImpl;
 import shticell.sheets.sheet.parts.cell.expression.effectiveValue.EffectiveValue;
@@ -46,6 +48,7 @@ public class SheetManagerController {
     private int count;
     private Coordinate coordinate;
     private Engine engine;
+    private SheetEngine sheetEngine;
     private String sheetName = "beginner";
     private AppController mainController;
     private final RequestsManager requestsManager = new RequestsManager(sheetName);
@@ -451,7 +454,14 @@ public class SheetManagerController {
         return engine.getDistinctValuesOfMultipleColsInRange(cols,rangeDefinition);
     }
     public void setEngineInWhatIfMode() throws IllegalStateException {
-        engine.setEngineInWhatIfMode(tableController.getFocusedCoord());
+        requestsManager.getClonedSheet(sheet -> {
+            Platform.runLater(()->{
+                sheetEngine=new SheetEngineImpl(sheet);
+            });
+        },errorMessage->{
+            StageUtils.showAlert("Error:", "Failed to activate what if mode: " + errorMessage);
+        });
+        sheetEngine.setEngineInWhatIfMode(tableController.getFocusedCoord());
     }
     public void calculateWhatIfValueForCell(double value){
         SheetDTO sheet = engine.calculateWhatIfValueForCell(value);
