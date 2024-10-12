@@ -333,41 +333,40 @@ private SheetDTO openFilterOptionsPopupAndGetFilteredSheet() throws Exception {
 //        graphController.setMainController(mainController);  // העברת ה-mainController ל-GraphController
 //        graphController.createGraph(xColumn, yColumn);  // יצירת הגרף עם העמודות הנבחרות
 //    }
+@FXML
+private void handleCalculateWhatIf() {
+    try {
+        double min = Double.parseDouble(whatIfMinimumTextField.getText());
+        double max = Double.parseDouble(whatIfMaximumTextField.getText());
 
-    @FXML
-    private void handleCalculateWhatIf() {
-        try {
-            double min = Double.parseDouble(whatIfMinimumTextField.getText());
-            double max = Double.parseDouble(whatIfMaximumTextField.getText());
-            if(max<=min){
-                throw new IllegalArgumentException("max must be greater than min");
-            }
-
-            mainController.setEngineInWhatIfMode();
-            // Perform your "What If" calculation here
-            mainController.changeWhatIfMode(true);
-            Coordinate focusedCoord =mainController.getCurrentlyFocusedCellCoord();
-            StageUtils.showInfo("Attention","Entered to WHAT- IF mode.\n" +
-                    "To cancel press 'Exit What If Mode' button.");
-            whatIfCoordinateLabel.setText(focusedCoord.toString());
-            minimumValueSliderLabel.setText(whatIfMinimumTextField.getText());// Example calculation
-            maximumValueSliderLabel.setText(whatIfMaximumTextField.getText());
-            whatIfSlider.setMin(min);
-            whatIfSlider.setMax(max);
-
-            // Display the result to the user
-
-        }  catch (NumberFormatException e) {
-            StageUtils.showAlert("Input Error", "Please enter valid numbers.");
-        }
-        catch (IllegalStateException e){
-            StageUtils.showAlert("Error",e.getMessage());
-        }
-        catch (IllegalArgumentException e){
-            StageUtils.showAlert("Error",e.getMessage());
+        if (max <= min) {
+            throw new IllegalArgumentException("max must be greater than min");
         }
 
+        // קריאה למתודה האסינכרונית עם Consumers
+        mainController.setEngineInWhatIfMode(mainController.getCurrentlyFocusedCellCoord(),
+                (success) -> { // מה לעשות במקרה של הצלחה
+                    mainController.changeWhatIfMode(true);
+                    Coordinate focusedCoord = mainController.getCurrentlyFocusedCellCoord();
+                    whatIfCoordinateLabel.setText(focusedCoord.toString());
+                    minimumValueSliderLabel.setText(whatIfMinimumTextField.getText());
+                    maximumValueSliderLabel.setText(whatIfMaximumTextField.getText());
+                    whatIfSlider.setMin(min);
+                    whatIfSlider.setMax(max);
+                },
+                (errorMessage) -> { // מה לעשות במקרה של שגיאה
+                    StageUtils.showAlert("Error", errorMessage);
+                }
+        );
+
+    } catch (NumberFormatException e) {
+        StageUtils.showAlert("Input Error", "Please enter valid numbers.");
+    } catch (IllegalArgumentException e) {
+        StageUtils.showAlert("Error", e.getMessage());
+    } catch (Exception e) {
+        StageUtils.showAlert("Error", e.getMessage());
     }
+}
     @FXML
     private void handlesWhatIfSliderMove() {
         mainController.calculateWhatIfValueForCell(whatIfSlider.getValue());

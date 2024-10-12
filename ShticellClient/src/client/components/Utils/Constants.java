@@ -1,7 +1,6 @@
 package client.components.Utils;
 
 import com.google.gson.Gson;
-import com.sun.webkit.network.URLs;
 
 public class Constants {
 
@@ -44,6 +43,10 @@ public class Constants {
 
     //sorting
     public static final String GET_SORTED_SHEET_DTO = FULL_SERVER_PATH + "/getSortedSheetDTO";
+
+    //what if
+    public static final String SET_SHEET_IN_WHAT_IF_MODE = FULL_SERVER_PATH + "/setSheetInWhatIfMode";
+    public static final String CALCULATE_WHAT_IF_VALUE_FOR_CELL = FULL_SERVER_PATH + "/calculateWhatIfValueForCell";
 
     // GSON instance
     public final static Gson GSON_INSTANCE = new Gson();

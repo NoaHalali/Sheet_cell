@@ -32,12 +32,14 @@ import parts.SheetDTO;
 import shticell.engines.engine.Engine;
 import shticell.engines.sheetEngine.SheetEngine;
 import shticell.engines.sheetEngine.SheetEngineImpl;
+import shticell.sheets.sheet.Sheet;
 import shticell.sheets.sheet.parts.cell.coordinate.Coordinate;
 import shticell.sheets.sheet.parts.cell.coordinate.CoordinateImpl;
 import shticell.sheets.sheet.parts.cell.expression.effectiveValue.EffectiveValue;
 
 
 import java.io.File;
+import java.io.IOException;
 import java.util.*;
 import java.util.function.Consumer;
 
@@ -453,24 +455,40 @@ public class SheetManagerController {
     public Map<String,Set<EffectiveValue>> getDistinctValuesOfMultipleColsInRange(List<Character> cols,String rangeDefinition){
         return engine.getDistinctValuesOfMultipleColsInRange(cols,rangeDefinition);
     }
-    public void setEngineInWhatIfMode() throws IllegalStateException {
-        requestsManager.getClonedSheet(sheet -> {
-            Platform.runLater(()->{
-                sheetEngine=new SheetEngineImpl(sheet);
-            });
-        },errorMessage->{
-            StageUtils.showAlert("Error:", "Failed to activate what if mode: " + errorMessage);
+
+    public void setEngineInWhatIfMode(Coordinate coord, Consumer<Void> onSuccess, Consumer<String> onFailure)throws IllegalArgumentException{
+        requestsManager.setEngineInWhatIfMode(coord, success -> {
+            onSuccess.accept(null); // קריאה ל-onSuccess אם הצליחה הבקשה
+        }, failure -> {
+            onFailure.accept(failure); // קריאה ל-onFailure אם נכשלה הבקשה
         });
-        sheetEngine.setEngineInWhatIfMode(tableController.getFocusedCoord());
     }
-    public void calculateWhatIfValueForCell(double value){
-        SheetDTO sheet = engine.calculateWhatIfValueForCell(value);
-        setCells(sheet);
+
+    public void calculateWhatIfValueForCell(double value) {
+        // קריאה אסינכרונית ל-requestsManager כדי לחשב ערך What If
+        requestsManager.calculateWhatIfValueForCell(value, sheet -> {
+            // הפעלה של הקוד ב-Thread הראשי עם Platform.runLater לאחר קבלת התשובה
+            Platform.runLater(() -> {
+                setCells(sheet);
+            });
+        }, errorMessage -> {
+            // טיפול במקרה של שגיאה
+            Platform.runLater(() -> {
+                StageUtils.showAlert("Error", errorMessage);
+            });
+        });
     }
 
     public void showCurrentSheet(){
-        SheetDTO sheet=engine.getCurrentSheetDTO();
-        setCells(sheet);
+        requestsManager.getSheetDTO(sheet -> {
+            // פעולה במקרה של הצלחה: עדכון ה-UI
+            setCells(sheet);
+        }, errorMessage -> {
+            // פעולה במקרה של כשל
+            System.out.println("Error to get sheetDTO: " + errorMessage);
+            StageUtils.showAlert("Error to get sheetDTO", errorMessage);
+        });
+
     }
 
     public void setColumnWidth(int width) throws IllegalArgumentException {

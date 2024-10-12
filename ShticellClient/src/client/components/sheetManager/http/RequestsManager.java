@@ -431,6 +431,74 @@ public class RequestsManager {
             }
         });
     }
+    public void setEngineInWhatIfMode(Coordinate coord, Consumer<Void> onSuccess, Consumer<String> onFailure) {
+        String body = "sheetName=" + sheetName + "\n" + "cellID=" + coord.toString() + "\n";
+
+        Request request = new Request.Builder()
+                .url(SET_SHEET_IN_WHAT_IF_MODE)
+                .put(RequestBody.create(body.getBytes()))
+                .build();
+
+        HttpClientUtil.runAsyncByRequest(request, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Platform.runLater(() -> onFailure.accept("Failed to activate what if mode: " + e.getMessage()));
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    System.out.println("what iffffffffffffffffffffffffffffffffffffffffff");
+                    Platform.runLater(() -> onSuccess.accept(null));
+                } else {
+                    String errorMessage = "Unknown error";
+                    if (response.body() != null) {
+                        errorMessage = response.body().string();
+                    }
+                    final String finalErrorMessage = errorMessage;
+                    Platform.runLater(() -> onFailure.accept("Error: " + finalErrorMessage));
+                }
+                }
+
+        });
+    }
+
+    public void calculateWhatIfValueForCell(double value,Consumer<SheetDTO> onSuccess, Consumer<String> onFailure){
+        // יצירת ה-body בצורה של טקסט רגיל עם מפריד שורות "\n"
+        String body = "sheetName=" + sheetName + "\n" +
+                "value=" + value + "\n" ;
+
+        // יצירת בקשת POST עם ה-body
+        Request request = new Request.Builder()
+                .url(CALCULATE_WHAT_IF_VALUE_FOR_CELL) // ה-URL של הבקשה
+                .put(RequestBody.create(body.getBytes())) // שליחת ה-body בפורמט טקסט
+                .build();
+
+        HttpClientUtil.runAsyncByRequest(request, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Platform.runLater(() -> {
+                    StageUtils.showAlert("Error:", "Failed to change cell value " + e.getMessage());
+                });
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String responseBody = response.body().string();
+                if (response.isSuccessful()) {
+                    Gson gson = new GsonBuilder()
+                            .registerTypeAdapter(Coordinate.class, new CoordinateDeserializer())
+                            .registerTypeAdapter(EffectiveValue.class, new EffectiveValueDeserializer())
+                            .create();
+                    SheetDTO changeSheet = gson.fromJson(responseBody, SheetDTO.class);
+                    onSuccess.accept(changeSheet);
+                } else {
+                    throw new IllegalArgumentException(responseBody);
+                    //Platform.runLater(() -> onFailure.accept("Error uploading file: " + responseBody));
+                }
+            }
+        });
+    }
 
 
 
