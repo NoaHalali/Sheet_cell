@@ -23,6 +23,7 @@ import shticell.sheets.sheet.parts.cell.coordinate.Coordinate;
 import shticell.sheets.sheet.parts.cell.expression.effectiveValue.EffectiveValue;
 
 import java.util.*;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 
@@ -207,30 +208,77 @@ public class CommandsController {
 
     @FXML
     private void OnCalcValuesToFilterButtonClicked() {
-       try{
-           SheetDTO sheet = openFilterOptionsPopupAndGetFilteredSheet();
-           previewSheetDTOWithPrevStyleInPopup(sheet,"Filtered Sheet Preview");
+        try {
+            openFilterOptionsPopupAndGetFilteredSheet(sheet -> {
+                // פתיחת פופאפ עם הגיליון המסונן);
+                try {
+                    previewSheetDTOWithPrevStyleInPopup(sheet, "Filtered Sheet Preview");
+                } catch (Exception e) {
+                    StageUtils.showAlert("Error", e.getMessage());
+                }
+            }, errorMessage -> {
+                StageUtils.showAlert("Error", errorMessage);
+            });
+        } catch (Exception e) {
+            StageUtils.showAlert("Error", e.getMessage());
+        }
 
-       }
-         catch (Exception e) {
-             StageUtils.showAlert("Error", e.getMessage());
-         }
     }
 
 
+//private SheetDTO openFilterOptionsPopupAndGetFilteredSheet() throws Exception {
+//    List<Character> colsList = colsStringToCharList(filterColumnsTextField.getText());
+//    String rangeDefinition = filterRangeTextField.getText();
+//
+//    Map<String,Set<EffectiveValue>> values = mainController.getDistinctValuesOfMultipleColsInRange(colsList, rangeDefinition);
+//
+//    // קריאה למתודה שתפתח מספר פופאפים
+//    Map<String,Set<EffectiveValue>> filteredValues = openMultipleFilterPopups(values);
+//    // החזרת ערך מתאים
+//    return mainController.filterData(filteredValues, rangeDefinition);
+//}
 
+//        private SheetDTO openFilterOptionsPopupAndGetFilteredSheet() throws Exception {
+//            return openFilterOptionsPopupAndGetFilteredSheet(
+//                    sheet -> {
+//                        // פתיחת פופאפ עם הגיליון המסונן
+//                        try {
+//                            previewSheetDTOWithPrevStyleInPopup(sheet,"Filtered Sheet Preview");
+//                        } catch (Exception e) {
+//                            StageUtils.showAlert("Error", e.getMessage());
+//                        }
+//                    },
+//                    errorMessage -> {
+//                        StageUtils.showAlert("Error", errorMessage);
+//                    }
+//            );
+//
+    private void openFilterOptionsPopupAndGetFilteredSheet(Consumer<SheetDTO> onSuccess, Consumer<String> onFailure) throws Exception {
+        List<Character> colsList = colsStringToCharList(filterColumnsTextField.getText());
+        String rangeDefinition = filterRangeTextField.getText();
 
-private SheetDTO openFilterOptionsPopupAndGetFilteredSheet() throws Exception {
-    List<Character> colsList = colsStringToCharList(filterColumnsTextField.getText());
-    String rangeDefinition = filterRangeTextField.getText();
-    Map<String,Set<EffectiveValue>> values = mainController.getDistinctValuesOfMultipleColsInRange(colsList, rangeDefinition);
+        // קריאה למתודה שמקבלת את הערכים הייחודיים
+        mainController.getDistinctValuesOfMultipleColsInRange(colsList, rangeDefinition, values -> {
+            // קריאה למתודה שתפתח את הפופאפים ותאפשר סינון
+            Map<String, Set<EffectiveValue>> filteredValues = null;
+            try {
+                filteredValues = openMultipleFilterPopups(values);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
 
-    // קריאה למתודה שתפתח מספר פופאפים
-    Map<String,Set<EffectiveValue>> filteredValues = openMultipleFilterPopups(values);
+            // קריאה לפילטר נתונים בהתאם לערכים המסוננים
+            mainController.filterData(filteredValues, rangeDefinition, filteredSheet -> {
+                onSuccess.accept(filteredSheet);  // קריאה ל-onSuccess במקרה של הצלחה
+            }, errorMessage -> {
+                onFailure.accept(errorMessage);  // קריאה ל-onFailure במקרה של שגיאה
+            });
 
-    // החזרת ערך מתאים
-    return mainController.filterData(filteredValues, rangeDefinition);
-}
+        }, errorMessage -> {
+            onFailure.accept(errorMessage);  // טיפול בשגיאה במקרה שלא ניתן לקבל את הערכים הייחודיים
+        });
+    }
+
 
     private  Map<String,Set<EffectiveValue>> openMultipleFilterPopups(Map<String,Set<EffectiveValue>> allValues) throws Exception {
         Map<String,Set<EffectiveValue>> filteredValues = new HashMap<>();

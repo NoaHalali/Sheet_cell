@@ -2,6 +2,7 @@ package client.components.sheetManager.http;
 import client.components.Utils.StageUtils;
 import client.components.Utils.deserializer.CoordinateDeserializer;
 import client.components.Utils.deserializer.EffectiveValueDeserializer;
+import client.components.Utils.http.EffectiveValueSerializer;
 import client.components.Utils.http.HttpClientUtil;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -18,6 +19,8 @@ import shticell.sheets.sheet.parts.cell.expression.effectiveValue.EffectiveValue
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.function.Consumer;
 
 import static client.components.Utils.Constants.*;
@@ -431,6 +434,7 @@ public class RequestsManager {
             }
         });
     }
+
     public void setEngineInWhatIfMode(Coordinate coord, Consumer<Void> onSuccess, Consumer<String> onFailure) {
         String body = "sheetName=" + sheetName + "\n" + "cellID=" + coord.toString() + "\n";
 
@@ -500,34 +504,144 @@ public class RequestsManager {
         });
     }
 
+    public void getDistinctValuesOfMultipleColsInRange(List<Character> cols, String rangeDefinition, Consumer<Map<String, Set<EffectiveValue>>> onSuccess, Consumer<String> onFailure) {
+        // המרת רשימת העמודות לפורמט שניתן לשלוח ב-Query Parameters
+        HttpUrl.Builder urlBuilder = HttpUrl.parse(GET_DISTINCT_VALUES_OF_MULTIPLE_COLS_IN_RANGE)
+                .newBuilder()
+                .addQueryParameter("rangeDefinition", rangeDefinition);
 
+        // הוספת העמודות כ-Query Parameters
+        for (Character col : cols) {
+            urlBuilder.addQueryParameter("cols", col.toString());
+        }
 
-//    public void getRangeNames(Consumer<List<String>> onSuccess, Consumer<String> onFailure){
-//        String finalUrl = HttpUrl.parse(GET_CELL_DTO_URL)
+        String finalUrl = urlBuilder.build().toString();
+
+        // יצירת בקשת GET
+        Request request = new Request.Builder()
+                .url(finalUrl)
+                .get()
+                .build();
+
+        // קריאה אסינכרונית לשרת
+        HttpClientUtil.runAsyncByRequest(request, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Platform.runLater(() -> onFailure.accept("Failed to fetch distinct values: " + e.getMessage()));
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String responseBody = response.body().string();
+                if (response.isSuccessful()) {
+                    // שימוש ב-Gson עם EffectiveValueDeserializer
+                    Gson gson = new GsonBuilder()
+                            .registerTypeAdapter(EffectiveValue.class, new EffectiveValueDeserializer())  // השימוש ב-Deserializer
+                            .create();
+
+                    Type type = new TypeToken<Map<String, Set<EffectiveValue>>>(){}.getType();
+                    Map<String, Set<EffectiveValue>> distinctValuesMap = gson.fromJson(responseBody, type);
+
+                    Platform.runLater(() -> onSuccess.accept(distinctValuesMap));
+                } else {
+                    Platform.runLater(() -> onFailure.accept("Error fetching distinct values: " + responseBody));
+                }
+            }
+        });
+    }
+
+//    public void getFilteredSheetDTO(Map<String, Set<EffectiveValue>> selectedValues, String rangeDefinition, Consumer<SheetDTO> onSuccess, Consumer<String> onFailure) {
+//        // יצירת URL עם הפרמטרים
+//        HttpUrl.Builder urlBuilder = HttpUrl.parse(GET_FILTERED_SHEET_DTO)
 //                .newBuilder()
-//                .addQueryParameter("sheetName", sheetName)
-//                .build()
-//                .toString();
+//                .addQueryParameter("rangeDefinition", rangeDefinition);
 //
-//        HttpClientUtil.runAsyncByUrl(finalUrl, new Callback() {
+//        // המרת ה-Map של selectedValues ל-query parameters
+//        for (Map.Entry<String, Set<EffectiveValue>> entry : selectedValues.entrySet()) {
+//            String column = entry.getKey();
+//            for (EffectiveValue value : entry.getValue()) {
+//                urlBuilder.addQueryParameter("selectedValues[" + column + "]", value.toString());
+//            }
+//        }
+//
+//        String finalUrl = urlBuilder.build().toString();
+//
+//        // יצירת בקשת GET
+//        Request request = new Request.Builder()
+//                .url(finalUrl)
+//                .get()
+//                .build();
+//
+//        // קריאה אסינכרונית לשרת
+//        HttpClientUtil.runAsyncByRequest(request, new Callback() {
 //            @Override
 //            public void onFailure(Call call, IOException e) {
-//                Platform.runLater(() -> onFailure.accept("Error: " + e.getMessage()));
+//                Platform.runLater(() -> onFailure.accept("Failed to get filtered sheetDTO: " + e.getMessage()));
 //            }
 //
 //            @Override
 //            public void onResponse(Call call, Response response) throws IOException {
 //                String responseBody = response.body().string();
-//
 //                if (response.isSuccessful()) {
-//                    Type listOfStringType = new TypeToken<List<String>>() {}.getType();
-//                    List<String> rangeNames = GSON_INSTANCE.fromJson(responseBody, listOfStringType);
-//                    Platform.runLater(() -> onSuccess.accept(rangeNames));
-//
+//                    // המרת ה-JSON ל-SheetDTO עם שימוש ב-Deserializer
+//                    Gson gson = new GsonBuilder()
+//                            .registerTypeAdapter(Coordinate.class, new CoordinateDeserializer())  // שימוש ב-Deserializer
+//                            .registerTypeAdapter(EffectiveValue.class, new EffectiveValueDeserializer())  // שימוש ב-Deserializer
+//                            .create();
+//                    SheetDTO filteredSheet = gson.fromJson(responseBody, SheetDTO.class);
+//                    Platform.runLater(() -> onSuccess.accept(filteredSheet));
 //                } else {
-//                    Platform.runLater(() -> onFailure.accept(responseBody));
+//                    Platform.runLater(() -> onFailure.accept("Error fetching filtered sheetDTO: " + responseBody));
 //                }
 //            }
 //        });
 //    }
+
+
+    public void getFilteredSheetDTOFromMultipleCols(Map<String, Set<EffectiveValue>> selectedValues, String rangeDefinition, Consumer<SheetDTO> onSuccess, Consumer<String> onFailure) {
+        // המרת המפה של הערכים הנבחרים ל-JSON
+        Gson gson = new GsonBuilder()
+                .registerTypeAdapter(EffectiveValue.class, new EffectiveValueSerializer())  // שימוש ב-Serializer
+                .create();
+        String jsonBody = gson.toJson(selectedValues);
+
+        // יצירת URL עם פרמטר של rangeDefinition
+        String finalUrl = HttpUrl.parse(GET_FILTERED_SHEET_DTO)
+                .newBuilder()
+                .addQueryParameter("rangeDefinition", rangeDefinition)
+                .build()
+                .toString();
+
+        // יצירת RequestBody כ-JSON
+        RequestBody body = RequestBody.create(jsonBody, MediaType.parse("application/json"));
+
+        // יצירת בקשת POST
+        Request request = new Request.Builder()
+                .url(finalUrl)
+                .post(body)
+                .build();
+
+        // קריאה אסינכרונית לשרת
+        HttpClientUtil.runAsyncByRequest(request, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Platform.runLater(() -> onFailure.accept("Failed to filter data: " + e.getMessage()));
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String responseBody = response.body().string();
+                if (response.isSuccessful()) {
+                    // המרת ה-JSON ל-SheetDTO
+                    SheetDTO filteredSheet = gson.fromJson(responseBody, SheetDTO.class);
+                    Platform.runLater(() -> onSuccess.accept(filteredSheet));
+                } else {
+                    Platform.runLater(() -> onFailure.accept("Error filtering data: " + responseBody));
+                }
+            }
+        });
+    }
+
+
+
 }

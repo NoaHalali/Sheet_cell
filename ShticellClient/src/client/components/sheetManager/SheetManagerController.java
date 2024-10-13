@@ -49,7 +49,7 @@ public class SheetManagerController {
     private Scene scene;
     private int count;
     private Coordinate coordinate;
-    private Engine engine;
+    //private Engine engine;
     private SheetEngine sheetEngine;
     private String sheetName = "beginner";
     private AppController mainController;
@@ -439,21 +439,32 @@ public class SheetManagerController {
         return rangeSelected;
     }
 
-    public SheetDTO filterData(Map<String,Set<EffectiveValue>> selectedValues, String rangeDefinition) {
-        return engine.getFilteredSheetDTOFromMultipleCols(selectedValues, rangeDefinition);
+
+    public void getDistinctValuesOfMultipleColsInRange(List<Character> cols, String rangeDefinition, Consumer<Map<String, Set<EffectiveValue>>> onSuccess, Consumer<String> onFailure) {
+        //return engine.getDistinctValuesOfMultipleColsInRange(cols,rangeDefinition);
+        // קריאה ל-requestsManager עם צרכנים (Consumers) שמטפלים בתוצאה ובשגיאות
+        requestsManager.getDistinctValuesOfMultipleColsInRange(cols, rangeDefinition, distinctValuesMap -> {
+            // קריאה ל-onSuccess עם המפה שהתקבלה אם הפעולה הצליחה
+            onSuccess.accept(distinctValuesMap);
+        }, errorMessage -> {
+            // קריאה ל-onFailure במקרה של שגיאה
+            onFailure.accept(errorMessage);
+            StageUtils.showAlert("Error to get distinct values", errorMessage);
+        });
     }
 
-//    public Set<EffectiveValue> getDistinctValuesOfColInRange(String col,String rangeDefinition){
-////        Set<String>strValues=new HashSet<String>();
-//        Set<EffectiveValue> values=engine.getDistinctValuesOfColInRange(col,rangeDefinition);
-////        strValues = values.stream()
-////                .map(value -> tableController.calcValueToString(value)) // המרה למחרוזת//todo להוסיף את CALCVALUE למקום אחר
-////                .collect(Collectors.toSet()); // המרת הזרם לסט
-//        return values;
-//    }
 
-    public Map<String,Set<EffectiveValue>> getDistinctValuesOfMultipleColsInRange(List<Character> cols,String rangeDefinition){
-        return engine.getDistinctValuesOfMultipleColsInRange(cols,rangeDefinition);
+    public void filterData(Map<String,Set<EffectiveValue>> selectedValues, String rangeDefinition, Consumer<SheetDTO> onSuccess, Consumer<String> onFailure) {
+        //return engine.getFilteredSheetDTOFromMultipleCols(selectedValues, rangeDefinition);
+        requestsManager.getFilteredSheetDTOFromMultipleCols(selectedValues, rangeDefinition, sheet -> {
+            // קריאה ל-onSuccess עם הגיליון שהתקבל אם הפעולה הצליחה
+            onSuccess.accept(sheet);
+        }, errorMessage -> {
+            // קריאה ל-onFailure במקרה של שגיאה
+            onFailure.accept(errorMessage);
+            StageUtils.showAlert("Error to get filtered sheet", errorMessage);
+        });
+
     }
 
     public void setEngineInWhatIfMode(Coordinate coord, Consumer<Void> onSuccess, Consumer<String> onFailure)throws IllegalArgumentException{
