@@ -1,5 +1,6 @@
 package shticell.engines.sheetEngine;
 
+import parts.SheetDetailsDTO;
 import shticell.files.FileManager;
 import shticell.exceptions.SheetNotLoadedException;
 import shticell.sheets.sheet.parts.Range;
@@ -23,14 +24,16 @@ public class SheetEngineImpl implements SheetEngine {
     private FileManager fileManager = new FileManager();
     private List <Version> versionsList = new LinkedList<Version>();
     private static final String SHEET_NOT_LOADED_MESSAGE = "Sheet is not loaded. Please load a sheet before attempting to access it.";
+    private String owner;
 
     @Override
     public boolean sheetLoadad() {
         return currentSheet != null;
     }
 
-    public SheetEngineImpl(Sheet sheet) {
+    public SheetEngineImpl(Sheet sheet,String owner) {
         currentSheet = sheet;
+        this.owner = owner;
         //versionsList.clear();
         addVersion(currentSheet, currentSheet.howManyActiveCellsInSheet());
     }
@@ -243,12 +246,19 @@ public class SheetEngineImpl implements SheetEngine {
         cell.setExpression(new NumberExpression(value));
         return whatIfSheet.toSheetDTO();
     }
-    @Override
-    public Sheet getClonedSheet(){
-        return currentSheet.cloneSheet();
-    }
+//    @Override
+//    public Sheet getClonedSheet(){
+//        return currentSheet.cloneSheet();
+//    }
 
     public int getNumberOfColumns(){
         return currentSheet.getNumberOfColumns();
+    }
+
+    @Override
+    public SheetDetailsDTO getSheetDetailsDTO() {
+        String size = currentSheet.getSizeString();
+        String sheetName = currentSheet.getSheetName();
+        return new SheetDetailsDTO(owner, sheetName, size);
     }
 }

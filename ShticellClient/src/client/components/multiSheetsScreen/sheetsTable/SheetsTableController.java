@@ -1,14 +1,14 @@
 package client.components.multiSheetsScreen.sheetsTable;
 
 import javafx.application.Platform;
-import javafx.beans.binding.Bindings;
-import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
+import parts.SheetDetailsDTO;
 
 import java.util.List;
 import java.util.Timer;
@@ -21,11 +21,12 @@ public class SheetsTableController {
     private Timer timer;
     private TimerTask listRefresher;
     private final IntegerProperty totalSheets;
-    //private HttpStatusUpdate httpStatusUpdate;
 
-    @FXML
-    private ListView<String> usersListView;
-    @FXML private Label chatUsersLabel;
+    @FXML private TableView<SheetDetailsDTO> sheetsTable;
+    @FXML private TableColumn<SheetDetailsDTO, String> sheetNameColumn;
+    @FXML private TableColumn<SheetDetailsDTO, String> ownerNameColumn;
+    @FXML private TableColumn<SheetDetailsDTO, String> sheetSizeColumn;
+   // @FXML private TableColumn<SheetDetailsDTO, String> permissionColumn;
 
     public SheetsTableController() {
         totalSheets = new SimpleIntegerProperty();
@@ -33,41 +34,23 @@ public class SheetsTableController {
 
     @FXML
     public void initialize() {
-        chatUsersLabel.textProperty().bind(Bindings.concat("Available Sheets: (", totalSheets.asString(), ")"));
+        sheetNameColumn.setCellValueFactory(new PropertyValueFactory<>("sheetName"));
+        sheetSizeColumn.setCellValueFactory(new PropertyValueFactory<>("sheetSize"));
+        ownerNameColumn.setCellValueFactory(new PropertyValueFactory<>("ownerName"));
+       // permissionColumn.setCellValueFactory(new PropertyValueFactory<>("permission"));  // Add this if `permission` exists in DTO
     }
 
-//    public void setHttpStatusUpdate(HttpStatusUpdate httpStatusUpdate) {
-//        this.httpStatusUpdate = httpStatusUpdate;
-//
-//    }
-
-//    public BooleanProperty autoUpdatesProperty() {
-//        return autoUpdate;
-//    }
-
-    private void updateUsersList(List<String> sheetsNames) {
+    private void updateUsersList(List<SheetDetailsDTO> sheetsDetailsNames) {
         Platform.runLater(() -> {
-            ObservableList<String> items = usersListView.getItems();
-            items.clear();
-            items.addAll(sheetsNames);
-            totalSheets.set(sheetsNames.size());
+            ObservableList<SheetDetailsDTO> items = sheetsTable.getItems();
+            items.clear(); // Clear the current table
+            items.addAll(sheetsDetailsNames); // Add new DTO list to the table
         });
     }
 
     public void startListRefresher() {
-        listRefresher = new SheetsListRefresher(
-                this::updateUsersList);
+        listRefresher = new SheetsListRefresher(this::updateUsersList);
         timer = new Timer();
         timer.schedule(listRefresher, REFRESH_RATE, REFRESH_RATE);
     }
-
-//    @Override
-//    public void close() {
-//        usersListView.getItems().clear();
-//        totalUsers.set(0);
-//        if (listRefresher != null && timer != null) {
-//            listRefresher.cancel();
-//            timer.cancel();
-//        }
-//    }
 }

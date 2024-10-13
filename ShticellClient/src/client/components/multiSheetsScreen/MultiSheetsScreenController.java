@@ -46,7 +46,8 @@ public class MultiSheetsScreenController {
     }
 
     public void setActive() {
-        //sheetsTableController.startListRefresher();
+        sheetsTableController.startListRefresher();
         System.out.println("MultiSheetsScreenController is active");
+
     }
 }

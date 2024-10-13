@@ -29,7 +29,7 @@ public class Constants {
 
     //MultiSheetsScreenController
     public static final String UPLOAD_FILE = FULL_SERVER_PATH + "/uploadFile";
-    public final static String GET_SHEETS_LIST = FULL_SERVER_PATH + "/getSheetsList";
+    public final static String GET_SHEETS_LIST = FULL_SERVER_PATH + "/getSheetsDetailsList";
 
 
     //SheetManagerController

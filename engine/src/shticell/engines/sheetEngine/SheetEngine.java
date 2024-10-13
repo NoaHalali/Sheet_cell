@@ -1,6 +1,7 @@
 package shticell.engines.sheetEngine;
 
 import parts.SheetDTO;
+import parts.SheetDetailsDTO;
 import parts.cell.CellDTO;
 import shticell.exceptions.SheetNotLoadedException;
 import shticell.sheets.sheet.Sheet;
@@ -62,7 +63,11 @@ public interface SheetEngine {
     public SheetDTO calculateWhatIfValueForCell(double value);
 
     public void setEngineInWhatIfMode(Coordinate coord)throws IllegalStateException ;
-    public Sheet getClonedSheet();
+
+    //public Sheet getClonedSheet();
+
+    public SheetDetailsDTO getSheetDetailsDTO();
+
 }
 
 

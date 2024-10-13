@@ -11,6 +11,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.Part;
 import utils.ServletUtils;
+import utils.SessionUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -69,7 +70,7 @@ public class UploadSheetFileServlet extends HttpServlet  {
 
                     } else {
                         //add the new sheet to the multiSheetEngineManager
-                        multiSheetEngineManager.addSheetEngine(sheet);
+                        multiSheetEngineManager.addSheetEngine(sheet, SessionUtils.getUsername(request));
 
                         out.println("File processed successfully."); //print to client
                         System.out.println("On adding sheet, request URI is: " + request.getRequestURI()); //print to server

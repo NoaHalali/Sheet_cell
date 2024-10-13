@@ -45,6 +45,11 @@ public class Sheet implements Serializable {
     public String getSheetName() {
         return name;
     }
+    public String getSizeString() {
+        String size =  numberOfRows + "x" + numberOfCols;
+        return size;
+
+    }
 
     public int getVersion() {
         return version;
@@ -69,6 +74,7 @@ public class Sheet implements Serializable {
                         .toArray(CellDTO[]::new))
                 .toArray(CellDTO[][]::new);
     }
+
 
     public void setCellsMatrix(Cell[][] cellsMatrix) {
         this.cellsMatrix = cellsMatrix;

@@ -1,6 +1,7 @@
 package client.components.multiSheetsScreen.loadFiles;
 
 import client.components.Utils.StageUtils;
+import client.components.Utils.http.HttpClientUtil;
 import client.components.multiSheetsScreen.MultiSheetsScreenController;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -65,8 +66,8 @@ public class LoadSheetFilesController {
 
         System.out.println("New request is launched for: " + UPLOAD_FILE );
 
-        //TODO - move to Utils the next line
-        client.newCall(request).enqueue(new Callback() {
+
+        HttpClientUtil.runAsyncByRequest(request, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 // טיפול בשגיאה במקרה של כשל
@@ -80,7 +81,7 @@ public class LoadSheetFilesController {
                     Platform.runLater(() -> {
                         // טיפול במקרה שהבקשה הצליחה
                         System.out.println("Upload successful: " + responseBody);
-                        parentController.switchToSheetManager();
+                        //parentController.switchToSheetManager();
                         //parentController.switchToMultiSheetsScreen();
                     });
 

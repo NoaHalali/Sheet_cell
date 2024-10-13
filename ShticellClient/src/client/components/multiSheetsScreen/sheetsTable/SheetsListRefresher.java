@@ -1,16 +1,16 @@
 package client.components.multiSheetsScreen.sheetsTable;
 
-import javafx.beans.property.BooleanProperty;
+import com.google.gson.reflect.TypeToken;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 import org.jetbrains.annotations.NotNull;
-import client.components.Utils.Constants;
 import client.components.Utils.http.HttpClientUtil;
+import parts.SheetDetailsDTO;
+
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
-import java.util.TimerTask;
+import java.lang.reflect.Type;
+import java.util.*;
 import java.util.function.Consumer;
 
 import static client.components.Utils.Constants.GET_SHEETS_LIST;
@@ -19,15 +19,15 @@ import static client.components.Utils.Constants.GSON_INSTANCE;
 public class SheetsListRefresher extends TimerTask {
 
     //private final Consumer<String> httpRequestLoggerConsumer;
-    private final Consumer<List<String>> usersListConsumer;
+    private final Consumer<List<SheetDetailsDTO>> sheetsListConsumer;
     private int requestNumber;
     //private final BooleanProperty shouldUpdate;
 
 
-    public SheetsListRefresher(Consumer<List<String>> usersListConsumer) {
+    public SheetsListRefresher(Consumer<List<SheetDetailsDTO>> sheetsListConsumer) {
         //this.shouldUpdate = shouldUpdate;
         //this.httpRequestLoggerConsumer = httpRequestLoggerConsumer;
-        this.usersListConsumer = usersListConsumer;
+        this.sheetsListConsumer = sheetsListConsumer;
         requestNumber = 0;
     }
 
@@ -52,11 +52,12 @@ public class SheetsListRefresher extends TimerTask {
 
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                String jsonArrayOfUsersNames = response.body().string();
+                String jsonListOfSheetDetails = response.body().string();
                // httpRequestLoggerConsumer.accept("Users Request # " + finalRequestNumber + " | Response: " + jsonArrayOfUsersNames);
-                System.out.println("Users Request # " + finalRequestNumber + " | Response: " + jsonArrayOfUsersNames);
-                String[] usersNames = GSON_INSTANCE.fromJson(jsonArrayOfUsersNames, String[].class);
-                usersListConsumer.accept(Arrays.asList(usersNames));
+                System.out.println("Users Request # " + finalRequestNumber + " | Response: " + jsonListOfSheetDetails);
+                Type type = new TypeToken<List<SheetDetailsDTO>>(){}.getType();
+                List<SheetDetailsDTO> sheetDetailsDTO = GSON_INSTANCE.fromJson(jsonListOfSheetDetails, type);
+                sheetsListConsumer.accept(sheetDetailsDTO);
             }
         });
     }
