@@ -14,7 +14,7 @@ public class Constants {
     public final static String MAIN_PAGE_FXML_RESOURCE_LOCATION = "/client/components/mainAppController/app-main.fxml";
     public final static String LOGIN_PAGE_FXML_RESOURCE_LOCATION = "/client/components/login/login.fxml";
     public final static String SHEET_MANAGER_FXML_RESOURCE_LOCATION = "/client/components/sheetManager/sheetManager.fxml";
-    public final static String SHEETS_AND_PERMISSIONS_FXML_RESOURCE_LOCATION = "/client/components/multiSheetsScreen/multiSheetsScreen.fxml";
+    public final static String MULTI_SHEETS_SCREEN_FXML_RESOURCE_LOCATION = "/client/components/multiSheetsScreen/multiSheetsScreen.fxml";
     public final static String CELL_FXML_RESOURCE_LOCATION = "/client/components/sheetManager/parts/center/cell/cell.fxml";
     public final static String TABLE_FXML_RESOURCE_LOCATION = "/client/components/sheetManager/parts/center/cellsTable/table.fxml";
     // Server resources locations
@@ -24,9 +24,15 @@ public class Constants {
     private final static String FULL_SERVER_PATH = BASE_URL + CONTEXT_PATH;
 
     /*URLs*/
+    //MainAppController
     public final static String LOGIN_PAGE = FULL_SERVER_PATH + "/login";
-    public static final String UPLOAD_FILE = FULL_SERVER_PATH + "/uploadFile";
 
+    //MultiSheetsScreenController
+    public static final String UPLOAD_FILE = FULL_SERVER_PATH + "/uploadFile";
+    public final static String GET_SHEETS_LIST = FULL_SERVER_PATH + "/getSheetsList";
+
+
+    //SheetManagerController
     public static final String GET_SHEET_DTO = FULL_SERVER_PATH + "/getSheetDTO";
     public static final String GET_CLONED_SHEET = FULL_SERVER_PATH + "/getClonedSheet";
     public static final String GET_SHEET_DTO_BY_VERSION = FULL_SERVER_PATH + "/getSheetDTOByVersion";

@@ -81,7 +81,7 @@ public class LoadSheetFilesController {
                         // טיפול במקרה שהבקשה הצליחה
                         System.out.println("Upload successful: " + responseBody);
                         parentController.switchToSheetManager();
-                        //parentController.switchToSheetsAndPermissionsManager();
+                        //parentController.switchToMultiSheetsScreen();
                     });
 
                 } else {

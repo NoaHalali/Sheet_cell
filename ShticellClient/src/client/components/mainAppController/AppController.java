@@ -32,7 +32,7 @@ public class AppController {
     private ScrollPane sheetManagerComponent;
     private SheetManagerController sheetManagerController;
     
-    private BorderPane  sheetsAndPermissionsManagerComponent;
+    private BorderPane multiSheetsScreenComponent;
     private MultiSheetsScreenController multiSheetsScreenController;
 
     @FXML private Label userGreetingLabel;
@@ -53,10 +53,7 @@ public class AppController {
         loadLoginPage();
         loadSheetManagerPage();
         loadSheetAndPermissionManager();
-        
     }
-
-
 
     public void updateUserName(String userName) {
         currentUserName.set(userName);
@@ -76,11 +73,11 @@ public class AppController {
 //        chatRoomComponentController.close();
 //    }
     private void loadSheetAndPermissionManager() {
-        URL SheetAndPermissionManagerPageUrl = getClass().getResource(SHEETS_AND_PERMISSIONS_FXML_RESOURCE_LOCATION);
+        URL multiSheetsScreenURL = getClass().getResource(MULTI_SHEETS_SCREEN_FXML_RESOURCE_LOCATION);
         try {
             FXMLLoader fxmlLoader = new FXMLLoader();
-            fxmlLoader.setLocation(SheetAndPermissionManagerPageUrl);
-            sheetsAndPermissionsManagerComponent = fxmlLoader.load();
+            fxmlLoader.setLocation(multiSheetsScreenURL);
+            multiSheetsScreenComponent = fxmlLoader.load();
             multiSheetsScreenController = fxmlLoader.getController();
             multiSheetsScreenController.setMainController(this);
 
@@ -133,8 +130,11 @@ public class AppController {
             //sheetManagerController.setEngine(engine);
         });
     }
-    public void switchToSheetsAndPermissionsManager() {
-        setMainPanelTo(sheetsAndPermissionsManagerComponent);
+    public void switchToMultiSheetsScreen() {
+
+        setMainPanelTo(multiSheetsScreenComponent);
+        multiSheetsScreenController.setActive();
+
     }
 
     public void switchToLogin() {
