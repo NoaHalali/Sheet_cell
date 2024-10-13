@@ -32,6 +32,7 @@ public class RequestsManager {
     public RequestsManager(String sheetName) {
         this.sheetName = sheetName;
     }
+
     public void getSheetDTO(Consumer<SheetDTO> onSuccess, Consumer<String> onFailure) {
         //OkHttpClient client = new OkHttpClient().newBuilder().build();
 

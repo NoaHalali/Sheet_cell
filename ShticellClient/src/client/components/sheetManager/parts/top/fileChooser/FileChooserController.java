@@ -59,7 +59,7 @@ public class FileChooserController {
                 super.succeeded();
                 // עדכון ה-UI במקרה של הצלחה
 
-                mainController.initializeComponentsAfterLoad(); // קריאה למתודה שמעדכנת את כל הרכיבים
+                mainController.initializeComponentsAfterLoad(null); // קריאה למתודה שמעדכנת את כל הרכיבים
 
                 progressBar.setVisible(false); // הסתרת ProgressIndicator
             }

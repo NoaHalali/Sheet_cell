@@ -21,4 +21,7 @@
          </items>
       </SplitPane>
    </center>
+   <right>
+      <fx:include fx:id="commands" source="commands/commands.fxml" />
+   </right>
 </BorderPane>

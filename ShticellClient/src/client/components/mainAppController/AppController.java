@@ -122,14 +122,16 @@ public class AppController {
 //        httpStatusComponentController.addHttpStatusLine(line);
 //    }
 
-    public void switchToSheetManager() {
+    public void switchToSheetManager(String sheetName) {
         Platform.runLater(() -> {
             //sheetManagerController.setActive();
             setMainPanelTo(sheetManagerComponent);
-            sheetManagerController.initializeComponentsAfterLoad();
             //sheetManagerController.setEngine(engine);
+            sheetManagerController.initializeComponentsAfterLoad(sheetName);
+
         });
     }
+
     public void switchToMultiSheetsScreen() {
 
         setMainPanelTo(multiSheetsScreenComponent);

@@ -54,7 +54,7 @@ public class SheetsListRefresher extends TimerTask {
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 String jsonListOfSheetDetails = response.body().string();
                // httpRequestLoggerConsumer.accept("Users Request # " + finalRequestNumber + " | Response: " + jsonArrayOfUsersNames);
-                System.out.println("Users Request # " + finalRequestNumber + " | Response: " + jsonListOfSheetDetails);
+               // System.out.println("Users Request # " + finalRequestNumber + " | Response: " + jsonListOfSheetDetails);
                 Type type = new TypeToken<List<SheetDetailsDTO>>(){}.getType();
                 List<SheetDetailsDTO> sheetDetailsDTO = GSON_INSTANCE.fromJson(jsonListOfSheetDetails, type);
                 sheetsListConsumer.accept(sheetDetailsDTO);

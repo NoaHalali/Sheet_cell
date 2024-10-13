@@ -51,9 +51,11 @@ public class SheetManagerController {
     private Coordinate coordinate;
     //private Engine engine;
     private SheetEngine sheetEngine;
-    private String sheetName = "beginner";
+    //private String sheetName = "beginner";
     private AppController mainController;
-    private final RequestsManager requestsManager = new RequestsManager(sheetName);
+    //private final RequestsManager requestsManager = new RequestsManager(sheetName);
+    private RequestsManager requestsManager;
+
 
     //Components
     @FXML private GridPane actionLine;
@@ -131,10 +133,12 @@ public class SheetManagerController {
         ranges.disableProperty().bind(whatIfAndFileBinding);
     }
 
-    public void initializeComponentsAfterLoad() {
+    public void initializeComponentsAfterLoad(String sheetName) {
 
         clearSelectionStates();
         fileSelectedProperty.set(true);
+
+        requestsManager = new RequestsManager(sheetName);
 
 // שולחים את הבקשה לשרת ומעבירים את ה-Consumers המתאימים
         requestsManager.getSheetDTO(sheet -> {
@@ -144,8 +148,8 @@ public class SheetManagerController {
             actionLineController.initializeActionLine(cellSelected);
             commandsController.InitializeCommandsController(cellSelected, rangeSelected, columnSelected, rowSelected, showWhatIfMode);
             rangesController.initializeRangesController(sheet.getRangesNames(), rangeSelected);
-
             versionProperty.set(1);
+
         }, errorMessage -> {
             // פעולה במקרה של כשל
             System.out.println("Error to get sheetDTO: " + errorMessage);

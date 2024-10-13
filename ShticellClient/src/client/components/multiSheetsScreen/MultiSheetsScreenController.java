@@ -1,11 +1,13 @@
 package client.components.multiSheetsScreen;
 
 import client.components.mainAppController.AppController;
+import client.components.multiSheetsScreen.commands.CommandsController;
 import client.components.multiSheetsScreen.loadFiles.LoadSheetFilesController;
 import client.components.multiSheetsScreen.sheetsTable.SheetsTableController;
 import javafx.fxml.FXML;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
@@ -20,12 +22,17 @@ public class MultiSheetsScreenController {
     @FXML ScrollPane sheetsTable;
     @FXML SheetsTableController sheetsTableController;
 
+    @FXML VBox commands;
+    @FXML CommandsController commandsController;
+
 
     @FXML
     public void initialize() {
 
         //loadSheetFilesController.setParentController(this);
         loadSheetFilesController.setParentController(this);
+        sheetsTableController.setParentController(this);
+        commandsController.setParentController(this);
 
     }
 
@@ -42,7 +49,8 @@ public class MultiSheetsScreenController {
     }
 
     public void switchToSheetManager() {
-        mainController.switchToSheetManager();
+        String selectedSheetName = sheetsTableController.getSelectedSheetName();
+        mainController.switchToSheetManager(selectedSheetName);
     }
 
     public void setActive() {
