@@ -4,6 +4,7 @@ import client.components.mainAppController.AppController;
 import client.components.multiSheetsScreen.commands.CommandsController;
 import client.components.multiSheetsScreen.loadFiles.LoadSheetFilesController;
 import client.components.multiSheetsScreen.sheetsTable.SheetsTableController;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.HBox;
@@ -17,22 +18,26 @@ public class MultiSheetsScreenController {
     private Stage primaryStage;
     private AppController mainController;
     @FXML private HBox loadSheetFiles;
-    @FXML LoadSheetFilesController loadSheetFilesController;
+    @FXML private LoadSheetFilesController loadSheetFilesController;
 
-    @FXML ScrollPane sheetsTable;
-    @FXML SheetsTableController sheetsTableController;
+    @FXML private ScrollPane sheetsTable;
+    @FXML private SheetsTableController sheetsTableController;
 
-    @FXML VBox commands;
-    @FXML CommandsController commandsController;
+    @FXML private VBox commands;
+    @FXML private CommandsController commandsController;
+
+    private SimpleBooleanProperty sheetSelected ;
 
 
     @FXML
     public void initialize() {
 
         //loadSheetFilesController.setParentController(this);
+        sheetSelected=new SimpleBooleanProperty(false);
         loadSheetFilesController.setParentController(this);
         sheetsTableController.setParentController(this);
         commandsController.setParentController(this);
+        commandsController.initializeCommandsController(sheetSelected);
 
     }
 
@@ -54,8 +59,16 @@ public class MultiSheetsScreenController {
     }
 
     public void setActive() {
+        commandsController.setSheetNameLabel("");
+        sheetSelected.set(false);
         sheetsTableController.startListRefresher();
         System.out.println("MultiSheetsScreenController is active");
+
+    }
+    public void handleSheetSelected(String sheetSelectedName){
+        sheetSelected.set(true);
+        commandsController.setSheetNameLabel(sheetSelectedName);
+
 
     }
 }

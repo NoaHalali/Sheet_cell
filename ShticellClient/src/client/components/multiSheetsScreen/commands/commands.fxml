@@ -1,11 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
-
 
 <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="228.0" spacing="20.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.components.multiSheetsScreen.commands.CommandsController">
    <children>
+      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
+         <children>
+            <Label prefHeight="17.0" prefWidth="90.0" text="Selected sheet :" />
+            <Label fx:id="sheetNameLabel" />
+         </children>
+      </HBox>
       <Button fx:id="viewSheetButton" mnemonicParsing="false" onAction="#handleViewSheetButtonClick" text="View Sheet" />
       <Button fx:id="requestPermissionButton" mnemonicParsing="false" text="Request Permission" />
       <Button fx:id="handlePermissionRequest" mnemonicParsing="false" text="Ask/Deny Permission Request" />

@@ -17,8 +17,10 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.GridPane;
@@ -66,6 +68,7 @@ public class SheetManagerController {
     @FXML private HBox versionSelector;
     @FXML private Label currentVersionLabel;
     @FXML private HBox skinSelector;
+    @FXML private Button backToDashBoardButton;
 
     //Controllers
     @FXML private ActionLineController actionLineController;
@@ -537,5 +540,10 @@ public class SheetManagerController {
 
     public void setMainController(AppController mainController) {
         this.mainController = mainController;
+    }
+
+    @FXML
+    public void handleBackToDashBoardButtonClick() {
+        mainController.switchToMultiSheetsScreen();
     }
 }
