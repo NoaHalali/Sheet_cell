@@ -12,7 +12,6 @@ import okhttp3.*;
 import parts.SheetDTO;
 import parts.cell.CellDTO;
 import shticell.sheets.sheet.Sheet;
-import shticell.sheets.sheet.parts.cell.Cell;
 import shticell.sheets.sheet.parts.cell.coordinate.Coordinate;
 import shticell.sheets.sheet.parts.cell.expression.effectiveValue.EffectiveValue;
 
@@ -392,6 +391,7 @@ public class RequestsManager {
             }
         });
     }
+
     public void getClonedSheet(Consumer<Sheet> onSuccess, Consumer<String> onFailure) {
         //OkHttpClient client = new OkHttpClient().newBuilder().build();
 
@@ -507,8 +507,9 @@ public class RequestsManager {
 
     public void getDistinctValuesOfMultipleColsInRange(List<Character> cols, String rangeDefinition, Consumer<Map<String, Set<EffectiveValue>>> onSuccess, Consumer<String> onFailure) {
         // המרת רשימת העמודות לפורמט שניתן לשלוח ב-Query Parameters
-        HttpUrl.Builder urlBuilder = HttpUrl.parse(GET_DISTINCT_VALUES_OF_MULTIPLE_COLS_IN_RANGE)
+        HttpUrl.Builder urlBuilder = HttpUrl.parse(GET_DISTINCT_VALUES_OF_MULTIPLE_COLS_PATH)
                 .newBuilder()
+                .addQueryParameter("sheetName", sheetName)
                 .addQueryParameter("rangeDefinition", rangeDefinition);
 
         // הוספת העמודות כ-Query Parameters
@@ -601,14 +602,15 @@ public class RequestsManager {
 
     public void getFilteredSheetDTOFromMultipleCols(Map<String, Set<EffectiveValue>> selectedValues, String rangeDefinition, Consumer<SheetDTO> onSuccess, Consumer<String> onFailure) {
         // המרת המפה של הערכים הנבחרים ל-JSON
-        Gson gson = new GsonBuilder()
+        Gson requestGson = new GsonBuilder()
                 .registerTypeAdapter(EffectiveValue.class, new EffectiveValueSerializer())  // שימוש ב-Serializer
                 .create();
-        String jsonBody = gson.toJson(selectedValues);
+        String jsonBody = requestGson.toJson(selectedValues);
 
         // יצירת URL עם פרמטר של rangeDefinition
         String finalUrl = HttpUrl.parse(GET_FILTERED_SHEET_DTO)
                 .newBuilder()
+                .addQueryParameter("sheetName", sheetName)
                 .addQueryParameter("rangeDefinition", rangeDefinition)
                 .build()
                 .toString();
@@ -633,8 +635,13 @@ public class RequestsManager {
             public void onResponse(Call call, Response response) throws IOException {
                 String responseBody = response.body().string();
                 if (response.isSuccessful()) {
-                    // המרת ה-JSON ל-SheetDTO
+                    Gson gson = new GsonBuilder()
+                            .registerTypeAdapter(Coordinate.class, new CoordinateDeserializer())
+                            .registerTypeAdapter(EffectiveValue.class, new EffectiveValueDeserializer())
+                            .create();
                     SheetDTO filteredSheet = gson.fromJson(responseBody, SheetDTO.class);
+
+                    //SheetDTO filteredSheet = responseGson.fromJson(responseBody, SheetDTO.class);
                     Platform.runLater(() -> onSuccess.accept(filteredSheet));
                 } else {
                     Platform.runLater(() -> onFailure.accept("Error filtering data: " + responseBody));

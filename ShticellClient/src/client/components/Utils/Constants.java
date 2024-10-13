@@ -17,6 +17,9 @@ public class Constants {
     public final static String MULTI_SHEETS_SCREEN_FXML_RESOURCE_LOCATION = "/client/components/multiSheetsScreen/multiSheetsScreen.fxml";
     public final static String CELL_FXML_RESOURCE_LOCATION = "/client/components/sheetManager/parts/center/cell/cell.fxml";
     public final static String TABLE_FXML_RESOURCE_LOCATION = "/client/components/sheetManager/parts/center/cellsTable/table.fxml";
+    public final static String FILTER_POPUP_FXML_RESOURCE_LOCATION = "/client/components/sheetManager/parts/left/commands/filter/filterPopup.fxml";
+
+
     // Server resources locations
     public final static String BASE_DOMAIN = "localhost";
     private final static String BASE_URL = "http://" + BASE_DOMAIN + ":8080";
@@ -51,7 +54,7 @@ public class Constants {
     public static final String GET_SORTED_SHEET_DTO = FULL_SERVER_PATH + "/getSortedSheetDTO";
 
     //filtering
-    public static final String GET_DISTINCT_VALUES_OF_MULTIPLE_COLS_IN_RANGE = "/getDistinctValuesOfMultipleColsInRange";
+    public static final String GET_DISTINCT_VALUES_OF_MULTIPLE_COLS_PATH = FULL_SERVER_PATH + "/getDistinctValuesOfMultipleColsInRange";
     //public static final String FILTER_DATA = "/filterData";
     public static final String GET_FILTERED_SHEET_DTO = FULL_SERVER_PATH + "/getFilteredSheetDTOFromMultipleCols";
 

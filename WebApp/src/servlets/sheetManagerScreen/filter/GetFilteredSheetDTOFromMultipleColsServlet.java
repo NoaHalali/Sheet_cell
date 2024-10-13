@@ -10,14 +10,11 @@ import jakarta.servlet.http.HttpServletResponse;
 import parts.SheetDTO;
 import shticell.engines.sheetEngine.SheetEngine;
 import shticell.sheets.sheet.parts.cell.expression.effectiveValue.EffectiveValue;
-import shticell.sheets.sheet.parts.cell.expression.effectiveValue.EffectiveValueImpl;
 import utils.EffectiveValueDeserializer;
 import utils.EffectiveValueSerializer;
 import utils.ServletUtils;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -37,12 +34,7 @@ public class GetFilteredSheetDTOFromMultipleColsServlet extends HttpServlet {
             return;
         }
 
-        // קריאת המפה של selectedValues מה-body של הבקשה
-        Gson gson = new GsonBuilder()
-                .registerTypeAdapter(EffectiveValue.class, new EffectiveValueDeserializer())  // שימוש ב-Deserializer
-                .create();
-
-        Map<String, Set<EffectiveValue>> selectedValues = gson.fromJson(request.getReader(), new TypeToken<Map<String, Set<EffectiveValue>>>(){}.getType());
+        Map<String, Set<EffectiveValue>> selectedValues = getColToValuesMapFromRequest(request);
 
         try {
             // קבלת SheetEngine לצורך ביצוע הסינון
@@ -53,6 +45,9 @@ public class GetFilteredSheetDTOFromMultipleColsServlet extends HttpServlet {
             SheetDTO filteredSheet = sheetEngine.getFilteredSheetDTOFromMultipleCols(selectedValues, rangeDefinition);
 
             // החזרת התוצאה כ-JSON
+            Gson gson = new GsonBuilder()
+                    .registerTypeAdapter(EffectiveValue.class, new EffectiveValueSerializer())
+                    .create();
             String jsonResponse = gson.toJson(filteredSheet);
             response.getWriter().write(jsonResponse);
 
@@ -60,6 +55,16 @@ public class GetFilteredSheetDTOFromMultipleColsServlet extends HttpServlet {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             response.getWriter().write("{\"error\": \"An error occurred: " + e.getMessage() + "\"}");
         }
+    }
+
+    private static Map<String, Set<EffectiveValue>> getColToValuesMapFromRequest(HttpServletRequest request) throws IOException {
+        // קריאת המפה של selectedValues מה-body של הבקשה
+        Gson gson = new GsonBuilder()
+                .registerTypeAdapter(EffectiveValue.class, new EffectiveValueDeserializer())  // שימוש ב-Deserializer
+                .create();
+
+        Map<String, Set<EffectiveValue>> selectedValues = gson.fromJson(request.getReader(), new TypeToken<Map<String, Set<EffectiveValue>>>(){}.getType());
+        return selectedValues;
     }
 }
 

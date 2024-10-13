@@ -26,6 +26,8 @@ import java.util.*;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
+import static client.components.Utils.Constants.FILTER_POPUP_FXML_RESOURCE_LOCATION;
+import static client.components.Utils.Constants.TABLE_FXML_RESOURCE_LOCATION;
 
 
 public class CommandsController {
@@ -158,7 +160,7 @@ public class CommandsController {
         popupStage.setTitle(popUpName);
 
         // טעינת FXML או יצירת ממשק באופן דינמי
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/client/components/sheetManager/center/cellsTable/table.fxml")); // Adjust the path
+        FXMLLoader loader = new FXMLLoader(getClass().getResource(TABLE_FXML_RESOURCE_LOCATION)); // Adjust the path
         Parent root = loader.load();
 
         // קבלת ה-TableController ואתחולו עם הגרסה הנבחרת של הגיליון
@@ -285,7 +287,7 @@ public class CommandsController {
         for (String key : allValues.keySet()) {
             // טוען את ה-FXML של הפופאפ
             Set<EffectiveValue> valueSet=allValues.get(key);
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/client/components/sheetManager/left/commands/filter/filterPopup.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(FILTER_POPUP_FXML_RESOURCE_LOCATION));
             Parent root = loader.load();
             Map<String, EffectiveValue> stringToEffectiveValueMap = getStringToEffectiveValueMap(valueSet);
             Set<String> valuesSetStr = stringToEffectiveValueMap.keySet();
