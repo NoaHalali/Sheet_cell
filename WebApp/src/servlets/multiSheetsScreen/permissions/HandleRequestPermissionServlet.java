@@ -32,7 +32,7 @@ public class HandleRequestPermissionServlet extends HttpServlet {
             String sheetName = prop.getProperty("sheetName");
             String requestNumberString = prop.getProperty("requestNumber");
             String isApproved = prop.getProperty("isApproved");
-            String username = "noa"; //SessionUtils.getUsername(req);
+           // String username = "noa"; //SessionUtils.getUsername(req);
 
             //String permissionType = prop.getProperty("permissionType");
             //PermissionType permission = PermissionType.valueOf(permissionType.toUpperCase());
@@ -40,7 +40,7 @@ public class HandleRequestPermissionServlet extends HttpServlet {
             // Validate parameters
             if (sheetName == null || requestNumberString == null || isApproved == null) {
                 // אם אחד הפרמטרים חסר, נחזיר שגיאה
-                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing cellID or newValue");
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing cellID or newValue"); //TODO: check if its printed or need to be from out.println()
                 return;
             }
 
@@ -61,6 +61,7 @@ public class HandleRequestPermissionServlet extends HttpServlet {
 
         if (isApproved) {
             sheetEngine.approvePermissionRequest(requestNumber);
+            //sheetEngine.
             out.println("permission approved successfully");
 
         }else{

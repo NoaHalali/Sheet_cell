@@ -43,8 +43,10 @@ public class RequestPermissionServlet extends HttpServlet {
             PermissionType permission = PermissionType.valueOf(permissionType.toUpperCase());
 
             addUserPermissionRequest(sheetName, permission, username);
-
             response.setStatus(HttpServletResponse.SC_OK);//todo add in others
+            out.println("Request sent successfully");
+
+
         } catch (Exception e) {
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "An error occurred: " + e.getMessage());
         }

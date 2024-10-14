@@ -43,13 +43,13 @@ public class PermissionsManager {
         request.setRequestStatus(RequestStatus.DENIED);
     }
 
-    List<UserRequestDTO> getPermissionsDTOList()
+    public List<UserRequestDTO> getRequestsDTOList()
     {
-        List<UserRequestDTO> permissionsDTOList = new ArrayList<>();
+        List<UserRequestDTO> requestsDTOList = new ArrayList<>();
         for (UserRequest request : requestsHistory) {
-            permissionsDTOList.add(request.toDTO());
+            requestsDTOList.add(request.toDTO());
         }
-        return permissionsDTOList;
+        return requestsDTOList;
     }
 
     public PermissionType getPermissionForUser(String username) {

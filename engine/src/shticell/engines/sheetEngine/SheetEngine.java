@@ -3,6 +3,7 @@ package shticell.engines.sheetEngine;
 import parts.SheetDTO;
 import parts.SheetDetailsDTO;
 import parts.cell.CellDTO;
+import parts.permission.UserRequestDTO;
 import shticell.exceptions.SheetNotLoadedException;
 import shticell.permissions.PermissionType;
 import shticell.sheets.sheet.Sheet;
@@ -72,6 +73,8 @@ public interface SheetEngine {
     public void approvePermissionRequest(int requestNumber) throws IllegalArgumentException;
 
     public void denyPermissionRequest(int requestNumber) throws IllegalArgumentException ;
+
+    public List<UserRequestDTO> getRequestsDTOList() throws IllegalArgumentException;
 }
 
 

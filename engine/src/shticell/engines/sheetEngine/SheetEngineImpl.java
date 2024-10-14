@@ -1,6 +1,7 @@
 package shticell.engines.sheetEngine;
 
 import parts.SheetDetailsDTO;
+import parts.permission.UserRequestDTO;
 import shticell.exceptions.SheetNotLoadedException;
 import shticell.permissions.PermissionType;
 import shticell.permissions.PermissionsManager;
@@ -279,5 +280,10 @@ public class SheetEngineImpl implements SheetEngine {
     @Override
     public void denyPermissionRequest(int requsstNumber) throws IllegalArgumentException {
         permissionsManager.denyPermissionRequest(requsstNumber);
+    }
+
+    @Override
+    public List<UserRequestDTO> getRequestsDTOList() {
+        return permissionsManager.getRequestsDTOList();
     }
 }
