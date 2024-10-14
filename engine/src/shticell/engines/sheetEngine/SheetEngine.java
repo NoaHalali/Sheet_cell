@@ -4,12 +4,11 @@ import parts.SheetDTO;
 import parts.SheetDetailsDTO;
 import parts.cell.CellDTO;
 import shticell.exceptions.SheetNotLoadedException;
+import shticell.permissions.PermissionType;
 import shticell.sheets.sheet.Sheet;
 import shticell.sheets.sheet.parts.cell.coordinate.Coordinate;
 import shticell.sheets.sheet.parts.cell.expression.effectiveValue.EffectiveValue;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -68,6 +67,9 @@ public interface SheetEngine {
 
     public SheetDetailsDTO getSheetDetailsDTO();
 
+    public void addUserPermissionRequest(String usernameFromParameter, PermissionType permission) throws IllegalArgumentException;
+
+    public void givePermissionToUser(String username, PermissionType permission) throws IllegalArgumentException;
 }
 
 

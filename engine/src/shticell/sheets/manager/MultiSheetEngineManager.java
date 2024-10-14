@@ -3,6 +3,7 @@ package shticell.sheets.manager;
 import parts.SheetDetailsDTO;
 import shticell.engines.sheetEngine.SheetEngine;
 import shticell.engines.sheetEngine.SheetEngineImpl;
+import shticell.permissions.PermissionType;
 import shticell.sheets.sheet.Sheet;
 
 import java.util.*;
@@ -52,4 +53,9 @@ public class MultiSheetEngineManager {
         return list;
     }
 
+    public void giveDefaultPermissionsToUser(String usernameFromParameter) { //maybe
+        for (SheetEngine sheetEngine : sheetEngines.values()) {
+            sheetEngine.givePermissionToUser(usernameFromParameter, PermissionType.NONE);
+        }
+    }
 }

@@ -5,6 +5,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import shticell.sheets.manager.MultiSheetEngineManager;
 import shticell.users.UserManager;
 import utils.ServletUtils;
 import utils.SessionUtils;
@@ -60,7 +61,7 @@ public class LoginServlet extends HttpServlet {
                     }
                     else {
                         //add the new user to the users list
-                        userManager.addUser(usernameFromParameter);
+                        addUser(userManager, usernameFromParameter);
                         //set the username in a session so it will be available on each request
                         //the true parameter means that if a session object does not exists yet
                         //create a new one
@@ -80,4 +81,9 @@ public class LoginServlet extends HttpServlet {
         }
     }
 
+    private void addUser(UserManager userManager, String usernameFromParameter) { //TODO: if None won't be shown, no need this method
+        userManager.addUser(usernameFromParameter);
+        MultiSheetEngineManager multiSheetEngineManager = ServletUtils.getMultiSheetEngineManager(getServletContext());
+        multiSheetEngineManager.giveDefaultPermissionsToUser(usernameFromParameter);
+    }
 }

@@ -1,8 +1,9 @@
 package shticell.engines.sheetEngine;
 
 import parts.SheetDetailsDTO;
-import shticell.files.FileManager;
 import shticell.exceptions.SheetNotLoadedException;
+import shticell.permissions.PermissionType;
+import shticell.permissions.PermissionsManager;
 import shticell.sheets.sheet.parts.Range;
 import shticell.sheets.sheet.parts.Version;
 import shticell.sheets.sheet.Sheet;
@@ -12,19 +13,20 @@ import shticell.sheets.sheet.parts.cell.expression.effectiveValue.EffectiveValue
 import shticell.sheets.sheet.parts.cell.expression.impl.NumberExpression;
 import parts.SheetDTO;
 import parts.cell.CellDTO;
-import java.io.*;
+
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class SheetEngineImpl implements SheetEngine {
 
     private Sheet currentSheet = null;
+    //private FileManager fileManager = new FileManager();
+    private List <Version> versionsList = new LinkedList<Version>();
+    private String owner;
+    private final PermissionsManager permissionsManager = new PermissionsManager();
+    private static final String SHEET_NOT_LOADED_MESSAGE = "Sheet is not loaded. Please load a sheet before attempting to access it.";
     public Sheet whatIfSheet = null;
     public Coordinate whatIfCSelectedCoordinate = null;
-    private FileManager fileManager = new FileManager();
-    private List <Version> versionsList = new LinkedList<Version>();
-    private static final String SHEET_NOT_LOADED_MESSAGE = "Sheet is not loaded. Please load a sheet before attempting to access it.";
-    private String owner;
 
     @Override
     public boolean sheetLoadad() {
@@ -37,7 +39,6 @@ public class SheetEngineImpl implements SheetEngine {
         //versionsList.clear();
         addVersion(currentSheet, currentSheet.howManyActiveCellsInSheet());
     }
-
 
     //2
     @Override
@@ -260,5 +261,15 @@ public class SheetEngineImpl implements SheetEngine {
         String size = currentSheet.getSizeString();
         String sheetName = currentSheet.getSheetName();
         return new SheetDetailsDTO(owner, sheetName, size);
+    }
+
+    @Override
+    public void givePermissionToUser(String usernameFromParameter, PermissionType permission) throws IllegalArgumentException {
+        permissionsManager.givePermissionToUser(usernameFromParameter, permission);
+    }
+
+    @Override
+    public void addUserPermissionRequest(String usernameFromParameter, PermissionType permission) throws IllegalArgumentException {
+        permissionsManager.addUserPermissionRequest(usernameFromParameter, permission);
     }
 }
