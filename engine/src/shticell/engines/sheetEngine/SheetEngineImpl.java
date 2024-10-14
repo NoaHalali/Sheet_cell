@@ -272,4 +272,8 @@ public class SheetEngineImpl implements SheetEngine {
     public void addUserPermissionRequest(String usernameFromParameter, PermissionType permission) throws IllegalArgumentException {
         permissionsManager.addUserPermissionRequest(usernameFromParameter, permission);
     }
+    @Override
+    public void denyPermissionToUser(String usernameFromParameter) throws IllegalArgumentException {
+        permissionsManager.denyPermissionToUser(usernameFromParameter);
+    }
 }

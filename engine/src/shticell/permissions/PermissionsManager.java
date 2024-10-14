@@ -10,8 +10,8 @@ public class PermissionsManager {
 //    Map<String, String> permissions; //TODO: maybe change value accordings to Avias'd response
 //
 //
-    Map<String, PermissionType> approved;
-    Map<String, PermissionType> notApprovedYet;
+    Map<String, PermissionType> approved=new HashMap<>();
+    Map<String, PermissionType> notApprovedYet=new HashMap<>();
 
     public void addUserPermissionRequest(String usernameFromParameter, PermissionType permission) { //User call this method
         notApprovedYet.put(usernameFromParameter, permission);

@@ -70,6 +70,8 @@ public interface SheetEngine {
     public void addUserPermissionRequest(String usernameFromParameter, PermissionType permission) throws IllegalArgumentException;
 
     public void givePermissionToUser(String username, PermissionType permission) throws IllegalArgumentException;
+
+    public void denyPermissionToUser(String usernameFromParameter) throws IllegalArgumentException ;
 }
 
 

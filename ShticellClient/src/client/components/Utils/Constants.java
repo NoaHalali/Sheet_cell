@@ -62,6 +62,10 @@ public class Constants {
     public static final String SET_SHEET_IN_WHAT_IF_MODE = FULL_SERVER_PATH + "/setSheetInWhatIfMode";
     public static final String CALCULATE_WHAT_IF_VALUE_FOR_CELL = FULL_SERVER_PATH + "/calculateWhatIfValueForCell";
 
+    //permissions
+    private static final String REQUEST_PERMISSION_URL = FULL_SERVER_PATH + "/requestPermission";
+    private static final String HANDLE_REQUEST_PERMISSION_URL = FULL_SERVER_PATH + "/handleRequestPermission";
+
     // GSON instance
     public final static Gson GSON_INSTANCE = new Gson();
 }
