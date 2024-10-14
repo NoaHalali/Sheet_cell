@@ -65,13 +65,13 @@ public interface SheetEngine {
 
     //public Sheet getClonedSheet();
 
-    public SheetDetailsDTO getSheetDetailsDTO();
+    public SheetDetailsDTO getSheetDetailsDTOForUser(String username) throws IllegalArgumentException;
 
     public void addUserPermissionRequest(String usernameFromParameter, PermissionType permission) throws IllegalArgumentException;
 
-    public void givePermissionToUser(String username, PermissionType permission) throws IllegalArgumentException;
+    public void approvePermissionRequest(int requestNumber) throws IllegalArgumentException;
 
-    public void denyPermissionToUser(String usernameFromParameter) throws IllegalArgumentException ;
+    public void denyPermissionRequest(int requestNumber) throws IllegalArgumentException ;
 }
 
 

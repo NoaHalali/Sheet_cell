@@ -1,19 +1,21 @@
 package parts;
 
+import shticell.permissions.PermissionType;
+
 public class SheetDetailsDTO {
     private String ownerName;
     private String sheetName;
     private String sheetSize;
-    //private String permission;//todo enum
+    private PermissionType permission;
 
-    public SheetDetailsDTO(String ownerName, String sheetName, String sheetSize) {
+    public SheetDetailsDTO(String ownerName, String sheetName, String sheetSize, PermissionType permission) {
         this.ownerName = ownerName;
         this.sheetName = sheetName;
         this.sheetSize = sheetSize;
+        this.permission = permission;
     }
     public String getOwnerName() {
         return ownerName;
-
     }
 
 
@@ -23,6 +25,5 @@ public class SheetDetailsDTO {
     public String getSheetSize() {
         return sheetSize;
     }
-
 
 }

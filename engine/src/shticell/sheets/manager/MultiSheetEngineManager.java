@@ -45,17 +45,17 @@ public class MultiSheetEngineManager {
 //    public Collection<SheetEngine> getAllSheetEngines() {
 //        return sheetEngines.values();
 //    }
-    public synchronized List<SheetDetailsDTO> getSheetsDetalisList() {
+    public synchronized List<SheetDetailsDTO> getSheetsDetalisListForUser(String username) {
         List<SheetDetailsDTO> list = new LinkedList<>();
         for (SheetEngine sheetEngine : sheetEngines.values()) {
-            list.add(sheetEngine.getSheetDetailsDTO());
+            list.add(sheetEngine.getSheetDetailsDTOForUser(username));
         }
         return list;
     }
 
-    public void giveDefaultPermissionsToUser(String usernameFromParameter) { //maybe
-        for (SheetEngine sheetEngine : sheetEngines.values()) {
-            sheetEngine.givePermissionToUser(usernameFromParameter, PermissionType.NONE);
-        }
-    }
+//    public void giveDefaultPermissionsToUser(String usernameFromParameter) { //maybe
+//        for (SheetEngine sheetEngine : sheetEngines.values()) {
+//            sheetEngine.givePermissionToUser(usernameFromParameter, PermissionType.NONE);
+//        }
+//    }
 }

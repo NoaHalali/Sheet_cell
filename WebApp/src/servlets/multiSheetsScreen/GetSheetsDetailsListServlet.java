@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import parts.SheetDetailsDTO;
 import shticell.sheets.manager.MultiSheetEngineManager;
 import utils.ServletUtils;
+import utils.SessionUtils;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -23,7 +24,10 @@ public class GetSheetsDetailsListServlet extends HttpServlet {
         try (PrintWriter out = response.getWriter()) {
             Gson gson = new Gson();
             MultiSheetEngineManager manager = ServletUtils.getMultiSheetEngineManager(getServletContext());
-            List<SheetDetailsDTO> sheetDetailsDTOList = manager.getSheetsDetalisList();
+
+            String username = SessionUtils.getUsername(request);
+            List<SheetDetailsDTO> sheetDetailsDTOList = manager.getSheetsDetalisListForUser(username);
+
             String json = gson.toJson(sheetDetailsDTOList);
             out.println(json);
             out.flush();

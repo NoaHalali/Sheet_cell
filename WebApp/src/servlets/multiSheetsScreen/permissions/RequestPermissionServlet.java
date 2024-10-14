@@ -1,23 +1,17 @@
 package servlets.multiSheetsScreen.permissions;
 
-import com.google.gson.Gson;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import parts.SheetDTO;
 import shticell.engines.sheetEngine.SheetEngine;
 import shticell.permissions.PermissionType;
-import shticell.sheets.sheet.parts.cell.coordinate.Coordinate;
-import shticell.sheets.sheet.parts.cell.coordinate.CoordinateImpl;
 import utils.ServletUtils;
-import utils.SessionUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
-import java.security.Permission;
 import java.util.Properties;
 
 @WebServlet("/requestPermission")
@@ -38,7 +32,7 @@ public class RequestPermissionServlet extends HttpServlet {
             String sheetName = prop.getProperty("sheetName");
             String permissionType = prop.getProperty("permissionType");
             String username ="noa"; //SessionUtils.getUsername(req);
-            PermissionType permission = PermissionType.valueOf(permissionType.toUpperCase());
+
             // Validate parameters
             if (sheetName == null || permissionType == null) {
                 // אם אחד הפרמטרים חסר, נחזיר שגיאה
@@ -46,18 +40,13 @@ public class RequestPermissionServlet extends HttpServlet {
                 return;
             }
 
-            // כאן תבצע את הלוגיקה שלך לעדכן את התא במנוע (Engine)
+            PermissionType permission = PermissionType.valueOf(permissionType.toUpperCase());
+
             addUserPermissionRequest(sheetName, permission, username);
 
-            // החזרת התשובה – האם התא התעדכן או לא (true/false)
-//            Gson gson = new Gson();
-//            String json = gson.toJson(); // החזרת true אם התא השתנה, false אם לא
-//            response.getWriter().write(json);
             response.setStatus(HttpServletResponse.SC_OK);//todo add in others
         } catch (Exception e) {
-            // במקרה של שגיאה כללית, נחזיר שגיאת שרת
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "An error occurred: " + e.getMessage());
-            //response.getWriter().println(e.getMessage());
         }
     }
 

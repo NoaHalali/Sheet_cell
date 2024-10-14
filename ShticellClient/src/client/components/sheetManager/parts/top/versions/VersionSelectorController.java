@@ -48,6 +48,7 @@ public class VersionSelectorController {
         versionMenuButton.setDisable(false); // הפיכת MenuButton לזמין לאחר טעינת הגרסאות
     }
 
+
     private void handleVersionSelection(String versionString) {
         try {
             // יצירת Stage חדש עבור החלון הקופץ

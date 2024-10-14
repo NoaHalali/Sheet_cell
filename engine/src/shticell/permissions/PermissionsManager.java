@@ -1,53 +1,68 @@
 package shticell.permissions;
 
-import parts.permission.UserPermissionDTO;
+import parts.permission.UserRequestDTO;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class PermissionsManager {
 
-//    Map<String, String> permissions; //TODO: maybe change value accordings to Avias'd response
-//
-//
-    Map<String, PermissionType> approved=new HashMap<>();
-    Map<String, PermissionType> notApprovedYet=new HashMap<>();
+    private Map<String, PermissionType> usersPermissions = new HashMap<>();//תכלס
+    private List<UserRequest> requestsHistory = new ArrayList<>();
+    private int requestsNumber;
 
-    public void addUserPermissionRequest(String usernameFromParameter, PermissionType permission) { //User call this method
-        notApprovedYet.put(usernameFromParameter, permission);
+    public PermissionsManager(String owner) {
+        usersPermissions.put(owner, PermissionType.OWNER);
+        requestsHistory.add(new UserRequest( owner,PermissionType.OWNER,RequestStatus.APPROVED)); //TODO maybe add request number here
+        requestsNumber = 1;
     }
 
-    public void givePermissionToUser(String username, PermissionType permission) //Owner call this method
+    //Map<Integer, UserPermissionDTO> allHistory = new HashMap<>();//אושרו
+    //Map<String, PermissionType> notApprovedYet=new HashMap<>();//לאגור את כל הבקשות
+
+    public void addUserPermissionRequest(String userName, PermissionType permission) { //User call this method
+        requestsHistory.add(new UserRequest(userName,permission,RequestStatus.PENDING));
+        requestsNumber++;
+    }
+
+    public void approvePermissionRequest(int permissionNumber) //Owner call this method
     {
-        if (notApprovedYet.containsKey(username)) //useful for None
-        {
-            notApprovedYet.remove(username);
-        }
-        approved.put(username,permission);
+        UserRequest request = requestsHistory.get(permissionNumber-1);
+        String username = request.getUsername();
+        PermissionType permission = request.getPermission();
+        request.setRequestStatus(RequestStatus.APPROVED);
+
+        usersPermissions.put(username,permission);
     }
 
-    public void denyPermissionToUser(String username) //Owner call this method
+    public void denyPermissionRequest(int permissionNumber) //Owner call this method
     {
-        notApprovedYet.remove(username);
+        UserRequest request = requestsHistory.get(permissionNumber-1);
+        request.setRequestStatus(RequestStatus.DENIED);
     }
 
-    Map<String,UserPermissionDTO> getPermissionsTable()
+    List<UserRequestDTO> getPermissionsDTOList()
     {
-        Map<String,UserPermissionDTO> permissionsTable = new HashMap<String,UserPermissionDTO>();
-        for (String username : notApprovedYet.keySet())
-        {
-            permissionsTable.put(username,new UserPermissionDTO(notApprovedYet.get(username),false));
+        List<UserRequestDTO> permissionsDTOList = new ArrayList<>();
+        for (UserRequest request : requestsHistory) {
+            permissionsDTOList.add(request.toDTO());
         }
-
-        for (String username : approved.keySet())
-        {
-            if (!permissionsTable.containsKey(username)) {
-                permissionsTable.put(username, new UserPermissionDTO(approved.get(username),true));
-            }
-        }
-
-        return permissionsTable;
+        return permissionsDTOList;
     }
+
+    public PermissionType getPermissionForUser(String username) {
+        if (!usersPermissions.containsKey(username)) {
+            return PermissionType.NONE;
+        }
+
+        return usersPermissions.get(username);
+    }
+
+
+
+
 
     //TODO: if someone can be shown multiple times, List insdead of Map, and delete the if in line 30
     //TODO: if the method returns list it will be PermissionDTO, otherwise UserPermissionDTO (without username)

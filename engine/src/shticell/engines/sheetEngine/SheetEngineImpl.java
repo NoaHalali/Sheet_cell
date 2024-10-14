@@ -23,7 +23,7 @@ public class SheetEngineImpl implements SheetEngine {
     //private FileManager fileManager = new FileManager();
     private List <Version> versionsList = new LinkedList<Version>();
     private String owner;
-    private final PermissionsManager permissionsManager = new PermissionsManager();
+    private final PermissionsManager permissionsManager;
     private static final String SHEET_NOT_LOADED_MESSAGE = "Sheet is not loaded. Please load a sheet before attempting to access it.";
     public Sheet whatIfSheet = null;
     public Coordinate whatIfCSelectedCoordinate = null;
@@ -38,6 +38,7 @@ public class SheetEngineImpl implements SheetEngine {
         this.owner = owner;
         //versionsList.clear();
         addVersion(currentSheet, currentSheet.howManyActiveCellsInSheet());
+        permissionsManager = new PermissionsManager(owner);
     }
 
     //2
@@ -247,6 +248,7 @@ public class SheetEngineImpl implements SheetEngine {
         cell.setExpression(new NumberExpression(value));
         return whatIfSheet.toSheetDTO();
     }
+
 //    @Override
 //    public Sheet getClonedSheet(){
 //        return currentSheet.cloneSheet();
@@ -257,23 +259,25 @@ public class SheetEngineImpl implements SheetEngine {
     }
 
     @Override
-    public SheetDetailsDTO getSheetDetailsDTO() {
+    public SheetDetailsDTO getSheetDetailsDTOForUser(String username) {
         String size = currentSheet.getSizeString();
         String sheetName = currentSheet.getSheetName();
-        return new SheetDetailsDTO(owner, sheetName, size);
-    }
-
-    @Override
-    public void givePermissionToUser(String usernameFromParameter, PermissionType permission) throws IllegalArgumentException {
-        permissionsManager.givePermissionToUser(usernameFromParameter, permission);
+        PermissionType permission = permissionsManager.getPermissionForUser(username);
+        return new SheetDetailsDTO(owner, sheetName, size, permission);
     }
 
     @Override
     public void addUserPermissionRequest(String usernameFromParameter, PermissionType permission) throws IllegalArgumentException {
         permissionsManager.addUserPermissionRequest(usernameFromParameter, permission);
     }
+
     @Override
-    public void denyPermissionToUser(String usernameFromParameter) throws IllegalArgumentException {
-        permissionsManager.denyPermissionToUser(usernameFromParameter);
+    public void approvePermissionRequest(int requestNumber) throws IllegalArgumentException {
+        permissionsManager.approvePermissionRequest(requestNumber);
+    }
+
+    @Override
+    public void denyPermissionRequest(int requsstNumber) throws IllegalArgumentException {
+        permissionsManager.denyPermissionRequest(requsstNumber);
     }
 }
