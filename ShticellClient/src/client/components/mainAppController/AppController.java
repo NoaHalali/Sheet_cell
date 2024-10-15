@@ -128,7 +128,6 @@ public class AppController {
             setMainPanelTo(sheetManagerComponent);
             //sheetManagerController.setEngine(engine);
             sheetManagerController.initializeComponentsAfterLoad(sheetName);
-
         });
     }
 
@@ -139,13 +138,13 @@ public class AppController {
 
     }
 
-    public void switchToLogin() {
-        Platform.runLater(() -> {
-            currentUserName.set(JHON_DOE);
-           // chatRoomComponentController.setInActive();
-            setMainPanelTo(loginComponent);
-        });
-    }
+//    public void switchToLogin() {
+//        Platform.runLater(() -> {
+//            currentUserName.set(JHON_DOE);
+//           // chatRoomComponentController.setInActive();
+//            setMainPanelTo(loginComponent);
+//        });
+//    }
 
 
     public void setPrimaryStage(Stage primaryStage) {

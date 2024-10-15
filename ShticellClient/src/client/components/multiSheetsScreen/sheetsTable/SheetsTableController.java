@@ -4,6 +4,7 @@ import client.components.multiSheetsScreen.MultiSheetsScreenController;
 import javafx.application.Platform;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.StringProperty;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
@@ -12,6 +13,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseButton;
 import parts.SheetDetailsDTO;
+import shticell.permissions.PermissionType;
 
 import java.util.List;
 import java.util.Timer;
@@ -30,6 +32,7 @@ public class SheetsTableController {
 
     private String selectedSheetName;
     private MultiSheetsScreenController parentController;
+    //private PermissionType permissionForSelectedSheet;
 
    // @FXML private TableColumn<SheetDetailsDTO, String> permissionColumn;
 
@@ -55,9 +58,10 @@ public class SheetsTableController {
                 if (!row.isEmpty() && event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 1) {
                     SheetDetailsDTO clickedRowData = row.getItem();  // קבלת הנתונים של השורה שנלחצה
                     System.out.println("Clicked row of sheet: " + clickedRowData.getSheetName());
-                    selectedSheetName = clickedRowData.getSheetName();
-                    parentController.handleSheetSelect(selectedSheetName);
 
+                    selectedSheetName = clickedRowData.getSheetName();
+                    PermissionType permissionForSelectedSheet = clickedRowData.getPermission();
+                    parentController.handleSheetSelect(selectedSheetName,permissionForSelectedSheet);
                 }
             });
             return row;

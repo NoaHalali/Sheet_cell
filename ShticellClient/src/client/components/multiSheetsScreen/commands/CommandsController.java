@@ -2,7 +2,10 @@ package client.components.multiSheetsScreen.commands;
 
 import client.components.Utils.http.HttpClientUtil;
 import client.components.multiSheetsScreen.MultiSheetsScreenController;
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -30,10 +33,15 @@ public class CommandsController {
     @FXML private MenuButton handleRequestMenuButton;
 
 
-    public void initializeCommandsController(SimpleBooleanProperty sheetSelected,SimpleBooleanProperty pendingRequestSelected) {
+    public void initializeCommandsController(SimpleBooleanProperty sheetSelected, SimpleBooleanProperty pendingRequestSelected, SimpleStringProperty selectedSheetName
+            , SimpleBooleanProperty hasOwnerPermission, SimpleBooleanProperty hasWriterPermission, SimpleBooleanProperty hasReaderPermission) {
+        BooleanBinding hasOwnerPermissionAndPendingRequestSelected = Bindings.and(hasOwnerPermission,pendingRequestSelected);
+
         viewSheetButton.disableProperty().bind(sheetSelected.not());
         requestPermissionMenuButton.disableProperty().bind(sheetSelected.not());
-        handleRequestMenuButton.disableProperty().bind(pendingRequestSelected.not());
+        handleRequestMenuButton.disableProperty().bind(hasOwnerPermissionAndPendingRequestSelected.not());
+        sheetNameLabel.textProperty().bind(selectedSheetName);
+
 
         setRequestPermissionMenuItems();
         setHandleRequestMenuItems();
@@ -43,13 +51,14 @@ public class CommandsController {
         this.parentController = multiSheetsScreenController;
     }
 
+    @FXML
     public void handleViewSheetButtonClick(ActionEvent actionEvent) {
         parentController.switchToSheetManager();
     }
 
-    public void setSheetNameLabel(String sheetName) { //TODO: maybe string property
-        sheetNameLabel.setText(sheetName);
-    }
+//    public void setSheetNameLabel(String sheetName) { //TODO: maybe string property
+//        sheetNameLabel.setText(sheetName);
+//    }
 
     private void setRequestPermissionMenuItems() {
         // יצירת פריטי MenuItem נוספים
