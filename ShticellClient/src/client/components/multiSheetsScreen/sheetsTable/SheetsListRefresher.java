@@ -40,7 +40,7 @@ public class SheetsListRefresher extends TimerTask {
 
         final int finalRequestNumber = ++requestNumber;
         //httpRequestLoggerConsumer.accept("About to invoke: " + GET_SHEETS_LIST + " | Users Request # " + finalRequestNumber);
-        System.out.println("About to invoke: " + GET_SHEETS_LIST + " | Users Request # " + finalRequestNumber);
+        //System.out.println("About to invoke: " + GET_SHEETS_LIST + " | Users Request # " + finalRequestNumber);
         HttpClientUtil.runAsyncByUrl(GET_SHEETS_LIST, new Callback() {
 
             @Override

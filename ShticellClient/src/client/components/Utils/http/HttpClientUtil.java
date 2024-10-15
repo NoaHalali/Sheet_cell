@@ -31,13 +31,13 @@ public class HttpClientUtil {
 
         Call call = HttpClientUtil.HTTP_CLIENT.newCall(request);
 
-        System.out.println("Launching new request for: " + finalUrl);
+        //System.out.println("Launching new request for: " + finalUrl);
         call.enqueue(callback);
     }
 
     public static void runAsyncByRequest(Request request, Callback callback) {
         Call call = HTTP_CLIENT.newCall(request);
-        System.out.println("Launching new request for: " + request.url());
+        //System.out.println("Launching new request for: " + request.url());
         call.enqueue(callback);
     }
 

@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import shticell.engines.sheetEngine.SheetEngine;
 import shticell.permissions.PermissionType;
 import utils.ServletUtils;
+import utils.SessionUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -31,7 +32,8 @@ public class RequestPermissionServlet extends HttpServlet {
             // Read values from the Properties
             String sheetName = prop.getProperty("sheetName");
             String permissionType = prop.getProperty("permissionType");
-            String username ="noa"; //SessionUtils.getUsername(req);
+            //String username ="noa";
+            String username = SessionUtils.getUsername(req);
 
             // Validate parameters
             if (sheetName == null || permissionType == null) {
@@ -44,7 +46,8 @@ public class RequestPermissionServlet extends HttpServlet {
 
             addUserPermissionRequest(sheetName, permission, username);
             response.setStatus(HttpServletResponse.SC_OK);//todo add in others
-            out.println("Request sent successfully");
+            out.println("Permission request " + permissionType + ", by the user '" + username +"', for sheet '" +sheetName+  "' added successfully");
+            //System.out.println("Permission request " + permissionType + ", by the user '" + username +"', for sheet '" +sheetName+  "' added successfully");
 
 
         } catch (Exception e) {

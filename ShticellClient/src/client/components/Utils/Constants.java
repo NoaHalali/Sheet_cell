@@ -63,8 +63,8 @@ public class Constants {
     public static final String CALCULATE_WHAT_IF_VALUE_FOR_CELL = FULL_SERVER_PATH + "/calculateWhatIfValueForCell";
 
     //permissions
-    private static final String REQUEST_PERMISSION_URL = FULL_SERVER_PATH + "/requestPermission";
-    private static final String HANDLE_REQUEST_PERMISSION_URL = FULL_SERVER_PATH + "/handleRequestPermission";
+    public static final String REQUEST_PERMISSION_URL = FULL_SERVER_PATH + "/requestPermission";
+    public static final String HANDLE_REQUEST_PERMISSION_URL = FULL_SERVER_PATH + "/handleRequestPermission";
 
     // GSON instance
     public final static Gson GSON_INSTANCE = new Gson();

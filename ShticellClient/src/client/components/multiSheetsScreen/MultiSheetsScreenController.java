@@ -11,6 +11,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import shticell.permissions.PermissionType;
 
 import java.io.File;
 
@@ -71,4 +72,9 @@ public class MultiSheetsScreenController {
 
 
     }
+
+//    public void handlePermissionRequest(PermissionType permissionType) {
+//        String selectedSheetName = sheetsTableController.getSelectedSheetName();
+//        mainController.handlePermissionRequest(selectedSheetName, permissionType);
+//    }
 }
