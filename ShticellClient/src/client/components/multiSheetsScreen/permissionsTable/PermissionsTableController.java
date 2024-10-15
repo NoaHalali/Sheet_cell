@@ -13,7 +13,6 @@ import parts.permission.UserRequestDTO;
 
 import java.util.List;
 import java.util.Timer;
-import java.util.TimerTask;
 
 import static client.components.Utils.Constants.REFRESH_RATE;
 
@@ -29,7 +28,7 @@ public class PermissionsTableController {
     private int selectedRequestNumber;
 
     private Timer timer;
-    private TimerTask listRefresher;
+    private RequestsListRefresherTask listRefresher;
     //private final IntegerProperty totalSheets;
 
     @FXML
@@ -68,12 +67,14 @@ public class PermissionsTableController {
 
     public void startListRefresher() {
         String selectedSheet = parentController.getSelectedSheetName();
-        if (listRefresher != null) {
-            listRefresher.cancel();
+        if (listRefresher == null) {
+            listRefresher = new RequestsListRefresherTask(this::updateRequestsList, selectedSheet);
+            timer = new Timer();
+            timer.schedule(listRefresher, REFRESH_RATE, REFRESH_RATE);
         }
-        listRefresher = new RequestsListRefresher(this::updateRequestsList, selectedSheet);
-        timer = new Timer();
-        timer.schedule(listRefresher, REFRESH_RATE, REFRESH_RATE);
+        else {
+            listRefresher.setSheetName(selectedSheet);
+        }
     }
 
 //    public String getSelectedSheetName() {
@@ -82,5 +83,9 @@ public class PermissionsTableController {
 
     public void setParentController(MultiSheetsScreenController parentController) {
         this.parentController = parentController;
+    }
+
+    public int getSelectedRequestNumber() {
+        return selectedRequestNumber;
     }
 }

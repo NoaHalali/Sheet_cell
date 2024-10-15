@@ -26,6 +26,7 @@ public class SheetsTableController {
     @FXML private TableColumn<SheetDetailsDTO, String> sheetNameColumn;
     @FXML private TableColumn<SheetDetailsDTO, String> ownerNameColumn;
     @FXML private TableColumn<SheetDetailsDTO, String> sheetSizeColumn;
+    @FXML private TableColumn<SheetDetailsDTO, String> permissionTypeColumn;
 
     private String selectedSheetName;
     private MultiSheetsScreenController parentController;
@@ -45,7 +46,8 @@ public class SheetsTableController {
         sheetNameColumn.setCellValueFactory(new PropertyValueFactory<>("sheetName"));
         sheetSizeColumn.setCellValueFactory(new PropertyValueFactory<>("sheetSize"));
         ownerNameColumn.setCellValueFactory(new PropertyValueFactory<>("ownerName"));
-       // permissionColumn.setCellValueFactory(new PropertyValueFactory<>("permission"));  // Add this if `permission` exists in DTO
+        permissionTypeColumn.setCellValueFactory(new PropertyValueFactory<>("permission"));
+
         sheetsTable.setRowFactory(tv -> {
             TableRow<SheetDetailsDTO> row = new TableRow<>();
 

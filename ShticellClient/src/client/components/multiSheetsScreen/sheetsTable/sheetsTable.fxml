@@ -6,12 +6,12 @@
 
 <ScrollPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="339.0" prefWidth="542.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.components.multiSheetsScreen.sheetsTable.SheetsTableController">
     <content>
-        <TableView fx:id="sheetsTable" prefHeight="348.0" prefWidth="544.0">
+        <TableView fx:id="sheetsTable" prefHeight="337.0" prefWidth="542.0">
             <columns>
-                <TableColumn fx:id="ownerNameColumn" prefWidth="116.0" text="Uploaded By" />
-                <TableColumn fx:id="sheetNameColumn" prefWidth="137.0" text="Sheet Name" />
-                <TableColumn fx:id="sheetSizeColumn" prefWidth="93.0" text="Sheet Size" />
-<!--                <TableColumn fx:id="permissionColumn" prefWidth="98.0" text="Permission" />-->
+                <TableColumn fx:id="ownerNameColumn" editable="false" prefWidth="147.0" sortable="false" text="Uploaded By" />
+                <TableColumn fx:id="sheetNameColumn" editable="false" prefWidth="137.0" sortable="false" text="Sheet Name" />
+                <TableColumn fx:id="sheetSizeColumn" editable="false" prefWidth="123.0" sortable="false" text="Sheet Size" />
+                <TableColumn fx:id="permissionTypeColumn" editable="false" prefWidth="115.0" sortable="false" text="Permission" />
             </columns>
         </TableView>
     </content>

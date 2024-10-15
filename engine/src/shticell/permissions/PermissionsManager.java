@@ -41,7 +41,7 @@ public class PermissionsManager {
     public void denyPermissionRequest(int permissionNumber) //Owner call this method
     {
         UserRequest request = requestsHistory.get(permissionNumber-1);
-        request.setRequestStatus(RequestStatus.DENIED);
+        request.setRequestStatus(RequestStatus.REJECTED);
     }
 
     public List<UserRequestDTO> getRequestsDTOList()

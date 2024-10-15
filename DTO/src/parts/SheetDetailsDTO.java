@@ -3,10 +3,10 @@ package parts;
 import shticell.permissions.PermissionType;
 
 public class SheetDetailsDTO {
-    private String ownerName;
-    private String sheetName;
-    private String sheetSize;
-    private PermissionType permission;
+    private final String ownerName;
+    private final String sheetName;
+    private final String sheetSize;
+    private final PermissionType permission;
 
     public SheetDetailsDTO(String ownerName, String sheetName, String sheetSize, PermissionType permission) {
         this.ownerName = ownerName;
@@ -18,6 +18,9 @@ public class SheetDetailsDTO {
         return ownerName;
     }
 
+    public PermissionType getPermission() {
+        return permission;
+    }
 
     public String getSheetName() {
         return sheetName;

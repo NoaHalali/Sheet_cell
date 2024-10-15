@@ -16,6 +16,6 @@
       </HBox>
       <Button fx:id="viewSheetButton" mnemonicParsing="false" onAction="#handleViewSheetButtonClick" text="View Sheet" />
       <MenuButton fx:id="requestPermissionMenuButton" mnemonicParsing="false" text="Select Permission To Request" />
-      <Button fx:id="handlePermissionRequest" mnemonicParsing="false" text="Ask/Deny Permission Request" />
+      <MenuButton fx:id="handleRequestMenuButton" layoutX="31.0" layoutY="258.0" mnemonicParsing="false" text="Accept/ Deny permission" />
    </children>
 </VBox>

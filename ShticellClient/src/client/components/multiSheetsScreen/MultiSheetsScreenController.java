@@ -103,6 +103,10 @@ public class MultiSheetsScreenController {
         return selectedSheetName.get();
     }
 
+    public int getSelectedRequestNumber() {
+        return permissionsTableController.getSelectedRequestNumber();
+    }
+
 
 //    public void handlePermissionRequest(PermissionType permissionType) {
 //        String selectedSheetName = sheetsTableController.getSelectedSheetName();

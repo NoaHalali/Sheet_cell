@@ -17,7 +17,7 @@ import java.util.function.Consumer;
 
 import static client.components.Utils.Constants.*;
 
-public class RequestsListRefresher extends TimerTask {
+public class RequestsListRefresherTask extends TimerTask {
 
     //private final Consumer<String> httpRequestLoggerConsumer;
     private final Consumer<List<UserRequestDTO>> requestsListConsumer;
@@ -26,7 +26,7 @@ public class RequestsListRefresher extends TimerTask {
     //private final BooleanProperty shouldUpdate;
 
 
-    public RequestsListRefresher(Consumer<List<UserRequestDTO>> requestsListConsumer,String selectedSheet) {
+    public RequestsListRefresherTask(Consumer<List<UserRequestDTO>> requestsListConsumer, String selectedSheet) {
         //this.shouldUpdate = shouldUpdate;
         //this.httpRequestLoggerConsumer = httpRequestLoggerConsumer;
 
@@ -68,5 +68,9 @@ public class RequestsListRefresher extends TimerTask {
                 requestsListConsumer.accept(userRequestsDTO);
             }
         });
+    }
+
+    public void setSheetName(String selectedSheet) {
+        this.selectedSheet = selectedSheet;
     }
 }
