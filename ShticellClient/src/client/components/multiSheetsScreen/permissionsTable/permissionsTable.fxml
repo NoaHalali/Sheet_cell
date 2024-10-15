@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+
+<ScrollPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="326.0" prefWidth="549.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.components.multiSheetsScreen.permissionsTable.PermissionsTableController">
+    <content>
+        <TableView fx:id="sheetsTable" prefHeight="309.0" prefWidth="563.0">
+            <columns>
+                <TableColumn fx:id="requestNumberColumn" prefWidth="115.0" text="Request Number" />
+                <TableColumn fx:id="requesterNameColumn" prefWidth="123.0" text="Requested By" />
+                <TableColumn fx:id="permissionTypeColumn" prefWidth="125.0" text="Permission Type" />
+            <TableColumn fx:id="requestStatusColumn" prefWidth="118.0" text="Request Status" />
+                <!--                <TableColumn fx:id="permissionColumn" prefWidth="98.0" text="Permission" />-->
+            </columns>
+        </TableView>
+    </content>
+</ScrollPane>

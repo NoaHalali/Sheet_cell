@@ -26,6 +26,7 @@ public class SheetsTableController {
     @FXML private TableColumn<SheetDetailsDTO, String> sheetNameColumn;
     @FXML private TableColumn<SheetDetailsDTO, String> ownerNameColumn;
     @FXML private TableColumn<SheetDetailsDTO, String> sheetSizeColumn;
+
     private String selectedSheetName;
     private MultiSheetsScreenController parentController;
 
@@ -75,10 +76,9 @@ public class SheetsTableController {
 //            });
 //            return row;
 //        });
-
     }
 
-    private void updateUsersList(List<SheetDetailsDTO> sheetsDetailsNames) {
+    private void updateSheetsList(List<SheetDetailsDTO> sheetsDetailsNames) {
         Platform.runLater(() -> {
             ObservableList<SheetDetailsDTO> items = sheetsTable.getItems();
             items.clear(); // Clear the current table
@@ -87,7 +87,7 @@ public class SheetsTableController {
     }
 
     public void startListRefresher() {
-        listRefresher = new SheetsListRefresher(this::updateUsersList);
+        listRefresher = new SheetsListRefresher(this::updateSheetsList);
         timer = new Timer();
         timer.schedule(listRefresher, REFRESH_RATE, REFRESH_RATE);
     }

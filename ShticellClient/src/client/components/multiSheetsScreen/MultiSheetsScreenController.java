@@ -3,6 +3,7 @@ package client.components.multiSheetsScreen;
 import client.components.mainAppController.AppController;
 import client.components.multiSheetsScreen.commands.CommandsController;
 import client.components.multiSheetsScreen.loadFiles.LoadSheetFilesController;
+import client.components.multiSheetsScreen.permissionsTable.PermissionsTableController;
 import client.components.multiSheetsScreen.sheetsTable.SheetsTableController;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.fxml.FXML;
@@ -27,6 +28,9 @@ public class MultiSheetsScreenController {
     @FXML private VBox commands;
     @FXML private CommandsController commandsController;
 
+    @FXML private ScrollPane permissionsTable;
+    @FXML private PermissionsTableController permissionsTableController;
+
     private SimpleBooleanProperty sheetSelected ;
 
 
@@ -39,7 +43,8 @@ public class MultiSheetsScreenController {
         sheetsTableController.setParentController(this);
         commandsController.setParentController(this);
         commandsController.initializeCommandsController(sheetSelected);
-
+        //permissionsTableController.setParentController(this);
+       // permissionsTableController.initializePermissionsTableController(sheetSelected);
     }
 
     public File showFileChooser(FileChooser fileChooser) {

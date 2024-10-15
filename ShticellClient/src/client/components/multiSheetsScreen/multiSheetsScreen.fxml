@@ -1,23 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.SplitPane?>
-<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="584.0" prefWidth="711.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.components.multiSheetsScreen.MultiSheetsScreenController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="734.0" prefWidth="981.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.components.multiSheetsScreen.MultiSheetsScreenController">
    <top>
       <fx:include fx:id="loadSheetFiles" source="loadFiles/loadSheetFiles.fxml" />
    </top>
    <center>
-      <SplitPane dividerPositions="0.991304347826087" orientation="VERTICAL" prefHeight="507.0" prefWidth="711.0" BorderPane.alignment="CENTER">
+      <SplitPane dividerPositions="0.5" orientation="VERTICAL" prefHeight="665.0" prefWidth="703.0" BorderPane.alignment="CENTER">
          <items>
             <fx:include fx:id="sheetsTable" source="sheetsTable/sheetsTable.fxml" />
-            <AnchorPane prefHeight="143.0" prefWidth="598.0">
-               <children>
-                  <ScrollPane layoutY="64.0" prefHeight="136.0" prefWidth="463.0" />
-               </children>
-            </AnchorPane>
+            <fx:include fx:id="permissionsTable" source="permissionsTable/permissionsTable.fxml" />
          </items>
       </SplitPane>
    </center>
