@@ -14,17 +14,18 @@ public class PermissionsManager {
     private int requestsNumber;
 
     public PermissionsManager(String owner) {
-        usersPermissions.put(owner, PermissionType.OWNER);
-        requestsHistory.add(new UserRequest( owner,PermissionType.OWNER,RequestStatus.APPROVED)); //TODO maybe add request number here
         requestsNumber = 1;
+        usersPermissions.put(owner, PermissionType.OWNER);
+        requestsHistory.add(new UserRequest( owner,PermissionType.OWNER,RequestStatus.APPROVED,requestsNumber)); //TODO maybe add request number here
     }
 
     //Map<Integer, UserPermissionDTO> allHistory = new HashMap<>();//אושרו
     //Map<String, PermissionType> notApprovedYet=new HashMap<>();//לאגור את כל הבקשות
 
-    public void addUserPermissionRequest(String userName, PermissionType permission) { //User call this method
-        requestsHistory.add(new UserRequest(userName,permission,RequestStatus.PENDING));
+    public void addUserPermissionRequest(String userName, PermissionType permission) {
+        //User call this method
         requestsNumber++;
+        requestsHistory.add(new UserRequest(userName,permission,RequestStatus.PENDING,requestsNumber));
     }
 
     public void approvePermissionRequest(int permissionNumber) //Owner call this method
@@ -46,7 +47,9 @@ public class PermissionsManager {
     public List<UserRequestDTO> getRequestsDTOList()
     {
         List<UserRequestDTO> requestsDTOList = new ArrayList<>();
+        int count=0;
         for (UserRequest request : requestsHistory) {
+
             requestsDTOList.add(request.toDTO());
         }
         return requestsDTOList;

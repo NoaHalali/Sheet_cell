@@ -6,11 +6,13 @@ public class UserRequest {
     private final String username;
     private final PermissionType permission;
     private RequestStatus requestStatus;
+    private final int requestNumber;
 
-    public UserRequest(String username, PermissionType permission, RequestStatus requestStatus) {
+    public UserRequest(String username, PermissionType permission, RequestStatus requestStatus, int requestNumber) {
         this.username = username;
         this.permission = permission;
         this.requestStatus = requestStatus;
+        this.requestNumber = requestNumber;
     }
 
     public String getUsername() {
@@ -30,6 +32,6 @@ public class UserRequest {
     }
 
     public UserRequestDTO toDTO() {
-        return new UserRequestDTO(username, permission, requestStatus );
+        return new UserRequestDTO(username, permission, requestStatus,requestNumber );
     }
 }

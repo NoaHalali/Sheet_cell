@@ -65,6 +65,8 @@ public class Constants {
     //permissions
     public static final String REQUEST_PERMISSION_URL = FULL_SERVER_PATH + "/requestPermission";
     public static final String HANDLE_REQUEST_PERMISSION_URL = FULL_SERVER_PATH + "/handleRequestPermission";
+    public static final String GET_REQUESTS_LIST_URL = FULL_SERVER_PATH + "/getRequestsList";
+
 
     // GSON instance
     public final static Gson GSON_INSTANCE = new Gson();

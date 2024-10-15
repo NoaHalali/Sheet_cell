@@ -27,9 +27,10 @@ public class CommandsController {
     @FXML private Button viewSheetButton;
     @FXML private Label sheetNameLabel;
 
-    public void initializeCommandsController(SimpleBooleanProperty sheetSelected) {
+    public void initializeCommandsController(SimpleBooleanProperty sheetSelected,SimpleBooleanProperty pendingRequestSelected) {
         viewSheetButton.disableProperty().bind(sheetSelected.not());
         requestPermissionMenuButton.disableProperty().bind(sheetSelected.not());
+        handlePermissionRequest.disableProperty().bind(pendingRequestSelected.not());
 
         // יצירת פריטי MenuItem נוספים
         MenuItem readerOption = new MenuItem("READER");

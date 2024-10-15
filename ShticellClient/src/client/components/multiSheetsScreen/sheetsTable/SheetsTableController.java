@@ -54,7 +54,7 @@ public class SheetsTableController {
                     SheetDetailsDTO clickedRowData = row.getItem();  // קבלת הנתונים של השורה שנלחצה
                     System.out.println("Clicked row of sheet: " + clickedRowData.getSheetName());
                     selectedSheetName = clickedRowData.getSheetName();
-                    parentController.handleSheetSelected(selectedSheetName);
+                    parentController.handleSheetSelect(selectedSheetName);
 
                 }
             });
