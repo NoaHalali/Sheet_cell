@@ -5,7 +5,11 @@ import client.components.multiSheetsScreen.commands.CommandsController;
 import client.components.multiSheetsScreen.loadFiles.LoadSheetFilesController;
 import client.components.multiSheetsScreen.permissionsTable.PermissionsTableController;
 import client.components.multiSheetsScreen.sheetsTable.SheetsTableController;
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.BooleanBinding;
+import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.ScrollPane;
@@ -19,6 +23,7 @@ import shticell.permissions.RequestStatus;
 import java.io.File;
 
 public class MultiSheetsScreenController {
+
     private Stage primaryStage;
     private AppController mainController;
     @FXML private HBox loadSheetFiles;
@@ -36,11 +41,28 @@ public class MultiSheetsScreenController {
     private SimpleBooleanProperty sheetSelected;
     private SimpleBooleanProperty pendingRequestSelected ;
 
-    private SimpleBooleanProperty hasOwnerPermission;
-    private SimpleBooleanProperty hasWriterPermission;
-    private SimpleBooleanProperty hasReaderPermission;
+//    private SimpleBooleanProperty hasOwnerPermission;
+//    private SimpleBooleanProperty hasWriterPermission;
+//    private SimpleBooleanProperty hasReaderPermission;
 
     private SimpleStringProperty selectedSheetName ;
+    //private PermissionType permissionForSelectedSheet;
+    private ObjectProperty<PermissionType> permissionForSelectedSheet = new SimpleObjectProperty<>(PermissionType.NONE);;
+
+    public BooleanBinding hasOwnerPermission = Bindings.createBooleanBinding(() ->
+                    permissionForSelectedSheet.get() == PermissionType.OWNER,
+            permissionForSelectedSheet
+    );
+
+    public BooleanBinding hasWriterPermission = Bindings.createBooleanBinding(() ->
+                    permissionForSelectedSheet.get() == PermissionType.WRITER,
+            permissionForSelectedSheet
+    );
+
+    public BooleanBinding hasReaderPermission = Bindings.createBooleanBinding(() ->
+                    permissionForSelectedSheet.get() == PermissionType.READER, //boolean condition
+            permissionForSelectedSheet //observable value
+    );
 
 
     @FXML
@@ -49,11 +71,11 @@ public class MultiSheetsScreenController {
         //loadSheetFilesController.setParentController(this);
         sheetSelected= new SimpleBooleanProperty(false);
         pendingRequestSelected= new SimpleBooleanProperty(false);
-        hasOwnerPermission= new SimpleBooleanProperty(false);
-        hasWriterPermission= new SimpleBooleanProperty(false);
-        hasReaderPermission= new SimpleBooleanProperty(false);
-
+//        hasOwnerPermission= new SimpleBooleanProperty(false);
+//        hasWriterPermission= new SimpleBooleanProperty(false);
+//        hasReaderPermission= new SimpleBooleanProperty(false);
         selectedSheetName= new SimpleStringProperty("");
+        //permissionForSelectedSheet = new SimpleObjectProperty<>(PermissionType.NONE); //TODO: maybe null?
 
         loadSheetFilesController.setParentController(this);
         sheetsTableController.setParentController(this);
@@ -62,6 +84,7 @@ public class MultiSheetsScreenController {
 
         commandsController.initializeCommandsController(sheetSelected,pendingRequestSelected, selectedSheetName,
                 hasOwnerPermission, hasWriterPermission, hasReaderPermission);
+
 
        // permissionsTableController.initializePermissionsTableController(sheetSelected);
     }
@@ -80,7 +103,7 @@ public class MultiSheetsScreenController {
 
     public void switchToSheetManager() {
         //String selectedSheetName = sheetsTableController.getSelectedSheetName();
-        mainController.switchToSheetManager(selectedSheetName.get());
+        mainController.switchToSheetManager(selectedSheetName.get(), permissionForSelectedSheet);
     }
 
     public void setActive() {
@@ -91,11 +114,12 @@ public class MultiSheetsScreenController {
         System.out.println("MultiSheetsScreenController is active");
     }
 
-    public void handleSheetSelect(String sheetSelectedName, PermissionType permissionForSelectedSheet) {
+    public void handleSheetSelect(String sheetSelectedName, PermissionType permission) {
 
         sheetSelected.set(true);
         selectedSheetName.set(sheetSelectedName);
-        updatePermissionsProperties(permissionForSelectedSheet);
+        this.permissionForSelectedSheet.set(permission);
+        //updatePermissionsProperties(permissionForSelectedSheet);
 
         //commandsController.setSheetNameLabel(sheetSelectedName);
         permissionsTableController.startListRefresher();
@@ -117,26 +141,26 @@ public class MultiSheetsScreenController {
         return permissionsTableController.getSelectedRequestNumber();
     }
 
-    private void updatePermissionsProperties(PermissionType permissionForSelectedSheet) {
-        resetPermissionsProperties();
-        switch (permissionForSelectedSheet){
-            case OWNER:
-                hasOwnerPermission.set(true);
-                break;
-            case WRITER:
-                hasWriterPermission.set(true);
-                break;
-            case READER:
-                hasReaderPermission.set(true);
-                break;
-        }
-    }
-
-    private void resetPermissionsProperties() {
-        hasOwnerPermission.set(false);
-        hasWriterPermission.set(false);
-        hasReaderPermission.set(false);
-    }
+//    private void updatePermissionsProperties(PermissionType permissionForSelectedSheet) {
+//        resetPermissionsProperties();
+//        switch (permissionForSelectedSheet){
+//            case OWNER:
+//                hasOwnerPermission.set(true);
+//                break;
+//            case WRITER:
+//                hasWriterPermission.set(true);
+//                break;
+//            case READER:
+//                hasReaderPermission.set(true);
+//                break;
+//        }
+//    }
+//
+//    private void resetPermissionsProperties() {
+//        hasOwnerPermission.set(false);
+//        hasWriterPermission.set(false);
+//        hasReaderPermission.set(false);
+//    }
 
 //    public void handlePermissionRequest(PermissionType permissionType) {
 //        String selectedSheetName = sheetsTableController.getSelectedSheetName();

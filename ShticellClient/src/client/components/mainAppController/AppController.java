@@ -5,6 +5,7 @@ import client.components.multiSheetsScreen.MultiSheetsScreenController;
 import client.components.sheetManager.SheetManagerController;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
+import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.fxml.FXML;
@@ -16,6 +17,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
+import shticell.permissions.PermissionType;
 
 import java.io.IOException;
 import java.net.URL;
@@ -122,12 +124,11 @@ public class AppController {
 //        httpStatusComponentController.addHttpStatusLine(line);
 //    }
 
-    public void switchToSheetManager(String sheetName) {
+    public void switchToSheetManager(String sheetName, ObjectProperty<PermissionType> permissionTypeProperty) {
         Platform.runLater(() -> {
             //sheetManagerController.setActive();
             setMainPanelTo(sheetManagerComponent);
-            //sheetManagerController.setEngine(engine);
-            sheetManagerController.initializeComponentsAfterLoad(sheetName);
+            sheetManagerController.initializeComponentsAfterLoad(sheetName, permissionTypeProperty);
         });
     }
 

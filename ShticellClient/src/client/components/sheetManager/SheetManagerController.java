@@ -13,10 +13,7 @@ import client.components.sheetManager.parts.top.versions.VersionSelectorControll
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
@@ -34,6 +31,7 @@ import parts.SheetDTO;
 import shticell.engines.engine.Engine;
 import shticell.engines.sheetEngine.SheetEngine;
 import shticell.engines.sheetEngine.SheetEngineImpl;
+import shticell.permissions.PermissionType;
 import shticell.sheets.sheet.Sheet;
 import shticell.sheets.sheet.parts.cell.coordinate.Coordinate;
 import shticell.sheets.sheet.parts.cell.coordinate.CoordinateImpl;
@@ -136,7 +134,7 @@ public class SheetManagerController {
         ranges.disableProperty().bind(whatIfAndFileBinding);
     }
 
-    public void initializeComponentsAfterLoad(String sheetName) {
+    public void initializeComponentsAfterLoad(String sheetName, ObjectProperty<PermissionType> permissionTypeProperty) {
 
         clearSelectionStates();
         fileSelectedProperty.set(true);

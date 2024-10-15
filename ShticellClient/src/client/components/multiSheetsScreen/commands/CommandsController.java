@@ -34,15 +34,25 @@ public class CommandsController {
 
 
     public void initializeCommandsController(SimpleBooleanProperty sheetSelected, SimpleBooleanProperty pendingRequestSelected, SimpleStringProperty selectedSheetName
-            , SimpleBooleanProperty hasOwnerPermission, SimpleBooleanProperty hasWriterPermission, SimpleBooleanProperty hasReaderPermission) {
-        BooleanBinding hasOwnerPermissionAndPendingRequestSelected = Bindings.and(hasOwnerPermission,pendingRequestSelected);
+            , BooleanBinding hasOwnerPermission, BooleanBinding hasWriterPermission, BooleanBinding hasReaderPermission) {
 
-        viewSheetButton.disableProperty().bind(sheetSelected.not());
-        requestPermissionMenuButton.disableProperty().bind(sheetSelected.not());
+        BooleanBinding hasAnyPermission = Bindings.or(hasOwnerPermission, Bindings.or(hasWriterPermission, hasReaderPermission));
+        BooleanBinding hasOwnerPermissionAndPendingRequestSelected = Bindings.and(hasOwnerPermission, pendingRequestSelected);
+        BooleanBinding hasOwnerPermissionOrSheetNotSelected = Bindings.or(hasOwnerPermission, sheetSelected.not());
+
+        // קשירת הכפתורים לתנאים הלוגיים
+        viewSheetButton.disableProperty().bind(sheetSelected.not().or(hasAnyPermission.not()));
+        requestPermissionMenuButton.disableProperty().bind(hasOwnerPermissionOrSheetNotSelected);
         handleRequestMenuButton.disableProperty().bind(hasOwnerPermissionAndPendingRequestSelected.not());
+
         sheetNameLabel.textProperty().bind(selectedSheetName);
-
-
+//        BooleanBinding hasOwnerPermissionAndPendingRequestSelected = Bindings.and(hasOwnerPermission,pendingRequestSelected);
+//
+//        viewSheetButton.disableProperty().bind(sheetSelected.not());
+//        requestPermissionMenuButton.disableProperty().bind(sheetSelected.not());
+//        handleRequestMenuButton.disableProperty().bind(hasOwnerPermissionAndPendingRequestSelected.not());
+//        sheetNameLabel.textProperty().bind(selectedSheetName);
+        // יצירת Binding שמוודא האם יש הרשאה כלשהי (OWNER, WRITER, או READER)
         setRequestPermissionMenuItems();
         setHandleRequestMenuItems();
     }
