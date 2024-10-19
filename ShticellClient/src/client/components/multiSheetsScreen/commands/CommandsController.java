@@ -2,6 +2,7 @@ package client.components.multiSheetsScreen.commands;
 
 import client.components.Utils.http.HttpClientUtil;
 import client.components.multiSheetsScreen.MultiSheetsScreenController;
+import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -166,6 +167,7 @@ public class CommandsController {
                 if (response.isSuccessful())
                 {
                     System.out.println(responseBody);
+                    Platform.runLater(() -> parentController.clearRequestSelection());
                 }
                 else
                 {

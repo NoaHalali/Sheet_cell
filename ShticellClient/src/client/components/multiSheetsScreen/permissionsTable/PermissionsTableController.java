@@ -14,6 +14,7 @@ import parts.permission.UserRequestDTO;
 import java.util.List;
 import java.util.Timer;
 
+import static client.components.Utils.Constants.PERMISSIONS_TABLE_REFRESH_RATE;
 import static client.components.Utils.Constants.REFRESH_RATE;
 
 public class PermissionsTableController {
@@ -53,24 +54,48 @@ public class PermissionsTableController {
             return row;
         });
     }
+//    private void updateRequestsList(List<UserRequestDTO> requestsList) {
+//        Platform.runLater(() -> {
+//            if (requestsList != null) {
+//                ObservableList<UserRequestDTO> items = requestsTable.getItems();
+//                items.clear(); // Clear the current table
+//                items.addAll(requestsList); // Add new DTO list to the table
+//            } else {
+//                System.err.println("requestsList is null, cannot update table.");
+//            }
+//        });
+//    }
+
     private void updateRequestsList(List<UserRequestDTO> requestsList) {
         Platform.runLater(() -> {
             if (requestsList != null) {
                 ObservableList<UserRequestDTO> items = requestsTable.getItems();
                 items.clear(); // Clear the current table
                 items.addAll(requestsList); // Add new DTO list to the table
+
+                // אם יש אינדקס שמור מהבחירה הקודמת, נבחר את השורה באותו אינדקס
+                int selectedRequestIndex = selectedRequestNumber-1;
+                if (selectedRequestIndex!= -1 && selectedRequestIndex < requestsList.size()) {
+                    requestsTable.getSelectionModel().select(selectedRequestIndex);
+                }
             } else {
                 System.err.println("requestsList is null, cannot update table.");
             }
         });
     }
 
+
+
     public void startListRefresher() {
         String selectedSheet = parentController.getSelectedSheetName();
+
+        // איפוס הבחירה כשמחליפים גיליון
+        selectedRequestNumber = -1; // או ערך מתאים אחר שמסמן שאין בחירה
+
         if (listRefresher == null) {
             listRefresher = new RequestsListRefresherTask(this::updateRequestsList, selectedSheet);
             timer = new Timer();
-            timer.schedule(listRefresher, REFRESH_RATE, REFRESH_RATE);
+            timer.schedule(listRefresher, REFRESH_RATE, PERMISSIONS_TABLE_REFRESH_RATE);
         }
         else {
             listRefresher.setSheetName(selectedSheet);
@@ -87,5 +112,9 @@ public class PermissionsTableController {
 
     public int getSelectedRequestNumber() {
         return selectedRequestNumber;
+    }
+
+    public void clearSelection() {
+        requestsTable.getSelectionModel().clearSelection();
     }
 }

@@ -111,7 +111,7 @@ public class MultiSheetsScreenController {
     public void setActive() {
         //sheetSelected.set(false);
         //resetPermissionsProperties();
-        selectedSheetName.set("");
+        //selectedSheetName.set("");
         sheetsTableController.startListRefresher();
         System.out.println("MultiSheetsScreenController is active");
     }
@@ -141,6 +141,12 @@ public class MultiSheetsScreenController {
 
     public int getSelectedRequestNumber() {
         return permissionsTableController.getSelectedRequestNumber();
+    }
+
+    public void clearRequestSelection() {
+        pendingRequestSelected.set(false);
+        permissionsTableController.clearSelection();
+
     }
 
 //    private void updatePermissionsProperties(PermissionType permissionForSelectedSheet) {

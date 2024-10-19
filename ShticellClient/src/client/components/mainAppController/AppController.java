@@ -142,7 +142,6 @@ public class AppController {
 
         setMainPanelTo(multiSheetsScreenComponent);
         multiSheetsScreenController.setActive();
-
     }
 
     public void switchToMultiSheetsScreenAfterLogin() {

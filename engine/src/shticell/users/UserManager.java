@@ -45,9 +45,8 @@ public class UserManager {
 
     public synchronized PermissionUpdate getUserPermissionsUpdates(String username) {
         Queue<PermissionUpdate> queue = usersPermissionsUpdates.get(username.toUpperCase());
-        System.out.println( "removing choice from user " + username + " : " + queue.peek().getPermission());
+       // System.out.println( "removing choice from user " + username + " : " + queue.peek().getPermission());
         return queue.poll();
-
         }
 //    public void setNoUpdateForUser(String username) {
 //        usersPermissionsUpdates.put(username.toUpperCase(), NO_UPDATE);
