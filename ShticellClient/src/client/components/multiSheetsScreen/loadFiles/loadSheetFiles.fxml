@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.layout.HBox?>
 
-<HBox alignment="CENTER_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="69.0" prefWidth="393.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.components.multiSheetsScreen.loadFiles.LoadSheetFilesController">
+<HBox alignment="CENTER_LEFT" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.components.multiSheetsScreen.loadFiles.LoadSheetFilesController">
       <Button fx:id="loadSheetFileButton" mnemonicParsing="false" onAction="#loadFileButtonClicked" text="Load sheet file" />
+   <padding>
+      <Insets left="10.0" />
+   </padding>
 </HBox>

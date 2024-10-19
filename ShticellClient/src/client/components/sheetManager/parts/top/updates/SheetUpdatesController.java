@@ -1,4 +1,4 @@
-package client.components.mainAppController.updates;
+package client.components.sheetManager.parts.top.updates;
 
 import client.components.multiSheetsScreen.MultiSheetsScreenController;
 import javafx.animation.FadeTransition;
@@ -12,7 +12,7 @@ import java.util.TimerTask;
 
 import static client.components.Utils.Constants.REFRESH_RATE;
 
-public class PermissionsUpdatesController {
+public class SheetUpdatesController {
 
     @FXML
     private Label messageLabel;
@@ -70,7 +70,7 @@ public class PermissionsUpdatesController {
 
     public void startMessageRefresher() {
 
-        messageRefresher = new PermissionsUpdatesRefresher(this::updateMessage);
+        messageRefresher = new SheetUpdatesRefresher(this::updateMessage);
         timer = new Timer();
         timer.schedule(messageRefresher, REFRESH_RATE, 5000);
     }

@@ -1,29 +1,26 @@
-package client.components.mainAppController.updates;
+package client.components.sheetManager.parts.top.updates;
 
 import client.components.Utils.http.HttpClientUtil;
-import com.google.gson.reflect.TypeToken;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 import org.jetbrains.annotations.NotNull;
-import parts.SheetDetailsDTO;
 import shticell.users.PermissionUpdate;
 
 import java.io.IOException;
-import java.lang.reflect.Type;
-import java.util.List;
 import java.util.TimerTask;
 import java.util.function.Consumer;
 
-import static client.components.Utils.Constants.*;
+import static client.components.Utils.Constants.GET_CHANGED_PERMISSION_FOR_USER;
+import static client.components.Utils.Constants.GSON_INSTANCE;
 
-public class PermissionsUpdatesRefresher extends TimerTask  {
+public class SheetUpdatesRefresher extends TimerTask  {
     //private final Consumer<String> httpRequestLoggerConsumer;
     private final Consumer<String> messageConsumer;
     private int requestNumber;
     //private final BooleanProperty shouldUpdate;
 
-    public PermissionsUpdatesRefresher(Consumer<String> messageConsumer) {
+    public SheetUpdatesRefresher(Consumer<String> messageConsumer) {
         //this.shouldUpdate = shouldUpdate;
         //this.httpRequestLoggerConsumer = httpRequestLoggerConsumer;
         this.messageConsumer = messageConsumer;
@@ -33,13 +30,6 @@ public class PermissionsUpdatesRefresher extends TimerTask  {
     @Override
     public void run() {
 
-//        if (!shouldUpdate.get()) {
-//            return;
-//        }
-
-        //final int finalRequestNumber = ++requestNumber;
-        //httpRequestLoggerConsumer.accept("About to invoke: " + GET_SHEETS_LIST + " | Users Request # " + finalRequestNumber);
-        //System.out.println("About to invoke: " + GET_SHEETS_LIST + " | Users Request # " + finalRequestNumber);
         HttpClientUtil.runAsyncByUrl(GET_CHANGED_PERMISSION_FOR_USER, new Callback() {
 
             @Override
@@ -69,5 +59,4 @@ public class PermissionsUpdatesRefresher extends TimerTask  {
         return message;
 
     }
-
 }

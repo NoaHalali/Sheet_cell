@@ -37,18 +37,10 @@
                                 <Label fx:id="currentVersionLabel" text="1.0" />
                             </children>
                         </HBox>
-                  <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="5.0">
-                     <padding>
-                        <Insets left="5.0" />
-                     </padding>
-                     <children>
-                        <fx:include fx:id="skinSelector" source="parts/skin/skin.fxml" />
-                     </children>
-                  </HBox>
                     </children>
                 </GridPane>
                 <!-- הכללת קובץ ה-FXML של הרכיב העליון -->
-                <fx:include fx:id="fileChooser" source="parts/top/fileChooser/fileChooser.fxml" />
+                <fx:include fx:id="sheetUpdates" source="parts/top/updates/sheetUpdates.fxml" />
 
                 <!-- הכללת קובץ ה-FXML של Action Line -->
                 <HBox alignment="CENTER_LEFT" spacing="10" HBox.hgrow="ALWAYS">

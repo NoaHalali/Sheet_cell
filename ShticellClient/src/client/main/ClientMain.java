@@ -23,7 +23,7 @@ public class ClientMain extends Application {
     public void start(Stage primaryStage) {
 
         primaryStage.setMinHeight(600);
-        primaryStage.setMinWidth(600);
+        primaryStage.setMinWidth(700);
         primaryStage.setTitle("Chat App Client");
 
         //URL loginPage = getClass().getResource(MAIN_PAGE_FXML_RESOURCE_LOCATION);
@@ -36,7 +36,7 @@ public class ClientMain extends Application {
             mainController.setPrimaryStage(primaryStage); // העברת ה-Stage ל-AppController
 
 
-            Scene scene = new Scene(root, 700, 600);
+            Scene scene = new Scene(root, 1000, 800);
             primaryStage.setScene(scene);
            // mainController.setScene(scene);  // העברת הסצנה ל-AppController לשימוש ב-SkinSelector
             primaryStage.show();

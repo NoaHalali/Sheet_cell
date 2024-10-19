@@ -6,9 +6,8 @@ import client.components.sheetManager.parts.center.cellsTable.TableController;
 import client.components.sheetManager.http.RequestsManager;
 import client.components.sheetManager.parts.left.commands.CommandsController;
 import client.components.sheetManager.parts.left.ranges.RangesController;
-import client.components.sheetManager.parts.skin.SkinSelectorController;
 import client.components.sheetManager.parts.top.actionLine.ActionLineController;
-import client.components.sheetManager.parts.top.fileChooser.FileChooserController;
+import client.components.sheetManager.parts.top.updates.SheetUpdatesController;
 import client.components.sheetManager.parts.top.versions.VersionSelectorController;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
@@ -19,16 +18,14 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import parts.cell.CellDTO;
 import parts.SheetDTO;
-import shticell.engines.sheetEngine.SheetEngine;
-import shticell.permissions.PermissionType;
 import shticell.sheets.sheet.parts.cell.coordinate.Coordinate;
 import shticell.sheets.sheet.parts.cell.expression.effectiveValue.EffectiveValue;
 
@@ -41,19 +38,12 @@ public class SheetManagerController {
 
     private Stage primaryStage;
     private Scene scene;
-    private int count;
-    private Coordinate coordinate;
-    //private Engine engine;
-    private SheetEngine sheetEngine;
-    //private String sheetName = "beginner";
     private AppController mainController;
-    //private final RequestsManager requestsManager = new RequestsManager(sheetName);
     private RequestsManager requestsManager;
 
 
     //Components
     @FXML private GridPane actionLine;
-    @FXML private GridPane fileChooser;
     @FXML private ScrollPane table;
     @FXML private ScrollPane commands;
     @FXML private VBox ranges;
@@ -61,15 +51,15 @@ public class SheetManagerController {
     @FXML private Label currentVersionLabel;
     @FXML private HBox skinSelector;
     @FXML private Button backToDashBoardButton;
+    @FXML private AnchorPane sheetUpdates;
 
     //Controllers
     @FXML private ActionLineController actionLineController;
     @FXML private TableController tableController;
-    @FXML private FileChooserController fileChooserController;
+    @FXML private SheetUpdatesController sheetUpdatesController;
     @FXML private CommandsController commandsController;
     @FXML private RangesController rangesController;
     @FXML private VersionSelectorController versionSelectorController;
-    @FXML private SkinSelectorController skinSelectorController;
 
     //Properties
     private SimpleBooleanProperty fileSelectedProperty;
@@ -82,8 +72,8 @@ public class SheetManagerController {
 
     @FXML
     private void initialize() {
-        if (actionLineController != null && tableController != null && fileChooserController != null
-                && versionSelectorController != null && commandsController != null && rangesController != null && skinSelectorController != null) {
+        if (actionLineController != null && tableController != null && sheetUpdatesController != null
+                && versionSelectorController != null && commandsController != null && rangesController != null) {
 
             //engine = new SheetEngine();
             setMainControllerForComponents();
@@ -96,11 +86,8 @@ public class SheetManagerController {
         actionLineController.setMainController(this);
         tableController.setMainController(this);
         versionSelectorController.setMainController(this);
-        fileChooserController.setMainController(this);
         commandsController.setMainController(this);
         rangesController.setMainController(this);
-        skinSelectorController.setMainController(this);
-        skinSelectorController.setMainController(this);
     }
 
     private void initializeProperties() {
@@ -145,6 +132,7 @@ public class SheetManagerController {
 
 
     public void initializeComponentsAfterLoad(String sheetName, BooleanBinding hasEditPermission) {
+
 
         clearSelectionStates();
         fileSelectedProperty.set(true);
@@ -208,29 +196,6 @@ public class SheetManagerController {
             StageUtils.showAlert("Error to get sheetDTO", errorMessage);
         });
     }
-
-
-    public void setPrimaryStage(Stage primaryStage) {
-        this.primaryStage = primaryStage;
-    }
-
-    public void setScene(Scene scene) {
-        this.scene = scene;
-        if (skinSelectorController != null) {
-            skinSelectorController.setScene(scene);  // העברת הסצנה ל-SkinSelectorController
-            skinSelectorController.initializeSkinSelector();  // אתחול ערכות הנושא
-        }
-    }
-
-//    public void setEngine(Engine engine) {
-//        this.engine = engine;
-//        initializeComponentsAfterLoad();
-//    }
-
-    public File showFileChooser(FileChooser fileChooser) {
-        return fileChooser.showOpenDialog(primaryStage);
-    }
-
 
     private void setCells(SheetDTO sheet) {
         CellDTO[][] cells = sheet.getCellsMatrix();

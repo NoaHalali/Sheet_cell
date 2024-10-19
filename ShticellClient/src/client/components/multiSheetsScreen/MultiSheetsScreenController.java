@@ -26,6 +26,7 @@ public class MultiSheetsScreenController {
 
     private Stage primaryStage;
     private AppController mainController;
+
     @FXML private HBox loadSheetFiles;
     @FXML private LoadSheetFilesController loadSheetFilesController;
 

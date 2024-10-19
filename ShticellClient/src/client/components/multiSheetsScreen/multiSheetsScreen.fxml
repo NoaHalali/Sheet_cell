@@ -1,21 +1,49 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.SplitPane?>
-<?import javafx.scene.layout.BorderPane?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="734.0" prefWidth="981.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.components.multiSheetsScreen.MultiSheetsScreenController">
-   <top>
-      <fx:include fx:id="loadSheetFiles" source="loadFiles/loadSheetFiles.fxml" />
-   </top>
-   <center>
-      <SplitPane dividerPositions="0.5" orientation="VERTICAL" prefHeight="665.0" prefWidth="703.0" BorderPane.alignment="CENTER">
-         <items>
+<ScrollPane fitToHeight="true" fitToWidth="true" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.components.multiSheetsScreen.MultiSheetsScreenController">
+   <content>
+      <GridPane alignment="CENTER" hgap="10.0" vgap="10.0">
+
+         <!-- הגדרת עמודות: 70% לטבלאות, 30% לפקודות -->
+         <columnConstraints>
+            <ColumnConstraints percentWidth="70" />
+            <ColumnConstraints percentWidth="30" />
+         </columnConstraints>
+
+         <!-- הגדרת שורות: שורה עבור טעינת קבצים ושורה עבור הטבלאות -->
+         <rowConstraints>
+            <RowConstraints percentHeight="5.0" />  <!-- שורה עבור טעינת קבצים -->
+            <RowConstraints percentHeight="95.0" />  <!-- שורה עבור הטבלאות והפקודות -->
+         </rowConstraints>
+
+         <!-- רכיב ה-Load Sheet File בשורה הראשונה -->
+         <fx:include fx:id="loadSheetFiles" source="loadFiles/loadSheetFiles.fxml" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="0" />
+
+         <!-- VBox שמכיל את שתי הטבלאות בשורה השנייה -->
+         <VBox alignment="CENTER" prefWidth="703.0" spacing="10.0" GridPane.columnIndex="0" GridPane.rowIndex="1">
             <fx:include fx:id="sheetsTable" source="sheetsTable/sheetsTable.fxml" />
+            <Separator prefWidth="200.0" />
             <fx:include fx:id="permissionsTable" source="permissionsTable/permissionsTable.fxml" />
-         </items>
-      </SplitPane>
-   </center>
-   <right>
-      <fx:include fx:id="commands" source="commands/commands.fxml" />
-   </right>
-</BorderPane>
+            <GridPane.margin>
+               <Insets />
+            </GridPane.margin>
+         </VBox>
+         <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+            <children>
+      
+               <!-- הפקודות מימין, תופסות 30% מהרוחב בשורה השנייה -->
+               <fx:include fx:id="commands" source="commands/commands.fxml" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            </children>
+         </VBox>
+
+      </GridPane>
+   </content>
+</ScrollPane>

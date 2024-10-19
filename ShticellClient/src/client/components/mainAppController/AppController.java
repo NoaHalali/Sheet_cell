@@ -7,7 +7,6 @@ import client.components.sheetManager.SheetManagerController;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
-import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.fxml.FXML;
@@ -19,7 +18,6 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
-import shticell.permissions.PermissionType;
 
 import java.io.IOException;
 import java.net.URL;
@@ -28,7 +26,6 @@ import static client.components.Utils.Constants.*;
 
 public class AppController {
 
-
     private GridPane loginComponent;
     private LoginController logicController;
 
@@ -36,12 +33,11 @@ public class AppController {
     private ScrollPane sheetManagerComponent;
     private SheetManagerController sheetManagerController;
     
-    private BorderPane multiSheetsScreenComponent;
+    private ScrollPane multiSheetsScreenComponent;
     private MultiSheetsScreenController multiSheetsScreenController;
 
     @FXML private Label userGreetingLabel;
     @FXML private AnchorPane mainPanel;
-
 
     @FXML private PermissionsUpdatesController permissionsUpdatesController;
     @FXML private AnchorPane permissionsUpdates;
@@ -60,7 +56,7 @@ public class AppController {
         // prepare components
         loadLoginPage();
         loadSheetManagerPage();
-        loadSheetAndPermissionManager();
+        loadMultiSheetsScreen();
     }
 
     public void updateUserName(String userName) {
@@ -80,7 +76,7 @@ public class AppController {
 //    public void close() throws IOException {
 //        chatRoomComponentController.close();
 //    }
-    private void loadSheetAndPermissionManager() {
+    private void loadMultiSheetsScreen() {
         URL multiSheetsScreenURL = getClass().getResource(MULTI_SHEETS_SCREEN_FXML_RESOURCE_LOCATION);
         try {
             FXMLLoader fxmlLoader = new FXMLLoader();
