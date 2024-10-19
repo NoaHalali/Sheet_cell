@@ -22,13 +22,13 @@ public class PermissionsManager {
     //Map<Integer, UserPermissionDTO> allHistory = new HashMap<>();//אושרו
     //Map<String, PermissionType> notApprovedYet=new HashMap<>();//לאגור את כל הבקשות
 
-    public void addUserPermissionRequest(String userName, PermissionType permission) {
+    public synchronized void addUserPermissionRequest(String userName, PermissionType permission) {
         //User call this method
         requestsNumber++;
         requestsHistory.add(new UserRequest(userName,permission,RequestStatus.PENDING,requestsNumber));
     }
 
-    public void approvePermissionRequest(int permissionNumber) //Owner call this method
+    public synchronized void approvePermissionRequest(int permissionNumber) //Owner call this method
     {
         UserRequest request = requestsHistory.get(permissionNumber-1);
         String username = request.getUsername();
@@ -36,16 +36,15 @@ public class PermissionsManager {
         request.setRequestStatus(RequestStatus.APPROVED);
 
         usersPermissions.put(username,permission);
-
     }
 
-    public void denyPermissionRequest(int permissionNumber) //Owner call this method
+    public synchronized void denyPermissionRequest(int permissionNumber) //Owner call this method
     {
         UserRequest request = requestsHistory.get(permissionNumber-1);
         request.setRequestStatus(RequestStatus.REJECTED);
     }
 
-    public List<UserRequestDTO> getRequestsDTOList()
+    public synchronized List<UserRequestDTO> getRequestsDTOList()
     {
         List<UserRequestDTO> requestsDTOList = new ArrayList<>();
         int count=0;
@@ -56,7 +55,7 @@ public class PermissionsManager {
         return requestsDTOList;
     }
 
-    public PermissionType getPermissionForUser(String username) {
+    public synchronized PermissionType getPermissionForUser(String username) {
         if (!usersPermissions.containsKey(username)) {
             return PermissionType.NONE;
         }
@@ -64,9 +63,14 @@ public class PermissionsManager {
         return usersPermissions.get(username);
     }
 
-    public String getRequesterUsername(int requestNumber) {
+    public synchronized  String getRequestedUsername(int requestNumber) {
         return requestsHistory.get(requestNumber-1).getUsername();
     }
+    public synchronized PermissionType getRequestedPermission(int requestNumber) {
+        return requestsHistory.get(requestNumber-1).getPermission();
+    }
+
+
 
 
     //TODO: if someone can be shown multiple times, List insdead of Map, and delete the if in line 30

@@ -29,6 +29,7 @@ public class Constants {
     /*URLs*/
     //MainAppController
     public final static String LOGIN_PAGE = FULL_SERVER_PATH + "/login";
+    public final static String  GET_CHANGED_PERMISSION_FOR_USER = FULL_SERVER_PATH +"/getPermissionUpdatesForUser";
 
     //MultiSheetsScreenController
     public static final String UPLOAD_FILE = FULL_SERVER_PATH + "/uploadFile";

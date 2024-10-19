@@ -239,13 +239,13 @@ public class SheetEngineImpl implements SheetEngine {
         if(!isCellValidForWhatIf){
             throw new IllegalStateException ("must select cell with simple number original value");
         }
-        whatIfCSelectedCoordinate=coord;
+        whatIfCSelectedCoordinate =coord;
         whatIfSheet=currentSheet.cloneSheet();
 
     }
     @Override
     public SheetDTO calculateWhatIfValueForCell(double value){
-        Cell cell =whatIfSheet.getCellByCoord(whatIfCSelectedCoordinate);
+        Cell cell = whatIfSheet.getCellByCoord(whatIfCSelectedCoordinate);
         cell.setExpression(new NumberExpression(value));
         return whatIfSheet.toSheetDTO();
     }

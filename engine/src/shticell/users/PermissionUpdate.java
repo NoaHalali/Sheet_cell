@@ -22,7 +22,7 @@ public class PermissionUpdate { //also DTO
         return requestStatus;
     }
 
-    public String getUsername() {
+    public String getSheetName() {
         return sheetName;
     }
 }

@@ -1,6 +1,7 @@
 package client.components.mainAppController;
 
 import client.components.login.LoginController;
+import client.components.mainAppController.updates.PermissionsUpdatesController;
 import client.components.multiSheetsScreen.MultiSheetsScreenController;
 import client.components.sheetManager.SheetManagerController;
 import javafx.application.Platform;
@@ -40,6 +41,10 @@ public class AppController {
 
     @FXML private Label userGreetingLabel;
     @FXML private AnchorPane mainPanel;
+
+
+    @FXML private PermissionsUpdatesController permissionsUpdatesController;
+    @FXML private AnchorPane permissionsUpdates;
 
     private final StringProperty currentUserName;
     private Stage stage;
@@ -140,6 +145,12 @@ public class AppController {
 
     }
 
+    public void switchToMultiSheetsScreenAfterLogin() {
+        startMessageRefresher();
+        switchToMultiSheetsScreen();
+
+    }
+
 //    public void switchToLogin() {
 //        Platform.runLater(() -> {
 //            currentUserName.set(JHON_DOE);
@@ -153,5 +164,9 @@ public class AppController {
         this.stage = primaryStage;
 //        sheetsAndPermissionsManagerController.setPrimaryStage(primaryStage);
 //        sheetManagerController.setPrimaryStage(primaryStage);
+    }
+
+    public void startMessageRefresher() {
+        permissionsUpdatesController.startMessageRefresher();
     }
 }

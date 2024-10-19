@@ -70,27 +70,29 @@ public class HandleRequestPermissionServlet extends HttpServlet {
     }
 
     private void handleRequestPermission(String sheetName, int requestNumber, RequestStatus requestStatus, PrintWriter out ) {
-        SheetEngine sheetEngine = ServletUtils.getSheetEngineByName(sheetName, getServletContext());
-        UserManager userManager = ServletUtils.getUserManager(getServletContext());
-        PermissionsManager sheetPermissionsManager = sheetEngine.getPermissionsManager();
-        String username = sheetPermissionsManager.getRequesterUsername(requestNumber);
-        PermissionType permission = sheetPermissionsManager.getPermissionForUser(username);
 
-        switch (requestStatus){
-            case APPROVED:
-                sheetEngine.approvePermissionRequest(requestNumber);
-                out.println("permission approved successfully");
+            SheetEngine sheetEngine = ServletUtils.getSheetEngineByName(sheetName, getServletContext());
+            UserManager userManager = ServletUtils.getUserManager(getServletContext());
+            PermissionsManager sheetPermissionsManager = sheetEngine.getPermissionsManager();
+            String username = sheetPermissionsManager.getRequestedUsername(requestNumber);
+            PermissionType permission = sheetPermissionsManager.getRequestedPermission(requestNumber);
 
-                break;
-            case REJECTED:
-                sheetEngine.denyPermissionRequest(requestNumber);
-                out.println("permission denied successfully");
-                break;
-            case PENDING:
-                out.println("permission is still pending");
-                break;
+            switch (requestStatus) {
+                case APPROVED:
+                    sheetEngine.approvePermissionRequest(requestNumber);
+                    out.println("permission approved successfully");
+
+                    break;
+                case REJECTED:
+                    sheetEngine.denyPermissionRequest(requestNumber);
+                    out.println("permission denied successfully");
+                    break;
+                case PENDING:
+                    out.println("permission is still pending");
+                    break;
+            }
+
+            userManager.addPermissionUpdate(username, new PermissionUpdate(sheetName, permission, requestStatus));
         }
 
-        userManager.addPermissionUpdate(username, new PermissionUpdate(sheetName, permission,requestStatus));
-    }
 }
