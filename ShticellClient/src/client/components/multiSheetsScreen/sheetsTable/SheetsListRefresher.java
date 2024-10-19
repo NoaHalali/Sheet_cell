@@ -23,7 +23,6 @@ public class SheetsListRefresher extends TimerTask {
     private int requestNumber;
     //private final BooleanProperty shouldUpdate;
 
-
     public SheetsListRefresher(Consumer<List<SheetDetailsDTO>> sheetsListConsumer) {
         //this.shouldUpdate = shouldUpdate;
         //this.httpRequestLoggerConsumer = httpRequestLoggerConsumer;

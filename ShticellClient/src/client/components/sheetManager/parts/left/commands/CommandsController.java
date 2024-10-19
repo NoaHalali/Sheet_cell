@@ -7,6 +7,8 @@ import client.components.sheetManager.parts.center.cellsTable.TableController;
 import client.components.sheetManager.parts.left.commands.filter.FilterPopupController;
 import client.components.sheetManager.parts.left.commands.graph.GraphController;
 import client.components.sheetManager.SheetManagerController;
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -75,43 +77,23 @@ public class CommandsController {
     @FXML private TextField yColRangeTextField;
     @FXML private Button createGraphButton;
 
-    public void InitializeCommandsController(SimpleBooleanProperty cellSelected, SimpleBooleanProperty rangeSelected,
-                                             SimpleBooleanProperty columnSelected, SimpleBooleanProperty rowSelected,SimpleBooleanProperty showWhatIfMode) {
-        setColumnWidthButton.disableProperty().bind(columnSelected.not());
-        setRowHeightButton.disableProperty().bind(rowSelected.not());
-        setColumnAlignmentButton.disableProperty().bind(columnSelected.not());
-        resetCellStyleButton.disableProperty().bind(cellSelected.not());
-        textColorPicker.disableProperty().bind(cellSelected.not());
-        backgroundColorPicker.disableProperty().bind(cellSelected.not());
-        applyTextColorButton.disableProperty().bind(cellSelected.not());
-        applyBackgroundColorButton.disableProperty().bind(cellSelected.not());
-        calculateWhatIfButton.disableProperty().bind(cellSelected.not());
-        SliderSettingsVBox.visibleProperty().bind(showWhatIfMode);
-        SliderSettingsVBox.managedProperty().bind(showWhatIfMode);
+    public void InitializeCommandsController(SimpleBooleanProperty cellSelected, SimpleBooleanProperty columnSelected,
+                                             SimpleBooleanProperty rowSelected, SimpleBooleanProperty showWhatIfMode, BooleanBinding hasEditPermission) {
 
-        setWhatIfSettingsVBox.visibleProperty().bind(showWhatIfMode.not());
-        setWhatIfSettingsVBox.managedProperty().bind(showWhatIfMode.not());
-        whatIfSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
-            handlesWhatIfSliderMove();
-        });
+        bindRowsColsStyle(columnSelected, rowSelected, hasEditPermission);
+        bindCellStyleCommands(cellSelected, hasEditPermission);
+        bindWhatIfCommands(cellSelected, showWhatIfMode);
         //sections disable in what if mode
         displaySortButton.disableProperty().bind(showWhatIfMode);
         calcValuesToFilterButton.disableProperty().bind(showWhatIfMode);
         createGraphButton.disableProperty().bind(showWhatIfMode);
-
     }
 
-    @FXML
-    public void setColumnRowWidthAction() {
-        String width = columnRowWidthTextField.getText();
-        // לוגיקה להגדרת רוחב העמודות/שורות והטיפול ב-wrap/clip
-    }
-
-    @FXML
-    public void setColumnAlignmentAction() {
-        String alignment = columnAlignmentTextField.getText();
-        // לוגיקה לבחירת יישור של התוכן בעמודה
-    }
+//    @FXML
+//    public void setColumnAlignmentAction() {
+//        String alignment = columnAlignmentTextField.getText();
+//        // לוגיקה לבחירת יישור של התוכן בעמודה
+//    }
 
     @FXML
     public void applyTextColorAction() {
@@ -155,6 +137,7 @@ public class CommandsController {
             StageUtils.showAlert("Error", e.getMessage());
         }
     }
+
     public void previewSheetDTOWithPrevStyleInPopup(SheetDTO sheet,String popUpName) throws Exception {
         Stage popupStage = new Stage();
         popupStage.setTitle(popUpName);
@@ -189,6 +172,7 @@ public class CommandsController {
         }
         return charList;
     }
+
     public void validateColsSeperatedInput(String input) throws IllegalArgumentException {
         if (input == null || input.trim().isEmpty()) {
             throw new IllegalArgumentException(
@@ -206,7 +190,6 @@ public class CommandsController {
             );
         }
     }
-
 
     @FXML
     private void OnCalcValuesToFilterButtonClicked() {
@@ -318,8 +301,6 @@ public class CommandsController {
         return filteredValues;
     }
 
-
-
     public Map<String, EffectiveValue> getStringToEffectiveValueMap(Set<EffectiveValue> values) {
         return values.stream()
                 .collect(Collectors.toMap(EffectiveValueUtils::calcValueToString, v -> v));
@@ -351,15 +332,6 @@ public class CommandsController {
                 alignment -> mainController.setColumnAlignment(alignment)  // פונקציה לעדכון יישור עמודה
         );
     }
-//
-//    @FXML
-//    private void handleCreateGraph() {
-//        int numOfColumns = mainController.getNumberOfColumns();
-//
-//        String [] columns = createColumnsArray(numOfColumns);
-//        // מראה את הדיאלוג לבחירת העמודות ליצירת הגרף
-//        dialogManager.showGraphDialog(this::createGraphFromDialog,columns);
-//    }
 
     @FXML
     private void OnCreateGraphButtonCliked()
@@ -376,15 +348,8 @@ public class CommandsController {
         }
     }
 
-
-//    private void createGraphFromDialog(String xColumn, String yColumn) {
-//        // נוודא שיש לנו GraphController ונקרא לפונקציה ליצירת הגרף
-//        GraphController graphController = new GraphController();  // אם יש דרך ליצור את זה ב-FXML, עדיף
-//        graphController.setMainController(mainController);  // העברת ה-mainController ל-GraphController
-//        graphController.createGraph(xColumn, yColumn);  // יצירת הגרף עם העמודות הנבחרות
-//    }
-@FXML
-private void handleCalculateWhatIf() {
+    @FXML
+    private void handleCalculateWhatIf() {
     try {
         double min = Double.parseDouble(whatIfMinimumTextField.getText());
         double max = Double.parseDouble(whatIfMaximumTextField.getText());
@@ -417,6 +382,7 @@ private void handleCalculateWhatIf() {
         StageUtils.showAlert("Error", e.getMessage());
     }
 }
+
     @FXML
     private void handlesWhatIfSliderMove() {
         mainController.calculateWhatIfValueForCell(whatIfSlider.getValue());
@@ -426,4 +392,42 @@ private void handleCalculateWhatIf() {
         mainController.changeWhatIfMode(false);
         mainController.showCurrentSheet();
     }
+
+    private void bindRowsColsStyle(SimpleBooleanProperty columnSelected, SimpleBooleanProperty rowSelected, BooleanBinding hasEditPermission) {
+
+        BooleanBinding columnSelectedAndHasEditPermission = Bindings.and(columnSelected, hasEditPermission);
+        BooleanBinding rowSelectedAndHasEditPermission = Bindings.and(rowSelected, hasEditPermission);
+
+        setColumnWidthButton.disableProperty().bind(columnSelectedAndHasEditPermission.not());
+        setColumnAlignmentButton.disableProperty().bind(columnSelectedAndHasEditPermission.not());
+        setRowHeightButton.disableProperty().bind(rowSelectedAndHasEditPermission.not());
+    }
+
+    private void bindCellStyleCommands(SimpleBooleanProperty cellSelected, BooleanBinding hasEditPermission) {
+
+        BooleanBinding hasEditPermissionAndCellSelected = Bindings.and(hasEditPermission,cellSelected);
+        resetCellStyleButton.disableProperty().bind(hasEditPermissionAndCellSelected.not());
+        textColorPicker.disableProperty().bind(hasEditPermissionAndCellSelected.not());
+        backgroundColorPicker.disableProperty().bind(hasEditPermissionAndCellSelected.not());
+        applyTextColorButton.disableProperty().bind(hasEditPermissionAndCellSelected.not());
+        applyBackgroundColorButton.disableProperty().bind(hasEditPermissionAndCellSelected.not());
+    }
+
+    private void bindWhatIfCommands(SimpleBooleanProperty cellSelected, SimpleBooleanProperty showWhatIfMode) {
+        calculateWhatIfButton.disableProperty().bind(cellSelected.not());
+        setWhatIfSettingsVBox.visibleProperty().bind(showWhatIfMode.not());
+        setWhatIfSettingsVBox.managedProperty().bind(showWhatIfMode.not());
+        whatIfSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
+            handlesWhatIfSliderMove();
+        });
+        SliderSettingsVBox.visibleProperty().bind(showWhatIfMode);
+        SliderSettingsVBox.managedProperty().bind(showWhatIfMode);
+    }
+
+    @FXML
+    public void setColumnRowWidthAction() {
+        String width = columnRowWidthTextField.getText();
+        // לוגיקה להגדרת רוחב העמודות/שורות והטיפול ב-wrap/clip
+    }
+
 }

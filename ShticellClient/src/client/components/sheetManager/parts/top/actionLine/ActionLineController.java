@@ -1,6 +1,7 @@
 package client.components.sheetManager.parts.top.actionLine;
 
 import client.components.sheetManager.SheetManagerController;
+import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -26,20 +27,13 @@ public class ActionLineController {
 
     private EngineImpl engine;
 
-    public void initializeActionLine(SimpleBooleanProperty cellSelected) {
-        updateCell.disableProperty().bind(cellSelected.not());
-        updateCellValueField.disableProperty().bind(cellSelected.not());
-//        updateCell.setOnAction(event -> {
-//            try {
-//                mainController.updateCellValue(updateCellValueField.getText());
-//
-//            } catch (Exception e) {
-//                throw new RuntimeException(e);
-//            }
-//
-//        });
+    public void initializeActionLine(SimpleBooleanProperty cellSelected, BooleanBinding hasEditPermission) {
+        BooleanBinding cellSelectedAndHasEditPermission = cellSelected.and(hasEditPermission);
 
+        updateCell.disableProperty().bind(cellSelectedAndHasEditPermission.not());
+        updateCellValueField.disableProperty().bind(cellSelectedAndHasEditPermission.not());
     }
+
     public void setActionLine(CellDTO cell) {
         if (cell != null) {
             // עדכון השדות בשורת הפעולה לפי פרטי התא

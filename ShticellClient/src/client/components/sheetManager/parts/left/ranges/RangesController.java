@@ -2,6 +2,7 @@ package client.components.sheetManager.parts.left.ranges;
 
 import client.components.Utils.StageUtils;
 import client.components.sheetManager.SheetManagerController;
+import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.MenuButton;
@@ -21,9 +22,14 @@ public class RangesController {
     private SheetManagerController mainController;
     private String lastSelectedRange = null; // שמירת שם הטווח שנבחר לאחרונה
 
-    public void initializeRangesController(List<String> existingRanges, SimpleBooleanProperty rangeSelected) {
+    public void initializeRangesController(List<String> existingRanges, SimpleBooleanProperty rangeSelected, BooleanBinding hasEditorPermission) {
+        BooleanBinding rangeSelectedAndHasEditorPermission = rangeSelected.and(hasEditorPermission);
+
         refreshMenuButton(existingRanges);
-        deleteRangeButton.disableProperty().bind(rangeSelected.not());
+        addRangeButton.disableProperty().bind(hasEditorPermission.not());
+        deleteRangeButton.disableProperty().bind(rangeSelectedAndHasEditorPermission.not());
+        rangeDefinitionField.disableProperty().bind(hasEditorPermission.not());
+        rangeNameField.disableProperty().bind(hasEditorPermission.not());
     }
 
     private void refreshMenuButton(List<String> ranges) {

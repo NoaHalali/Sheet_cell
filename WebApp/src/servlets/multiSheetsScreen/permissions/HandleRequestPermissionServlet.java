@@ -6,7 +6,11 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import shticell.engines.sheetEngine.SheetEngine;
+import shticell.permissions.PermissionType;
+import shticell.permissions.PermissionsManager;
 import shticell.permissions.RequestStatus;
+import shticell.users.PermissionUpdate;
+import shticell.users.UserManager;
 import utils.ServletUtils;
 
 import java.io.IOException;
@@ -44,6 +48,7 @@ public class HandleRequestPermissionServlet extends HttpServlet {
                 return;
             }
 
+
             try {
                 RequestStatus requestStatus = RequestStatus.valueOf(requestStatusStr);
                 int requestNumber = Integer.parseInt(requestNumberString);
@@ -66,11 +71,16 @@ public class HandleRequestPermissionServlet extends HttpServlet {
 
     private void handleRequestPermission(String sheetName, int requestNumber, RequestStatus requestStatus, PrintWriter out ) {
         SheetEngine sheetEngine = ServletUtils.getSheetEngineByName(sheetName, getServletContext());
+        UserManager userManager = ServletUtils.getUserManager(getServletContext());
+        PermissionsManager sheetPermissionsManager = sheetEngine.getPermissionsManager();
+        String username = sheetPermissionsManager.getRequesterUsername(requestNumber);
+        PermissionType permission = sheetPermissionsManager.getPermissionForUser(username);
 
         switch (requestStatus){
             case APPROVED:
                 sheetEngine.approvePermissionRequest(requestNumber);
                 out.println("permission approved successfully");
+
                 break;
             case REJECTED:
                 sheetEngine.denyPermissionRequest(requestNumber);
@@ -81,14 +91,6 @@ public class HandleRequestPermissionServlet extends HttpServlet {
                 break;
         }
 
-//        if (isApproved) {
-//            sheetEngine.approvePermissionRequest(requestNumber);
-//            //sheetEngine.
-//            out.println("permission approved successfully");
-//
-//        }else{
-//            sheetEngine.denyPermissionRequest(requestNumber);
-//            out.println("permission denied successfully");
-//        }
+        userManager.addPermissionUpdate(username, new PermissionUpdate(sheetName, permission,requestStatus));
     }
 }

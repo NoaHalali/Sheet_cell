@@ -5,6 +5,7 @@ import client.components.multiSheetsScreen.MultiSheetsScreenController;
 import client.components.sheetManager.SheetManagerController;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
+import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -124,11 +125,11 @@ public class AppController {
 //        httpStatusComponentController.addHttpStatusLine(line);
 //    }
 
-    public void switchToSheetManager(String sheetName, ObjectProperty<PermissionType> permissionTypeProperty) {
+    public void switchToSheetManager(String sheetName, BooleanBinding hasEditPermission) {
         Platform.runLater(() -> {
             //sheetManagerController.setActive();
             setMainPanelTo(sheetManagerComponent);
-            sheetManagerController.initializeComponentsAfterLoad(sheetName, permissionTypeProperty);
+            sheetManagerController.initializeComponentsAfterLoad(sheetName, hasEditPermission);
         });
     }
 

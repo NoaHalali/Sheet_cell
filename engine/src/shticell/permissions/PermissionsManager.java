@@ -36,6 +36,7 @@ public class PermissionsManager {
         request.setRequestStatus(RequestStatus.APPROVED);
 
         usersPermissions.put(username,permission);
+
     }
 
     public void denyPermissionRequest(int permissionNumber) //Owner call this method
@@ -63,8 +64,9 @@ public class PermissionsManager {
         return usersPermissions.get(username);
     }
 
-
-
+    public String getRequesterUsername(int requestNumber) {
+        return requestsHistory.get(requestNumber-1).getUsername();
+    }
 
 
     //TODO: if someone can be shown multiple times, List insdead of Map, and delete the if in line 30

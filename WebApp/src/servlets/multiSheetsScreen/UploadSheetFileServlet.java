@@ -36,11 +36,6 @@ public class UploadSheetFileServlet extends HttpServlet  {
         StringBuilder fileStringContent = new StringBuilder();
 
         for (Part part : parts) {
-            //printPart(part, out);
-
-            //to write the content of the file to an actual file in the system (will be created at c:\samplefile)
-            //part.write("samplefile");
-
             //to write the content of the file to a string
             fileStringContent.append(readFromInputStream(part.getInputStream()));
             streams.add(part.getInputStream()); //new

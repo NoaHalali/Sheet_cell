@@ -286,4 +286,9 @@ public class SheetEngineImpl implements SheetEngine {
     public List<UserRequestDTO> getRequestsDTOList() {
         return permissionsManager.getRequestsDTOList();
     }
+
+    @Override
+    public PermissionsManager getPermissionsManager() { //TODO: maybe not needed
+        return permissionsManager;
+    }
 }

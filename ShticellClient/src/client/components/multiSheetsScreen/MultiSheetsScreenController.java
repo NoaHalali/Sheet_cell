@@ -47,7 +47,7 @@ public class MultiSheetsScreenController {
 
     private SimpleStringProperty selectedSheetName ;
     //private PermissionType permissionForSelectedSheet;
-    private ObjectProperty<PermissionType> permissionForSelectedSheet = new SimpleObjectProperty<>(PermissionType.NONE);;
+    private ObjectProperty<PermissionType> permissionForSelectedSheet = new SimpleObjectProperty<>(PermissionType.NONE);
 
     public BooleanBinding hasOwnerPermission = Bindings.createBooleanBinding(() ->
                     permissionForSelectedSheet.get() == PermissionType.OWNER,
@@ -103,7 +103,9 @@ public class MultiSheetsScreenController {
 
     public void switchToSheetManager() {
         //String selectedSheetName = sheetsTableController.getSelectedSheetName();
-        mainController.switchToSheetManager(selectedSheetName.get(), permissionForSelectedSheet);
+        //mainController.switchToSheetManager(selectedSheetName.get(), permissionForSelectedSheet);
+        BooleanBinding hasEditPermission = Bindings.or(hasOwnerPermission, hasWriterPermission);
+        mainController.switchToSheetManager(selectedSheetName.get(), hasEditPermission);
     }
 
     public void setActive() {

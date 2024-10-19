@@ -14,7 +14,6 @@ import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.*;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -28,18 +27,13 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import parts.cell.CellDTO;
 import parts.SheetDTO;
-import shticell.engines.engine.Engine;
 import shticell.engines.sheetEngine.SheetEngine;
-import shticell.engines.sheetEngine.SheetEngineImpl;
 import shticell.permissions.PermissionType;
-import shticell.sheets.sheet.Sheet;
 import shticell.sheets.sheet.parts.cell.coordinate.Coordinate;
-import shticell.sheets.sheet.parts.cell.coordinate.CoordinateImpl;
 import shticell.sheets.sheet.parts.cell.expression.effectiveValue.EffectiveValue;
 
 
 import java.io.File;
-import java.io.IOException;
 import java.util.*;
 import java.util.function.Consumer;
 
@@ -94,7 +88,7 @@ public class SheetManagerController {
             //engine = new SheetEngine();
             setMainControllerForComponents();
             initializeProperties();
-            bindUIComponents();
+            //bindUIComponents();
         }
     }
 
@@ -119,36 +113,52 @@ public class SheetManagerController {
         showWhatIfMode = new SimpleBooleanProperty(false);
     }
 
-    private void bindUIComponents() {
-        BooleanBinding whatIfAndFileBinding = Bindings.or(fileSelectedProperty.not(), showWhatIfMode);
+//    private void bindUIComponents() {
+//        BooleanBinding whatIfAndFileBinding = Bindings.or(fileSelectedProperty.not(), showWhatIfMode);
+//
+//        table.disableProperty().bind(fileSelectedProperty.not());
+//        // actionLine.disableProperty().bind(fileSelectedProperty.not());
+//        versionSelector.disableProperty().bind(fileSelectedProperty.not());
+//        commands.disableProperty().bind(fileSelectedProperty.not());
+//        //ranges.disableProperty().bind(fileSelectedProperty.not());
+//        currentVersionLabel.textProperty().bind(versionProperty.asString());
+//
+//        //what to disable in whatIfMode
+//        actionLine.disableProperty().bind(whatIfAndFileBinding);
+//        ranges.disableProperty().bind(whatIfAndFileBinding);
+//    }
 
-        table.disableProperty().bind(fileSelectedProperty.not());
-        // actionLine.disableProperty().bind(fileSelectedProperty.not());
-        versionSelector.disableProperty().bind(fileSelectedProperty.not());
-        commands.disableProperty().bind(fileSelectedProperty.not());
-        //ranges.disableProperty().bind(fileSelectedProperty.not());
+    private void bindUIComponents(BooleanBinding hasEditPermission) { //TODO - maybe need only the what if
+        //BooleanBinding whatIfAndFileBinding = Bindings.or(fileSelectedProperty.not(), showWhatIfMode);
+
+//        table.disableProperty().bind(fileSelectedProperty.not().or(hasEditPermission.not()));
+//        versionSelector.disableProperty().bind(fileSelectedProperty.not());
+//        commands.disableProperty().bind(fileSelectedProperty.not());
         currentVersionLabel.textProperty().bind(versionProperty.asString());
 
-        //what to disable in whatIfMode
-        actionLine.disableProperty().bind(whatIfAndFileBinding);
-        ranges.disableProperty().bind(whatIfAndFileBinding);
+        // טווח השבתה במצב What-If והקובץ
+        actionLine.disableProperty().bind(showWhatIfMode);
+        ranges.disableProperty().bind(showWhatIfMode);
+
+        // אפשר להוסיף Bindings נוספים לכפתורים או רכיבים אחרים כאן
     }
 
-    public void initializeComponentsAfterLoad(String sheetName, ObjectProperty<PermissionType> permissionTypeProperty) {
+
+    public void initializeComponentsAfterLoad(String sheetName, BooleanBinding hasEditPermission) {
 
         clearSelectionStates();
         fileSelectedProperty.set(true);
-
         requestsManager = new RequestsManager(sheetName);
+        bindUIComponents(hasEditPermission);
 
 // שולחים את הבקשה לשרת ומעבירים את ה-Consumers המתאימים
         requestsManager.getSheetDTO(sheet -> {
             // פעולה במקרה של הצלחה: עדכון ה-UI
             tableController.initializeGrid(sheet);
             versionSelectorController.initializeVersionSelector(sheet.getVersion());
-            actionLineController.initializeActionLine(cellSelected);
-            commandsController.InitializeCommandsController(cellSelected, rangeSelected, columnSelected, rowSelected, showWhatIfMode);
-            rangesController.initializeRangesController(sheet.getRangesNames(), rangeSelected);
+            actionLineController.initializeActionLine(cellSelected, hasEditPermission);
+            commandsController.InitializeCommandsController(cellSelected, columnSelected, rowSelected, showWhatIfMode, hasEditPermission);
+            rangesController.initializeRangesController(sheet.getRangesNames(), rangeSelected, hasEditPermission);
             versionProperty.set(1);
 
         }, errorMessage -> {

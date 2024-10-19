@@ -6,6 +6,7 @@ import parts.cell.CellDTO;
 import parts.permission.UserRequestDTO;
 import shticell.exceptions.SheetNotLoadedException;
 import shticell.permissions.PermissionType;
+import shticell.permissions.PermissionsManager;
 import shticell.sheets.sheet.Sheet;
 import shticell.sheets.sheet.parts.cell.coordinate.Coordinate;
 import shticell.sheets.sheet.parts.cell.expression.effectiveValue.EffectiveValue;
@@ -75,6 +76,8 @@ public interface SheetEngine {
     public void denyPermissionRequest(int requestNumber) throws IllegalArgumentException ;
 
     public List<UserRequestDTO> getRequestsDTOList() throws IllegalArgumentException;
+
+    public PermissionsManager getPermissionsManager();
 }
 
 

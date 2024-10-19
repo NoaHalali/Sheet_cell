@@ -24,31 +24,10 @@ public class LoadSheetFilesController {
     public void loadFileButtonClicked() throws Exception {
 
         File file = pickFile();
-        uploadFile(file);
-        //testSync();
-        //test1Async();
-        //testAsync(file);
+        if (file != null) {
+            uploadFile(file);
+        }
     }
-
-    private void testSync() throws IOException {
-        OkHttpClient client = new OkHttpClient().newBuilder()
-                .build();
-        MediaType mediaType = MediaType.parse("text/plain");
-        RequestBody body = new MultipartBody.Builder().setType(MultipartBody.FORM)
-                .addFormDataPart("file","/C:/Users/noa40/OneDrive - The Academic College of Tel-Aviv Jaffa - MTA/שנה ב/קורסי בחירה/פיתוח תוכנה מבוסס גאווה/מטלות/שטיסל/shticell/engine/src/shticell/files/resources/grades.xml",
-                        RequestBody.create(MediaType.parse("application/octet-stream"),
-                                new File("/C:/Users/noa40/OneDrive - The Academic College of Tel-Aviv Jaffa - MTA/שנה ב/קורסי בחירה/פיתוח תוכנה מבוסס גאווה/מטלות/שטיסל/shticell/engine/src/shticell/files/resources/grades.xml")))
-                .build();
-        Request request = new Request.Builder()
-                .url(UPLOAD_FILE)
-                .method("POST", body)
-                .build();
-        Call call = client.newCall(request);
-        Response response = call.execute();
-        System.out.println(response.body().string());
-        //Response response = client.newCall(request).execute();
-    }
-
 
     private void uploadFile(File file) {
         OkHttpClient client = new OkHttpClient().newBuilder()
