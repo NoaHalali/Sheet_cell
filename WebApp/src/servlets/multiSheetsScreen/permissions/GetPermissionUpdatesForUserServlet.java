@@ -9,9 +9,10 @@ import shticell.users.PermissionUpdate;
 import shticell.users.UserManager;
 import utils.ServletUtils;
 import utils.SessionUtils;
-
+import java.time.LocalTime;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Random;
 
 @WebServlet("/getPermissionUpdatesForUser")
 public class GetPermissionUpdatesForUserServlet extends HttpServlet {
@@ -19,6 +20,7 @@ public class GetPermissionUpdatesForUserServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         //returning JSON objects, not HTML
         response.setContentType("application/json");
+        Random numberGenerator = new Random();
         try (PrintWriter out = response.getWriter()) {
 
             String userName = SessionUtils.getUsername(request);
@@ -29,6 +31,7 @@ public class GetPermissionUpdatesForUserServlet extends HttpServlet {
             if (update != null) {
                 // יש עדכון - מחזירים את ה-JSON
                 response.setStatus(HttpServletResponse.SC_OK);
+                //System.out.println(getUpdateMessageFromPermissionUpdate(update,numberGenerator));
                 Gson gson = new Gson();
                 String json = gson.toJson(update);
                 out.println(json);
@@ -43,5 +46,13 @@ public class GetPermissionUpdatesForUserServlet extends HttpServlet {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             response.getWriter().write("An error occurred: " + e.getMessage());
         }
+    }
+    public String getUpdateMessageFromPermissionUpdate(PermissionUpdate permissionUpdate, Random numberGenerator) {
+
+        LocalTime currentTime = LocalTime.now();
+        String message ="Update: permission: " + permissionUpdate.getPermission() +", for sheet: " + permissionUpdate.getSheetName()
+                + ", has been changed to: " + permissionUpdate.getRequestStatus() +" at: "+currentTime+ "random num :" +numberGenerator;
+        return message;
+
     }
 }
