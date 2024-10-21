@@ -38,6 +38,7 @@ public class GetColumnDataInRangeServlet extends HttpServlet {
         try {
             // קבלת ה-SheetEngine והביצוע בפועל
             SheetEngine sheetEngine = ServletUtils.getSheetEngineByName(sheetName, getServletContext());
+            ServletUtils.checkIfClientSheetVersionIsUpdated(request, sheetEngine);
             List<CellDTO> columnData = sheetEngine.getColumnDataInRange(rangeDefinition);
 
             // המרת התוצאה ל-JSON והחזרתה

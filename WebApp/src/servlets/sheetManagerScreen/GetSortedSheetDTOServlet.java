@@ -61,12 +61,9 @@ public class GetSortedSheetDTOServlet extends HttpServlet {
             // קבלת ה-SheetEngine לצורך ביצוע הפעולה
             SheetEngine sheetEngine = ServletUtils.getSheetEngineByName(sheetName, getServletContext());
 
-
-
             String userVersion = SessionUtils.getViewedSheetVersion(request);
             sheetEngine.checkIfVersionIsUpdated(userVersion);
-
-
+            ServletUtils.checkIfClientSheetVersionIsUpdated(request, sheetEngine);
 
             // קבלת ה-SheetDTO המסודר
             SheetDTO sortedSheet = sheetEngine.getSortedSheetDTO(rangeDefinition, columnsToSortBy);

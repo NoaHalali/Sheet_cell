@@ -39,9 +39,10 @@ public class GetFilteredSheetDTOFromMultipleColsServlet extends HttpServlet {
         try {
             // קבלת SheetEngine לצורך ביצוע הסינון
             String sheetName = request.getParameter("sheetName");
-            SheetEngine sheetEngine = ServletUtils.getSheetEngineByName(sheetName, getServletContext());
 
-            // ביצוע הסינון לפי הערכים הנבחרים והטווח
+            SheetEngine sheetEngine = ServletUtils.getSheetEngineByName(sheetName, getServletContext());
+            ServletUtils.checkIfClientSheetVersionIsUpdated(request, sheetEngine);
+
             SheetDTO filteredSheet = sheetEngine.getFilteredSheetDTOFromMultipleCols(selectedValues, rangeDefinition);
 
             // החזרת התוצאה כ-JSON

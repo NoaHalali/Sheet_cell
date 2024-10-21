@@ -19,7 +19,7 @@ import java.util.Properties;
 public class SetEngineInWhatIfMode extends HttpServlet {
 
     @Override
-    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPut(HttpServletRequest request, HttpServletResponse resp) throws ServletException, IOException {
         // Set the response type to JSON
         resp.setContentType("application/json");
         resp.setCharacterEncoding("UTF-8");
@@ -27,7 +27,7 @@ public class SetEngineInWhatIfMode extends HttpServlet {
 
         // Load parameters from the request body using Properties
         Properties prop = new Properties();
-        try (InputStream inputStream = req.getInputStream()) {
+        try (InputStream inputStream = request.getInputStream()) {
             prop.load(inputStream);
         }
 
@@ -42,17 +42,11 @@ public class SetEngineInWhatIfMode extends HttpServlet {
             return;
         }
 
-        // Process the request and add the range using the engine
         try {
-            // Call the engine to add the range and get the updated list of ranges
-             setSubEngineInWhatIfMode(sheetName,cellID);
+             setSubEngineInWhatIfMode(sheetName,cellID, request);
 
-            // Convert the list of range names to JSON and send it as the response
             Gson gson = new Gson();
-            //String json = gson.toJson(rangeNames);
-            //out.println(json);  // This is the only valid JSON response
 
-            // Set the response status as successful (optional, since 200 OK is the default)
             resp.setStatus(HttpServletResponse.SC_OK);
 
         } catch (IllegalArgumentException e) {
@@ -66,8 +60,9 @@ public class SetEngineInWhatIfMode extends HttpServlet {
         }
     }
 
-    private void setSubEngineInWhatIfMode(String sheetName, String cellID) {
+    private void setSubEngineInWhatIfMode(String sheetName, String cellID, HttpServletRequest request) {
         SheetEngine sheetEngine = ServletUtils.getSheetEngineByName(sheetName, getServletContext());
+        ServletUtils.checkIfClientSheetVersionIsUpdated(request, sheetEngine);
         sheetEngine.setEngineInWhatIfMode(CoordinateImpl.parseCoordinate(cellID));
     }
 

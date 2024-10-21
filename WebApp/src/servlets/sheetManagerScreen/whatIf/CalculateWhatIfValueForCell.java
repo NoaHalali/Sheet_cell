@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import parts.SheetDTO;
 import shticell.engines.sheetEngine.SheetEngine;
+import shticell.exceptions.OutdatedSheetVersionException;
 import shticell.sheets.sheet.parts.cell.coordinate.CoordinateImpl;
 import utils.ServletUtils;
 
@@ -18,15 +19,15 @@ import java.util.Properties;
 @WebServlet("/calculateWhatIfValueForCell")
 public class CalculateWhatIfValueForCell extends HttpServlet {
     @Override
-    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // Set the response type to JSON
-        resp.setContentType("application/json");
-        resp.setCharacterEncoding("UTF-8");
-        PrintWriter out = resp.getWriter();
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        PrintWriter out = response.getWriter();
 
         // Load parameters from the request body using Properties
         Properties prop = new Properties();
-        try (InputStream inputStream = req.getInputStream()) {
+        try (InputStream inputStream = request.getInputStream()) {
             prop.load(inputStream);
         }
 
@@ -37,8 +38,8 @@ public class CalculateWhatIfValueForCell extends HttpServlet {
 
         // Validate parameters
         if (sheetName == null || valueSTR == null) {
-            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            resp.getWriter().write("{\"error\": \"Missing sheet Name or value\"}");
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            response.getWriter().write("{\"error\": \"Missing sheet Name or value\"}");
             return;
         }
         double value = Double.parseDouble(valueSTR);
@@ -46,7 +47,9 @@ public class CalculateWhatIfValueForCell extends HttpServlet {
         // Process the request and add the range using the engine
         try {
             // Call the engine to add the range and get the updated list of ranges
-            SheetDTO sheet = calculateWhatIfValueForCell(sheetName,value);
+            SheetEngine sheetEngine = ServletUtils.getSheetEngineByName(sheetName, getServletContext());
+            ServletUtils.checkIfClientSheetVersionIsUpdated(request, sheetEngine);
+            SheetDTO sheet = sheetEngine.calculateWhatIfValueForCell(value);
 
             // Convert the list of range names to JSON and send it as the response
             Gson gson = new Gson();
@@ -54,22 +57,23 @@ public class CalculateWhatIfValueForCell extends HttpServlet {
             out.println(json);  // This is the only valid JSON response
 
             // Set the response status as successful (optional, since 200 OK is the default)
-            resp.setStatus(HttpServletResponse.SC_OK);
+            response.setStatus(HttpServletResponse.SC_OK);
 
-        } catch (IllegalArgumentException e) {
+        }
+        catch (OutdatedSheetVersionException e) {
+            // Handle outdated sheet version error
+            response.setStatus(HttpServletResponse.SC_CONFLICT);
+            response.getWriter().write("{\"error\": \"Failed to add range: " + e.getMessage() + "\"}");
+        }
+        catch (IllegalArgumentException e) {
             // Handle invalid input error
-            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            resp.getWriter().write("{\"error\": \"Failed to add range: " + e.getMessage() + "\"}");
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            response.getWriter().write("{\"error\": \"Failed to add range: " + e.getMessage() + "\"}");
         } catch (Exception e) {
             // Handle server error
-            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            resp.getWriter().write("{\"error\": \"Failed to add range: " + e.getMessage() + "\"}");
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.getWriter().write("{\"error\": \"Failed to add range: " + e.getMessage() + "\"}");
         }
-    }
-
-    private SheetDTO calculateWhatIfValueForCell(String sheetName, Double value) throws ServletException, IOException {
-        SheetEngine sheetEngine = ServletUtils.getSheetEngineByName(sheetName, getServletContext());
-        return sheetEngine.calculateWhatIfValueForCell(value);
     }
 
 }

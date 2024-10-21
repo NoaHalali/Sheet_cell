@@ -2,6 +2,7 @@ package utils;
 
 
 import shticell.engines.sheetEngine.SheetEngine;
+import shticell.exceptions.OutdatedSheetVersionException;
 import shticell.files.FileManager;
 import shticell.sheets.manager.MultiSheetEngineManager;
 import jakarta.servlet.ServletContext;
@@ -58,6 +59,11 @@ public class ServletUtils {
 	public static SheetEngine getSheetEngineByName(String sheetName, ServletContext servletContext) {
 		MultiSheetEngineManager engineManager = getMultiSheetEngineManager(servletContext);
 		return engineManager.getSheetEngine(sheetName);
+	}
+
+	public static void checkIfClientSheetVersionIsUpdated(HttpServletRequest request, SheetEngine sheetEngine) throws OutdatedSheetVersionException {
+		String userVersion = SessionUtils.getViewedSheetVersion(request);
+		sheetEngine.checkIfVersionIsUpdated(userVersion);
 	}
 
 

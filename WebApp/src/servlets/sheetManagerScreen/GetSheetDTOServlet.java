@@ -49,7 +49,6 @@ public class GetSheetDTOServlet extends HttpServlet {
                 return;
             }
 
-
             request.getSession(true).setAttribute(USER_VIEWED_SHEET_VERSION, sheetDTO.getVersion()+"");//מעדכנים את הגרסה  בSESSION
 
             // המרת ה-sheetDTO ל-JSON
@@ -67,12 +66,5 @@ public class GetSheetDTOServlet extends HttpServlet {
 
         return sheetEngine.getCurrentSheetDTO();
     }
-
-//    }// זו רק דוגמה איך לחלץ את ה-SheetDTO לפי השם. תצטרך להתאים את השיטה הזו לצרכים שלך.
-//    private SheetDTO getSheetDTOByName(String sheetName) {
-//        MultiSheetEngineManager engineManager = ServletUtils.getMultiSheetEngineManager(getServletContext());
-//        SheetEngine sheetEngine = engineManager.getSheetEngine(sheetName);
-//        return sheetEngine.getCurrentSheetDTO();
-//    }
 
 }

@@ -40,6 +40,7 @@ public class UpdateCellServlet extends HttpServlet {
                 isUpdated = updateCellInSheet(sheetName, coordinate, newValue,request);
 
 
+
             } catch (Exception e) {
                 // במקרה שנזרקה שגיאה, נחזיר שגיאת שרת
                 response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
@@ -66,6 +67,8 @@ public class UpdateCellServlet extends HttpServlet {
 
     private boolean updateCellInSheet(String sheetName, Coordinate coordinate, String newValue,HttpServletRequest request) throws Exception {
         SheetEngine sheetEngine = ServletUtils.getSheetEngineByName(sheetName, getServletContext());
+        ServletUtils.checkIfClientSheetVersionIsUpdated(request, sheetEngine);
+
         boolean isUpdated= sheetEngine.updateCellValue(newValue, coordinate);
         if(isUpdated) {
             int version = sheetEngine.getCurrentVersion();

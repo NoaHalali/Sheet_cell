@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import shticell.engines.sheetEngine.SheetEngine;
+import shticell.exceptions.OutdatedSheetVersionException;
 import shticell.sheets.sheet.parts.cell.expression.effectiveValue.EffectiveValue;
 import utils.EffectiveValueSerializer;
 import utils.ServletUtils;
@@ -58,11 +59,7 @@ public class GetDistinctValuesOfMultipleColsInRangeServlet extends HttpServlet {
         }
 
         try {
-            // קבלת SheetEngine לצורך ביצוע הפעולה
-            SheetEngine sheetEngine = ServletUtils.getSheetEngineByName(sheetName, getServletContext());
-            String userRequest = SessionUtils.getViewedSheetVersion(request);
-            sheetEngine.checkIfVersionIsUpdated(userRequest);
-            Map<String, Set<EffectiveValue>> distinctValuesMap = sheetEngine.getDistinctValuesOfMultipleColsInRange(columnsToSortBy, rangeDefinition);
+            Map<String, Set<EffectiveValue>> distinctValuesMap = getDistinctValuesOfMultipleColsInRange(request, sheetName, columnsToSortBy, rangeDefinition);
 
             // המרת התוצאה ל-JSON תוך שימוש ב-EffectiveValueSerializer
             Gson gson = new GsonBuilder()
@@ -75,9 +72,27 @@ public class GetDistinctValuesOfMultipleColsInRangeServlet extends HttpServlet {
             out.print(jsonResponse);
             out.flush();
 
-        } catch (Exception e) {
+        }
+        catch (OutdatedSheetVersionException e) {
+            response.setStatus(HttpServletResponse.SC_CONFLICT);
+            response.getWriter().write("{\"error\": \"Sheet version is outdated\"}");
+        }
+        catch (Exception e) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             response.getWriter().write("{\"error\": \"An error occurred: " + e.getMessage() + "\"}");
         }
     }
+
+    private Map<String, Set<EffectiveValue>> getDistinctValuesOfMultipleColsInRange(HttpServletRequest request, String sheetName,
+                                                                                    List<Character> columnsToSortBy, String rangeDefinition)
+            throws OutdatedSheetVersionException
+    {
+
+        SheetEngine sheetEngine = ServletUtils.getSheetEngineByName(sheetName, getServletContext());
+        ServletUtils.checkIfClientSheetVersionIsUpdated(request, sheetEngine);
+        Map<String, Set<EffectiveValue>> distinctValuesMap = sheetEngine.getDistinctValuesOfMultipleColsInRange(columnsToSortBy, rangeDefinition);
+        return distinctValuesMap;
+    }
+
+
 }
