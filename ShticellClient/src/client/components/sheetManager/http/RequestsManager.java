@@ -453,7 +453,6 @@ public class RequestsManager {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 if (response.isSuccessful()) {
-                    System.out.println("what iffffffffffffffffffffffffffffffffffffffffff");
                     Platform.runLater(() -> onSuccess.accept(null));
                 } else {
                     String errorMessage = "Unknown error";

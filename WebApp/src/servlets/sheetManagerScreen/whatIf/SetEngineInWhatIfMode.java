@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import shticell.engines.sheetEngine.SheetEngine;
+import shticell.exceptions.OutdatedSheetVersionException;
 import shticell.sheets.sheet.parts.cell.coordinate.CoordinateImpl;
 import utils.ServletUtils;
 
@@ -60,7 +61,7 @@ public class SetEngineInWhatIfMode extends HttpServlet {
         }
     }
 
-    private void setSubEngineInWhatIfMode(String sheetName, String cellID, HttpServletRequest request) {
+    private void setSubEngineInWhatIfMode(String sheetName, String cellID, HttpServletRequest request)throws OutdatedSheetVersionException {
         SheetEngine sheetEngine = ServletUtils.getSheetEngineByName(sheetName, getServletContext());
         ServletUtils.checkIfClientSheetVersionIsUpdated(request, sheetEngine);
         sheetEngine.setEngineInWhatIfMode(CoordinateImpl.parseCoordinate(cellID));

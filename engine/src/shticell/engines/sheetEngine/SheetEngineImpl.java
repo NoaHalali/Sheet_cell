@@ -27,7 +27,7 @@ public class SheetEngineImpl implements SheetEngine {
     private String owner;
     private final PermissionsManager permissionsManager;
     private static final String SHEET_NOT_LOADED_MESSAGE = "Sheet is not loaded. Please load a sheet before attempting to access it.";
-    private static final String OUTDATED_SHEET_VERSION_MESSAGE ="You are currently viewing an outdated version of the sheet. To make updates, please refresh to the latest version."
+    private static final String OUTDATED_SHEET_VERSION_MESSAGE ="You are currently viewing an outdated version of the sheet. To make updates, please refresh to the latest version.";
     public Sheet whatIfSheet = null;
     public Coordinate whatIfCSelectedCoordinate = null;
 
