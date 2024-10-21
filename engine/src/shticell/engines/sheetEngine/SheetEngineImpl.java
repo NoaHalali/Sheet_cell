@@ -303,7 +303,7 @@ public class SheetEngineImpl implements SheetEngine {
         int sheetVersion = getCurrentVersion();
         String sheetVersionStr=sheetVersion+"";
         if (!userVersionStr.equals(sheetVersionStr)) {
-            throw new SheetNotLoadedException(OUTDATED_SHEET_VERSION_MESSAGE);
+            throw new OutdatedSheetVersionException(OUTDATED_SHEET_VERSION_MESSAGE);
         }
     }
 }
