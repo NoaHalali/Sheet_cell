@@ -2,7 +2,9 @@ package constant;
 
 public class Constants {
     public static final String USERNAME = "username";
-    public static final String SHEETNAME = "sheetName";
+    public static final String SHEET_NAME = "sheetName";
+    public static final String USER_VIEWED_SHEET_VERSION = "UserViewedSheetVersion";
+    public static final String USER_SHEET_ID = "UserSheetId";
     public static final String USER_NAME_ERROR = "username_error";
 
     public static final String CHAT_PARAMETER = "userstring";

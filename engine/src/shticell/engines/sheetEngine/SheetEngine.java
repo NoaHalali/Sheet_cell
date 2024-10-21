@@ -4,6 +4,7 @@ import parts.SheetDTO;
 import parts.SheetDetailsDTO;
 import parts.cell.CellDTO;
 import parts.permission.UserRequestDTO;
+import shticell.exceptions.OutdatedSheetVersionException;
 import shticell.exceptions.SheetNotLoadedException;
 import shticell.permissions.PermissionType;
 import shticell.permissions.PermissionsManager;
@@ -78,6 +79,10 @@ public interface SheetEngine {
     public List<UserRequestDTO> getRequestsDTOList() throws IllegalArgumentException;
 
     public PermissionsManager getPermissionsManager();
+
+    public int getCurrentVersion();
+
+    public void checkIfVersionIsUpdated(String versionStr) throws OutdatedSheetVersionException;
 }
 
 

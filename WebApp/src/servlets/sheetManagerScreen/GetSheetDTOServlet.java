@@ -17,6 +17,9 @@ import utils.ServletUtils;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+import static constant.Constants.USERNAME;
+import static constant.Constants.USER_VIEWED_SHEET_VERSION;
+
 @WebServlet("/getSheetDTO")
 public class GetSheetDTOServlet extends HttpServlet {
 
@@ -46,6 +49,9 @@ public class GetSheetDTOServlet extends HttpServlet {
                 return;
             }
 
+
+            request.getSession(true).setAttribute(USER_VIEWED_SHEET_VERSION, sheetDTO.getVersion()+"");//מעדכנים את הגרסה  בSESSION
+
             // המרת ה-sheetDTO ל-JSON
             String json = gson.toJson(sheetDTO);
             out.println(json);
@@ -58,6 +64,7 @@ public class GetSheetDTOServlet extends HttpServlet {
     // זו רק דוגמה איך לחלץ את ה-SheetDTO לפי השם. תצטרך להתאים את השיטה הזו לצרכים שלך.
     private SheetDTO getSheetDTOByName(String sheetName) {
         SheetEngine sheetEngine = ServletUtils.getSheetEngineByName(sheetName, getServletContext());
+
         return sheetEngine.getCurrentSheetDTO();
     }
 

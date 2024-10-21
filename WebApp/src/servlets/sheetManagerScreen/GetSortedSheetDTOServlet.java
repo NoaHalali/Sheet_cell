@@ -9,9 +9,12 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import parts.SheetDTO;
 import shticell.engines.sheetEngine.SheetEngine;
+import shticell.exceptions.OutdatedSheetVersionException;
 import shticell.sheets.sheet.parts.cell.expression.effectiveValue.EffectiveValue;
 import utils.EffectiveValueSerializer;
 import utils.ServletUtils;
+import utils.SessionUtils;
+
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -24,6 +27,7 @@ public class GetSortedSheetDTOServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
+
 
         String sheetName = request.getParameter("sheetName");
         String rangeDefinition = request.getParameter("rangeDefinition");
@@ -57,6 +61,13 @@ public class GetSortedSheetDTOServlet extends HttpServlet {
             // קבלת ה-SheetEngine לצורך ביצוע הפעולה
             SheetEngine sheetEngine = ServletUtils.getSheetEngineByName(sheetName, getServletContext());
 
+
+
+            String userVersion = SessionUtils.getViewedSheetVersion(request);
+            sheetEngine.checkIfVersionIsUpdated(userVersion);
+
+
+
             // קבלת ה-SheetDTO המסודר
             SheetDTO sortedSheet = sheetEngine.getSortedSheetDTO(rangeDefinition, columnsToSortBy);
 
@@ -71,7 +82,11 @@ public class GetSortedSheetDTOServlet extends HttpServlet {
             out.print(jsonResponse);
             out.flush();
 
-        } catch (Exception e) {
+        }catch (OutdatedSheetVersionException e){
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            response.getWriter().write("{\"OutdatedSheetVersion\":"+e.getMessage()+ "\"}");
+        }
+        catch (Exception e) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             response.getWriter().write("{\"error\": \"An error occurred: " + e.getMessage() + "\"}");
         }

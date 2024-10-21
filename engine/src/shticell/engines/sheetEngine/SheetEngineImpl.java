@@ -2,6 +2,7 @@ package shticell.engines.sheetEngine;
 
 import parts.SheetDetailsDTO;
 import parts.permission.UserRequestDTO;
+import shticell.exceptions.OutdatedSheetVersionException;
 import shticell.exceptions.SheetNotLoadedException;
 import shticell.permissions.PermissionType;
 import shticell.permissions.PermissionsManager;
@@ -26,6 +27,7 @@ public class SheetEngineImpl implements SheetEngine {
     private String owner;
     private final PermissionsManager permissionsManager;
     private static final String SHEET_NOT_LOADED_MESSAGE = "Sheet is not loaded. Please load a sheet before attempting to access it.";
+    private static final String OUTDATED_SHEET_VERSION_MESSAGE ="You are currently viewing an outdated version of the sheet. To make updates, please refresh to the latest version."
     public Sheet whatIfSheet = null;
     public Coordinate whatIfCSelectedCoordinate = null;
 
@@ -290,5 +292,18 @@ public class SheetEngineImpl implements SheetEngine {
     @Override
     public PermissionsManager getPermissionsManager() { //TODO: maybe not needed
         return permissionsManager;
+    }
+
+    @Override
+    public int getCurrentVersion(){
+        return currentSheet.getVersion() ;
+    }
+    @Override
+    public void checkIfVersionIsUpdated(String userVersionStr) throws OutdatedSheetVersionException {
+        int sheetVersion = getCurrentVersion();
+        String sheetVersionStr=sheetVersion+"";
+        if (!userVersionStr.equals(sheetVersionStr)) {
+            throw new SheetNotLoadedException(OUTDATED_SHEET_VERSION_MESSAGE);
+        }
     }
 }

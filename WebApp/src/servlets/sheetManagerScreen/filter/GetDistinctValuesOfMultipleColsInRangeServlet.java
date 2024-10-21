@@ -11,6 +11,7 @@ import shticell.engines.sheetEngine.SheetEngine;
 import shticell.sheets.sheet.parts.cell.expression.effectiveValue.EffectiveValue;
 import utils.EffectiveValueSerializer;
 import utils.ServletUtils;
+import utils.SessionUtils;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -59,6 +60,8 @@ public class GetDistinctValuesOfMultipleColsInRangeServlet extends HttpServlet {
         try {
             // קבלת SheetEngine לצורך ביצוע הפעולה
             SheetEngine sheetEngine = ServletUtils.getSheetEngineByName(sheetName, getServletContext());
+            String userRequest = SessionUtils.getViewedSheetVersion(request);
+            sheetEngine.checkIfVersionIsUpdated(userRequest);
             Map<String, Set<EffectiveValue>> distinctValuesMap = sheetEngine.getDistinctValuesOfMultipleColsInRange(columnsToSortBy, rangeDefinition);
 
             // המרת התוצאה ל-JSON תוך שימוש ב-EffectiveValueSerializer

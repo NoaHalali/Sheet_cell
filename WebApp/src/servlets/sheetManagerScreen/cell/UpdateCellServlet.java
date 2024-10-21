@@ -12,6 +12,8 @@ import utils.ServletUtils;
 
 import java.io.IOException;
 
+import static constant.Constants.USER_VIEWED_SHEET_VERSION;
+
 @WebServlet("/updateCell")
 public class UpdateCellServlet extends HttpServlet {
     @Override
@@ -35,7 +37,9 @@ public class UpdateCellServlet extends HttpServlet {
             boolean isUpdated = false;
 
             try {
-                isUpdated = updateCellInSheet(sheetName, coordinate, newValue);
+                isUpdated = updateCellInSheet(sheetName, coordinate, newValue,request);
+
+
             } catch (Exception e) {
                 // במקרה שנזרקה שגיאה, נחזיר שגיאת שרת
                 response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
@@ -60,9 +64,16 @@ public class UpdateCellServlet extends HttpServlet {
 //        return sheetEngine.updateCellValue(newValue, coordinate); // המתודה שלך מה-Engine
 //    }
 
-    private boolean updateCellInSheet(String sheetName, Coordinate coordinate, String newValue) throws Exception {
+    private boolean updateCellInSheet(String sheetName, Coordinate coordinate, String newValue,HttpServletRequest request) throws Exception {
         SheetEngine sheetEngine = ServletUtils.getSheetEngineByName(sheetName, getServletContext());
-        return sheetEngine.updateCellValue(newValue, coordinate);
+        boolean isUpdated= sheetEngine.updateCellValue(newValue, coordinate);
+        if(isUpdated) {
+            int version = sheetEngine.getCurrentVersion();
+            request.getSession(true).setAttribute(USER_VIEWED_SHEET_VERSION, version+"");
+        }
+
+
+        return isUpdated;
     }
 }
 
