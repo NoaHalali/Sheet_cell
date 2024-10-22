@@ -47,12 +47,13 @@ public class GetPermissionUpdatesForUserServlet extends HttpServlet {
             response.getWriter().write("An error occurred: " + e.getMessage());
         }
     }
-    public String getUpdateMessageFromPermissionUpdate(PermissionUpdate permissionUpdate, Random numberGenerator) {
 
-        LocalTime currentTime = LocalTime.now();
-        String message ="Update: permission: " + permissionUpdate.getPermission() +", for sheet: " + permissionUpdate.getSheetName()
-                + ", has been changed to: " + permissionUpdate.getRequestStatus() +" at: "+currentTime+ "random num :" +numberGenerator;
-        return message;
-
-    }
+//    public String getUpdateMessageFromPermissionUpdate(PermissionUpdate permissionUpdate, Random numberGenerator) {
+//
+//        LocalTime currentTime = LocalTime.now();
+//        String message ="Update: permission: " + permissionUpdate.getPermission() +", for sheet: " + permissionUpdate.getSheetName()
+//                + ", has been changed to: " + permissionUpdate.getRequestStatus() +" at: "+currentTime+ "random num :" +numberGenerator;
+//        return message;
+//
+//    }
 }

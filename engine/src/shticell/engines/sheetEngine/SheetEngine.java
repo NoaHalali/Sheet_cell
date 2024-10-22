@@ -22,7 +22,7 @@ public interface SheetEngine {
 
     public SheetDTO getCurrentSheetDTO() throws SheetNotLoadedException;
 
-    public CellDTO getCellDTOByCoordinate(Coordinate coordinate) throws IllegalArgumentException, SheetNotLoadedException;
+    public CellDTO getCellDTOByVersion(Coordinate coordinate, int version) throws IllegalArgumentException, SheetNotLoadedException;
 
     public boolean updateCellValue(String value, Coordinate coordinate) throws Exception;
 

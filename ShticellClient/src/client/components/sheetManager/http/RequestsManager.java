@@ -386,7 +386,8 @@ public class RequestsManager {
                     SheetDTO sortedSheet = gson.fromJson(responseBody, SheetDTO.class);
                     Platform.runLater(() -> onSuccess.accept(sortedSheet));
                 } else {
-                    Platform.runLater(() -> onFailure.accept("Error fetching sorted sheetDTO: " + responseBody));
+                    String errorMessage = GSON_INSTANCE.fromJson(responseBody, Map.class).get("error").toString();
+                    Platform.runLater(() -> onFailure.accept("Error fetching sorted sheetDTO: " + errorMessage));
                 }
             }
         });

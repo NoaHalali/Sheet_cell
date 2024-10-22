@@ -53,10 +53,11 @@ public class SheetEngineImpl implements SheetEngine {
 
     //3
     @Override
-    public CellDTO getCellDTOByCoordinate(Coordinate coordinate) throws IllegalArgumentException, SheetNotLoadedException {
+    public CellDTO getCellDTOByVersion(Coordinate coordinate, int version) throws IllegalArgumentException, SheetNotLoadedException {
         checkIfSheetHasBeenLoaded();
 
-        Cell cell = currentSheet.getCellByCoord(coordinate);
+        Sheet sheet = getSheetByVersion(version);
+        Cell cell = sheet.getCellByCoord(coordinate);
         if (cell != null)
         {
             return cell.toCellDTO();

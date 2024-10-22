@@ -1,6 +1,7 @@
 package client.components.sheetManager.parts.top.updates;
 
 import client.components.multiSheetsScreen.MultiSheetsScreenController;
+import client.components.sheetManager.SheetManagerController;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -17,7 +18,7 @@ public class SheetUpdatesController {
     private Label messageLabel;
     private String lastMessage = ""; // משתנה לשמירת ההודעה האחרונה
     @FXML private Button refreshButton;
-    private MultiSheetsScreenController parentController;
+    private SheetManagerController parentController;
     //String selectedSheet;
 
     private Timer timer;
@@ -41,30 +42,64 @@ public class SheetUpdatesController {
     public void updateMessage(String message) {
         Platform.runLater(() -> {
         if (!message.equals(lastMessage)) {
-            messageLabel.setVisible(true);
+            show();
+            //messageLabel.setVisible(true);
             messageLabel.setText(message);
             lastMessage = message;
 
-            messageLabel.setStyle("-fx-background-color: #5279bb; -fx-text-fill: #000000;");
+            messageLabel.setStyle("-fx-background-color: #f2f273; -fx-text-fill: #000000;");
 
-            refreshButton.setVisible(true);
+           // refreshButton.setVisible(true);
         }
     });
     }
 
     @FXML
     private void handleRefreshButtonClick() {
-        // לוגיקה לטעינת הגיליון מחדש
-        System.out.println("Refreshing the sheet...");
 
-        // הסתרת ההודעה והכפתור לאחר הרענון
-        messageLabel.setVisible(false);
-        refreshButton.setVisible(false);
+        hide();
+
+        System.out.println("Refreshing the sheet...");
+        System.out.println("Button visible: " + refreshButton.isVisible());
+        System.out.println("Button managed: " + refreshButton.isManaged());
+        System.out.println("Label visible: " + messageLabel.isVisible());
+        System.out.println("Label managed: " + messageLabel.isManaged());
+        parentController.refreshSheetToLatestVersion();
+
+        System.out.println("Button visible: " + refreshButton.isVisible());
+        System.out.println("Button managed: " + refreshButton.isManaged());
+        System.out.println("Label visible: " + messageLabel.isVisible());
+        System.out.println("Label managed: " + messageLabel.isManaged());
+
     }
 
     public void cancelTask() {
         messageRefresherTask.cancel();
         timer.cancel();
+        hide();
+    }
+
+    private void hide() {
+        messageLabel.setVisible(false);
+        messageLabel.setManaged(false); // להבטיח שלא תתפוס מקום בפריסה
+        messageLabel.setStyle("");
+
+        refreshButton.setVisible(false);
+        refreshButton.setManaged(false); // להבטיח שלא יתפוס מקום בפריסה
+        refreshButton.setStyle("");
+    }
+
+
+    private void show() {
+        messageLabel.setVisible(true);
+        messageLabel.setManaged(true); // מחזירה את ה-Label לתוך ה-layout
+
+        refreshButton.setVisible(true);
+        refreshButton.setManaged(true); // מחזירה את ה-Button לתוך ה-layout
+    }
+
+    public void setMainController(SheetManagerController sheetManagerController) {
+        this.parentController = sheetManagerController;
     }
 
 //    public String getSelectedSheetName() {

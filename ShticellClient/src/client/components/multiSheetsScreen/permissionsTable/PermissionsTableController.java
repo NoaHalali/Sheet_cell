@@ -29,7 +29,7 @@ public class PermissionsTableController {
     private int selectedRequestNumber;
 
     private Timer timer;
-    private RequestsListRefresherTask listRefresher;
+    private RequestsListRefresher listRefresher;
     //private final IntegerProperty totalSheets;
 
     @FXML
@@ -93,7 +93,7 @@ public class PermissionsTableController {
         selectedRequestNumber = -1; // או ערך מתאים אחר שמסמן שאין בחירה
 
         if (listRefresher == null) {
-            listRefresher = new RequestsListRefresherTask(this::updateRequestsList, selectedSheet);
+            listRefresher = new RequestsListRefresher(this::updateRequestsList, selectedSheet);
             timer = new Timer();
             timer.schedule(listRefresher, REFRESH_RATE, PERMISSIONS_TABLE_REFRESH_RATE);
         }

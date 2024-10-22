@@ -32,5 +32,8 @@ public class GetSheetsDetailsListServlet extends HttpServlet {
             out.println(json);
             out.flush();
         }
+        catch (Exception e) {
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "An error occurred while processing the request");
+        }
     }
 }

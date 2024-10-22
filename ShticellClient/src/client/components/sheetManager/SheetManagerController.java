@@ -10,7 +10,6 @@ import client.components.sheetManager.parts.top.actionLine.ActionLineController;
 import client.components.sheetManager.parts.top.updates.SheetUpdatesController;
 import client.components.sheetManager.parts.top.versions.VersionSelectorController;
 import javafx.application.Platform;
-import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.*;
 import javafx.fxml.FXML;
@@ -18,7 +17,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -26,11 +24,11 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import parts.cell.CellDTO;
 import parts.SheetDTO;
+import shticell.permissions.PermissionType;
 import shticell.sheets.sheet.parts.cell.coordinate.Coordinate;
 import shticell.sheets.sheet.parts.cell.expression.effectiveValue.EffectiveValue;
 
 
-import java.io.File;
 import java.util.*;
 import java.util.function.Consumer;
 
@@ -40,7 +38,7 @@ public class SheetManagerController {
     private Scene scene;
     private AppController mainController;
     private RequestsManager requestsManager;
-
+    BooleanBinding hasEditPermission;
 
     //Components
     @FXML private GridPane actionLine;
@@ -51,7 +49,7 @@ public class SheetManagerController {
     @FXML private Label currentVersionLabel;
     @FXML private HBox skinSelector;
     @FXML private Button backToDashBoardButton;
-    @FXML private AnchorPane sheetUpdates;
+    @FXML private HBox sheetUpdates;
     @FXML private Label sheetNameLabel;
 
     //Controllers
@@ -89,6 +87,7 @@ public class SheetManagerController {
         versionSelectorController.setMainController(this);
         commandsController.setMainController(this);
         rangesController.setMainController(this);
+        sheetUpdatesController.setMainController(this);
     }
 
     private void initializeProperties() {
@@ -117,7 +116,7 @@ public class SheetManagerController {
 //        ranges.disableProperty().bind(whatIfAndFileBinding);
 //    }
 
-    private void bindUIComponents(BooleanBinding hasEditPermission) { //TODO - maybe need only the what if
+    private void bindUIComponents() { //TODO - maybe need only the what if
 
 //        table.disableProperty().bind(fileSelectedProperty.not().or(hasEditPermission.not()));
 //        versionSelector.disableProperty().bind(fileSelectedProperty.not());
@@ -131,13 +130,13 @@ public class SheetManagerController {
     }
 
 
-    public void initializeComponentsAfterLoad(String sheetName, BooleanBinding hasEditPermission) {
+    public void initializeComponentsAfterSheetSelection(String sheetName, BooleanBinding hasEditPermission) {
 
         clearSelectionStates();
         requestsManager = new RequestsManager(sheetName);
-        bindUIComponents(hasEditPermission);
-        //sheetNameLabel.setText(sheetName);
+        bindUIComponents();
         sheetNameProperty.set(sheetName);
+        this.hasEditPermission = hasEditPermission;
 
         requestsManager.getSheetDTO(sheet -> {
             // פעולה במקרה של הצלחה: עדכון ה-UI
@@ -323,7 +322,7 @@ public class SheetManagerController {
             callback.accept(sheet);
         }, errorMessage -> {
             // פעולה במקרה של כשל
-            System.out.println("Error to get sheetDTO: " + errorMessage);
+            System.out.println("Error to get sorted sheetDTO: " + errorMessage);
             StageUtils.showAlert("Error to get sheetDTO", errorMessage);
         });
     }
@@ -521,6 +520,24 @@ public class SheetManagerController {
         mainController.switchToMultiSheetsScreen();
         sheetUpdatesController.cancelTask();
     }
+
+//    public void refreshToLatestVersion() {
+//        initializeComponentsAfterSheetSelection(sheetNameProperty.get(), hasEditPermission);
+//    }
+
+    public void refreshSheetToLatestVersion() {
+        initializeComponentsAfterSheetSelection(sheetNameProperty.get(), hasEditPermission);
+    }
+//        requestsManager.getSheetDTO(sheet -> {
+//            // רק לעדכן את הפרטים הדרושים
+//            setCells(sheet);
+//            versionProperty.set(sheet.getVersion());
+//            //sheetUpdatesController.startVersionUpdateMessageRefresher(sheetName);
+//        }, errorMessage -> {
+//            System.out.println("Error to refresh sheetDTO: " + errorMessage);
+//            StageUtils.showAlert("Error to refresh sheetDTO", errorMessage);
+//        });
+//    }
 
 //    public void setActive() {
 //        sheetUpdatesController.startVersionUpdateMessageRefresher(String sheet);

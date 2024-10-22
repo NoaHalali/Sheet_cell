@@ -68,9 +68,8 @@ public class UpdateCellServlet extends HttpServlet {
     private boolean updateCellInSheet(String sheetName, Coordinate coordinate, String newValue,HttpServletRequest request) throws Exception {
         SheetEngine sheetEngine = ServletUtils.getSheetEngineByName(sheetName, getServletContext());
         ServletUtils.checkIfClientSheetVersionIsUpdated(request, sheetEngine);
-
-
         boolean isUpdated= sheetEngine.updateCellValue(newValue, coordinate);
+
         if(isUpdated) {
             int version = sheetEngine.getCurrentVersion();
             request.getSession(true).setAttribute(USER_VIEWED_SHEET_VERSION, version+"");

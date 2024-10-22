@@ -62,8 +62,15 @@ public class GetCellDTOServlet extends HttpServlet {
     private CellDTO getCellDTOByCoordinate(String sheetName , Coordinate coordinate, HttpServletRequest request) throws OutdatedSheetVersionException {
 
         SheetEngine sheetEngine = ServletUtils.getSheetEngineByName(sheetName, getServletContext());
-        ServletUtils.checkIfClientSheetVersionIsUpdated(request,sheetEngine);
-        return sheetEngine.getCellDTOByCoordinate(coordinate);
+        //ServletUtils.checkIfClientSheetVersionIsUpdated(request,sheetEngine);
+        String versionStr = SessionUtils.getViewedSheetVersion(request);
+        try {
+            int version = Integer.parseInt(versionStr);
+            return sheetEngine.getCellDTOByVersion(coordinate,version);
+        }
+        catch (NumberFormatException e){
+            throw new OutdatedSheetVersionException("Invalid version number: " + versionStr);
+        }
     }
 
 }

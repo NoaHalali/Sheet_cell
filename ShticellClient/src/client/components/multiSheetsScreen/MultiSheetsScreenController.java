@@ -1,6 +1,7 @@
 package client.components.multiSheetsScreen;
 
 import client.components.mainAppController.AppController;
+import client.components.mainAppController.Screen;
 import client.components.multiSheetsScreen.commands.CommandsController;
 import client.components.multiSheetsScreen.loadFiles.LoadSheetFilesController;
 import client.components.multiSheetsScreen.permissionsTable.PermissionsTableController;
@@ -148,6 +149,10 @@ public class MultiSheetsScreenController {
         pendingRequestSelected.set(false);
         permissionsTableController.clearSelection();
 
+    }
+
+    public Screen getScreen() {
+        return mainController.getScreen();
     }
 
 //    private void updatePermissionsProperties(PermissionType permissionForSelectedSheet) {

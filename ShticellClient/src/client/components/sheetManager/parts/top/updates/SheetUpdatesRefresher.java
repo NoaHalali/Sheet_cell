@@ -42,14 +42,19 @@ public class SheetUpdatesRefresher extends TimerTask  {
             }
 
             @Override
-            public void onResponse(@NotNull Call call, @NotNull Response response) {
+            public void onResponse(@NotNull Call call, @NotNull Response response)  {
                 //String jsonResponse = response.body().string();
-
                 // בדיקה אם הגרסה אינה מעודכנת לפי קוד סטטוס
                 if(response.code() == 200) {
                     // יש עדכון - מקבלים את ההודעה על גרסה מעודכנת
-                    String message = "A new version of the sheet is available. Please refresh.";
-                    messageConsumer.accept(message); // העברת ההודעה למשתמש
+                    try {
+                        String message = response.body().string();
+                        messageConsumer.accept(message); // העברת ההודעה למשתמש
+                    }
+                    catch (IOException e) {
+                        messageConsumer.accept("Error: Unable to check for sheet version updates.");
+                    }
+
                 } else if (response.code() == 204) {
                     // אין עדכון - ממשיכים כרגיל
                     messageConsumer.accept(""); // אין צורך בעדכון

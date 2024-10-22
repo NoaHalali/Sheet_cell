@@ -1,6 +1,7 @@
 package client.components.mainAppController.updates;
 
-import client.components.multiSheetsScreen.MultiSheetsScreenController;
+import client.components.mainAppController.AppController;
+import client.components.mainAppController.Screen;
 import javafx.animation.FadeTransition;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -18,7 +19,7 @@ public class PermissionsUpdatesController {
     private Label messageLabel;
     private String lastMessage = ""; // משתנה לשמירת ההודעה האחרונה
 
-    private MultiSheetsScreenController parentController;
+    private AppController parentController;
 
     private Timer timer;
     private TimerTask messageRefresher;
@@ -26,7 +27,6 @@ public class PermissionsUpdatesController {
 
     @FXML
     public void initialize() {
-
     }
 
 //    private void updateMessage(String message) {
@@ -70,16 +70,25 @@ public class PermissionsUpdatesController {
 
     public void startMessageRefresher() {
 
-        messageRefresher = new PermissionsUpdatesRefresher(this::updateMessage);
+        messageRefresher = new PermissionsUpdatesRefresher(this::updateMessage, this);
         timer = new Timer();
         timer.schedule(messageRefresher, REFRESH_RATE, 5000);
+    }
+
+    public Screen getScreen() {
+        return parentController.getScreen();
     }
 
 //    public String getSelectedSheetName() {
 //        return selectedSheetName;
 //    }
 //
-//    public void setParentController(MultiSheetsScreenController parentController) {
-//        this.parentController = parentController;
+
+    public void setParentController(AppController parentController) {
+        this.parentController = parentController;
+    }
+
+//    public void close() {
+//        timer.cancel();
 //    }
 }

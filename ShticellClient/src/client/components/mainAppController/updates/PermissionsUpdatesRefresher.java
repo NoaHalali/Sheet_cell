@@ -1,10 +1,12 @@
 package client.components.mainAppController.updates;
 
 import client.components.Utils.http.HttpClientUtil;
+import client.components.mainAppController.Screen;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 import org.jetbrains.annotations.NotNull;
+import shticell.permissions.RequestStatus;
 import shticell.users.PermissionUpdate;
 
 import java.io.IOException;
@@ -13,16 +15,17 @@ import java.util.function.Consumer;
 
 import static client.components.Utils.Constants.*;
 
-public class PermissionsUpdatesRefresher extends TimerTask  {
+public class PermissionsUpdatesRefresher extends TimerTask {
     //private final Consumer<String> httpRequestLoggerConsumer;
     private final Consumer<String> messageConsumer;
     private int requestNumber;
-    //private final BooleanProperty shouldUpdate;
+    private PermissionsUpdatesController parentController;
 
-    public PermissionsUpdatesRefresher(Consumer<String> messageConsumer) {
-        //this.shouldUpdate = shouldUpdate;
-        //this.httpRequestLoggerConsumer = httpRequestLoggerConsumer;
+
+    public PermissionsUpdatesRefresher(Consumer<String> messageConsumer, PermissionsUpdatesController parentController) {
+
         this.messageConsumer = messageConsumer;
+        this.parentController = parentController;
         //requestNumber = 0;
     }
 
@@ -48,25 +51,37 @@ public class PermissionsUpdatesRefresher extends TimerTask  {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 String jsonListOfSheetDetails = response.body().string();
-                if(response.code()==200) {
+                if (response.code() == 200) {
                     PermissionUpdate permissionUpdate = GSON_INSTANCE.fromJson(jsonListOfSheetDetails, PermissionUpdate.class);
-                    String message =getUpdateMessageFromPermissionUpdate(permissionUpdate);
+                    String message = getUpdateMessageFromPermissionUpdate(permissionUpdate);
                     messageConsumer.accept(message);
-                }else {
+                } else {
                     messageConsumer.accept("");
                 }
             }
         });
     }
+
     public String getUpdateMessageFromPermissionUpdate(PermissionUpdate permissionUpdate) {
 
         if (permissionUpdate == null) {
             System.out.println("WARNING: permissionUpdate is null and status code is 200");
             return "";
         }
-        String message ="Update: permission: " + permissionUpdate.getPermission() +", for sheet: " + permissionUpdate.getSheetName()
-                + ", has been changed to: " + permissionUpdate.getRequestStatus();
-        return message;
+        RequestStatus requestStatus = permissionUpdate.getRequestStatus();
+        Screen screen = parentController.getScreen();
 
+        String message = "Update: permission: " + permissionUpdate.getPermission() + ", for sheet: " + permissionUpdate.getSheetName()
+                + ", has been " + requestStatus.toString() + ". ";
+        if (requestStatus == RequestStatus.APPROVED) {
+
+            if (screen == Screen.MULTI_SHEETS) {
+                message += "Please select the sheet again to see the changes.";
+            } else if (screen == Screen.SINGLE_SHEET_MANAGER) {
+                message += "Please go back to dashboard and select the sheet again to see the changes.";
+            }
+        }
+        return message;
     }
+
 }

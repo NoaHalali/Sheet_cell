@@ -15,7 +15,6 @@ import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
@@ -42,7 +41,9 @@ public class AppController {
     @FXML private PermissionsUpdatesController permissionsUpdatesController;
     @FXML private AnchorPane permissionsUpdates;
 
+
     private final StringProperty currentUserName;
+    Screen screen;
     private Stage stage;
 
     public AppController() {
@@ -57,6 +58,7 @@ public class AppController {
         loadLoginPage();
         loadSheetManagerPage();
         loadMultiSheetsScreen();
+        permissionsUpdatesController.setParentController(this);
     }
 
     public void updateUserName(String userName) {
@@ -90,8 +92,6 @@ public class AppController {
         }
     }
 
-
-
     private void loadLoginPage() {
         URL loginPageUrl = getClass().getResource(LOGIN_PAGE_FXML_RESOURCE_LOCATION);
         try {
@@ -100,8 +100,8 @@ public class AppController {
             loginComponent = fxmlLoader.load();
             logicController = fxmlLoader.getController();
             logicController.setChatAppMainController(this);
-
             setMainPanelTo(loginComponent);
+            screen = Screen.LOGIN;
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -130,7 +130,8 @@ public class AppController {
         Platform.runLater(() -> {
             setMainPanelTo(sheetManagerComponent);
            // sheetManagerController.setActive(); //TODO: it starts message refresher, maybr its wrong? didnt cancel last one
-            sheetManagerController.initializeComponentsAfterLoad(sheetName, hasEditPermission);
+            sheetManagerController.initializeComponentsAfterSheetSelection(sheetName, hasEditPermission);
+            screen = Screen.SINGLE_SHEET_MANAGER;
         });
     }
 
@@ -138,10 +139,12 @@ public class AppController {
 
         setMainPanelTo(multiSheetsScreenComponent);
         multiSheetsScreenController.setActive();
+        screen = Screen.MULTI_SHEETS;
+
     }
 
     public void switchToMultiSheetsScreenAfterLogin() {
-        startMessageRefresher();
+        startPermissionsMessageRefresher();
         switchToMultiSheetsScreen();
 
     }
@@ -161,7 +164,11 @@ public class AppController {
 //        sheetManagerController.setPrimaryStage(primaryStage);
     }
 
-    public void startMessageRefresher() {
+    public void startPermissionsMessageRefresher() {
         permissionsUpdatesController.startMessageRefresher();
+    }
+
+    public Screen getScreen() {
+        return screen;
     }
 }
