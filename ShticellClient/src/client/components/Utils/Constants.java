@@ -30,7 +30,7 @@ public class Constants {
     /*URLs*/
     //MainAppController
     public final static String LOGIN_PAGE = FULL_SERVER_PATH + "/login";
-    public final static String  GET_CHANGED_PERMISSION_FOR_USER = FULL_SERVER_PATH +"/getPermissionUpdatesForUser";
+    public final static String GET_PERMISSION_UPDATE_FOR_USER = FULL_SERVER_PATH +"/getPermissionUpdatesForUser";
 
     //MultiSheetsScreenController
     public static final String UPLOAD_FILE = FULL_SERVER_PATH + "/uploadFile";
@@ -41,6 +41,7 @@ public class Constants {
     public static final String GET_SHEET_DTO = FULL_SERVER_PATH + "/getSheetDTO";
     public static final String GET_CLONED_SHEET = FULL_SERVER_PATH + "/getClonedSheet";
     public static final String GET_SHEET_DTO_BY_VERSION = FULL_SERVER_PATH + "/getSheetDTOByVersion";
+    public static final String CHECK_SHEET_VERSION =  FULL_SERVER_PATH + "/checkSheetVersion";
 
     //cells
     public static final String UPDATE_CELL = FULL_SERVER_PATH + "/updateCell";

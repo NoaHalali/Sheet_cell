@@ -306,4 +306,9 @@ public class SheetEngineImpl implements SheetEngine {
             throw new OutdatedSheetVersionException(OUTDATED_SHEET_VERSION_MESSAGE);
         }
     }
+
+    @Override
+    public boolean isVersionUpToDate(String versionStr) throws IllegalArgumentException {
+        return versionStr.equals(getCurrentVersion()+"");
+    }
 }

@@ -89,12 +89,6 @@ public class CommandsController {
         createGraphButton.disableProperty().bind(showWhatIfMode);
     }
 
-//    @FXML
-//    public void setColumnAlignmentAction() {
-//        String alignment = columnAlignmentTextField.getText();
-//        // לוגיקה לבחירת יישור של התוכן בעמודה
-//    }
-
     @FXML
     public void applyTextColorAction() {
         Color selectedColor = textColorPicker.getValue();

@@ -1,17 +1,13 @@
 package client.components.mainAppController.updates;
 
 import client.components.Utils.http.HttpClientUtil;
-import com.google.gson.reflect.TypeToken;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 import org.jetbrains.annotations.NotNull;
-import parts.SheetDetailsDTO;
 import shticell.users.PermissionUpdate;
 
 import java.io.IOException;
-import java.lang.reflect.Type;
-import java.util.List;
 import java.util.TimerTask;
 import java.util.function.Consumer;
 
@@ -40,7 +36,7 @@ public class PermissionsUpdatesRefresher extends TimerTask  {
         //final int finalRequestNumber = ++requestNumber;
         //httpRequestLoggerConsumer.accept("About to invoke: " + GET_SHEETS_LIST + " | Users Request # " + finalRequestNumber);
         //System.out.println("About to invoke: " + GET_SHEETS_LIST + " | Users Request # " + finalRequestNumber);
-        HttpClientUtil.runAsyncByUrl(GET_CHANGED_PERMISSION_FOR_USER, new Callback() {
+        HttpClientUtil.runAsyncByUrl(GET_PERMISSION_UPDATE_FOR_USER, new Callback() {
 
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
@@ -64,10 +60,13 @@ public class PermissionsUpdatesRefresher extends TimerTask  {
     }
     public String getUpdateMessageFromPermissionUpdate(PermissionUpdate permissionUpdate) {
 
+        if (permissionUpdate == null) {
+            System.out.println("WARNING: permissionUpdate is null and status code is 200");
+            return "";
+        }
         String message ="Update: permission: " + permissionUpdate.getPermission() +", for sheet: " + permissionUpdate.getSheetName()
                 + ", has been changed to: " + permissionUpdate.getRequestStatus();
         return message;
 
     }
-
 }

@@ -18,7 +18,7 @@ import java.util.Random;
 public class GetPermissionUpdatesForUserServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        //returning JSON objects, not HTML
+
         response.setContentType("application/json");
         Random numberGenerator = new Random();
         try (PrintWriter out = response.getWriter()) {

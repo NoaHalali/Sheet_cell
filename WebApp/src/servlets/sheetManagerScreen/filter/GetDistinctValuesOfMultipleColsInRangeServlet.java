@@ -93,6 +93,4 @@ public class GetDistinctValuesOfMultipleColsInRangeServlet extends HttpServlet {
         Map<String, Set<EffectiveValue>> distinctValuesMap = sheetEngine.getDistinctValuesOfMultipleColsInRange(columnsToSortBy, rangeDefinition);
         return distinctValuesMap;
     }
-
-
 }

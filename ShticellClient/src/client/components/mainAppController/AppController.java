@@ -128,8 +128,8 @@ public class AppController {
 
     public void switchToSheetManager(String sheetName, BooleanBinding hasEditPermission) {
         Platform.runLater(() -> {
-            //sheetManagerController.setActive();
             setMainPanelTo(sheetManagerComponent);
+           // sheetManagerController.setActive(); //TODO: it starts message refresher, maybr its wrong? didnt cancel last one
             sheetManagerController.initializeComponentsAfterLoad(sheetName, hasEditPermission);
         });
     }

@@ -83,6 +83,8 @@ public interface SheetEngine {
     public int getCurrentVersion();
 
     public void checkIfVersionIsUpdated(String versionStr) throws OutdatedSheetVersionException;
+
+    public boolean isVersionUpToDate(String versionStr) throws IllegalArgumentException;
 }
 
 

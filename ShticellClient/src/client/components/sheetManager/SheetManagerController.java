@@ -52,6 +52,7 @@ public class SheetManagerController {
     @FXML private HBox skinSelector;
     @FXML private Button backToDashBoardButton;
     @FXML private AnchorPane sheetUpdates;
+    @FXML private Label sheetNameLabel;
 
     //Controllers
     @FXML private ActionLineController actionLineController;
@@ -62,13 +63,13 @@ public class SheetManagerController {
     @FXML private VersionSelectorController versionSelectorController;
 
     //Properties
-    private SimpleBooleanProperty fileSelectedProperty;
     private IntegerProperty versionProperty;
     private SimpleBooleanProperty cellSelected;
     private SimpleBooleanProperty rangeSelected;
     private SimpleBooleanProperty columnSelected;
     private SimpleBooleanProperty rowSelected;
     private SimpleBooleanProperty showWhatIfMode;
+    private SimpleStringProperty sheetNameProperty;
 
     @FXML
     private void initialize() {
@@ -91,13 +92,14 @@ public class SheetManagerController {
     }
 
     private void initializeProperties() {
-        fileSelectedProperty = new SimpleBooleanProperty(false);
+        //fileSelectedProperty = new SimpleBooleanProperty(false);
         versionProperty = new SimpleIntegerProperty(1);
         columnSelected = new SimpleBooleanProperty(false);
         rowSelected = new SimpleBooleanProperty(false);
         cellSelected = new SimpleBooleanProperty(false);
         rangeSelected = new SimpleBooleanProperty(false);
         showWhatIfMode = new SimpleBooleanProperty(false);
+        sheetNameProperty = new SimpleStringProperty();
     }
 
 //    private void bindUIComponents() {
@@ -116,38 +118,37 @@ public class SheetManagerController {
 //    }
 
     private void bindUIComponents(BooleanBinding hasEditPermission) { //TODO - maybe need only the what if
-        //BooleanBinding whatIfAndFileBinding = Bindings.or(fileSelectedProperty.not(), showWhatIfMode);
 
 //        table.disableProperty().bind(fileSelectedProperty.not().or(hasEditPermission.not()));
 //        versionSelector.disableProperty().bind(fileSelectedProperty.not());
 //        commands.disableProperty().bind(fileSelectedProperty.not());
         currentVersionLabel.textProperty().bind(versionProperty.asString());
+        sheetNameLabel.textProperty().bind(sheetNameProperty);
 
         // טווח השבתה במצב What-If והקובץ
         actionLine.disableProperty().bind(showWhatIfMode);
         ranges.disableProperty().bind(showWhatIfMode);
-
-        // אפשר להוסיף Bindings נוספים לכפתורים או רכיבים אחרים כאן
     }
 
 
     public void initializeComponentsAfterLoad(String sheetName, BooleanBinding hasEditPermission) {
 
-
         clearSelectionStates();
-        fileSelectedProperty.set(true);
         requestsManager = new RequestsManager(sheetName);
         bindUIComponents(hasEditPermission);
+        //sheetNameLabel.setText(sheetName);
+        sheetNameProperty.set(sheetName);
 
-// שולחים את הבקשה לשרת ומעבירים את ה-Consumers המתאימים
         requestsManager.getSheetDTO(sheet -> {
             // פעולה במקרה של הצלחה: עדכון ה-UI
             tableController.initializeGrid(sheet);
-            versionSelectorController.initializeVersionSelector(sheet.getVersion());
+            int version = sheet.getVersion();
+            versionSelectorController.initializeVersionSelector(version);
             actionLineController.initializeActionLine(cellSelected, hasEditPermission);
             commandsController.InitializeCommandsController(cellSelected, columnSelected, rowSelected, showWhatIfMode, hasEditPermission);
             rangesController.initializeRangesController(sheet.getRangesNames(), rangeSelected, hasEditPermission);
-            versionProperty.set(1);
+            versionProperty.set(version);
+            sheetUpdatesController.startVersionUpdateMessageRefresher(sheetName);
 
         }, errorMessage -> {
             // פעולה במקרה של כשל
@@ -518,5 +519,10 @@ public class SheetManagerController {
     @FXML
     public void handleBackToDashBoardButtonClick() {
         mainController.switchToMultiSheetsScreen();
+        sheetUpdatesController.cancelTask();
     }
+
+//    public void setActive() {
+//        sheetUpdatesController.startVersionUpdateMessageRefresher(String sheet);
+//    }
 }
