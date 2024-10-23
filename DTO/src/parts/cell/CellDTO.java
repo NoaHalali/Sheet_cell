@@ -12,18 +12,18 @@ public class CellDTO {
     private final int lastUpdatedVersion;
     private final List<Coordinate> influencingOn;
     private final List<Coordinate> dependsOn;
-
+    private final String lastEditedBy;
 
     public CellDTO(Coordinate coordinate, String originalValue,
-                           EffectiveValue effectiveValue, int lastUpdatedVersion, List<Coordinate> influencingOn, List<Coordinate>  dependsOn) {
+                           EffectiveValue effectiveValue, int lastUpdatedVersion, List<Coordinate> influencingOn,
+                   List<Coordinate>  dependsOn, String lastUpdatedBy) {
         this.coordinate = coordinate;
         this.originalValue = originalValue;
         this.lastUpdatedVersion = lastUpdatedVersion;
-//        this.rowsIndex = rowsIndex;
-//        this.columnsIndex = columnsIndex;
         this.effectiveValue = effectiveValue;
         this.influencingOn = influencingOn;
         this.dependsOn = dependsOn;
+        this.lastEditedBy = lastUpdatedBy;
     }
 
     public int getLastUpdatedVersion() {
@@ -48,5 +48,9 @@ public class CellDTO {
 
     public String getOriginalValue() {
         return originalValue;
+    }
+
+    public String getLastEditedBy() {
+        return lastEditedBy;
     }
 }

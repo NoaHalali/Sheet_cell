@@ -9,6 +9,7 @@ import shticell.engines.sheetEngine.SheetEngine;
 import shticell.sheets.sheet.parts.cell.coordinate.Coordinate;
 import shticell.sheets.sheet.parts.cell.coordinate.CoordinateImpl;
 import utils.ServletUtils;
+import utils.SessionUtils;
 
 import java.io.IOException;
 
@@ -68,13 +69,14 @@ public class UpdateCellServlet extends HttpServlet {
     private boolean updateCellInSheet(String sheetName, Coordinate coordinate, String newValue,HttpServletRequest request) throws Exception {
         SheetEngine sheetEngine = ServletUtils.getSheetEngineByName(sheetName, getServletContext());
         ServletUtils.checkIfClientSheetVersionIsUpdated(request, sheetEngine);
-        boolean isUpdated= sheetEngine.updateCellValue(newValue, coordinate);
+        String userName = SessionUtils.getUsername(request);
+
+        boolean isUpdated= sheetEngine.updateCellValue(newValue, coordinate, userName);
 
         if(isUpdated) {
             int version = sheetEngine.getCurrentVersion();
             request.getSession(true).setAttribute(USER_VIEWED_SHEET_VERSION, version+"");
         }
-
 
         return isUpdated;
     }

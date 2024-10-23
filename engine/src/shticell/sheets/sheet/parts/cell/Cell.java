@@ -24,6 +24,7 @@ public class Cell implements Serializable {
     private List<Cell> dependsOn; //התאים שמושפע מהם
     private List<Range> rangesDependsOn;
     private List<Range>InfluencingOnRanges;
+    private String lastEditedBy;
 
 
     //TODO - maybe send version of sheet
@@ -36,6 +37,7 @@ public class Cell implements Serializable {
         this.dependsOn = new LinkedList<Cell>();
         this.rangesDependsOn = new LinkedList<Range>();
         this.InfluencingOnRanges = new LinkedList<Range>();
+        this.lastEditedBy = "";
     }
     public static Cell createEmptyCell(Coordinate coordinate) {
         Cell cell= new Cell(coordinate, "");
@@ -49,8 +51,6 @@ public class Cell implements Serializable {
 //    public void setLastUpdatedVersion(int  lastUpdatedVersion) {
 //        lastUpdatedVersion=0;
 //    }
-
-
 
     public boolean calculateAndCheckIfUpdated() {
         EffectiveValue oldEffectiveValue = effectiveValue; //in case the next line changes it
@@ -98,6 +98,7 @@ public class Cell implements Serializable {
         }
         return fullList;
     }
+
     public CellDTO toCellDTO() {
         if (isExist)
         {
@@ -107,7 +108,9 @@ public class Cell implements Serializable {
                     getAndUpdateEffectiveValue(),
                     lastUpdatedVersion,
                     getFullInfluencingOnCoordinates(),
-                    getFullDependsOnCoordList()
+                    getFullDependsOnCoordList(),
+                    lastEditedBy
+
             );
         }
         else {
@@ -117,7 +120,8 @@ public class Cell implements Serializable {
                     null,
                     lastUpdatedVersion,
                    getFullInfluencingOnCoordinates(),
-                    List.of()
+                    List.of(),
+                    lastEditedBy
             );
         }
 
@@ -125,6 +129,7 @@ public class Cell implements Serializable {
     public List<Range>getRangesDependsOnList(){
         return rangesDependsOn;
     }
+
     public void setRangesDependsOnList(List<Range> rangesDependsOn) {
         this.rangesDependsOn = rangesDependsOn;
     }
@@ -133,9 +138,11 @@ public class Cell implements Serializable {
     {
         InfluencingOnRanges.add(influencingOnRange);
     }
+
     public void removeRangeFromInfluencingOnRange(Range influencingOnRange){
         InfluencingOnRanges.remove(influencingOnRange);
     }
+
     public Expression getCellValue() {
         return cellValue;
     }
@@ -177,6 +184,7 @@ public class Cell implements Serializable {
         return influencingOn.stream().map(Cell::getCoordinate).collect(Collectors.toList());
 
     }
+
     public List<Coordinate> getFullInfluencingOnCoordinates() {
         List <Coordinate> fullList = getInfluencingOnCoordinates();
         for(Range range : InfluencingOnRanges){
@@ -207,7 +215,6 @@ public class Cell implements Serializable {
             range.removeCoordinateFromInfluencingOnCoordinates(coordinate);
         }
         rangesDependsOn.clear();
-        //influencing ??
     }
 
     public void checkIfCellExpressionCanBeUpdatedWrapper() {
@@ -287,4 +294,7 @@ public class Cell implements Serializable {
         return cell != null && !cell.isExist();
     }
 
+    public void setLastEditedBy(String editorName) {
+        lastEditedBy = editorName;
+    }
 }

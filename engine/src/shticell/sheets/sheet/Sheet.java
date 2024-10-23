@@ -113,7 +113,7 @@ public class Sheet implements Serializable {
         version++;
     }
 
-    public int upgradeCellsVersionsAndGetNumOfChanges(){
+    public int upgradeCellsVersionsAndGetNumOfChanges(String editorName){
         List<Cell>changedCells = Arrays.stream(cellsMatrix)                          // Stream over rows of cellsMatrix
                 .flatMap(Arrays::stream)                    // Flatten the stream of rows into a single stream of cells
                 .filter(cell -> cell != null)               // Filter out null cells
@@ -121,7 +121,11 @@ public class Sheet implements Serializable {
                 .toList();
         //  if(changedCells.size() != 0){//תכלס שטום דבר לא השתנה
 
-        changedCells.stream().forEach(cell -> cell.setLastUpdatedVersion(version));
+        changedCells.stream().forEach(cell -> {
+            cell.setLastUpdatedVersion(version);
+            cell.setLastEditedBy(editorName);
+
+        });
         if(changedCells.size() == 0){//אף תא לא השתנה לכן רק התא לו שינינו את ערך המקור ולכן קיים שינוי 1 במידה וערך המקור לא השתנה אז זה שגיאה ???
             return 0; //TODO -  לשאול את אמיר
         }

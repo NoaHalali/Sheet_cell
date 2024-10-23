@@ -24,7 +24,7 @@ public interface SheetEngine {
 
     public CellDTO getCellDTOByVersion(Coordinate coordinate, int version) throws IllegalArgumentException, SheetNotLoadedException;
 
-    public boolean updateCellValue(String value, Coordinate coordinate) throws Exception;
+    public boolean updateCellValue(String value, Coordinate coordinate, String userName) throws Exception;
 
     public SheetDTO getSheetDTOByVersion(int versionNumber) throws IllegalArgumentException, SheetNotLoadedException;
 

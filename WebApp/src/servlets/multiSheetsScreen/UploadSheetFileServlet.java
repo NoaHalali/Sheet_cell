@@ -49,7 +49,7 @@ public class UploadSheetFileServlet extends HttpServlet  {
 
             try {
                 FileManager fileManager = ServletUtils.getFileManager(getServletContext());
-                Sheet sheet = fileManager.processFile(concatenatedStream);//fail here because load xml method wont even enter !!!
+                Sheet sheet = fileManager.processFile(concatenatedStream);
                 String sheetName = sheet.getSheetName();
                 MultiSheetEngineManager multiSheetEngineManager = ServletUtils.getMultiSheetEngineManager(getServletContext());
 

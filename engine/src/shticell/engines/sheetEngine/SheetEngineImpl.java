@@ -62,12 +62,12 @@ public class SheetEngineImpl implements SheetEngine {
         {
             return cell.toCellDTO();
         }
-        return new CellDTO(coordinate,null,null, 0,List.of(), List.of());
+        return new CellDTO(coordinate,null,null, 0,List.of(), List.of(), "");
     }
 
     //4
     @Override
-    public boolean updateCellValue(String newOriginalValue, Coordinate coord) throws Exception {
+    public boolean updateCellValue(String newOriginalValue, Coordinate coord, String editorName) throws Exception {
         checkIfSheetHasBeenLoaded();
         Sheet clonedSheet = currentSheet.cloneSheet();
         int numOfCellsChanged;
@@ -83,11 +83,11 @@ public class SheetEngineImpl implements SheetEngine {
                 if (originalValueChanged) {
                     clonedSheet.updateCellValue(newOriginalValue, cell);
 
-                    numOfCellsChanged = clonedSheet.upgradeCellsVersionsAndGetNumOfChanges();
+                    numOfCellsChanged = clonedSheet.upgradeCellsVersionsAndGetNumOfChanges(editorName);
                     if (numOfCellsChanged == 0) {
                         clonedSheet.upgradeCellVersion(cell);
-
                     }
+
                 }
                 else{ // original value didn't change
                     if(tryToDeleteGhostCell){ //trying to delete ghost cell
@@ -95,14 +95,15 @@ public class SheetEngineImpl implements SheetEngine {
                     }
                     return false;
                 }
+
             }
             else { // cell is null
                 cell = clonedSheet.createNewCellForCommand4(newOriginalValue, coord);
                 clonedSheet.upgradeCellVersion(cell);
                 numOfCellsChanged = 1;
-
             }
 
+            cell.setLastEditedBy(editorName);
             addVersion(clonedSheet, numOfCellsChanged);
             currentSheet = clonedSheet;
         }

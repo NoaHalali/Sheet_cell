@@ -60,7 +60,7 @@ public class SheetDTO {
         if(cell != null){
             return cell;
         }else{
-           return new CellDTO(coordinate,null,null, 0,List.of(), List.of());
+           return new CellDTO(coordinate,null,null, 0,List.of(), List.of(), "");
         }
     }
 

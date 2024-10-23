@@ -21,7 +21,7 @@ public class ActionLineController {
     @FXML
     private Button updateCell;
     @FXML
-    private Label cellLastUpdateVersion;
+    private Label cellLastUpdate;
     @FXML
     private TextField updateCellValueField;
 
@@ -39,16 +39,29 @@ public class ActionLineController {
             // עדכון השדות בשורת הפעולה לפי פרטי התא
             cellId.setText(cell.getCoord().toString());
             cellOriginalValue.setText(cell.getOriginalValue());
-            if (cell.getLastUpdatedVersion() != 0) {
-                cellLastUpdateVersion.setText(String.valueOf(cell.getLastUpdatedVersion()));
+
+            int lastUpdateVersion = cell.getLastUpdatedVersion();
+            String lastUpdateMessage;
+            if(lastUpdateVersion == 0) { //TODO: maybe change and init in the engine
+                lastUpdateMessage = "";
+            } else if (lastUpdateVersion == 1) {
+                lastUpdateMessage = "version 1" ;
             } else {
-                cellLastUpdateVersion.setText("");
+                lastUpdateMessage = "version" + lastUpdateVersion + ", by " + cell.getLastEditedBy();
             }
+            cellLastUpdate.setText(lastUpdateMessage);
+
+//            if (lastUpdateVersion != 0) {
+//                cellLastUpdate.setText(" version" + lastUpdateVersion + ", by " + cell.getLastEditedBy());
+//                cellLastUpdate.setText(String.valueOf(cell.getLastUpdatedVersion()));
+//            } else {
+//                cellLastUpdate.setText("");
+//            }
         } else {
             // איפוס השדות בשורת הפעולה אם אין תא ממוקד
             cellId.setText("");
             cellOriginalValue.setText("");
-            cellLastUpdateVersion.setText("");
+            cellLastUpdate.setText("");
         }
     }
 

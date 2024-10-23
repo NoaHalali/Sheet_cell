@@ -66,7 +66,7 @@ public class EngineImpl implements Engine {
         {
            return cell.toCellDTO();
         }
-        return new CellDTO(coordinate,null,null, 0,List.of(), List.of());
+        return new CellDTO(coordinate,null,null, 0,List.of(), List.of(), "");
     }
 
     //4
@@ -87,7 +87,7 @@ public class EngineImpl implements Engine {
                 if (originalValueChanged) {
                     clonedSheet.updateCellValue(newOriginalValue, cell);
 
-                    numOfCellsChanged = clonedSheet.upgradeCellsVersionsAndGetNumOfChanges();
+                    numOfCellsChanged = clonedSheet.upgradeCellsVersionsAndGetNumOfChanges("");
                     if (numOfCellsChanged == 0) {
                         clonedSheet.upgradeCellVersion(cell);
 

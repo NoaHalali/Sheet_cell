@@ -7,10 +7,7 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<GridPane alignment="CENTER_LEFT" hgap="10" style="-fx-padding: 5;"
-          xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1"
-          fx:controller="client.components.sheetManager.parts.top.actionLine.ActionLineController"
-          fx:id="actionLine" styleClass="subComponent">
+<GridPane fx:id="actionLine" alignment="CENTER_LEFT" hgap="10" style="-fx-padding: 5;" styleClass="subComponent" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.components.sheetManager.parts.top.actionLine.ActionLineController">
     <!-- תווית עבור Cell ID -->
     <Label style="-fx-background-color: #777777; -fx-text-fill: white; -fx-padding: 5;" text="Cell ID:" GridPane.columnIndex="0" />
     <Label fx:id="cellId" maxWidth="100" minWidth="36.0" prefHeight="17.0" prefWidth="20.0" style="-fx-text-overrun: ellipsis;" text="" GridPane.columnIndex="1" />
@@ -19,22 +16,22 @@
     <Label prefWidth="91.0" style="-fx-background-color: #777777; -fx-text-fill: white; -fx-padding: 5;" text="Original value:" GridPane.columnIndex="2" />
     <Label fx:id="cellOriginalValue" minWidth="50" style="-fx-text-overrun: ellipsis;" text="" GridPane.columnIndex="3" />
 
-    <TextField fx:id="updateCellValueField" promptText="Enter new value" GridPane.columnIndex="4" GridPane.hgrow="ALWAYS" />
+    <TextField fx:id="updateCellValueField" prefHeight="25.0" prefWidth="127.0" promptText="Enter new value" GridPane.columnIndex="4" GridPane.hgrow="ALWAYS" />
 
     <Button fx:id="updateCell" onMouseClicked="#updateCellButtonAction" text="Update value" GridPane.columnIndex="5" />
 
-    <Label maxWidth="112.0" minWidth="50" prefHeight="17.0" prefWidth="112.0" style="-fx-text-overrun: ellipsis;" text="Last update version:" GridPane.columnIndex="6" />
-    <Label fx:id="cellLastUpdateVersion" maxWidth="100" minWidth="50.0" prefWidth="33.0" style="-fx-text-overrun: ellipsis;" text="" GridPane.columnIndex="7" />
+    <Label maxWidth="112.0" minWidth="50" prefHeight="17.0" style="-fx-text-overrun: ellipsis;" text="Last update:" GridPane.columnIndex="6" />
+    <Label fx:id="cellLastUpdate" maxWidth="158.0" minWidth="50.0" prefHeight="17.0" prefWidth="100.0" style="-fx-text-overrun: ellipsis;" text="" GridPane.columnIndex="7" />
 
     <columnConstraints>
         <ColumnConstraints />
+        <ColumnConstraints maxWidth="32.0" minWidth="28.0" prefWidth="32.0" />
+        <ColumnConstraints maxWidth="99.0" minWidth="95.0" prefWidth="95.0" />
         <ColumnConstraints />
         <ColumnConstraints />
         <ColumnConstraints />
         <ColumnConstraints />
-        <ColumnConstraints />
-        <ColumnConstraints />
-        <ColumnConstraints />
+        <ColumnConstraints hgrow="ALWAYS" />
     </columnConstraints>
     <rowConstraints>
         <RowConstraints />
