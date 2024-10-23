@@ -147,7 +147,8 @@ public class SheetManagerController {
             commandsController.InitializeCommandsController(cellSelected, columnSelected, rowSelected, showWhatIfMode, hasEditPermission);
             rangesController.initializeRangesController(sheet.getRangesNames(), rangeSelected, hasEditPermission);
             versionProperty.set(version);
-            sheetUpdatesController.startVersionUpdateMessageRefresher(sheetName);
+
+            sheetUpdatesController.initializeSheetUpdatesController(sheetName);
 
         }, errorMessage -> {
             // פעולה במקרה של כשל
@@ -526,8 +527,20 @@ public class SheetManagerController {
 //    }
 
     public void refreshSheetToLatestVersion() {
-        initializeComponentsAfterSheetSelection(sheetNameProperty.get(), hasEditPermission);
+        // initializeComponentsAfterSheetSelection(sheetNameProperty.get(), hasEditPermission);
+            requestsManager.getSheetDTO(sheet -> {
+                // עדכון פרטי גיליון בלבד
+                //TODO: maybe action line reset?
+                setCells(sheet);
+                versionProperty.set(sheet.getVersion());
+                // השארת הכפתור וה-Label במצבם הנוכחי
+            }, errorMessage -> {
+                StageUtils.showAlert("Error to refresh sheetDTO", errorMessage);
+            });
+        }
+
     }
+
 //        requestsManager.getSheetDTO(sheet -> {
 //            // רק לעדכן את הפרטים הדרושים
 //            setCells(sheet);
@@ -542,4 +555,3 @@ public class SheetManagerController {
 //    public void setActive() {
 //        sheetUpdatesController.startVersionUpdateMessageRefresher(String sheet);
 //    }
-}

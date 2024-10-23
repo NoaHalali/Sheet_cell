@@ -7,6 +7,7 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.util.Duration;
+import shticell.permissions.PermissionType;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -87,6 +88,7 @@ public class PermissionsUpdatesController {
     public void setParentController(AppController parentController) {
         this.parentController = parentController;
     }
+
 
 //    public void close() {
 //        timer.cancel();

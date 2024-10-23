@@ -1,8 +1,9 @@
 package client.components.sheetManager.parts.top.updates;
 
-import client.components.multiSheetsScreen.MultiSheetsScreenController;
 import client.components.sheetManager.SheetManagerController;
 import javafx.application.Platform;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -16,22 +17,33 @@ public class SheetUpdatesController {
 
     @FXML
     private Label messageLabel;
-    private String lastMessage = ""; // משתנה לשמירת ההודעה האחרונה
+
     @FXML private Button refreshButton;
     private SheetManagerController parentController;
-    //String selectedSheet;
+    String sheetName;
+    private BooleanProperty hasNewUpdate = new SimpleBooleanProperty(false);
 
     private Timer timer;
     private TimerTask messageRefresherTask;
+    private static final String NO_UPDATES = "";
 
 
-    @FXML
-    public void initialize() {
-        messageLabel.setVisible(false);
-        refreshButton.setVisible(false); // הכפתור מוסתר כברירת מחדל
+//    @FXML
+//    public void initialize() {
+//        messageLabel.setVisible(false);
+//        refreshButton.setVisible(false); // הכפתור מוסתר כברירת מחדל
+//    }
+
+    public void initializeSheetUpdatesController(String sheetName) {
+        //messageLabel.setVisible(false);
+        //refreshButton.setVisible(false);
+        hasNewUpdate.set(false);
+        this.sheetName = sheetName;
+        startVersionUpdateMessageRefresher();
+        refreshButton.disableProperty().bind(hasNewUpdate.not());
     }
 
-    public void startVersionUpdateMessageRefresher(String sheetName) {
+    public void startVersionUpdateMessageRefresher() {
 
         messageRefresherTask = new SheetUpdatesRefresher(this::updateMessage,sheetName );
         timer = new Timer();
@@ -41,66 +53,44 @@ public class SheetUpdatesController {
 
     public void updateMessage(String message) {
         Platform.runLater(() -> {
-        if (!message.equals(lastMessage)) {
-            show();
-            //messageLabel.setVisible(true);
-            messageLabel.setText(message);
-            lastMessage = message;
+            if (!message.equals(NO_UPDATES)) {
+                hasNewUpdate.set(true); // הגדרת שיש עדכון חדש
+                messageLabel.setText(message);
+                //lastMessage = message;
 
-            messageLabel.setStyle("-fx-background-color: #f2f273; -fx-text-fill: #000000;");
-
-           // refreshButton.setVisible(true);
-        }
-    });
+                // עיצוב ה-label והכפתור לפי העדכון
+                messageLabel.setStyle("-fx-background-color: #f2f273; -fx-text-fill: #000000;");
+                //refreshButton.setDisable(false); // הפעלת הכפתור
+                //TODO: maybe cancel the task while there is a new update, doing problems for now so passed on it
+            }
+        });
     }
 
     @FXML
     private void handleRefreshButtonClick() {
-
-        hide();
-
-        System.out.println("Refreshing the sheet...");
-        System.out.println("Button visible: " + refreshButton.isVisible());
-        System.out.println("Button managed: " + refreshButton.isManaged());
-        System.out.println("Label visible: " + messageLabel.isVisible());
-        System.out.println("Label managed: " + messageLabel.isManaged());
-        parentController.refreshSheetToLatestVersion();
-
-        System.out.println("Button visible: " + refreshButton.isVisible());
-        System.out.println("Button managed: " + refreshButton.isManaged());
-        System.out.println("Label visible: " + messageLabel.isVisible());
-        System.out.println("Label managed: " + messageLabel.isManaged());
-
+        parentController.refreshSheetToLatestVersion(); // רענון הגיליון
+        setNoUpdatesMode();
     }
 
     public void cancelTask() {
         messageRefresherTask.cancel();
         timer.cancel();
-        hide();
+
+        setNoUpdatesMode();
     }
 
-    private void hide() {
-        messageLabel.setVisible(false);
-        messageLabel.setManaged(false); // להבטיח שלא תתפוס מקום בפריסה
-        messageLabel.setStyle("");
-
-        refreshButton.setVisible(false);
-        refreshButton.setManaged(false); // להבטיח שלא יתפוס מקום בפריסה
-        refreshButton.setStyle("");
-    }
-
-
-    private void show() {
-        messageLabel.setVisible(true);
-        messageLabel.setManaged(true); // מחזירה את ה-Label לתוך ה-layout
-
-        refreshButton.setVisible(true);
-        refreshButton.setManaged(true); // מחזירה את ה-Button לתוך ה-layout
+    private void setNoUpdatesMode() {
+        hasNewUpdate.set(false);
+        messageLabel.setStyle(""); // איפוס הסטייל
+        messageLabel.setText(""); // איפוס הטקסט
+        hasNewUpdate.set(false);
     }
 
     public void setMainController(SheetManagerController sheetManagerController) {
         this.parentController = sheetManagerController;
     }
+
+
 
 //    public String getSelectedSheetName() {
 //        return selectedSheetName;

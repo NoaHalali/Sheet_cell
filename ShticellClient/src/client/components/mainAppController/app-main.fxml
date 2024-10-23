@@ -11,8 +11,9 @@
     <children>
         <GridPane hgap="3.0" layoutX="5.0" layoutY="7.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@app-main.css" vgap="3.0" AnchorPane.bottomAnchor="-7.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="7.0">
             <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="562.0" minWidth="11.0" prefWidth="232.0" />
-                <ColumnConstraints hgrow="ALWAYS" maxWidth="551.0" minWidth="0.0" prefWidth="444.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="562.0" minWidth="11.0" prefWidth="319.0" />
+                <ColumnConstraints hgrow="ALWAYS" maxWidth="551.0" minWidth="0.0" prefWidth="357.0" />
+            <ColumnConstraints />
             </columnConstraints>
             <rowConstraints>
                 <RowConstraints maxHeight="195.0" minHeight="35.0" prefHeight="35.0" vgrow="NEVER" />

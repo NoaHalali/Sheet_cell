@@ -76,11 +76,12 @@ public class PermissionsUpdatesRefresher extends TimerTask {
         if (requestStatus == RequestStatus.APPROVED) {
 
             if (screen == Screen.MULTI_SHEETS) {
-                message += "Please select the sheet again to see the changes.";
+                message += "select the sheet again to see the changes.";
             } else if (screen == Screen.SINGLE_SHEET_MANAGER) {
-                message += "Please go back to dashboard and select the sheet again to see the changes.";
+                message += "go back to dashboard and select the sheet again to see the changes.";
             }
         }
+
         return message;
     }
 

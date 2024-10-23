@@ -8,7 +8,10 @@
 <HBox alignment="CENTER_LEFT" prefHeight="42.0" prefWidth="666.0" spacing="10" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.components.sheetManager.parts.top.updates.SheetUpdatesController">
     <children>
         <!-- Label להצגת ההודעה על גרסה לא עדכנית -->
-        <Label fx:id="messageLabel" prefHeight="4.0" prefWidth="400.0" wrapText="true" />
+        <Label fx:id="messageLabel" prefHeight="4.0" prefWidth="400.0" wrapText="true">
+         <HBox.margin>
+            <Insets left="5.0" />
+         </HBox.margin></Label>
 
         <!-- כפתור לרענון הגיליון -->
         <Button fx:id="refreshButton" onAction="#handleRefreshButtonClick" prefHeight="40.0" prefWidth="148.0" style="-fx-background-color: #5279bb; -fx-text-fill: white; -fx-padding: 10 20 10 20; -fx-background-radius: 8; -fx-font-size: 14px;" text="Refresh Sheet">>
