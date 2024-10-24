@@ -12,6 +12,7 @@ import shticell.engines.sheetEngine.SheetEngine;
 import shticell.sheets.sheet.parts.cell.expression.effectiveValue.EffectiveValue;
 import utils.EffectiveValueSerializer;
 import utils.ServletUtils;
+import utils.SessionUtils;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -26,9 +27,8 @@ public class GetColumnDataInRangeServlet extends HttpServlet {
         response.setCharacterEncoding("UTF-8");
         Gson gson = new Gson();
 
-        // קבלת ה-rangeDefinition וה-sheetName מה-query parameters
         String rangeDefinition = request.getParameter("rangeDefinition");
-        String sheetName = request.getParameter("sheetName");
+        String sheetName = SessionUtils.getViewedSheetName(request);
 
         if (sheetName == null || sheetName.isEmpty()) {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
@@ -37,6 +37,7 @@ public class GetColumnDataInRangeServlet extends HttpServlet {
 
             return;
         }
+
         if (rangeDefinition == null || rangeDefinition.isEmpty()) {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             String json= gson.toJson("Missing rangeDefinition");

@@ -181,6 +181,10 @@ public class AppController {
         String selectedSheetName = multiSheetsScreenController.getSelectedSheetName();
         if (selectedSheetName.equals(sheetName)) {
             multiSheetsScreenController.handleApprovePermissionForSelectedSheet(permission);
+            if(screen ==Screen.SINGLE_SHEET_MANAGER)
+            {
+                sheetManagerController.refreshSheetPermission(permission);
+            }
         }
     }
 }
