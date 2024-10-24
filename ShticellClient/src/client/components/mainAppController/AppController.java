@@ -26,7 +26,7 @@ import static client.components.Utils.Constants.*;
 
 public class AppController {
 
-    private GridPane loginComponent;
+    private ScrollPane loginComponent;
     private LoginController logicController;
 
     //private Parent chatRoomComponent;
