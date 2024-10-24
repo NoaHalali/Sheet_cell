@@ -176,4 +176,11 @@ public class AppController {
     public PermissionType getUserPermission() {
         return multiSheetsScreenController.getUserPermission();
     }
+
+    public void handleApprovePermissionForSheet(String sheetName, PermissionType permission) {
+        String selectedSheetName = multiSheetsScreenController.getSelectedSheetName();
+        if (selectedSheetName.equals(sheetName)) {
+            multiSheetsScreenController.handleApprovePermissionForSelectedSheet(permission);
+        }
+    }
 }

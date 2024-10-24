@@ -89,6 +89,10 @@ public class PermissionsUpdatesController {
         this.parentController = parentController;
     }
 
+    public void handleApprovePermissionForSheet(String sheetName, PermissionType permission) {
+        parentController.handleApprovePermissionForSheet(sheetName, permission);
+    }
+
 
 //    public void close() {
 //        timer.cancel();
