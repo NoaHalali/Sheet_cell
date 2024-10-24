@@ -26,10 +26,10 @@ public class VersionSelectorController {
     private SheetManagerController mainController;
 
     // במקום initialize
-    public void initializeVersionSelector(int numOfVersions) {
-        versionMenuButton.getItems().clear(); // מנקה את כל הפריטים הקיימים בתפריט
-        setVersionSelectorOptions(numOfVersions);
-    }
+//    public void initializeVersionSelector(int numOfVersions) {
+//        versionMenuButton.getItems().clear(); // מנקה את כל הפריטים הקיימים בתפריט
+//        setVersionSelectorOptions(numOfVersions);
+//    }
 
     public void setVersionSelectorOptions(int numOfVersions) {
         versionMenuButton.getItems().clear();

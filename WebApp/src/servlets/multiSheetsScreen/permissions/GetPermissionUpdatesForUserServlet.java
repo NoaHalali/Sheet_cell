@@ -33,6 +33,7 @@ public class GetPermissionUpdatesForUserServlet extends HttpServlet {
             PermissionUpdate update= userManager.getUserPermissionsUpdates(username);
 
 
+
             if (update != null) {
                 //TODO: extrect sheetname from session and request, compare and if equal and  approve, change the session parameter
                 updateSessionPermissionIfNeeded(request, update);
@@ -58,7 +59,7 @@ public class GetPermissionUpdatesForUserServlet extends HttpServlet {
     private void updateSessionPermissionIfNeeded(HttpServletRequest request, PermissionUpdate update) throws Exception {
 
         boolean isAproved = update.getRequestStatus().equals(RequestStatus.APPROVED);
-        if(!isAproved){
+        if(isAproved){
             String sheetName = SessionUtils.getViewedSheetName(request);
             String sheetNameFromUpdate = update.getSheetName();
 
