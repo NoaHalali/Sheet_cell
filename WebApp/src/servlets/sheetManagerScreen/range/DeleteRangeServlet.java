@@ -12,6 +12,7 @@ import utils.SessionUtils;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.List;
 
 @WebServlet("/deleteRange")
@@ -21,6 +22,8 @@ public class DeleteRangeServlet extends HttpServlet {
     public void doDelete(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
+        Gson gson = new Gson();
+
         PrintWriter out = response.getWriter();
 
         try {
@@ -51,14 +54,15 @@ public class DeleteRangeServlet extends HttpServlet {
                 List<String> rangeNames = deleteRangeInSheet(sheetName, rangeName);
 
                 // Convert the list of range names to JSON and send it as the response
-                Gson gson = new Gson();
                 String json = gson.toJson(rangeNames);
                 out.println(json);  // This is the only valid JSON response
 
             } catch (IllegalArgumentException e) {
                 // Handle invalid input error
                 response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-                response.getWriter().write("{\"error\": \"Failed to delete range: " + e.getMessage() + "\"}");
+                String json = gson.toJson(e.getMessage());
+
+                response.getWriter().write( json);
 
             } catch (Exception e) {
                 // במקרה שנזרקה שגיאה, נחזיר שגיאת שרת

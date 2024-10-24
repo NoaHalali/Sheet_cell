@@ -8,9 +8,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import parts.SheetDTO;
 import shticell.engines.sheetEngine.SheetEngine;
-import shticell.engines.sheetEngine.SheetEngineImpl;
 import shticell.permissions.PermissionType;
-import shticell.sheets.manager.MultiSheetEngineManager;
 import shticell.sheets.sheet.parts.cell.expression.effectiveValue.EffectiveValue;
 import utils.EffectiveValueSerializer;
 import utils.ServletUtils;
@@ -27,7 +25,7 @@ public class GetSheetDTOServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
         response.setContentType("application/json");
-
+        Gson gson = new Gson();
         try (PrintWriter out = response.getWriter()) {
             String sheetName = request.getParameter("sheetName");
             String permission = request.getParameter("permissionType"); //TODO : maybe change to body and get permissionType
@@ -42,7 +40,7 @@ public class GetSheetDTOServlet extends HttpServlet {
             try {
                 PermissionType permissionType = PermissionType.valueOf(permission);
                 System.out.println("GetSheetDTOServlet : permissionType: " + permissionType);
-                Gson gson = new GsonBuilder()
+                Gson gsonBuilder = new GsonBuilder()
                         .registerTypeAdapter(EffectiveValue.class, new EffectiveValueSerializer())
                         .create();
                 SheetDTO sheetDTO = getSheetDTOByName(sheetName);  // זהו המקום בו תבצע את הלוגיקה שלך
@@ -59,17 +57,20 @@ public class GetSheetDTOServlet extends HttpServlet {
 
 
                 // המרת ה-sheetDTO ל-JSON
-                String json = gson.toJson(sheetDTO);
+                String json = gsonBuilder.toJson(sheetDTO);
                 out.println(json);
             }catch (IllegalArgumentException e) {
                 //response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid permission parameter");
                 response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-                response.getWriter().write("{\"error\": \"An error occurred: Invalid permission parameter\"}");
+
+                String json =gson.toJson("An error occurred: Invalid permission parameter");
+                response.getWriter().write(json);
                 return;
             } catch (Exception e) {
                 //response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid version parameter");
                 response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-                response.getWriter().write("{\"error\": \"An error occurred: " + e.getMessage() + "\"}");
+                String json =gson.toJson( e.getMessage());
+                response.getWriter().write(json);
                 return;
             }
         } catch (Exception e) {

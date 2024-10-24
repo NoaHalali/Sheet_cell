@@ -25,6 +25,7 @@ public class SetEngineInWhatIfMode extends HttpServlet {
         // Set the response type to JSON
         resp.setContentType("application/json");
         resp.setCharacterEncoding("UTF-8");
+        Gson gson = new Gson();
         PrintWriter out = resp.getWriter();
 
         // Load parameters from the request body using Properties
@@ -41,25 +42,27 @@ public class SetEngineInWhatIfMode extends HttpServlet {
         // Validate parameters
         if (sheetName == null || cellID == null) {
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            resp.getWriter().write("{\"error\": \"Missing sheet Name or cell ID\"}");
+            String json = gson.toJson("Missing sheet Name or cell ID");
+            resp.getWriter().write(json);
             return;
         }
 
         try {
              setSubEngineInWhatIfMode(sheetName,cellID, request);
 
-            Gson gson = new Gson();
 
             resp.setStatus(HttpServletResponse.SC_OK);
 
         } catch (IllegalArgumentException e) {
             // Handle invalid input error
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            resp.getWriter().write("{\"error\": \"Failed to calculate WhatIf on cell: " + e.getMessage() + "\"}");
+            String json = gson.toJson(e.getMessage());
+            resp.getWriter().write(json);
         } catch (Exception e) {
             // Handle server error
             resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            resp.getWriter().write("{\"error\": \"Failed to calculate WhatIf on cell: " + e.getMessage() + "\"}");
+            String json = gson.toJson(e.getMessage());
+            resp.getWriter().write(json);
         }
     }
 

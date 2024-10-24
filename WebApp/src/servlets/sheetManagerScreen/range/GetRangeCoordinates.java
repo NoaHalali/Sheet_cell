@@ -34,7 +34,6 @@ public class GetRangeCoordinates extends HttpServlet{
                 return;
             }
 
-            System.out.println("Getting range coordinates, request URI is: " + request.getRequestURI());
 
             try {
 
