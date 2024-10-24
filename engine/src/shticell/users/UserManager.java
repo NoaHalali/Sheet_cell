@@ -39,7 +39,7 @@ public class UserManager {
 
     public boolean isUserExists(String username) {
         System.out.println("Engine is checking if user exists: " + username);
-        return usersSet.contains(username);
+        return usersSet.contains(username.toUpperCase());
     }
 
     public synchronized PermissionUpdate getUserPermissionsUpdates(String username) {

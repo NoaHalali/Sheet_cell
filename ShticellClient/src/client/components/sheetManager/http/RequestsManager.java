@@ -109,7 +109,8 @@ public class RequestsManager {
                     Boolean isUpdated = GSON_INSTANCE.fromJson(responseBody, Boolean.class);
                     Platform.runLater(() -> onSuccess.accept(isUpdated));
                 } else {
-                    String errorMessage = GSON_INSTANCE.fromJson(responseBody, Map.class).get("error").toString();
+                   // String errorMessage = GSON_INSTANCE.fromJson(responseBody, Map.class).get("error").toString();
+                    String errorMessage = GSON_INSTANCE.fromJson(responseBody, String.class);
                     Platform.runLater(() -> onFailure.accept(errorMessage));
 
                 }

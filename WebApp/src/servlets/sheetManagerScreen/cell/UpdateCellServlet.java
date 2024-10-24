@@ -21,6 +21,7 @@ public class UpdateCellServlet extends HttpServlet {
     @Override
     protected void doPut(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setContentType("application/json");
+        Gson gson = new Gson();
 
         try {
             //String sheetName = request.getParameter("sheetName");
@@ -49,28 +50,31 @@ public class UpdateCellServlet extends HttpServlet {
                 response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing cellID or newValue parameter");
                 return;
             }
-
             boolean isUpdated = false;
             try {
                 Coordinate coordinate = CoordinateImpl.parseCoordinate(cellID);
                 isUpdated = updateCellInSheet(sheetName, coordinate, newValue,request, username);
 
-            } catch (Exception e) {
+            }
+            catch (Exception e) {
                 // במקרה שנזרקה שגיאה, נחזיר שגיאת שרת
+
                 response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-                response.getWriter().write("{\"error\": " + e.getMessage() + "\"}");
+                String json= gson.toJson(e.getMessage());
+                response.getWriter().write( json );
                 return;
             }
 
             // החזרת התשובה – האם התא התעדכן או לא (true/false)
-            Gson gson = new Gson();
+
             String json = gson.toJson(isUpdated);
             response.getWriter().write(json);
 
         } catch (Exception e) {
             // במקרה של שגיאה כללית, נחזיר שגיאת שרת
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            response.getWriter().write("{\"error\": \"An error occurred: " + e.getMessage() + "\"}");
+            String json= gson.toJson(e.getMessage());
+            response.getWriter().write( json );
 
         }
 

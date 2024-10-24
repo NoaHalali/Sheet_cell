@@ -28,20 +28,23 @@ public class GetDistinctValuesOfMultipleColsInRangeServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
-
+        Gson gson=new Gson();
         // קבלת ה-rangeDefinition מה-query parameters
         //String sheetName = request.getParameter("sheetName");
         String sheetName = SessionUtils.getViewedSheetName(request);
         if (sheetName == null || sheetName.isEmpty()) {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            response.getWriter().write("{\"error\": \"Missing sheetName\"}");
+            String json= gson.toJson("Missing sheetName");
+            response.getWriter().write(json);
+
             return;
         }
 
         String rangeDefinition = request.getParameter("rangeDefinition");
         if (rangeDefinition == null || rangeDefinition.isEmpty()) {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            response.getWriter().write("{\"error\": \"Missing rangeDefinition\"}");
+            String json= gson.toJson("Missing rangeDefinition");
+            response.getWriter().write( json );
             return;
         }
 
@@ -49,7 +52,8 @@ public class GetDistinctValuesOfMultipleColsInRangeServlet extends HttpServlet {
         String[] cols = request.getParameterValues("cols");
         if (cols == null || cols.length == 0) {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            response.getWriter().write("{\"error\": \"Missing columns\"}");
+            String json= gson.toJson("Missing columns");
+            response.getWriter().write( json );
             return;
         }
 
@@ -60,7 +64,8 @@ public class GetDistinctValuesOfMultipleColsInRangeServlet extends HttpServlet {
                 columnsToSortBy.add(col.charAt(0));
             } else {
                 response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-                response.getWriter().write("{\"error\": \"Invalid column: " + col + "\"}");
+                String json= gson.toJson("Invalid column " + col);
+                response.getWriter().write( json );
                 return;
             }
         }
@@ -68,10 +73,10 @@ public class GetDistinctValuesOfMultipleColsInRangeServlet extends HttpServlet {
         try {
             Map<String, Set<EffectiveValue>> distinctValuesMap = getDistinctValuesOfMultipleColsInRange(request, sheetName, columnsToSortBy, rangeDefinition);
 
-            Gson gson = new GsonBuilder()
+            Gson gsonBuilder = new GsonBuilder()
                     .registerTypeAdapter(EffectiveValue.class, new EffectiveValueSerializer())  // הוספת הסריאליזר
                     .create();
-            String jsonResponse = gson.toJson(distinctValuesMap);
+            String jsonResponse = gsonBuilder.toJson(distinctValuesMap);
 
             // שליחת התשובה בחזרה ללקוח
             PrintWriter out = response.getWriter();
@@ -81,11 +86,13 @@ public class GetDistinctValuesOfMultipleColsInRangeServlet extends HttpServlet {
         }
         catch (OutdatedSheetVersionException e) {
             response.setStatus(HttpServletResponse.SC_CONFLICT);
-            response.getWriter().write("{\"error\": \"Sheet version is outdated\"}");
+            String json = gson.toJson(e.getMessage());
+            response.getWriter().write(json);
         }
         catch (Exception e) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            response.getWriter().write("{\"error\": \"An error occurred: " + e.getMessage() + "\"}");
+            String json= gson.toJson(e.getMessage());
+            response.getWriter().write( json );
         }
     }
 
