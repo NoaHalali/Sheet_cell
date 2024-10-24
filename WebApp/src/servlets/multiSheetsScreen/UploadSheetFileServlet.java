@@ -1,5 +1,6 @@
 package servlets.multiSheetsScreen;
 
+import com.google.gson.Gson;
 import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
 import shticell.files.FileManager;
@@ -28,6 +29,7 @@ public class UploadSheetFileServlet extends HttpServlet  {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/plain");
         PrintWriter out = response.getWriter();
+
 
         Collection<Part> parts = request.getParts();
         //out.println("Total parts : " + parts.size());
@@ -67,8 +69,6 @@ public class UploadSheetFileServlet extends HttpServlet  {
                         //add the new sheet to the multiSheetEngineManager
                         multiSheetEngineManager.addSheetEngine(sheet, SessionUtils.getUsername(request));
 
-                        out.println("File processed successfully."); //print to client
-                        System.out.println("On adding sheet, request URI is: " + request.getRequestURI()); //print to server
                         response.setStatus(HttpServletResponse.SC_OK);
                     }
                 }

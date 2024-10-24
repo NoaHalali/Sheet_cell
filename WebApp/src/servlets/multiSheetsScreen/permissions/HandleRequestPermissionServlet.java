@@ -85,15 +85,15 @@ public class HandleRequestPermissionServlet extends HttpServlet {
             switch (requestStatus) {
                 case APPROVED:
                     sheetEngine.approvePermissionRequest(requestNumber);
-                    out.println("permission approved successfully");
+                    //out.println("permission approved successfully");
 
                     break;
                 case REJECTED:
                     sheetEngine.denyPermissionRequest(requestNumber);
-                    out.println("permission denied successfully");
+                    //out.println("permission denied successfully");
                     break;
                 case PENDING:
-                    out.println("permission is still pending");
+                  //  out.println("permission is still pending");
                     break;
             }
 
