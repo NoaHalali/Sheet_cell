@@ -2,14 +2,12 @@ package servlets.sheetManagerScreen.cell;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.sun.net.httpserver.Request;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import parts.cell.CellDTO;
 import shticell.engines.sheetEngine.SheetEngine;
-import shticell.exceptions.OutdatedSheetVersionException;
 import shticell.sheets.sheet.parts.cell.coordinate.Coordinate;
 import shticell.sheets.sheet.parts.cell.coordinate.CoordinateImpl;
 import shticell.sheets.sheet.parts.cell.expression.effectiveValue.EffectiveValue;
@@ -24,6 +22,7 @@ public class GetCellDTOServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setContentType("application/json");
+        Gson gson =new Gson();
 
         //String sheetName = request.getParameter("sheetName");
         String sheetName = SessionUtils.getViewedSheetName(request);
@@ -32,42 +31,43 @@ public class GetCellDTOServlet extends HttpServlet {
         if(sheetName == null){
             //response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing sheet name parameter");
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            response.getWriter().write("{\"error\": \"Missing sheet name parameter\"}");
+            String json= gson.toJson("Missing sheet name parameter");
+            response.getWriter().write( json );
             return;
         }
 
         if (coordStr == null) {
             //response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing coordinate parameter");
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            response.getWriter().write("{\"error\": \"Missing coordinate parameter\"}");
+            String json= gson.toJson("Missing coordinate parameter");
+            response.getWriter().write( json );
             return;
         }
 
-        //System.out.println("Getting CellDTO, request URI is: " + request.getRequestURI());
 
         try {
+
             Coordinate coordinate = CoordinateImpl.parseCoordinate(coordStr);
             CellDTO cellDTO = getCellDTOByCoordinate(sheetName, coordinate,request);
 
             if (cellDTO == null) {
                 response.sendError(HttpServletResponse.SC_NOT_FOUND, "Cell not found for coordinate: " + coordStr);
             } else {
-                Gson gson = new GsonBuilder()
+                Gson gsonBuilder = new GsonBuilder()
                         .registerTypeAdapter(EffectiveValue.class, new EffectiveValueSerializer())
                         .create();
-                String json = gson.toJson(cellDTO);
+                String json = gsonBuilder.toJson(cellDTO);
                 response.getWriter().write(json);
             }
         }
-        catch (OutdatedSheetVersionException e){
+        catch (Exception e){
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            response.getWriter().write("{\"OutdatedSheetVersion\":"+e.getMessage()+ "\"}");
-        }catch (Exception e) {
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error processing request: " + e.getMessage());
+            String json= gson.toJson(e.getMessage());
+            response.getWriter().write( json );
         }
     }
 
-    private CellDTO getCellDTOByCoordinate(String sheetName , Coordinate coordinate, HttpServletRequest request) throws OutdatedSheetVersionException {
+    private CellDTO getCellDTOByCoordinate(String sheetName , Coordinate coordinate, HttpServletRequest request) throws Exception {
 
         SheetEngine sheetEngine = ServletUtils.getSheetEngineByName(sheetName, getServletContext());
         //ServletUtils.checkIfClientSheetVersionIsUpdated(request,sheetEngine);
@@ -77,7 +77,7 @@ public class GetCellDTOServlet extends HttpServlet {
             return sheetEngine.getCellDTOByVersion(coordinate,version);
         }
         catch (NumberFormatException e){
-            throw new OutdatedSheetVersionException("Invalid version number: " + versionStr);
+            throw new NumberFormatException("Invalid version number: " + versionStr);
         }
     }
 

@@ -36,9 +36,13 @@ public class HandleRequestPermissionServlet extends HttpServlet {
             String sheetName = prop.getProperty("sheetName");
             String requestNumberString = prop.getProperty("requestNumber");
             String requestStatusStr = prop.getProperty("requestStatus");
+            String username =SessionUtils.getUsername(request);
+            SheetEngine sheetEngine = ServletUtils.getSheetEngineByName(sheetName, getServletContext());
+            PermissionsManager sheetPermissionsManager = sheetEngine.getPermissionsManager();
+            PermissionType userPermissionForSheet= sheetPermissionsManager.getPermissionForUser(username);
 
-            String permissionStr = SessionUtils.getUserViewedSheetPermission(request);
-            if(permissionStr == null || !permissionStr.equals(PermissionType.OWNER.toString())){
+
+            if(userPermissionForSheet == null || !userPermissionForSheet.equals(PermissionType.OWNER)){
                 response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "You are not authorized to perform this action");
                 return;
             }
@@ -57,7 +61,7 @@ public class HandleRequestPermissionServlet extends HttpServlet {
             try {
                 RequestStatus requestStatus = RequestStatus.valueOf(requestStatusStr);
                 int requestNumber = Integer.parseInt(requestNumberString);
-                handleRequestPermission(sheetName.toLowerCase(), requestNumber, requestStatus,out);
+                handleRequestPermission(sheetEngine,sheetName, requestNumber, requestStatus,out);
                 response.setStatus(HttpServletResponse.SC_OK);//todo add in others
 
             } catch (IllegalArgumentException e) {
@@ -71,9 +75,8 @@ public class HandleRequestPermissionServlet extends HttpServlet {
         }
     }
 
-    private void handleRequestPermission(String sheetName, int requestNumber, RequestStatus requestStatus, PrintWriter out ) {
+    private void handleRequestPermission( SheetEngine sheetEngine,String sheetName, int requestNumber, RequestStatus requestStatus, PrintWriter out ) {
 
-            SheetEngine sheetEngine = ServletUtils.getSheetEngineByName(sheetName, getServletContext());
             UserManager userManager = ServletUtils.getUserManager(getServletContext());
             PermissionsManager sheetPermissionsManager = sheetEngine.getPermissionsManager();
             String username = sheetPermissionsManager.getRequestedUsername(requestNumber);

@@ -24,6 +24,7 @@ public class GetColumnDataInRangeServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
+        Gson gson = new Gson();
 
         // קבלת ה-rangeDefinition וה-sheetName מה-query parameters
         String rangeDefinition = request.getParameter("rangeDefinition");
@@ -31,13 +32,15 @@ public class GetColumnDataInRangeServlet extends HttpServlet {
 
         if (sheetName == null || sheetName.isEmpty()) {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            response.getWriter().write("{\"error\": \"Missing sheetName\"}");
+            String json= gson.toJson("Missing sheetName");
+            response.getWriter().write(json);
+
             return;
         }
-
-        if (rangeDefinition == null || sheetName == null) {
+        if (rangeDefinition == null || rangeDefinition.isEmpty()) {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            response.getWriter().write("{\"error\": \"Missing rangeDefinition or sheetName\"}");
+            String json= gson.toJson("Missing rangeDefinition");
+            response.getWriter().write( json );
             return;
         }
 
@@ -48,7 +51,7 @@ public class GetColumnDataInRangeServlet extends HttpServlet {
             List<CellDTO> columnData = sheetEngine.getColumnDataInRange(rangeDefinition);
 
             // המרת התוצאה ל-JSON והחזרתה
-            Gson gson = new GsonBuilder()
+            Gson gsonBuilder = new GsonBuilder()
                     .registerTypeAdapter(EffectiveValue.class, new EffectiveValueSerializer())
                     .create();
             String jsonResponse = gson.toJson(columnData);
@@ -59,7 +62,8 @@ public class GetColumnDataInRangeServlet extends HttpServlet {
 
         } catch (Exception e) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            response.getWriter().write("{\"error\": \"An error occurred: " + e.getMessage() + "\"}");
+            String json = gson.toJson(e.getMessage());
+            response.getWriter().write(json);
         }
     }
 }

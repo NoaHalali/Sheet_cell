@@ -26,12 +26,14 @@ public class GetFilteredSheetDTOFromMultipleColsServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
+        Gson gson = new Gson();
 
         // קבלת ה-rangeDefinition מה-query parameters
         String rangeDefinition = request.getParameter("rangeDefinition");
         if (rangeDefinition == null || rangeDefinition.isEmpty()) {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            response.getWriter().write("{\"error\": \"Missing rangeDefinition\"}");
+            String json= gson.toJson("Missing rangeDefinition");
+            response.getWriter().write( json );
             return;
         }
 
@@ -51,15 +53,16 @@ public class GetFilteredSheetDTOFromMultipleColsServlet extends HttpServlet {
             SheetDTO filteredSheet = sheetEngine.getFilteredSheetDTOFromMultipleCols(selectedValues, rangeDefinition);
 
             // החזרת התוצאה כ-JSON
-            Gson gson = new GsonBuilder()
+            Gson gsonBuilder = new GsonBuilder()
                     .registerTypeAdapter(EffectiveValue.class, new EffectiveValueSerializer())
                     .create();
-            String jsonResponse = gson.toJson(filteredSheet);
+            String jsonResponse = gsonBuilder.toJson(filteredSheet);
             response.getWriter().write(jsonResponse);
 
         } catch (Exception e) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            response.getWriter().write("{\"error\": \"An error occurred: " + e.getMessage() + "\"}");
+            String json= gson.toJson(e.getMessage());
+            response.getWriter().write( json );
         }
     }
 
