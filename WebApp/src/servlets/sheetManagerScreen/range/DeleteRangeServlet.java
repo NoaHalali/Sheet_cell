@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import shticell.engines.sheetEngine.SheetEngine;
 import utils.ServletUtils;
+import utils.SessionUtils;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -16,22 +17,25 @@ import java.util.List;
 public class DeleteRangeServlet extends HttpServlet {
 
     @Override
-    public void doDelete(HttpServletRequest request, HttpServletResponse resp) throws IOException {
-        resp.setContentType("application/json");
-        resp.setCharacterEncoding("UTF-8");
-        PrintWriter out = resp.getWriter();
+    public void doDelete(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        PrintWriter out = response.getWriter();
 
         try {
-            // חילוץ הפרמטרים מהבקשה (sheetName, range)
-
-            String sheetName = request.getParameter("sheetName");
+            //String sheetName = request.getParameter("sheetName");
+            String sheetName = SessionUtils.getViewedSheetName(request);
             String rangeName = request.getParameter("rangeName");
             System.out.println("Received sheetName: " + sheetName);
             System.out.println("Received rangeName: " + rangeName);
 
-            if (sheetName == null || rangeName == null) {
-                // אם אחד הפרמטרים חסר, נחזיר שגיאה
-                resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing sheetName or range");
+//            if (sheetName == null || rangeName == null) {
+//                // אם אחד הפרמטרים חסר, נחזיר שגיאה
+//                resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing sheetName or range");
+//                return;
+//            }
+            if (sheetName == null) {
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing sheet name");
                 return;
             }
 
@@ -45,19 +49,19 @@ public class DeleteRangeServlet extends HttpServlet {
 
             } catch (IllegalArgumentException e) {
                 // Handle invalid input error
-                resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-                resp.getWriter().write("{\"error\": \"Failed to delete range: " + e.getMessage() + "\"}");
+                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                response.getWriter().write("{\"error\": \"Failed to delete range: " + e.getMessage() + "\"}");
 
             } catch (Exception e) {
                 // במקרה שנזרקה שגיאה, נחזיר שגיאת שרת
-                resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
                 return;
             }
 
 
         } catch (Exception e) {
             // במקרה של שגיאה כללית, נחזיר שגיאת שרת
-            resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "An error occurred: " + e.getMessage());
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "An error occurred: " + e.getMessage());
         }
     }
 

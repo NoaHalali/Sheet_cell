@@ -19,35 +19,40 @@ import java.util.Properties;
 public class RequestPermissionServlet extends HttpServlet {
 
     @Override
-    protected void doPut(HttpServletRequest req, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/plain;charset=UTF-8");
         PrintWriter out = response.getWriter();
 
         // Load parameters from the request body using Properties
         Properties prop = new Properties();
-        try (InputStream inputStream = req.getInputStream()) {
+        try (InputStream inputStream = request.getInputStream()) {
             prop.load(inputStream);
 
+            String username = SessionUtils.getUsername(request);
+            if (username == null) {
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            }
 
             // Read values from the Properties
-            String sheetName = prop.getProperty("sheetName");
+            //String sheetName = prop.getProperty("sheetName");
+            String sheetName = SessionUtils.getViewedSheetName(request);
             String permissionType = prop.getProperty("permissionType");
-            //String username ="noa";
-            String username = SessionUtils.getUsername(req);
-
             // Validate parameters
             if (sheetName == null || permissionType == null) {
-                // אם אחד הפרמטרים חסר, נחזיר שגיאה
-                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing cellID or newValue");
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing sheetName or permissionType");
                 return;
             }
 
-            PermissionType permission = PermissionType.valueOf(permissionType.toUpperCase());
 
-            addUserPermissionRequest(sheetName, permission, username);
-            response.setStatus(HttpServletResponse.SC_OK);//todo add in others
-            out.println("Permission request " + permissionType + ", by the user '" + username +"', for sheet '" +sheetName+  "' added successfully");
-            //System.out.println("Permission request " + permissionType + ", by the user '" + username +"', for sheet '" +sheetName+  "' added successfully");
+            try {
+                PermissionType permission = PermissionType.valueOf(permissionType.toUpperCase());
+                addUserPermissionRequest(sheetName.toLowerCase(), permission, username);
+                response.setStatus(HttpServletResponse.SC_OK);//todo add in others
+                out.println("Permission request " + permissionType + ", by the user '" + username +"', for sheet '" +sheetName+  "' added successfully");
+            } catch (IllegalArgumentException e) {
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid permissionType: " + permissionType);
+            }
+
 
 
         } catch (Exception e) {
@@ -55,7 +60,7 @@ public class RequestPermissionServlet extends HttpServlet {
         }
     }
 
-    private void  addUserPermissionRequest(String sheetName, PermissionType type,String username) throws ServletException, IOException {
+    private void  addUserPermissionRequest(String sheetName, PermissionType type,String username) throws IllegalArgumentException {
         SheetEngine sheetEngine = ServletUtils.getSheetEngineByName(sheetName, getServletContext());
         sheetEngine.addUserPermissionRequest(username,type);
     }

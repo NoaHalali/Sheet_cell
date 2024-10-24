@@ -12,6 +12,7 @@ import shticell.sheets.manager.MultiSheetEngineManager;
 import shticell.sheets.sheet.parts.cell.expression.effectiveValue.EffectiveValue;
 import utils.EffectiveValueSerializer;
 import utils.ServletUtils;
+import utils.SessionUtils;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -22,33 +23,41 @@ public class GetSheetDTOByVersion extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
         response.setContentType("application/json");
-        String sheetName = request.getParameter("sheetName");
+        //String sheetName = request.getParameter("sheetName");
+        String sheetName = SessionUtils.getViewedSheetName(request);
         String version = request.getParameter("version");
 
-        if (sheetName == null || sheetName.isEmpty()) {
-            // אם השם לא קיים או ריק, נחזיר שגיאה
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing or empty sheetName parameter");
+        if (sheetName == null) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing sheet name");
             return;
         }
-
 
         System.out.println("Getting sheetDTO, request URI is: " + request.getRequestURI());
         try (PrintWriter out = response.getWriter()) {
             Gson gson = new GsonBuilder()
                     .registerTypeAdapter(EffectiveValue.class, new EffectiveValueSerializer())
                     .create();
-            // כאן תוכל לחלץ את ה-SheetDTO לפי השם מה-Engine שלך
-            SheetDTO sheetDTO = getSheetDTOByNameAndVersion(sheetName, Integer.parseInt(version));  // זהו המקום בו תבצע את הלוגיקה שלך
 
-            if (sheetDTO == null) {
-                // אם ה-sheet לא נמצא, נחזיר שגיאה מתאימה
-                response.sendError(HttpServletResponse.SC_NOT_FOUND, "Sheet not found");
-                return;
+            try {
+                SheetDTO sheetDTO = getSheetDTOByNameAndVersion(sheetName, Integer.parseInt(version));  // זהו המקום בו תבצע את הלוגיקה שלך
+
+                if (sheetDTO == null) {
+                    response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                    response.getWriter().write("{\"error\": Sheet not found \"}");
+                    //response.sendError(HttpServletResponse.SC_NOT_FOUND, "Sheet not found");
+                    return;
+                }
+
+                // המרת ה-sheetDTO ל-JSON
+                String json = gson.toJson(sheetDTO);
+                out.println(json);
+            }
+            catch (Exception e) {
+                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                response.getWriter().write("{\"error\": " + e.getMessage() + "\"}");
             }
 
-            // המרת ה-sheetDTO ל-JSON
-            String json = gson.toJson(sheetDTO);
-            out.println(json);
+
         } catch (Exception e) {
             // במקרה של תקלה, נחזיר שגיאת שרת
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "An error occurred while processing the request");
@@ -59,10 +68,5 @@ public class GetSheetDTOByVersion extends HttpServlet {
         SheetEngine sheetEngine = ServletUtils.getSheetEngineByName(sheetName, getServletContext());
         return sheetEngine.getSheetDTOByVersion(sheetVersion);
     }
-//    // זו רק דוגמה איך לחלץ את ה-SheetDTO לפי השם. תצטרך להתאים את השיטה הזו לצרכים שלך.
-//    private SheetDTO getSheetDTOByNameAndVersion(String sheetName,int sheetVersion) {
-//        MultiSheetEngineManager engineManager = ServletUtils.getMultiSheetEngineManager(getServletContext());
-//        SheetEngine sheetEngine = engineManager.getSheetEngine(sheetName);
-//        return sheetEngine.getSheetDTOByVersion(sheetVersion);
-//    }
+
 }

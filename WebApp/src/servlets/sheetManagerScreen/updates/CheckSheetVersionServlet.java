@@ -21,21 +21,34 @@ import java.io.PrintWriter;
         response.setCharacterEncoding("UTF-8");
 
         try (PrintWriter out = response.getWriter()){
-            String sheetName = request.getParameter("sheetName");
+            //String sheetName = request.getParameter("sheetName");
+            String sheetName = SessionUtils.getViewedSheetName(request);
 
             String userVersion = SessionUtils.getViewedSheetVersion(request);
-            SheetEngine sheetEngine = ServletUtils.getSheetEngineByName(sheetName, getServletContext());
-
-            // בדיקה אם גרסת המשתמש מעודכנת
-            if (!sheetEngine.isVersionUpToDate(userVersion)) {
-                // אם יש גרסה חדשה, מחזירים סטטוס 200 עם הודעה פשוטה
-                response.setStatus(HttpServletResponse.SC_OK);
-                out.write("A new version of the sheet is available.");
-            } else {
-                // אם אין עדכון, מחזירים סטטוס 204
-                response.setStatus(HttpServletResponse.SC_NO_CONTENT);
-                out.write("You are viewing the latest version of the sheet.");
+            if (sheetName == null ||  userVersion== null) {
+                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                out.write("Missing sheet name or version.");
+                return;
             }
+
+            try {
+                SheetEngine sheetEngine = ServletUtils.getSheetEngineByName(sheetName, getServletContext());
+
+                if (!sheetEngine.isVersionUpToDate(userVersion)) {
+                    // אם יש גרסה חדשה, מחזירים סטטוס 200 עם הודעה פשוטה
+                    response.setStatus(HttpServletResponse.SC_OK);
+                    out.write("A new version of the sheet is available.");
+                } else {
+                    // אם אין עדכון, מחזירים סטטוס 204
+                    response.setStatus(HttpServletResponse.SC_NO_CONTENT);
+                    out.write("You are viewing the latest version of the sheet.");
+                }
+            }
+            catch (Exception e) {
+                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                out.write("Failed to check sheet version: " + e.getMessage());
+            }
+
         } catch ( Exception e) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             response.getWriter().write("An error occurred: " + e.getMessage());

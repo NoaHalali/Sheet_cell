@@ -9,10 +9,9 @@ import shticell.users.PermissionUpdate;
 import shticell.users.UserManager;
 import utils.ServletUtils;
 import utils.SessionUtils;
-import java.time.LocalTime;
+
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Random;
 
 @WebServlet("/getPermissionUpdatesForUser")
 public class GetPermissionUpdatesForUserServlet extends HttpServlet {
@@ -20,13 +19,15 @@ public class GetPermissionUpdatesForUserServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
         response.setContentType("application/json");
-        Random numberGenerator = new Random();
         try (PrintWriter out = response.getWriter()) {
 
-            String userName = SessionUtils.getUsername(request);
+            String username = SessionUtils.getUsername(request);
+            if (username == null) {
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            }
             UserManager userManager = ServletUtils.getUserManager(getServletContext());
-            PermissionUpdate update= userManager.getUserPermissionsUpdates(userName);
-            //userManager.setNoUpdateForUser(userName);
+            PermissionUpdate update= userManager.getUserPermissionsUpdates(username);
+
 
             if (update != null) {
                 // יש עדכון - מחזירים את ה-JSON
@@ -47,13 +48,4 @@ public class GetPermissionUpdatesForUserServlet extends HttpServlet {
             response.getWriter().write("An error occurred: " + e.getMessage());
         }
     }
-
-//    public String getUpdateMessageFromPermissionUpdate(PermissionUpdate permissionUpdate, Random numberGenerator) {
-//
-//        LocalTime currentTime = LocalTime.now();
-//        String message ="Update: permission: " + permissionUpdate.getPermission() +", for sheet: " + permissionUpdate.getSheetName()
-//                + ", has been changed to: " + permissionUpdate.getRequestStatus() +" at: "+currentTime+ "random num :" +numberGenerator;
-//        return message;
-//
-//    }
 }

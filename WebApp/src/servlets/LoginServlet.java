@@ -81,9 +81,4 @@ public class LoginServlet extends HttpServlet {
         }
     }
 
-//    private void addUser(UserManager userManager, String usernameFromParameter) { //TODO: if None won't be shown, no need this method
-//        userManager.addUser(usernameFromParameter);
-//        MultiSheetEngineManager multiSheetEngineManager = ServletUtils.getMultiSheetEngineManager(getServletContext());
-//        multiSheetEngineManager.giveDefaultPermissionsToUser(usernameFromParameter);
-//    }
 }

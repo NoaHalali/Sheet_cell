@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import shticell.engines.sheetEngine.SheetEngine;
 import shticell.sheets.sheet.parts.cell.coordinate.Coordinate;
 import utils.ServletUtils;
+import utils.SessionUtils;
 
 import java.io.IOException;
 import java.util.List;
@@ -19,9 +20,14 @@ public class GetRangeCoordinates extends HttpServlet{
         protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
             response.setContentType("application/json");
 
-            String sheetName = request.getParameter("sheetName");
+            //String sheetName = request.getParameter("sheetName");
+            String sheetName = SessionUtils.getViewedSheetName(request);
             String rangeName = request.getParameter("rangeName");
 
+            if (sheetName == null) {
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing sheet name");
+                return;
+            }
 
             if (rangeName == null || rangeName.isEmpty()) {
                 response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing or empty range name parameter");
@@ -37,7 +43,6 @@ public class GetRangeCoordinates extends HttpServlet{
                 if (Coordinates == null) {
                     response.sendError(HttpServletResponse.SC_NOT_FOUND, "Range Coordinates not found for range: " + rangeName);
                 } else {
-                    // סידור ה-CellDTO ל-JSON (לא צריך Deserializers כאן)
                     Gson gson = new Gson();
                     String json = gson.toJson(Coordinates);
                     response.getWriter().write(json);

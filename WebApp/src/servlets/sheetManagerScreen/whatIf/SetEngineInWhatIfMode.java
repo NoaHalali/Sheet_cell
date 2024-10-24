@@ -10,6 +10,7 @@ import shticell.engines.sheetEngine.SheetEngine;
 import shticell.exceptions.OutdatedSheetVersionException;
 import shticell.sheets.sheet.parts.cell.coordinate.CoordinateImpl;
 import utils.ServletUtils;
+import utils.SessionUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -33,7 +34,8 @@ public class SetEngineInWhatIfMode extends HttpServlet {
         }
 
         // Read values from the Properties
-        String sheetName = prop.getProperty("sheetName");
+        //String sheetName = prop.getProperty("sheetName");
+        String sheetName = SessionUtils.getViewedSheetName(request);
         String cellID = prop.getProperty("cellID");
 
         // Validate parameters
@@ -53,11 +55,11 @@ public class SetEngineInWhatIfMode extends HttpServlet {
         } catch (IllegalArgumentException e) {
             // Handle invalid input error
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            resp.getWriter().write("{\"error\": \"Failed to add range: " + e.getMessage() + "\"}");
+            resp.getWriter().write("{\"error\": \"Failed to calculate WhatIf on cell: " + e.getMessage() + "\"}");
         } catch (Exception e) {
             // Handle server error
             resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            resp.getWriter().write("{\"error\": \"Failed to add range: " + e.getMessage() + "\"}");
+            resp.getWriter().write("{\"error\": \"Failed to calculate WhatIf on cell: " + e.getMessage() + "\"}");
         }
     }
 

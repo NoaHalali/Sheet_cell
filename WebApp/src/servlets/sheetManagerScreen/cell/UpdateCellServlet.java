@@ -22,56 +22,59 @@ public class UpdateCellServlet extends HttpServlet {
         response.setContentType("application/json");
 
         try {
-            // חילוץ הפרמטרים מהבקשה (cellID והערך החדש)
-            String sheetName = request.getParameter("sheetName");
+            //String sheetName = request.getParameter("sheetName");
             String cellID = request.getParameter("cellID");
             String newValue = request.getParameter("newValue");
 
-            if (cellID == null || newValue == null) {
-                // אם אחד הפרמטרים חסר, נחזיר שגיאה
-                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing cellID or newValue");
+            String username = SessionUtils.getUsername(request);
+            if (username == null) {
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            }
+
+            String sheetName = SessionUtils.getViewedSheetName(request);
+            if(sheetName == null){
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing sheet name");
                 return;
             }
 
-            // כאן תבצע את הלוגיקה שלך לעדכן את התא במנוע (Engine)
-            Coordinate coordinate = CoordinateImpl.parseCoordinate(cellID); // הנחה שיש לך Coordinate מתאים מזה
+            if (cellID == null || newValue == null ) {
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing cellID or newValue parameter");
+                return;
+            }
+
             boolean isUpdated = false;
-
             try {
-                isUpdated = updateCellInSheet(sheetName, coordinate, newValue,request);
-
-
+                Coordinate coordinate = CoordinateImpl.parseCoordinate(cellID);
+                isUpdated = updateCellInSheet(sheetName, coordinate, newValue,request, username);
 
             } catch (Exception e) {
                 // במקרה שנזרקה שגיאה, נחזיר שגיאת שרת
-                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                response.getWriter().write("{\"error\": " + e.getMessage() + "\"}");
                 return;
             }
 
             // החזרת התשובה – האם התא התעדכן או לא (true/false)
             Gson gson = new Gson();
-            String json = gson.toJson(isUpdated); // החזרת true אם התא השתנה, false אם לא
+            String json = gson.toJson(isUpdated);
             response.getWriter().write(json);
 
         } catch (Exception e) {
             // במקרה של שגיאה כללית, נחזיר שגיאת שרת
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "An error occurred: " + e.getMessage());
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.getWriter().write("{\"error\": \"An error occurred: " + e.getMessage() + "\"}");
+
         }
 
     }
 
-//    private boolean updateCellInSheet(String sheetName, Coordinate coordinate, String newValue) throws Exception {
-//        MultiSheetEngineManager engineManager = ServletUtils.getMultiSheetEngineManager(getServletContext());
-//        SheetEngine sheetEngine = engineManager.getSheetEngine(sheetName);
-//        return sheetEngine.updateCellValue(newValue, coordinate); // המתודה שלך מה-Engine
-//    }
+    private boolean updateCellInSheet(String sheetName, Coordinate coordinate, String newValue,
+                                      HttpServletRequest request, String username) throws Exception {
 
-    private boolean updateCellInSheet(String sheetName, Coordinate coordinate, String newValue,HttpServletRequest request) throws Exception {
         SheetEngine sheetEngine = ServletUtils.getSheetEngineByName(sheetName, getServletContext());
         ServletUtils.checkIfClientSheetVersionIsUpdated(request, sheetEngine);
-        String userName = SessionUtils.getUsername(request);
 
-        boolean isUpdated= sheetEngine.updateCellValue(newValue, coordinate, userName);
+        boolean isUpdated= sheetEngine.updateCellValue(newValue, coordinate, username);
 
         if(isUpdated) {
             int version = sheetEngine.getCurrentVersion();

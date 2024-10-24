@@ -17,8 +17,7 @@ import utils.ServletUtils;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-import static constant.Constants.USERNAME;
-import static constant.Constants.USER_VIEWED_SHEET_VERSION;
+import static constant.Constants.*;
 
 @WebServlet("/getSheetDTO")
 public class GetSheetDTOServlet extends HttpServlet {
@@ -27,33 +26,41 @@ public class GetSheetDTOServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
         response.setContentType("application/json");
-        String sheetName = request.getParameter("sheetName");
 
-        if (sheetName == null || sheetName.isEmpty()) {
-            // אם השם לא קיים או ריק, נחזיר שגיאה
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing or empty sheetName parameter");
-            return;
-        }
-
-        System.out.println("Getting sheetDTO, request URI is: " + request.getRequestURI());
         try (PrintWriter out = response.getWriter()) {
-            Gson gson = new GsonBuilder()
-                    .registerTypeAdapter(EffectiveValue.class, new EffectiveValueSerializer())
-                    .create();
-            // כאן תוכל לחלץ את ה-SheetDTO לפי השם מה-Engine שלך
-            SheetDTO sheetDTO = getSheetDTOByName(sheetName);  // זהו המקום בו תבצע את הלוגיקה שלך
+            String sheetName = request.getParameter("sheetName");
 
-            if (sheetDTO == null) {
-                // אם ה-sheet לא נמצא, נחזיר שגיאה מתאימה
-                response.sendError(HttpServletResponse.SC_NOT_FOUND, "Sheet not found");
+            if (sheetName == null || sheetName.isEmpty()) {
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing or empty sheetName parameter");
                 return;
             }
 
-            request.getSession(true).setAttribute(USER_VIEWED_SHEET_VERSION, sheetDTO.getVersion()+"");//מעדכנים את הגרסה  בSESSION
+            //System.out.println("Getting sheetDTO, request URI is: " + request.getRequestURI());
+            try {
+                Gson gson = new GsonBuilder()
+                        .registerTypeAdapter(EffectiveValue.class, new EffectiveValueSerializer())
+                        .create();
+                SheetDTO sheetDTO = getSheetDTOByName(sheetName);  // זהו המקום בו תבצע את הלוגיקה שלך
 
-            // המרת ה-sheetDTO ל-JSON
-            String json = gson.toJson(sheetDTO);
-            out.println(json);
+                if (sheetDTO == null) {
+                    // אם ה-sheet לא נמצא, נחזיר שגיאה מתאימה
+                    response.sendError(HttpServletResponse.SC_NOT_FOUND, "Sheet not found");
+                    return;
+                }
+
+                request.getSession(true).setAttribute(USER_VIEWED_SHEET_VERSION, sheetDTO.getVersion() + "");//מעדכנים את הגרסה  בSESSION
+                request.getSession(true).setAttribute(USER_VIEWED_SHEET_NAME, sheetDTO.getName());//מעדכנים את השם בSESSION
+
+
+                // המרת ה-sheetDTO ל-JSON
+                String json = gson.toJson(sheetDTO);
+                out.println(json);
+            } catch (Exception e) {
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid version parameter");
+                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                response.getWriter().write("{\"error\": \"An error occurred: " + e.getMessage() + "\"}");
+                return;
+            }
         } catch (Exception e) {
             // במקרה של תקלה, נחזיר שגיאת שרת
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "An error occurred while processing the request");

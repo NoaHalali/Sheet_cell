@@ -17,11 +17,14 @@ import java.util.List;
 public class GetRequestsListServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        //returning JSON objects, not HTML
         response.setContentType("application/json");
         try (PrintWriter out = response.getWriter()) {
 
             String sheetName = request.getParameter("sheetName");
+            if (sheetName == null) {
+                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            }
+
             SheetEngine sheetEngine = ServletUtils.getSheetEngineByName(sheetName, getServletContext());
             List<UserRequestDTO> requestsDTOList = sheetEngine.getRequestsDTOList();
 

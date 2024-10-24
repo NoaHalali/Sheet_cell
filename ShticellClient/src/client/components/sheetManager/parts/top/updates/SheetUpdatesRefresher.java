@@ -24,7 +24,7 @@ public class SheetUpdatesRefresher extends TimerTask  {
         this.finalUrl = HttpUrl
                 .parse(CHECK_SHEET_VERSION)  // כתובת ה-URL של הסרבלט
                 .newBuilder()
-                .addQueryParameter("sheetName", sheetName)  // שם הגיליון
+                //.addQueryParameter("sheetName", sheetName)  // שם הגיליון
                 .build()
                 .toString();
     }

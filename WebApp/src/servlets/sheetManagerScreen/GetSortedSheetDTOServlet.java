@@ -28,8 +28,18 @@ public class GetSortedSheetDTOServlet extends HttpServlet {
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
 
+        //String sheetName = request.getParameter("sheetName");
+        String sheetName = SessionUtils.getViewedSheetName(request);
+//        if (sheetName == null || sheetName.isEmpty()) {
+//            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+//            response.getWriter().write("{\"error\": \"Missing sheetName\"}");
+//            return;
+//        }
+        if (sheetName == null) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing sheet name");
+            return;
+        }
 
-        String sheetName = request.getParameter("sheetName");
         String rangeDefinition = request.getParameter("rangeDefinition");
         if (rangeDefinition == null || rangeDefinition.isEmpty()) {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);

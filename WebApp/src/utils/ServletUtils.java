@@ -56,7 +56,7 @@ public class ServletUtils {
 		return (MultiSheetEngineManager) servletContext.getAttribute(MULTI_SHEET_ENGINE_MANAGER_ATTRIBUTE_NAME);
 	}
 
-	public static SheetEngine getSheetEngineByName(String sheetName, ServletContext servletContext) {
+	public static SheetEngine getSheetEngineByName(String sheetName, ServletContext servletContext) throws IllegalArgumentException{
 		MultiSheetEngineManager engineManager = getMultiSheetEngineManager(servletContext);
 		return engineManager.getSheetEngine(sheetName);
 	}

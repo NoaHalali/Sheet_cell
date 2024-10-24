@@ -3,7 +3,6 @@ package shticell.sheets.manager;
 import parts.SheetDetailsDTO;
 import shticell.engines.sheetEngine.SheetEngine;
 import shticell.engines.sheetEngine.SheetEngineImpl;
-import shticell.permissions.PermissionType;
 import shticell.sheets.sheet.Sheet;
 
 import java.util.*;
@@ -16,20 +15,22 @@ public class MultiSheetEngineManager {
     private final Map<String, SheetEngine> sheetEngines = new HashMap<>(); // מנועים של גיליונות
 
     // החזרת המנוע של גיליון עם סנכרון על כל גיליון בנפרד
-    public SheetEngine getSheetEngine(String sheetId) {
-        Lock lock = sheetLocks.computeIfAbsent(sheetId, k -> new ReentrantLock());
+    public SheetEngine getSheetEngine(String sheetName) throws IllegalArgumentException {
+        if (!isSheetNameExists(sheetName)) {
+            throw new IllegalArgumentException("Sheet with name " + sheetName + " does not exist.");
+        }
 
+        Lock lock = sheetLocks.computeIfAbsent(sheetName, k -> new ReentrantLock());
         // נועל את הגישה למנוע של הגיליון
         lock.lock();
         try {
-            return sheetEngines.get(sheetId);
-
-        } finally {
+            return sheetEngines.get(sheetName);
+        }
+        finally {
             // משחרר את הנעילה לאחר סיום השימוש במנוע
             lock.unlock();
         }
     }
-
 
 //
 //    public MultiSheetEngineManager() {
@@ -46,19 +47,13 @@ public class MultiSheetEngineManager {
 //
 //        sheetEngines.put(sheetId, new SheetEngine(initialSheet));
 //    }
+
     public synchronized void addSheetEngine(Sheet sheet,String owner) {
-//        if (this.sheetEngines.containsKey(sheet.getSheetName())) {
-//            throw new IllegalArgumentException("Sheet already exists");
-//        }
         this.sheetEngines.put(sheet.getSheetName(), new SheetEngineImpl(sheet,owner));
     }
     public boolean isSheetNameExists(String sheetName) {
-        return this.sheetEngines.containsKey(sheetName);
+        return this.sheetEngines.containsKey(sheetName.toLowerCase());
     }
-
-//    public synchronized SheetEngine getSheetEngine(String sheetId) {
-//        return sheetEngines.get(sheetId);
-//    }
 
     public synchronized void removeSheet(String sheetId) {
         sheetEngines.remove(sheetId);
@@ -72,9 +67,4 @@ public class MultiSheetEngineManager {
         return list;
     }
 
-//    public void giveDefaultPermissionsToUser(String usernameFromParameter) { //maybe
-//        for (SheetEngine sheetEngine : sheetEngines.values()) {
-//            sheetEngine.givePermissionToUser(usernameFromParameter, PermissionType.NONE);
-//        }
-//    }
 }

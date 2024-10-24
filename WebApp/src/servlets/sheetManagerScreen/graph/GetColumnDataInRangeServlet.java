@@ -29,6 +29,12 @@ public class GetColumnDataInRangeServlet extends HttpServlet {
         String rangeDefinition = request.getParameter("rangeDefinition");
         String sheetName = request.getParameter("sheetName");
 
+        if (sheetName == null || sheetName.isEmpty()) {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            response.getWriter().write("{\"error\": \"Missing sheetName\"}");
+            return;
+        }
+
         if (rangeDefinition == null || sheetName == null) {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             response.getWriter().write("{\"error\": \"Missing rangeDefinition or sheetName\"}");

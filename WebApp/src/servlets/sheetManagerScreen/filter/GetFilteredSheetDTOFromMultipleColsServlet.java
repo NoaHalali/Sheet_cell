@@ -13,6 +13,7 @@ import shticell.sheets.sheet.parts.cell.expression.effectiveValue.EffectiveValue
 import utils.EffectiveValueDeserializer;
 import utils.EffectiveValueSerializer;
 import utils.ServletUtils;
+import utils.SessionUtils;
 
 import java.io.IOException;
 import java.util.Map;
@@ -38,7 +39,11 @@ public class GetFilteredSheetDTOFromMultipleColsServlet extends HttpServlet {
 
         try {
             // קבלת SheetEngine לצורך ביצוע הסינון
-            String sheetName = request.getParameter("sheetName");
+            //String sheetName = request.getParameter("sheetName");
+            String sheetName = SessionUtils.getViewedSheetName(request);
+            if (sheetName == null) {
+                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            }
 
             SheetEngine sheetEngine = ServletUtils.getSheetEngineByName(sheetName, getServletContext());
             ServletUtils.checkIfClientSheetVersionIsUpdated(request, sheetEngine);

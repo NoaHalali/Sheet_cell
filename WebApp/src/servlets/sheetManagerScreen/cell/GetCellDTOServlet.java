@@ -25,16 +25,25 @@ public class GetCellDTOServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setContentType("application/json");
 
-        String sheetName = request.getParameter("sheetName");
+        //String sheetName = request.getParameter("sheetName");
+        String sheetName = SessionUtils.getViewedSheetName(request);
         String coordStr = request.getParameter("cellID");
 
-
-        if (coordStr == null || coordStr.isEmpty()) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing or empty coordStr parameter");
+        if(sheetName == null){
+            //response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing sheet name parameter");
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            response.getWriter().write("{\"error\": \"Missing sheet name parameter\"}");
             return;
         }
 
-        System.out.println("Getting CellDTO, request URI is: " + request.getRequestURI());
+        if (coordStr == null) {
+            //response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing coordinate parameter");
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            response.getWriter().write("{\"error\": \"Missing coordinate parameter\"}");
+            return;
+        }
+
+        //System.out.println("Getting CellDTO, request URI is: " + request.getRequestURI());
 
         try {
             Coordinate coordinate = CoordinateImpl.parseCoordinate(coordStr);
@@ -43,7 +52,6 @@ public class GetCellDTOServlet extends HttpServlet {
             if (cellDTO == null) {
                 response.sendError(HttpServletResponse.SC_NOT_FOUND, "Cell not found for coordinate: " + coordStr);
             } else {
-                // סידור ה-CellDTO ל-JSON (לא צריך Deserializers כאן)
                 Gson gson = new GsonBuilder()
                         .registerTypeAdapter(EffectiveValue.class, new EffectiveValueSerializer())
                         .create();

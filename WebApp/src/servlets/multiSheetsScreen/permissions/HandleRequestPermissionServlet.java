@@ -12,6 +12,7 @@ import shticell.permissions.RequestStatus;
 import shticell.users.PermissionUpdate;
 import shticell.users.UserManager;
 import utils.ServletUtils;
+import utils.SessionUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -31,36 +32,31 @@ public class HandleRequestPermissionServlet extends HttpServlet {
         try (InputStream inputStream = req.getInputStream()) {
             prop.load(inputStream);
 
-
             // Read values from the Properties
-            String sheetName = prop.getProperty("sheetName");
+            //String sheetName = prop.getProperty("sheetName");
             String requestNumberString = prop.getProperty("requestNumber");
             String requestStatusStr = prop.getProperty("requestStatus");
-           // String username = "noa"; //SessionUtils.getUsername(req);
 
-            //String permissionType = prop.getProperty("permissionType");
-            //PermissionType permission = PermissionType.valueOf(permissionType.toUpperCase());
-
-            // Validate parameters
-            if (sheetName == null || requestNumberString == null || requestStatusStr == null) {
-                // אם אחד הפרמטרים חסר, נחזיר שגיאה
-                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing cellID or newValue"); //TODO: check if its printed or need to be from out.println()
+            String sheetName = SessionUtils.getViewedSheetName(req);
+            if(sheetName == null){
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing sheet name");
                 return;
             }
-
+            // Validate parameters
+            if ( requestNumberString == null || requestStatusStr == null) {
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing request number or request status");
+                return;
+            }
 
             try {
                 RequestStatus requestStatus = RequestStatus.valueOf(requestStatusStr);
                 int requestNumber = Integer.parseInt(requestNumberString);
-                handleRequestPermission(sheetName, requestNumber, requestStatus,out);
+                handleRequestPermission(sheetName.toLowerCase(), requestNumber, requestStatus,out);
                 response.setStatus(HttpServletResponse.SC_OK);//todo add in others
 
             } catch (IllegalArgumentException e) {
                 response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid parameters");
             }
-
-            //RequestStatus requestStatus = RequestStatus.valueOf(requestStatusStr);
-            //int requestNumber = Integer.parseInt(requestNumberString);
 
 
         } catch (Exception e) {

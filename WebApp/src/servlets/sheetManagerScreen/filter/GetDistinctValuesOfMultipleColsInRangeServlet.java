@@ -30,7 +30,14 @@ public class GetDistinctValuesOfMultipleColsInRangeServlet extends HttpServlet {
         response.setCharacterEncoding("UTF-8");
 
         // קבלת ה-rangeDefinition מה-query parameters
-        String sheetName = request.getParameter("sheetName");
+        //String sheetName = request.getParameter("sheetName");
+        String sheetName = SessionUtils.getViewedSheetName(request);
+        if (sheetName == null || sheetName.isEmpty()) {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            response.getWriter().write("{\"error\": \"Missing sheetName\"}");
+            return;
+        }
+
         String rangeDefinition = request.getParameter("rangeDefinition");
         if (rangeDefinition == null || rangeDefinition.isEmpty()) {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
@@ -61,7 +68,6 @@ public class GetDistinctValuesOfMultipleColsInRangeServlet extends HttpServlet {
         try {
             Map<String, Set<EffectiveValue>> distinctValuesMap = getDistinctValuesOfMultipleColsInRange(request, sheetName, columnsToSortBy, rangeDefinition);
 
-            // המרת התוצאה ל-JSON תוך שימוש ב-EffectiveValueSerializer
             Gson gson = new GsonBuilder()
                     .registerTypeAdapter(EffectiveValue.class, new EffectiveValueSerializer())  // הוספת הסריאליזר
                     .create();
@@ -87,7 +93,6 @@ public class GetDistinctValuesOfMultipleColsInRangeServlet extends HttpServlet {
                                                                                     List<Character> columnsToSortBy, String rangeDefinition)
             throws OutdatedSheetVersionException
     {
-
         SheetEngine sheetEngine = ServletUtils.getSheetEngineByName(sheetName, getServletContext());
         ServletUtils.checkIfClientSheetVersionIsUpdated(request, sheetEngine);
         Map<String, Set<EffectiveValue>> distinctValuesMap = sheetEngine.getDistinctValuesOfMultipleColsInRange(columnsToSortBy, rangeDefinition);

@@ -80,7 +80,7 @@ public class RequestsManager {
         // יצירת ה-URL עם הפרמטרים (Query Parameters)
         String finalUrl = HttpUrl.parse(UPDATE_CELL)
                 .newBuilder()
-                .addQueryParameter("sheetName", sheetName)  // הוספת שם הגיליון
+                //.addQueryParameter("sheetName", sheetName)  // הוספת שם הגיליון
                 .addQueryParameter("cellID", cellID)        // הוספת ID של התא
                 .addQueryParameter("newValue", newValue)    // הוספת הערך החדש
                 .build()
@@ -106,7 +106,9 @@ public class RequestsManager {
                     Boolean isUpdated = GSON_INSTANCE.fromJson(responseBody, Boolean.class);
                     Platform.runLater(() -> onSuccess.accept(isUpdated));
                 } else {
-                    Platform.runLater(() -> onFailure.accept(responseBody));
+                    String errorMessage = GSON_INSTANCE.fromJson(responseBody, Map.class).get("error").toString();
+                    Platform.runLater(() -> onFailure.accept(errorMessage));
+
                 }
             }
         });
@@ -115,7 +117,7 @@ public class RequestsManager {
     public void getCellDTO(String cellID, Consumer<CellDTO> onSuccess, Consumer<String> onFailure) {
         String finalUrl = HttpUrl.parse(GET_CELL_DTO_URL)
                 .newBuilder()
-                .addQueryParameter("sheetName", sheetName)
+                //.addQueryParameter("sheetName", sheetName)
                 .addQueryParameter("cellID", cellID)
                 .build()
                 .toString();
@@ -141,7 +143,8 @@ public class RequestsManager {
                     CellDTO cellDTO = gson.fromJson(responseBody, CellDTO.class);
                     Platform.runLater(() -> onSuccess.accept(cellDTO));
                 } else {
-                    Platform.runLater(() -> onFailure.accept(responseBody));
+                    String errorMessage = GSON_INSTANCE.fromJson(responseBody, Map.class).get("error").toString();
+                    Platform.runLater(() -> onFailure.accept(errorMessage));
                 }
             }
         });
@@ -152,7 +155,7 @@ public class RequestsManager {
         String finalUrl = HttpUrl
                 .parse(GET_SHEET_DTO_BY_VERSION)
                 .newBuilder()
-                .addQueryParameter("sheetName", sheetName)
+                //.addQueryParameter("sheetName", sheetName)
                 .addQueryParameter("version" ,version)
                 .build()
                 .toString();
@@ -185,7 +188,8 @@ public class RequestsManager {
                     Platform.runLater(() -> onSuccess.accept(sheet));
                 } else {
                     // במקרה של שגיאה נציג הודעה
-                    Platform.runLater(() -> onFailure.accept("Error uploading file: " + responseBody));
+                    String errorMessage = GSON_INSTANCE.fromJson(responseBody, Map.class).get("error").toString();
+                    Platform.runLater(() -> onFailure.accept(errorMessage));
                 }
             }
         });
@@ -195,8 +199,7 @@ public class RequestsManager {
         String RESOURCE = "/api/add-range"; // שינוי ה-RESOURCE בהתאם לצורך שלך
 
         // יצירת ה-body בצורה של טקסט רגיל עם מפריד שורות "\n"
-        String body = "sheetName=" + sheetName + "\n" +
-                "rangeName=" + rangeName + "\n" +
+        String body = "rangeName=" + rangeName + "\n" +
                 "rangeDefinition=" + rangeDefinition;
 
         // יצירת בקשת POST עם ה-body
@@ -221,7 +224,8 @@ public class RequestsManager {
                     List<String> rangeNames = GSON_INSTANCE.fromJson(responseBody, listOfStringType);
                     Platform.runLater(() -> onSuccess.accept(rangeNames));
                 } else {
-                    Platform.runLater(() -> onFailure.accept("Error uploading file: " + responseBody));
+                    String errorMessage = GSON_INSTANCE.fromJson(responseBody, Map.class).get("error").toString();
+                    Platform.runLater(() -> onFailure.accept(errorMessage));
                 }
             }
         });
@@ -230,7 +234,7 @@ public class RequestsManager {
     public void deleteRange(String rangeName, Consumer<List<String>> onSuccess, Consumer<String> onFailure) {
         String finalUrl = HttpUrl.parse(DELETE_RANGE_URL)
                 .newBuilder()
-                .addQueryParameter("sheetName", sheetName)
+                //.addQueryParameter("sheetName", sheetName)
                 .addQueryParameter("rangeName", rangeName)
                 .build()
                 .toString();
@@ -257,7 +261,8 @@ public class RequestsManager {
                     List<String> rangeNames = GSON_INSTANCE.fromJson(responseBody, listOfStringType);
                     Platform.runLater(() -> onSuccess.accept(rangeNames));
                 } else {
-                    Platform.runLater(() -> onFailure.accept("Error uploading file: " + responseBody));
+                    String errorMessage = GSON_INSTANCE.fromJson(responseBody, Map.class).get("error").toString();
+                    Platform.runLater(() -> onFailure.accept(errorMessage));
                 }
             }
         });
@@ -268,7 +273,7 @@ public class RequestsManager {
         String finalUrl = HttpUrl
                 .parse(GET_RANGE_COORDINATES)
                 .newBuilder()
-                .addQueryParameter("sheetName", sheetName)
+                //.addQueryParameter("sheetName", sheetName)
                 .addQueryParameter("rangeName" ,rangeName)
                 .build()
                 .toString();
@@ -299,8 +304,8 @@ public class RequestsManager {
                     // מעבירים את ה-DTO ל-UI באמצעות ה-Consumer של onSuccess
                     Platform.runLater(() -> onSuccess.accept(rangeCoordinates));
                 } else {
-                    // במקרה של שגיאה נציג הודעה
-                    Platform.runLater(() -> onFailure.accept("Error uploading file: " + responseBody));
+                    String errorMessage = GSON_INSTANCE.fromJson(responseBody, Map.class).get("error").toString();
+                    Platform.runLater(() -> onFailure.accept(errorMessage));
                 }
             }
         });
@@ -310,7 +315,7 @@ public class RequestsManager {
         // יצירת URL עם הפרמטרים
         String finalUrl = HttpUrl.parse(GET_COLUMN_DATA_IN_RANGE)
                 .newBuilder()
-                .addQueryParameter("sheetName", sheetName)
+                //.addQueryParameter("sheetName", sheetName)
                 .addQueryParameter("rangeDefinition", rangeDefinition)
                 .build()
                 .toString();
@@ -340,7 +345,8 @@ public class RequestsManager {
                     List<CellDTO> columnData = gson.fromJson(responseBody, new TypeToken<List<CellDTO>>(){}.getType());
                     Platform.runLater(() -> onSuccess.accept(columnData));
                 } else {
-                    Platform.runLater(() -> onFailure.accept("Error fetching data: " + responseBody));
+                    String errorMessage = GSON_INSTANCE.fromJson(responseBody, Map.class).get("error").toString();
+                    Platform.runLater(() -> onFailure.accept(errorMessage));
                 }
             }
         });
@@ -350,7 +356,7 @@ public class RequestsManager {
         // יצירת URL עם פרמטרים מתאימים ל-batch של ה-GET
         HttpUrl.Builder urlBuilder = HttpUrl.parse(GET_SORTED_SHEET_DTO)
                 .newBuilder()
-                .addQueryParameter("sheetName", sheetName)
+                //.addQueryParameter("sheetName", sheetName)
                 .addQueryParameter("rangeDefinition", rangeDefinition);
 
         // המרת רשימת העמודות לרשימה ב-query parameter
@@ -387,58 +393,58 @@ public class RequestsManager {
                     Platform.runLater(() -> onSuccess.accept(sortedSheet));
                 } else {
                     String errorMessage = GSON_INSTANCE.fromJson(responseBody, Map.class).get("error").toString();
-                    Platform.runLater(() -> onFailure.accept("Error fetching sorted sheetDTO: " + errorMessage));
+                    Platform.runLater(() -> onFailure.accept(errorMessage));
                 }
             }
         });
     }
 
-    public void getClonedSheet(Consumer<Sheet> onSuccess, Consumer<String> onFailure) {
-        //OkHttpClient client = new OkHttpClient().newBuilder().build();
-
-        String finalUrl = HttpUrl
-                .parse(GET_CLONED_SHEET)
-                .newBuilder()
-                .addQueryParameter("sheetName", sheetName)
-                .build()
-                .toString();
-
-        System.out.println("New request is launched for: " + GET_CLONED_SHEET);
-
-        HttpClientUtil.runAsyncByUrl(finalUrl, new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                // במקרה של כשל, נפעיל את ה-Consumer של onFailure
-                Platform.runLater(() -> onFailure.accept("Error: " + e.getMessage()));
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                String responseBody = response.body().string();
-
-                if (response.isSuccessful()) {
-                    Gson gson = new GsonBuilder()
-                            .registerTypeAdapter(Coordinate.class, new CoordinateDeserializer())
-                            .registerTypeAdapter(EffectiveValue.class, new EffectiveValueDeserializer())
-                            .create();
-
-                    // ממירים את ה-Response ל-SheetDTO
-                    Sheet sheet = gson.fromJson(responseBody, Sheet.class);
-                    System.out.println("Sheet constructor from json string: " + sheet);
-
-
-                    // מעבירים את ה-DTO ל-UI באמצעות ה-Consumer של onSuccess
-                    Platform.runLater(() -> onSuccess.accept(sheet));
-                } else {
-                    // במקרה של שגיאה נציג הודעה
-                    Platform.runLater(() -> onFailure.accept("Error uploading file: " + responseBody));
-                }
-            }
-        });
-    }
+//    public void getClonedSheet(Consumer<Sheet> onSuccess, Consumer<String> onFailure) {
+//        //OkHttpClient client = new OkHttpClient().newBuilder().build();
+//
+//        String finalUrl = HttpUrl
+//                .parse(GET_CLONED_SHEET)
+//                .newBuilder()
+//                .addQueryParameter("sheetName", sheetName)
+//                .build()
+//                .toString();
+//
+//        System.out.println("New request is launched for: " + GET_CLONED_SHEET);
+//
+//        HttpClientUtil.runAsyncByUrl(finalUrl, new Callback() {
+//            @Override
+//            public void onFailure(Call call, IOException e) {
+//                // במקרה של כשל, נפעיל את ה-Consumer של onFailure
+//                Platform.runLater(() -> onFailure.accept("Error: " + e.getMessage()));
+//            }
+//
+//            @Override
+//            public void onResponse(Call call, Response response) throws IOException {
+//                String responseBody = response.body().string();
+//
+//                if (response.isSuccessful()) {
+//                    Gson gson = new GsonBuilder()
+//                            .registerTypeAdapter(Coordinate.class, new CoordinateDeserializer())
+//                            .registerTypeAdapter(EffectiveValue.class, new EffectiveValueDeserializer())
+//                            .create();
+//
+//                    // ממירים את ה-Response ל-SheetDTO
+//                    Sheet sheet = gson.fromJson(responseBody, Sheet.class);
+//                    System.out.println("Sheet constructor from json string: " + sheet);
+//
+//
+//                    // מעבירים את ה-DTO ל-UI באמצעות ה-Consumer של onSuccess
+//                    Platform.runLater(() -> onSuccess.accept(sheet));
+//                } else {
+//                    // במקרה של שגיאה נציג הודעה
+//                    Platform.runLater(() -> onFailure.accept("Error uploading file: " + responseBody));
+//                }
+//            }
+//        });
+//    }
 
     public void setEngineInWhatIfMode(Coordinate coord, Consumer<Void> onSuccess, Consumer<String> onFailure) {
-        String body = "sheetName=" + sheetName + "\n" + "cellID=" + coord.toString() + "\n";
+        String body = "cellID=" + coord.toString() + "\n";
 
         Request request = new Request.Builder()
                 .url(SET_SHEET_IN_WHAT_IF_MODE)
@@ -470,8 +476,7 @@ public class RequestsManager {
 
     public void calculateWhatIfValueForCell(double value,Consumer<SheetDTO> onSuccess, Consumer<String> onFailure){
         // יצירת ה-body בצורה של טקסט רגיל עם מפריד שורות "\n"
-        String body = "sheetName=" + sheetName + "\n" +
-                "value=" + value + "\n" ;
+        String body = "value=" + value + "\n" ;
 
         // יצירת בקשת POST עם ה-body
         Request request = new Request.Builder()
@@ -498,8 +503,8 @@ public class RequestsManager {
                     SheetDTO changeSheet = gson.fromJson(responseBody, SheetDTO.class);
                     onSuccess.accept(changeSheet);
                 } else {
-                    throw new IllegalArgumentException(responseBody);
-                    //Platform.runLater(() -> onFailure.accept("Error uploading file: " + responseBody));
+                    String errorMessage = GSON_INSTANCE.fromJson(responseBody, Map.class).get("error").toString();
+                    Platform.runLater(() -> onFailure.accept("HIIIII"+errorMessage));
                 }
             }
         });
@@ -509,7 +514,7 @@ public class RequestsManager {
         // המרת רשימת העמודות לפורמט שניתן לשלוח ב-Query Parameters
         HttpUrl.Builder urlBuilder = HttpUrl.parse(GET_DISTINCT_VALUES_OF_MULTIPLE_COLS_PATH)
                 .newBuilder()
-                .addQueryParameter("sheetName", sheetName)
+                //.addQueryParameter("sheetName", sheetName)
                 .addQueryParameter("rangeDefinition", rangeDefinition);
 
         // הוספת העמודות כ-Query Parameters
@@ -546,59 +551,12 @@ public class RequestsManager {
 
                     Platform.runLater(() -> onSuccess.accept(distinctValuesMap));
                 } else {
-                    Platform.runLater(() -> onFailure.accept("Error fetching distinct values: " + responseBody));
+                    String errorMessage = GSON_INSTANCE.fromJson(responseBody, Map.class).get("error").toString();
+                    Platform.runLater(() -> onFailure.accept(errorMessage));
                 }
             }
         });
     }
-
-//    public void getFilteredSheetDTO(Map<String, Set<EffectiveValue>> selectedValues, String rangeDefinition, Consumer<SheetDTO> onSuccess, Consumer<String> onFailure) {
-//        // יצירת URL עם הפרמטרים
-//        HttpUrl.Builder urlBuilder = HttpUrl.parse(GET_FILTERED_SHEET_DTO)
-//                .newBuilder()
-//                .addQueryParameter("rangeDefinition", rangeDefinition);
-//
-//        // המרת ה-Map של selectedValues ל-query parameters
-//        for (Map.Entry<String, Set<EffectiveValue>> entry : selectedValues.entrySet()) {
-//            String column = entry.getKey();
-//            for (EffectiveValue value : entry.getValue()) {
-//                urlBuilder.addQueryParameter("selectedValues[" + column + "]", value.toString());
-//            }
-//        }
-//
-//        String finalUrl = urlBuilder.build().toString();
-//
-//        // יצירת בקשת GET
-//        Request request = new Request.Builder()
-//                .url(finalUrl)
-//                .get()
-//                .build();
-//
-//        // קריאה אסינכרונית לשרת
-//        HttpClientUtil.runAsyncByRequest(request, new Callback() {
-//            @Override
-//            public void onFailure(Call call, IOException e) {
-//                Platform.runLater(() -> onFailure.accept("Failed to get filtered sheetDTO: " + e.getMessage()));
-//            }
-//
-//            @Override
-//            public void onResponse(Call call, Response response) throws IOException {
-//                String responseBody = response.body().string();
-//                if (response.isSuccessful()) {
-//                    // המרת ה-JSON ל-SheetDTO עם שימוש ב-Deserializer
-//                    Gson gson = new GsonBuilder()
-//                            .registerTypeAdapter(Coordinate.class, new CoordinateDeserializer())  // שימוש ב-Deserializer
-//                            .registerTypeAdapter(EffectiveValue.class, new EffectiveValueDeserializer())  // שימוש ב-Deserializer
-//                            .create();
-//                    SheetDTO filteredSheet = gson.fromJson(responseBody, SheetDTO.class);
-//                    Platform.runLater(() -> onSuccess.accept(filteredSheet));
-//                } else {
-//                    Platform.runLater(() -> onFailure.accept("Error fetching filtered sheetDTO: " + responseBody));
-//                }
-//            }
-//        });
-//    }
-
 
     public void getFilteredSheetDTOFromMultipleCols(Map<String, Set<EffectiveValue>> selectedValues, String rangeDefinition, Consumer<SheetDTO> onSuccess, Consumer<String> onFailure) {
         // המרת המפה של הערכים הנבחרים ל-JSON
@@ -610,7 +568,7 @@ public class RequestsManager {
         // יצירת URL עם פרמטר של rangeDefinition
         String finalUrl = HttpUrl.parse(GET_FILTERED_SHEET_DTO)
                 .newBuilder()
-                .addQueryParameter("sheetName", sheetName)
+                //.addQueryParameter("sheetName", sheetName)
                 .addQueryParameter("rangeDefinition", rangeDefinition)
                 .build()
                 .toString();
@@ -644,7 +602,8 @@ public class RequestsManager {
                     //SheetDTO filteredSheet = responseGson.fromJson(responseBody, SheetDTO.class);
                     Platform.runLater(() -> onSuccess.accept(filteredSheet));
                 } else {
-                    Platform.runLater(() -> onFailure.accept("Error filtering data: " + responseBody));
+                    String errorMessage = GSON_INSTANCE.fromJson(responseBody, Map.class).get("error").toString();
+                    Platform.runLater(() -> onFailure.accept(errorMessage));
                 }
             }
         });

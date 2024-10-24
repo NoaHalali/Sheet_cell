@@ -18,9 +18,9 @@ public class SessionUtils {
         return sessionAttribute != null ? sessionAttribute.toString() : null;
     }
 
-    public static String getSheetName (HttpServletRequest request) {
+    public static String getViewedSheetName (HttpServletRequest request) {
         HttpSession session = request.getSession(false);
-        Object sessionAttribute = session != null ? session.getAttribute(Constants.SHEET_NAME) : null;
+        Object sessionAttribute = session != null ? session.getAttribute(Constants.USER_VIEWED_SHEET_NAME) : null;
         return sessionAttribute != null ? sessionAttribute.toString() : null;
     }
 

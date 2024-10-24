@@ -22,15 +22,28 @@ public class GetSheetsDetailsListServlet extends HttpServlet {
         //returning JSON objects, not HTML
         response.setContentType("application/json");
         try (PrintWriter out = response.getWriter()) {
+
             Gson gson = new Gson();
-            MultiSheetEngineManager manager = ServletUtils.getMultiSheetEngineManager(getServletContext());
+            try {
+                MultiSheetEngineManager manager = ServletUtils.getMultiSheetEngineManager(getServletContext());
 
-            String username = SessionUtils.getUsername(request);
-            List<SheetDetailsDTO> sheetDetailsDTOList = manager.getSheetsDetalisListForUser(username);
+                String username = SessionUtils.getUsername(request);
+                if (username == null) {
+                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                    return;
+                }
 
-            String json = gson.toJson(sheetDetailsDTOList);
-            out.println(json);
-            out.flush();
+                List<SheetDetailsDTO> sheetDetailsDTOList = manager.getSheetsDetalisListForUser(username);
+
+                String json = gson.toJson(sheetDetailsDTOList);
+                out.println(json);
+                out.flush();
+            }
+            catch (Exception e) {
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+            }
+
+
         }
         catch (Exception e) {
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "An error occurred while processing the request");
