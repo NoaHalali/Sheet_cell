@@ -6,6 +6,7 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 import org.jetbrains.annotations.NotNull;
+import shticell.permissions.PermissionType;
 import shticell.permissions.RequestStatus;
 import shticell.users.PermissionUpdate;
 
@@ -70,11 +71,14 @@ public class PermissionsUpdatesRefresher extends TimerTask {
         }
         RequestStatus requestStatus = permissionUpdate.getRequestStatus();
         Screen screen = parentController.getScreen();
+        PermissionType permission = permissionUpdate.getPermission();
+        String sheetName = permissionUpdate.getSheetName();
 
-        String message = "Update: permission: " + permissionUpdate.getPermission() + ", for sheet: " + permissionUpdate.getSheetName()
+
+        String message = "Update: permission: " + permission + ", for sheet: " + sheetName
                 + ", has been " + requestStatus.toString() + ". ";
         if (requestStatus == RequestStatus.APPROVED) {
-
+            parentController.handleApprovePermissionForSheet(sheetName, permission);
             if (screen == Screen.MULTI_SHEETS) {
                 message += "select the sheet again to see the changes.";
             } else if (screen == Screen.SINGLE_SHEET_MANAGER) {
