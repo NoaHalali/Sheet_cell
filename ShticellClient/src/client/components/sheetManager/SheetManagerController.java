@@ -88,6 +88,7 @@ public class SheetManagerController {
         commandsController.setMainController(this);
         rangesController.setMainController(this);
         sheetUpdatesController.setMainController(this);
+        //requestsManager.setParentController(this);
     }
 
     private void initializeProperties() {
@@ -539,6 +540,15 @@ public class SheetManagerController {
             });
         }
 
+
+    public void refreshSheetPermission(PermissionType permission) {
+
+        requestsManager.setPermissionType(permission);
+//        requestsManager.getSheetDTO(sheet -> {
+//        }, errorMessage -> {
+//            StageUtils.showAlert("Error to refresh sheetDTO", errorMessage);
+//        });
+    }
 }
 
 //        requestsManager.getSheetDTO(sheet -> {

@@ -4,6 +4,7 @@ import client.components.Utils.deserializer.CoordinateDeserializer;
 import client.components.Utils.deserializer.EffectiveValueDeserializer;
 import client.components.Utils.http.EffectiveValueSerializer;
 import client.components.Utils.http.HttpClientUtil;
+import client.components.sheetManager.SheetManagerController;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -27,11 +28,16 @@ import static client.components.Utils.Constants.*;
 
 public class RequestsManager {
 
-    private final String sheetName;
-    private final PermissionType permissionType;
+    private String sheetName;
+    private PermissionType permissionType;
+    //private final SheetManagerController parentController;
 
     public RequestsManager(String sheetName, PermissionType permissionType) {
         this.sheetName = sheetName;
+        this.permissionType = permissionType;
+    }
+
+    public void setPermissionType(PermissionType permissionType) {
         this.permissionType = permissionType;
     }
 
@@ -612,7 +618,4 @@ public class RequestsManager {
             }
         });
     }
-
-
-
 }
