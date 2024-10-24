@@ -79,7 +79,8 @@ public class RequestsManager {
                     Platform.runLater(() -> onSuccess.accept(sheet));
                 } else {
                     // במקרה של שגיאה נציג הודעה
-                    Platform.runLater(() -> onFailure.accept(responseBody));
+                    String errorMessage = GSON_INSTANCE.fromJson(responseBody, String.class);
+                    Platform.runLater(() -> onFailure.accept(errorMessage));
                 }
             }
         });
@@ -153,7 +154,7 @@ public class RequestsManager {
                     CellDTO cellDTO = gson.fromJson(responseBody, CellDTO.class);
                     Platform.runLater(() -> onSuccess.accept(cellDTO));
                 } else {
-                    String errorMessage = GSON_INSTANCE.fromJson(responseBody, Map.class).get("error").toString();
+                    String errorMessage = GSON_INSTANCE.fromJson(responseBody, String.class);
                     Platform.runLater(() -> onFailure.accept(errorMessage));
                 }
             }
@@ -198,7 +199,8 @@ public class RequestsManager {
                     Platform.runLater(() -> onSuccess.accept(sheet));
                 } else {
                     // במקרה של שגיאה נציג הודעה
-                    String errorMessage = GSON_INSTANCE.fromJson(responseBody, Map.class).get("error").toString();
+                    //String errorMessage = GSON_INSTANCE.fromJson(responseBody, Map.class).get("error").toString();
+                    String errorMessage = GSON_INSTANCE.fromJson(responseBody, String.class);
                     Platform.runLater(() -> onFailure.accept(errorMessage));
                 }
             }
@@ -234,7 +236,8 @@ public class RequestsManager {
                     List<String> rangeNames = GSON_INSTANCE.fromJson(responseBody, listOfStringType);
                     Platform.runLater(() -> onSuccess.accept(rangeNames));
                 } else {
-                    String errorMessage = GSON_INSTANCE.fromJson(responseBody, Map.class).get("error").toString();
+                    //String errorMessage = GSON_INSTANCE.fromJson(responseBody, Map.class).get("error").toString();
+                    String errorMessage = GSON_INSTANCE.fromJson(responseBody, String.class);
                     Platform.runLater(() -> onFailure.accept(errorMessage));
                 }
             }
@@ -271,7 +274,8 @@ public class RequestsManager {
                     List<String> rangeNames = GSON_INSTANCE.fromJson(responseBody, listOfStringType);
                     Platform.runLater(() -> onSuccess.accept(rangeNames));
                 } else {
-                    String errorMessage = GSON_INSTANCE.fromJson(responseBody, Map.class).get("error").toString();
+//                    String errorMessage = GSON_INSTANCE.fromJson(responseBody, Map.class).get("error").toString();
+                    String errorMessage = GSON_INSTANCE.fromJson(responseBody, String.class);
                     Platform.runLater(() -> onFailure.accept(errorMessage));
                 }
             }
@@ -314,7 +318,8 @@ public class RequestsManager {
                     // מעבירים את ה-DTO ל-UI באמצעות ה-Consumer של onSuccess
                     Platform.runLater(() -> onSuccess.accept(rangeCoordinates));
                 } else {
-                    String errorMessage = GSON_INSTANCE.fromJson(responseBody, Map.class).get("error").toString();
+//                    String errorMessage = GSON_INSTANCE.fromJson(responseBody, Map.class).get("error").toString();
+                    String errorMessage = GSON_INSTANCE.fromJson(responseBody, String.class);
                     Platform.runLater(() -> onFailure.accept(errorMessage));
                 }
             }
@@ -355,7 +360,8 @@ public class RequestsManager {
                     List<CellDTO> columnData = gson.fromJson(responseBody, new TypeToken<List<CellDTO>>(){}.getType());
                     Platform.runLater(() -> onSuccess.accept(columnData));
                 } else {
-                    String errorMessage = GSON_INSTANCE.fromJson(responseBody, Map.class).get("error").toString();
+                    String errorMessage = GSON_INSTANCE.fromJson(responseBody, String.class);
+//                    String errorMessage = GSON_INSTANCE.fromJson(responseBody, Map.class).get("error").toString();
                     Platform.runLater(() -> onFailure.accept(errorMessage));
                 }
             }
@@ -402,7 +408,8 @@ public class RequestsManager {
                     SheetDTO sortedSheet = gson.fromJson(responseBody, SheetDTO.class);
                     Platform.runLater(() -> onSuccess.accept(sortedSheet));
                 } else {
-                    String errorMessage = GSON_INSTANCE.fromJson(responseBody, Map.class).get("error").toString();
+                    String errorMessage = GSON_INSTANCE.fromJson(responseBody, String.class);
+//                    String errorMessage = GSON_INSTANCE.fromJson(responseBody, Map.class).get("error").toString();
                     Platform.runLater(() -> onFailure.accept(errorMessage));
                 }
             }
@@ -469,15 +476,12 @@ public class RequestsManager {
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
+                String responseBody = response.body().string();
                 if (response.isSuccessful()) {
                     Platform.runLater(() -> onSuccess.accept(null));
                 } else {
-                    String errorMessage = "Unknown error";
-                    if (response.body() != null) {
-                        errorMessage = response.body().string();
-                    }
-                    final String finalErrorMessage = errorMessage;
-                    Platform.runLater(() -> onFailure.accept("Error: " + finalErrorMessage));
+                    String errorMessage = GSON_INSTANCE.fromJson(responseBody, String.class);
+                    Platform.runLater(() -> onFailure.accept("Error: " + errorMessage));
                 }
                 }
 
@@ -513,8 +517,9 @@ public class RequestsManager {
                     SheetDTO changeSheet = gson.fromJson(responseBody, SheetDTO.class);
                     onSuccess.accept(changeSheet);
                 } else {
-                    String errorMessage = GSON_INSTANCE.fromJson(responseBody, Map.class).get("error").toString();
-                    Platform.runLater(() -> onFailure.accept("HIIIII"+errorMessage)); //TODO: fix printing and delete the HIIII
+//                    String errorMessage = GSON_INSTANCE.fromJson(responseBody, Map.class).get("error").toString();
+                    String errorMessage = GSON_INSTANCE.fromJson(responseBody, String.class);
+                    Platform.runLater(() -> onFailure.accept(errorMessage)); //TODO: fix printing and delete the HIIII
                 }
             }
         });
@@ -561,7 +566,8 @@ public class RequestsManager {
 
                     Platform.runLater(() -> onSuccess.accept(distinctValuesMap));
                 } else {
-                    String errorMessage = GSON_INSTANCE.fromJson(responseBody, Map.class).get("error").toString();
+//                    String errorMessage = GSON_INSTANCE.fromJson(responseBody, Map.class).get("error").toString();
+                    String errorMessage = GSON_INSTANCE.fromJson(responseBody, String.class);
                     Platform.runLater(() -> onFailure.accept(errorMessage));
                 }
             }
@@ -612,7 +618,8 @@ public class RequestsManager {
                     //SheetDTO filteredSheet = responseGson.fromJson(responseBody, SheetDTO.class);
                     Platform.runLater(() -> onSuccess.accept(filteredSheet));
                 } else {
-                    String errorMessage = GSON_INSTANCE.fromJson(responseBody, Map.class).get("error").toString();
+//                    String errorMessage = GSON_INSTANCE.fromJson(responseBody, Map.class).get("error").toString();
+                    String errorMessage = GSON_INSTANCE.fromJson(responseBody, String.class);
                     Platform.runLater(() -> onFailure.accept(errorMessage));
                 }
             }

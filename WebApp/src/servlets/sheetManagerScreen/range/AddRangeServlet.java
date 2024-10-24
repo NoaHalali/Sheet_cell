@@ -25,6 +25,7 @@ public class AddRangeServlet extends HttpServlet {
         // Set the response type to JSON
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
+        Gson gson = new Gson();
         PrintWriter out = response.getWriter();
 
         // Load parameters from the request body using Properties
@@ -54,7 +55,10 @@ public class AddRangeServlet extends HttpServlet {
         // Validate parameters
         if (rangeName == null || rangeDefinition == null) {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            response.getWriter().write("{\"error\": \"Missing rangeName or rangeDefinition\"}");
+            String json = gson.toJson("Missing rangeName or rangeDefinition");
+
+
+            response.getWriter().write(json);
             return;
         }
 
@@ -62,7 +66,6 @@ public class AddRangeServlet extends HttpServlet {
         try {
             List<String> rangeNames = addRange(sheetName, rangeName, rangeDefinition);
 
-            Gson gson = new Gson();
             String json = gson.toJson(rangeNames);
             out.println(json);  // This is the only valid JSON response
 
@@ -72,11 +75,13 @@ public class AddRangeServlet extends HttpServlet {
         } catch (IllegalArgumentException e) {
             // Handle invalid input error
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            response.getWriter().write("{\"error\": \"Failed to add range: " + e.getMessage() + "\"}");
+            String json = gson.toJson(e.getMessage());
+            response.getWriter().write(json);
         } catch (Exception e) {
             // Handle server error
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            response.getWriter().write("{\"error\": \"Failed to add range: " + e.getMessage() + "\"}");
+            String json = gson.toJson(e.getMessage());
+            response.getWriter().write(json);
         }
     }
 

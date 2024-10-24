@@ -8,7 +8,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import parts.SheetDTO;
 import shticell.engines.sheetEngine.SheetEngine;
-import shticell.sheets.manager.MultiSheetEngineManager;
 import shticell.sheets.sheet.parts.cell.expression.effectiveValue.EffectiveValue;
 import utils.EffectiveValueSerializer;
 import utils.ServletUtils;
@@ -23,6 +22,7 @@ public class GetSheetDTOByVersion extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
         response.setContentType("application/json");
+        Gson gson = new Gson();
         //String sheetName = request.getParameter("sheetName");
         String sheetName = SessionUtils.getViewedSheetName(request);
         String version = request.getParameter("version");
@@ -34,7 +34,7 @@ public class GetSheetDTOByVersion extends HttpServlet {
 
         System.out.println("Getting sheetDTO, request URI is: " + request.getRequestURI());
         try (PrintWriter out = response.getWriter()) {
-            Gson gson = new GsonBuilder()
+            Gson gsonBuilder = new GsonBuilder()
                     .registerTypeAdapter(EffectiveValue.class, new EffectiveValueSerializer())
                     .create();
 
@@ -43,18 +43,20 @@ public class GetSheetDTOByVersion extends HttpServlet {
 
                 if (sheetDTO == null) {
                     response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-                    response.getWriter().write("{\"error\": Sheet not found \"}");
+                    String json = gson.toJson("Sheet not found");
+                    out.println(json);
                     //response.sendError(HttpServletResponse.SC_NOT_FOUND, "Sheet not found");
                     return;
                 }
 
                 // המרת ה-sheetDTO ל-JSON
-                String json = gson.toJson(sheetDTO);
+                String json = gsonBuilder.toJson(sheetDTO);
                 out.println(json);
             }
             catch (Exception e) {
                 response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-                response.getWriter().write("{\"error\": " + e.getMessage() + "\"}");
+                String json = gson.toJson(e.getMessage());
+                response.getWriter().write(json);
             }
 
 

@@ -27,7 +27,7 @@ public class GetSortedSheetDTOServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
-
+         Gson gson = new Gson();
         //String sheetName = request.getParameter("sheetName");
         String sheetName = SessionUtils.getViewedSheetName(request);
 //        if (sheetName == null || sheetName.isEmpty()) {
@@ -43,15 +43,18 @@ public class GetSortedSheetDTOServlet extends HttpServlet {
         String rangeDefinition = request.getParameter("rangeDefinition");
         if (rangeDefinition == null || rangeDefinition.isEmpty()) {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            response.getWriter().write("{\"error\": \"Missing rangeDefinition\"}");
+            String json= gson.toJson("Missing rangeDefinition");
+            response.getWriter().write( json );
             return;
         }
+
 
         // קבלת העמודות לסינון מה-query parameters
         String[] columns = request.getParameterValues("columnsToSortBy");
         if (columns == null || columns.length == 0) {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            response.getWriter().write("{\"error\": \"Missing columnsToSortBy\"}");
+            String json= gson.toJson("Missing columnsToSortBy");
+            response.getWriter().write( json );
             return;
         }
 
@@ -62,7 +65,8 @@ public class GetSortedSheetDTOServlet extends HttpServlet {
                 columnsToSortBy.add(column.charAt(0));
             } else {
                 response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-                response.getWriter().write("{\"error\": \"Invalid column: " + column + "\"}");
+                String json= gson.toJson("Invalid column: " + column);
+                response.getWriter().write(json);
                 return;
             }
         }
@@ -79,10 +83,10 @@ public class GetSortedSheetDTOServlet extends HttpServlet {
             SheetDTO sortedSheet = sheetEngine.getSortedSheetDTO(rangeDefinition, columnsToSortBy);
 
             // המרת התוצאה ל-JSON
-            Gson gson = new GsonBuilder()
+            Gson gsonBuilder = new GsonBuilder()
                     .registerTypeAdapter(EffectiveValue.class, new EffectiveValueSerializer())
                     .create();
-            String jsonResponse = gson.toJson(sortedSheet);
+            String jsonResponse = gsonBuilder.toJson(sortedSheet);
 
             // שליחת התשובה בחזרה ללקוח
             PrintWriter out = response.getWriter();
@@ -91,11 +95,13 @@ public class GetSortedSheetDTOServlet extends HttpServlet {
 
         }catch (OutdatedSheetVersionException e){
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            response.getWriter().write("{\"OutdatedSheetVersion\":"+e.getMessage()+ "\"}");
+            String json =gson.toJson( e.getMessage());
+            response.getWriter().write(json);
         }
         catch (Exception e) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            response.getWriter().write("{\"error\": \"An error occurred: " + e.getMessage() + "\"}");
+            String json =gson.toJson( e.getMessage());
+            response.getWriter().write(json);
         }
     }
 }

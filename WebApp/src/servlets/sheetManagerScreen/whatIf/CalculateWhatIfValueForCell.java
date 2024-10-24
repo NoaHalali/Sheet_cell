@@ -23,6 +23,7 @@ public class CalculateWhatIfValueForCell extends HttpServlet {
         // Set the response type to JSON
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
+        Gson gson = new Gson();
         PrintWriter out = response.getWriter();
 
         // Load parameters from the request body using Properties
@@ -38,7 +39,8 @@ public class CalculateWhatIfValueForCell extends HttpServlet {
             // Validate parameters
             if (sheetName == null || valueStr == null) {
                 response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-                response.getWriter().write("{\"error\": \"Missing sheet Name or value\"}");
+                String json = gson.toJson("Missing sheet Name or value");
+                response.getWriter().write(json);
                 return;
             }
 
@@ -51,8 +53,8 @@ public class CalculateWhatIfValueForCell extends HttpServlet {
                 SheetDTO sheet = sheetEngine.calculateWhatIfValueForCell(value);
 
                 // Convert the list of range names to JSON and send it as the response
-                Gson gson = new Gson();
-                String json = gson.toJson(sheet);
+                Gson gsonBuilder = new Gson();
+                String json = gsonBuilder.toJson(sheet);
                 out.println(json);  // This is the only valid JSON response
 
                 // Set the response status as successful (optional, since 200 OK is the default)
@@ -61,23 +63,27 @@ public class CalculateWhatIfValueForCell extends HttpServlet {
             } catch (OutdatedSheetVersionException e) {
                 // Handle outdated sheet version error
                 response.setStatus(HttpServletResponse.SC_CONFLICT);
-                response.getWriter().write("{\"Outdated Sheet Version\":"+e.getMessage()+ "\"}");
+                String json = gson.toJson(e.getMessage());
+                response.getWriter().write(json);
             } catch (IllegalArgumentException e) {
                 // Handle invalid input error
                 response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-                response.getWriter().write("{\"error\": \"Failed to calculate WhatIf on cell: " + e.getMessage() + "\"}");
+                String json = gson.toJson(e.getMessage());
+                response.getWriter().write(json);
 
             }
             catch (Exception e) {
                 // Handle server error
                 response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-                response.getWriter().write("{\"error\": \"Failed to calculate WhatIf on cell: " + e.getMessage() + "\"}");
+                String json = gson.toJson(e.getMessage());
+                response.getWriter().write(json);
             }
 
         }catch (Exception e) {
             // Handle server error
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            response.getWriter().write("{\"error\": \"Failed to calculate WhatIf on cell: " + e.getMessage() + "\"}");
+            String json = gson.toJson(e.getMessage());
+            response.getWriter().write(json);
         }
     }
 
