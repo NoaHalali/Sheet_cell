@@ -133,7 +133,7 @@ public class SheetManagerController {
     public void initializeComponentsAfterSheetSelection(String sheetName, BooleanBinding hasEditPermission) {
 
         clearSelectionStates();
-        requestsManager = new RequestsManager(sheetName);
+        requestsManager = new RequestsManager(sheetName, mainController.getUserPermission());
         bindUIComponents();
         sheetNameProperty.set(sheetName);
         this.hasEditPermission = hasEditPermission;
@@ -539,7 +539,7 @@ public class SheetManagerController {
             });
         }
 
-    }
+}
 
 //        requestsManager.getSheetDTO(sheet -> {
 //            // רק לעדכן את הפרטים הדרושים

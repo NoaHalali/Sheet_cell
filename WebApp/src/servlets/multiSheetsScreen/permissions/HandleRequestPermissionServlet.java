@@ -23,21 +23,27 @@ import java.util.Properties;
 public class HandleRequestPermissionServlet extends HttpServlet {
 
     @Override
-    protected void doPut(HttpServletRequest req, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/plain;charset=UTF-8");
         PrintWriter out = response.getWriter();
 
         // Load parameters from the request body using Properties
         Properties prop = new Properties();
-        try (InputStream inputStream = req.getInputStream()) {
+        try (InputStream inputStream = request.getInputStream()) {
             prop.load(inputStream);
 
             // Read values from the Properties
-            //String sheetName = prop.getProperty("sheetName");
+            String sheetName = prop.getProperty("sheetName");
             String requestNumberString = prop.getProperty("requestNumber");
             String requestStatusStr = prop.getProperty("requestStatus");
 
-            String sheetName = SessionUtils.getViewedSheetName(req);
+            String permissionStr = SessionUtils.getUserViewedSheetPermission(request);
+            if(permissionStr == null || !permissionStr.equals(PermissionType.OWNER.toString())){
+                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "You are not authorized to perform this action");
+                return;
+            }
+
+           // String sheetName = SessionUtils.getViewedSheetName(request);
             if(sheetName == null){
                 response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing sheet name");
                 return;

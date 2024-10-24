@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import parts.SheetDTO;
 import shticell.engines.sheetEngine.SheetEngine;
 import shticell.engines.sheetEngine.SheetEngineImpl;
+import shticell.permissions.PermissionType;
 import shticell.sheets.manager.MultiSheetEngineManager;
 import shticell.sheets.sheet.parts.cell.expression.effectiveValue.EffectiveValue;
 import utils.EffectiveValueSerializer;
@@ -29,14 +30,18 @@ public class GetSheetDTOServlet extends HttpServlet {
 
         try (PrintWriter out = response.getWriter()) {
             String sheetName = request.getParameter("sheetName");
+            String permission = request.getParameter("permissionType"); //TODO : maybe change to body and get permissionType
 
-            if (sheetName == null || sheetName.isEmpty()) {
-                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing or empty sheetName parameter");
+            if (sheetName == null || permission == null) {
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing sheetName or permission parameter");
                 return;
             }
 
+
             //System.out.println("Getting sheetDTO, request URI is: " + request.getRequestURI());
             try {
+                PermissionType permissionType = PermissionType.valueOf(permission);
+                System.out.println("GetSheetDTOServlet : permissionType: " + permissionType);
                 Gson gson = new GsonBuilder()
                         .registerTypeAdapter(EffectiveValue.class, new EffectiveValueSerializer())
                         .create();
@@ -50,13 +55,19 @@ public class GetSheetDTOServlet extends HttpServlet {
 
                 request.getSession(true).setAttribute(USER_VIEWED_SHEET_VERSION, sheetDTO.getVersion() + "");//מעדכנים את הגרסה  בSESSION
                 request.getSession(true).setAttribute(USER_VIEWED_SHEET_NAME, sheetDTO.getName());//מעדכנים את השם בSESSION
+                request.getSession(true).setAttribute(USER_VIEWED_SHEET_PERMISSION, permissionType.toString());
 
 
                 // המרת ה-sheetDTO ל-JSON
                 String json = gson.toJson(sheetDTO);
                 out.println(json);
+            }catch (IllegalArgumentException e) {
+                //response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid permission parameter");
+                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                response.getWriter().write("{\"error\": \"An error occurred: Invalid permission parameter\"}");
+                return;
             } catch (Exception e) {
-                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid version parameter");
+                //response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid version parameter");
                 response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
                 response.getWriter().write("{\"error\": \"An error occurred: " + e.getMessage() + "\"}");
                 return;

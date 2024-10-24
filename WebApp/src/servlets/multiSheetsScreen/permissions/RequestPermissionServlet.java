@@ -34,15 +34,14 @@ public class RequestPermissionServlet extends HttpServlet {
             }
 
             // Read values from the Properties
-            //String sheetName = prop.getProperty("sheetName");
-            String sheetName = SessionUtils.getViewedSheetName(request);
+            //String sheetName = SessionUtils.getViewedSheetName(request);
+            String sheetName = prop.getProperty("sheetName");
             String permissionType = prop.getProperty("permissionType");
             // Validate parameters
             if (sheetName == null || permissionType == null) {
-                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing sheetName or permissionType");
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing sheetName or permissionType parameter");
                 return;
             }
-
 
             try {
                 PermissionType permission = PermissionType.valueOf(permissionType.toUpperCase());

@@ -6,6 +6,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import shticell.engines.sheetEngine.SheetEngine;
+import shticell.permissions.PermissionType;
 import utils.ServletUtils;
 import utils.SessionUtils;
 
@@ -20,7 +21,7 @@ import java.util.Properties;
 public class AddRangeServlet extends HttpServlet {
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // Set the response type to JSON
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
@@ -28,18 +29,25 @@ public class AddRangeServlet extends HttpServlet {
 
         // Load parameters from the request body using Properties
         Properties prop = new Properties();
-        try (InputStream inputStream = req.getInputStream()) {
+        try (InputStream inputStream = request.getInputStream()) {
             prop.load(inputStream);
         }
 
         // Read values from the Properties
         //String sheetName = prop.getProperty("sheetName");
-        String sheetName = SessionUtils.getViewedSheetName(req);
+        String sheetName = SessionUtils.getViewedSheetName(request);
         String rangeName = prop.getProperty("rangeName");
         String rangeDefinition = prop.getProperty("rangeDefinition");
 
         if (sheetName == null) {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing sheet name");
+            return;
+        }
+
+        String permissionStr = SessionUtils.getUserViewedSheetPermission(request);
+        boolean hasEditPermission = permissionStr.equals(PermissionType.OWNER.toString()) || permissionStr.equals(PermissionType.WRITER.toString());
+        if(permissionStr == null || !hasEditPermission){
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "You must have OWNER or WRITER permission to edit cells");
             return;
         }
 
@@ -49,9 +57,6 @@ public class AddRangeServlet extends HttpServlet {
             response.getWriter().write("{\"error\": \"Missing rangeName or rangeDefinition\"}");
             return;
         }
-
-
-
 
         // Process the request and add the range using the engine
         try {

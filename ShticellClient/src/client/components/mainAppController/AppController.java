@@ -17,6 +17,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
+import shticell.permissions.PermissionType;
 
 import java.io.IOException;
 import java.net.URL;
@@ -170,5 +171,9 @@ public class AppController {
 
     public Screen getScreen() {
         return screen;
+    }
+
+    public PermissionType getUserPermission() {
+        return multiSheetsScreenController.getUserPermission();
     }
 }

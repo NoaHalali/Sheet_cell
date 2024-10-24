@@ -6,6 +6,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import shticell.engines.sheetEngine.SheetEngine;
+import shticell.permissions.PermissionType;
 import utils.ServletUtils;
 import utils.SessionUtils;
 
@@ -36,6 +37,13 @@ public class DeleteRangeServlet extends HttpServlet {
 //            }
             if (sheetName == null) {
                 response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing sheet name");
+                return;
+            }
+
+            String permissionStr = SessionUtils.getUserViewedSheetPermission(request);
+            boolean hasEditPermission = permissionStr.equals(PermissionType.OWNER.toString()) || permissionStr.equals(PermissionType.WRITER.toString());
+            if(permissionStr == null || !hasEditPermission){
+                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "You must have OWNER or WRITER permission to edit cells");
                 return;
             }
 

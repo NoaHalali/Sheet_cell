@@ -24,6 +24,12 @@ public class SessionUtils {
         return sessionAttribute != null ? sessionAttribute.toString() : null;
     }
 
+    public static String getUserViewedSheetPermission(HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        Object sessionAttribute = session != null ? session.getAttribute(Constants.USER_VIEWED_SHEET_PERMISSION) : null;
+        return sessionAttribute != null ? sessionAttribute.toString() : null;
+    }
+
     public static void clearSession (HttpServletRequest request) {
         request.getSession().invalidate();
     }

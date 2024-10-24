@@ -155,6 +155,10 @@ public class MultiSheetsScreenController {
         return mainController.getScreen();
     }
 
+    public PermissionType getUserPermission() {
+        return permissionForSelectedSheet.get();
+    }
+
 //    private void updatePermissionsProperties(PermissionType permissionForSelectedSheet) {
 //        resetPermissionsProperties();
 //        switch (permissionForSelectedSheet){

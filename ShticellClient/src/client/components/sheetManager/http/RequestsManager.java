@@ -11,6 +11,7 @@ import javafx.application.Platform;
 import okhttp3.*;
 import parts.SheetDTO;
 import parts.cell.CellDTO;
+import shticell.permissions.PermissionType;
 import shticell.sheets.sheet.Sheet;
 import shticell.sheets.sheet.parts.cell.coordinate.Coordinate;
 import shticell.sheets.sheet.parts.cell.expression.effectiveValue.EffectiveValue;
@@ -27,18 +28,20 @@ import static client.components.Utils.Constants.*;
 public class RequestsManager {
 
     private final String sheetName;
+    private final PermissionType permissionType;
 
-    public RequestsManager(String sheetName) {
+    public RequestsManager(String sheetName, PermissionType permissionType) {
         this.sheetName = sheetName;
+        this.permissionType = permissionType;
     }
 
     public void getSheetDTO(Consumer<SheetDTO> onSuccess, Consumer<String> onFailure) {
         //OkHttpClient client = new OkHttpClient().newBuilder().build();
-
         String finalUrl = HttpUrl
                 .parse(GET_SHEET_DTO)
                 .newBuilder()
                 .addQueryParameter("sheetName", sheetName)
+                .addQueryParameter("permissionType", permissionType.toString())
                 .build()
                 .toString();
 
@@ -70,7 +73,7 @@ public class RequestsManager {
                     Platform.runLater(() -> onSuccess.accept(sheet));
                 } else {
                     // במקרה של שגיאה נציג הודעה
-                    Platform.runLater(() -> onFailure.accept("Error uploading file: " + responseBody));
+                    Platform.runLater(() -> onFailure.accept(responseBody));
                 }
             }
         });
@@ -504,7 +507,7 @@ public class RequestsManager {
                     onSuccess.accept(changeSheet);
                 } else {
                     String errorMessage = GSON_INSTANCE.fromJson(responseBody, Map.class).get("error").toString();
-                    Platform.runLater(() -> onFailure.accept("HIIIII"+errorMessage));
+                    Platform.runLater(() -> onFailure.accept("HIIIII"+errorMessage)); //TODO: fix printing and delete the HIIII
                 }
             }
         });
