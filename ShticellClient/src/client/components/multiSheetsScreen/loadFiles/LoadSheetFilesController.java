@@ -48,22 +48,13 @@ public class LoadSheetFilesController {
         HttpClientUtil.runAsyncByRequest(request, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                // טיפול בשגיאה במקרה של כשל
                 e.printStackTrace();
             }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 String responseBody = response.body().string();
-                if (response.isSuccessful()) {
-                    Platform.runLater(() -> {
-                        // טיפול במקרה שהבקשה הצליחה
-                        System.out.println("Upload successful: " + responseBody);
-                        //parentController.switchToSheetManager();
-                        //parentController.switchToMultiSheetsScreen();
-                    });
-
-                } else {
+                if (!response.isSuccessful()) {
                     Platform.runLater(() ->
                             StageUtils.showAlert("Error", "Error uploading file" + responseBody)
                     );

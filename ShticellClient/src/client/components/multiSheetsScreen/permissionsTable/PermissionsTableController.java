@@ -45,7 +45,6 @@ public class PermissionsTableController {
             row.setOnMouseClicked(event -> {
                 if (!row.isEmpty() && event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 1) {
                     UserRequestDTO clickedRowData = row.getItem();  // קבלת הנתונים של השורה שנלחצה
-                    System.out.println("request number chosen: " + clickedRowData.getRequestNumber() );
                     selectedRequestNumber = clickedRowData.getRequestNumber();
                     parentController.handleRequestSelect(clickedRowData.getRequestStatus());
 
@@ -54,17 +53,6 @@ public class PermissionsTableController {
             return row;
         });
     }
-//    private void updateRequestsList(List<UserRequestDTO> requestsList) {
-//        Platform.runLater(() -> {
-//            if (requestsList != null) {
-//                ObservableList<UserRequestDTO> items = requestsTable.getItems();
-//                items.clear(); // Clear the current table
-//                items.addAll(requestsList); // Add new DTO list to the table
-//            } else {
-//                System.err.println("requestsList is null, cannot update table.");
-//            }
-//        });
-//    }
 
     private void updateRequestsList(List<UserRequestDTO> requestsList) {
         Platform.runLater(() -> {
@@ -73,7 +61,6 @@ public class PermissionsTableController {
                 items.clear(); // Clear the current table
                 items.addAll(requestsList); // Add new DTO list to the table
 
-                // אם יש אינדקס שמור מהבחירה הקודמת, נבחר את השורה באותו אינדקס
                 int selectedRequestIndex = selectedRequestNumber-1;
                 if (selectedRequestIndex!= -1 && selectedRequestIndex < requestsList.size()) {
                     requestsTable.getSelectionModel().select(selectedRequestIndex);
@@ -89,7 +76,6 @@ public class PermissionsTableController {
     public void startListRefresher() {
         String selectedSheet = parentController.getSelectedSheetName();
 
-        // איפוס הבחירה כשמחליפים גיליון
         selectedRequestNumber = -1; // או ערך מתאים אחר שמסמן שאין בחירה
 
         if (listRefresher == null) {
@@ -102,9 +88,6 @@ public class PermissionsTableController {
         }
     }
 
-//    public String getSelectedSheetName() {
-//        return selectedSheetName;
-//    }
 
     public void setParentController(MultiSheetsScreenController parentController) {
         this.parentController = parentController;

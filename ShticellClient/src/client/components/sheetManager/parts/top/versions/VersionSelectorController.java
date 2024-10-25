@@ -3,7 +3,6 @@ package client.components.sheetManager.parts.top.versions;
 import client.components.Utils.StageUtils;
 import client.components.sheetManager.parts.center.cellsTable.TableController;
 import client.components.sheetManager.SheetManagerController;
-import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -12,7 +11,6 @@ import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import parts.SheetDTO;
 
 import java.io.IOException;
 import java.util.List;
@@ -23,13 +21,7 @@ import static client.components.Utils.Constants.TABLE_FXML_RESOURCE_LOCATION;
 public class VersionSelectorController {
 
     @FXML private MenuButton versionMenuButton;
-    private SheetManagerController mainController;
-
-    // במקום initialize
-//    public void initializeVersionSelector(int numOfVersions) {
-//        versionMenuButton.getItems().clear(); // מנקה את כל הפריטים הקיימים בתפריט
-//        setVersionSelectorOptions(numOfVersions);
-//    }
+    private SheetManagerController parentController;
 
     public void setVersionSelectorOptions(int numOfVersions) {
         versionMenuButton.getItems().clear();
@@ -64,7 +56,7 @@ public class VersionSelectorController {
 
             // קבלת ה-TableController ואתחולו עם הגרסה הנבחרת של הגיליון
             TableController tableController = loader.getController();
-             mainController.getSheetDTOByVersion(versionNumberStr,sheet->{
+             parentController.getSheetDTOByVersion(versionNumberStr, sheet->{
                tableController.showSheetPreview(sheet);
                      Scene scene = new Scene(root);
                      popupStage.setScene(scene);
@@ -77,7 +69,7 @@ public class VersionSelectorController {
         }
     }
 
-    public void setMainController(SheetManagerController mainController) {
-        this.mainController = mainController;
+    public void setParentController(SheetManagerController mainController) {
+        this.parentController = mainController;
     }
 }

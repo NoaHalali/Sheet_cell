@@ -42,7 +42,6 @@ public class UploadSheetFileServlet extends HttpServlet  {
             fileStringContent.append(readFromInputStream(part.getInputStream()));
             streams.add(part.getInputStream()); //new
         }
-        System.out.println("On upload file, request URI is: " + request.getRequestURI());
         //printFileContent(fileStringContent.toString(), out);
 
         if (!streams.isEmpty()) {

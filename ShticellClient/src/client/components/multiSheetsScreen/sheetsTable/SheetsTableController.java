@@ -23,7 +23,6 @@ import static client.components.Utils.Constants.REFRESH_RATE;
 
 public class SheetsTableController {
 
-
     @FXML private TableView<SheetDetailsDTO> sheetsTable;
     @FXML private TableColumn<SheetDetailsDTO, String> sheetNameColumn;
     @FXML private TableColumn<SheetDetailsDTO, String> ownerNameColumn;
@@ -32,9 +31,7 @@ public class SheetsTableController {
 
     private String selectedSheetName;
     private MultiSheetsScreenController parentController;
-    //private PermissionType permissionForSelectedSheet;
 
-   // @FXML private TableColumn<SheetDetailsDTO, String> permissionColumn;
 
     private Timer timer;
     private TimerTask listRefresher;
@@ -57,7 +54,6 @@ public class SheetsTableController {
             row.setOnMouseClicked(event -> {
                 if (!row.isEmpty() && event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 1) {
                     SheetDetailsDTO clickedRowData = row.getItem();  // קבלת הנתונים של השורה שנלחצה
-                    System.out.println("Clicked row of sheet: " + clickedRowData.getSheetName());
 
                     selectedSheetName = clickedRowData.getSheetName();
                     PermissionType permissionForSelectedSheet = clickedRowData.getPermission();
@@ -66,22 +62,6 @@ public class SheetsTableController {
             });
             return row;
         });
-//        sheetsTable.setRowFactory(tv -> {
-//            TableRow<SheetDetailsDTO> row = new TableRow<>();
-//            row.setOnMouseClicked(event -> {
-//                if (!row.isEmpty()) {
-//                    // קבלת השורה החדשה שנבחרה
-//                    SheetDetailsDTO rowData = row.getItem();
-//                    System.out.println("Selected row: " + rowData.getSheetName());
-//
-//                    // עדכון הבחירה בטבלה (הבחירה הקודמת תבוטל אוטומטית אם היא קיימת)
-//                    sheetsTable.getSelectionModel().select(row.getIndex());
-//                    SheetDetailsDTO clickedRowData = row.getItem();
-//                    selectedSheetName = clickedRowData.getSheetName();
-//                }
-//            });
-//            return row;
-//        });
     }
 
     private void updateSheetsList(List<SheetDetailsDTO> sheetsDetailsNames) {

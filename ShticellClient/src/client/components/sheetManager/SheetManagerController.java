@@ -82,12 +82,12 @@ public class SheetManagerController {
     }
 
     private void setMainControllerForComponents() {
-        actionLineController.setMainController(this);
-        tableController.setMainController(this);
-        versionSelectorController.setMainController(this);
-        commandsController.setMainController(this);
-        rangesController.setMainController(this);
-        sheetUpdatesController.setMainController(this);
+        actionLineController.setParentController(this);
+        tableController.setParentController(this);
+        versionSelectorController.setParentController(this);
+        commandsController.setParentController(this);
+        rangesController.setParentController(this);
+        sheetUpdatesController.setParentController(this);
         //requestsManager.setParentController(this);
     }
 
@@ -102,21 +102,6 @@ public class SheetManagerController {
         sheetNameProperty = new SimpleStringProperty();
     }
 
-//    private void bindUIComponents() {
-//        BooleanBinding whatIfAndFileBinding = Bindings.or(fileSelectedProperty.not(), showWhatIfMode);
-//
-//        table.disableProperty().bind(fileSelectedProperty.not());
-//        // actionLine.disableProperty().bind(fileSelectedProperty.not());
-//        versionSelector.disableProperty().bind(fileSelectedProperty.not());
-//        commands.disableProperty().bind(fileSelectedProperty.not());
-//        //ranges.disableProperty().bind(fileSelectedProperty.not());
-//        currentVersionLabel.textProperty().bind(versionProperty.asString());
-//
-//        //what to disable in whatIfMode
-//        actionLine.disableProperty().bind(whatIfAndFileBinding);
-//        ranges.disableProperty().bind(whatIfAndFileBinding);
-//    }
-
     private void bindUIComponents() { //TODO - maybe need only the what if
 
 //        table.disableProperty().bind(fileSelectedProperty.not().or(hasEditPermission.not()));
@@ -129,7 +114,6 @@ public class SheetManagerController {
         actionLine.disableProperty().bind(showWhatIfMode);
         ranges.disableProperty().bind(showWhatIfMode);
     }
-
 
     public void initializeComponentsAfterSheetSelection(String sheetName, BooleanBinding hasEditPermission) {
 
@@ -152,29 +136,21 @@ public class SheetManagerController {
             sheetUpdatesController.initializeSheetUpdatesController(sheetName);
 
         }, errorMessage -> {
-            // פעולה במקרה של כשל
-            System.out.println("Error to get sheetDTO: " + errorMessage);
             StageUtils.showAlert("Error to get sheetDTO", errorMessage);
         });
     }
 
     public void updateCellValue(String value) {
-
         Coordinate coordinate = tableController.getFocusedCoord();
 
-        // הסרת סימונים לפני עדכון התא
         tableController.removeMarksOfFocusedCell(() -> {
-            // לאחר הסרת הסימונים, נבצע את עדכון התא
             requestsManager.updateCell(coordinate.toString(), value, isUpdated -> {
                 if (isUpdated) {
-                    // אם התא עודכן בהצלחה, נעדכן את ה-UI
                     updateUIComponentsAfterCellsChanges(coordinate);
 
-                    // נוסיף סימונים חדשים לתא המעודכן
                     tableController.addMarksOfFocusingToCell(coordinate, null); // אין צורך ב-callback לאחר הפעולה
                 }
             }, errorMessage -> {
-                // במקרה של שגיאה, נטפל בה בהתאם
                 StageUtils.showAlert("Error:", "Failed to update cell: " + errorMessage);
                 tableController.removeMarksOfFocusedCell(null);
                 actionLineController.setActionLine(null);
@@ -221,10 +197,6 @@ public class SheetManagerController {
             StageUtils.showAlert("Error:", "Failed to get cell: " + errorMessage);
         });
     }
-//    public List<String> getRanges() {
-//        return engine.getRangesNames();
-//    }
-
 
     public void getSheetDTOByVersion(String version, Consumer<SheetDTO> callback) {
         requestsManager.getSheetDtoByVersion(version, sheet -> {
@@ -234,11 +206,6 @@ public class SheetManagerController {
             StageUtils.showAlert("Error to get sheetDTO by version", errorMessage);
         });
     }
-
-
-//    public void loadFileToSystem(String absolutePath) throws Exception {
-//        engine.readFileData(absolutePath);
-//    }
 
     //Ranges
     public void addRange(String rangeName, String rangeDefinition,Consumer<List<String>> callBack) throws Exception {
@@ -261,7 +228,6 @@ public class SheetManagerController {
     }
 
     public void clearCurrSelectedRangeHighlight() {
-        //List<Coordinate> rangeCoordinates = engine.getRangeCoordinates(rangeName);
         tableController.clearCurrentHighlightRange();
     }
 
@@ -274,7 +240,6 @@ public class SheetManagerController {
         },errorMessage -> {
             StageUtils.showAlert("Error to get sheetDTO", errorMessage);
         });
-
     }
 
     public Map<String,String> getStylesFromMainSheet() {
@@ -313,7 +278,6 @@ public class SheetManagerController {
     }
 
     public void getSortedSheetDTO(String rangeDefinition, List<Character> columnsToSortBy, Consumer<SheetDTO> callback ) throws IllegalArgumentException {
-        //return engine.getSortedSheetDTO(rangeDefinition, columnsToSortBy);
         requestsManager.getSortedSheetDTO(rangeDefinition, columnsToSortBy, sheet -> {
             callback.accept(sheet);
         }, errorMessage -> {
@@ -325,8 +289,6 @@ public class SheetManagerController {
 
     public void clearBorderMarkOfCells() {
         tableController.clearMarkOfCells(() -> {
-            // אפשר להוסיף כאן פעולה אם צריך לאחר סיום ניקוי הסימונים
-            System.out.println("Cell borders cleared");
         });
     }
 
@@ -357,7 +319,6 @@ public class SheetManagerController {
     public void handleRangeSelection(String rangeName) {
         // אם תא נבחר או עמודה נבחרה, בטל את הסימון שלהם
         if(cellSelected.get() || columnSelected.get()||rowSelected.get()) {
-            // בטל את הבחירה של התא והעמודה
             cellSelected.set(false);
             columnSelected.set(false);
             rowSelected.set(false);
@@ -370,16 +331,7 @@ public class SheetManagerController {
     }
 
     public void handleColumnSelection() {
-        // אם תא נבחר או טווח נבחר, בטל את הסימון שלהם
-//        if(cellSelected.get() || rangeSelected.get()||rowSelected.get()) {
-//            cellSelected.set(false);
-//            rangeSelected.set(false);
-//            rowSelected.set(false);
-//            actionLineController.setActionLine(null); // איפוס השורה
-//        }
         clearSelectionStates();
-
-        //clearBorderMarkOfCells(); // ניקוי סימוני תאים קודם
         columnSelected.set(true); // עדכון מצב בחירת עמודה
     }
 
@@ -412,14 +364,12 @@ public class SheetManagerController {
         return cellSelected;
     }
 
-
     public BooleanProperty rangeSelectedProperty() {
         return rangeSelected;
     }
 
 
     public void getDistinctValuesOfMultipleColsInRange(List<Character> cols, String rangeDefinition, Consumer<Map<String, Set<EffectiveValue>>> onSuccess, Consumer<String> onFailure) {
-        //return engine.getDistinctValuesOfMultipleColsInRange(cols,rangeDefinition);
         // קריאה ל-requestsManager עם צרכנים (Consumers) שמטפלים בתוצאה ובשגיאות
         requestsManager.getDistinctValuesOfMultipleColsInRange(cols, rangeDefinition, distinctValuesMap -> {
             // קריאה ל-onSuccess עם המפה שהתקבלה אם הפעולה הצליחה
@@ -432,7 +382,6 @@ public class SheetManagerController {
     }
 
     public void filterData(Map<String,Set<EffectiveValue>> selectedValues, String rangeDefinition, Consumer<SheetDTO> onSuccess, Consumer<String> onFailure) {
-        //return engine.getFilteredSheetDTOFromMultipleCols(selectedValues, rangeDefinition);
         requestsManager.getFilteredSheetDTOFromMultipleCols(selectedValues, rangeDefinition, sheet -> {
             // קריאה ל-onSuccess עם הגיליון שהתקבל אם הפעולה הצליחה
             onSuccess.accept(sheet);
@@ -517,12 +466,7 @@ public class SheetManagerController {
         sheetUpdatesController.cancelTask();
     }
 
-//    public void refreshToLatestVersion() {
-//        initializeComponentsAfterSheetSelection(sheetNameProperty.get(), hasEditPermission);
-//    }
-
     public void refreshSheetToLatestVersion() {
-        // initializeComponentsAfterSheetSelection(sheetNameProperty.get(), hasEditPermission);
             requestsManager.getSheetDTO(sheet -> {
 
                 setCells(sheet);
@@ -538,29 +482,8 @@ public class SheetManagerController {
             });
         }
 
-
-
     public void refreshSheetPermission(PermissionType permission) {
 
         requestsManager.setPermissionType(permission);
-//        requestsManager.getSheetDTO(sheet -> {
-//        }, errorMessage -> {
-//            StageUtils.showAlert("Error to refresh sheetDTO", errorMessage);
-//        });
     }
 }
-
-//        requestsManager.getSheetDTO(sheet -> {
-//            // רק לעדכן את הפרטים הדרושים
-//            setCells(sheet);
-//            versionProperty.set(sheet.getVersion());
-//            //sheetUpdatesController.startVersionUpdateMessageRefresher(sheetName);
-//        }, errorMessage -> {
-//            System.out.println("Error to refresh sheetDTO: " + errorMessage);
-//            StageUtils.showAlert("Error to refresh sheetDTO", errorMessage);
-//        });
-//    }
-
-//    public void setActive() {
-//        sheetUpdatesController.startVersionUpdateMessageRefresher(String sheet);
-//    }

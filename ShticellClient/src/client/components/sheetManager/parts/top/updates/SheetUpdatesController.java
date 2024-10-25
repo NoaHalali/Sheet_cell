@@ -15,10 +15,9 @@ import static client.components.Utils.Constants.REFRESH_RATE;
 
 public class SheetUpdatesController {
 
-    @FXML
-    private Label messageLabel;
-
+    @FXML private Label messageLabel;
     @FXML private Button refreshButton;
+
     private SheetManagerController parentController;
     String sheetName;
     private BooleanProperty hasNewUpdate = new SimpleBooleanProperty(false);
@@ -26,13 +25,6 @@ public class SheetUpdatesController {
     private Timer timer;
     private TimerTask messageRefresherTask;
     private static final String NO_UPDATES = "";
-
-
-//    @FXML
-//    public void initialize() {
-//        messageLabel.setVisible(false);
-//        refreshButton.setVisible(false); // הכפתור מוסתר כברירת מחדל
-//    }
 
     public void initializeSheetUpdatesController(String sheetName) {
         //messageLabel.setVisible(false);
@@ -86,7 +78,7 @@ public class SheetUpdatesController {
         hasNewUpdate.set(false);
     }
 
-    public void setMainController(SheetManagerController sheetManagerController) {
+    public void setParentController(SheetManagerController sheetManagerController) {
         this.parentController = sheetManagerController;
     }
 

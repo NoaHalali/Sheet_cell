@@ -19,7 +19,7 @@ public class RangesController {
     @FXML private Button addRangeButton;
     @FXML private Button deleteRangeButton;
 
-    private SheetManagerController mainController;
+    private SheetManagerController parentController;
     private String lastSelectedRange = null; // שמירת שם הטווח שנבחר לאחרונה
 
     public void initializeRangesController(List<String> existingRanges, SimpleBooleanProperty rangeSelected, BooleanBinding hasEditorPermission) {
@@ -59,7 +59,7 @@ public class RangesController {
         String rangeDefinition = rangeDefinitionField.getText();
 
         try {
-            mainController.addRange(rangeName, rangeDefinition,rangeNames->{
+            parentController.addRange(rangeName, rangeDefinition, rangeNames->{
                         refreshMenuButton(rangeNames);
                     });
         } catch (Exception e) {
@@ -76,7 +76,7 @@ public class RangesController {
         }
 
         try {
-            mainController.handleDeleteRange(lastSelectedRange,rangeNames->{
+            parentController.handleDeleteRange(lastSelectedRange, rangeNames->{
                 refreshMenuButton(rangeNames);
                 clearSelectedRangeOption();
             });
@@ -92,33 +92,25 @@ public class RangesController {
 
         if ("None".equals(rangeName)) {
             if(lastSelectedRange != null) {
-                mainController.clearBorderMarkOfCells(); // ניקוי סימוני תאים קודם
-                mainController.rangeSelectedProperty().set(false); // עדכון מצב בחירת טווח
+                parentController.clearBorderMarkOfCells(); // ניקוי סימוני תאים קודם
+                parentController.rangeSelectedProperty().set(false); // עדכון מצב בחירת טווח
                 clearSelectedRangeOption();
-            }
-            else{
             }
             return;
         }
 
         if (rangeName != null && !"None".equals(rangeName)) {
             lastSelectedRange = rangeName; // שמירת הטווח הנבחר
-            mainController.handleRangeSelection(rangeName);
-//            mainController.clearBorderMarkOfCells(); // ניקוי סימוני תאים קודם
-//            mainController.highlightRange(rangeName);
-
-            //mainController.rangeSelectedProperty().set(true); // עדכון מצב בחירת טווח
+            parentController.handleRangeSelection(rangeName);
         }
     }
 
     public void clearSelectedRangeOption() {
-        lastSelectedRange = null; // איפוס שם הטווח שנבחר לאחרונה
+        lastSelectedRange = null;
         rangeMenuButton.setText("Choose range: "); // איפוס שם ה-MenuButton
-        //deleteRangeButton.disableProperty()
-
     }
 
-    public void setMainController(SheetManagerController mainController) {
-        this.mainController = mainController;
+    public void setParentController(SheetManagerController parentController) {
+        this.parentController = parentController;
     }
 }

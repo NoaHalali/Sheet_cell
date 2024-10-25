@@ -30,20 +30,16 @@ public class HttpClientUtil {
                 .build();
 
         Call call = HttpClientUtil.HTTP_CLIENT.newCall(request);
-
-        //System.out.println("Launching new request for: " + finalUrl);
         call.enqueue(callback);
     }
 
     public static void runAsyncByRequest(Request request, Callback callback) {
         Call call = HTTP_CLIENT.newCall(request);
-        //System.out.println("Launching new request for: " + request.url());
         call.enqueue(callback);
     }
 
 
     public static void shutdown() {
-        System.out.println("Shutting down HTTP CLIENT");
         HTTP_CLIENT.dispatcher().executorService().shutdown();
         HTTP_CLIENT.connectionPool().evictAll();
     }

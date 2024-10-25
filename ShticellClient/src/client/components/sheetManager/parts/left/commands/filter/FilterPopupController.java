@@ -49,8 +49,6 @@ public class FilterPopupController {
 
     @FXML
     private void applyFilterAction() {
-        // כאן תוכל לבצע את הלוגיקה לסינון
-        System.out.println("Selected items: " + selectedItems);
         isSelected=true;
         // סגור את הפופאפ
         Stage stage = (Stage) filterListView.getScene().getWindow();

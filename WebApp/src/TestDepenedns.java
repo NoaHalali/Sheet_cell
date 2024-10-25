@@ -14,7 +14,6 @@ public class TestDepenedns {
         {
             E.printStackTrace();
         }
-        System.out.println("foo");
     }
     public static void main(String[] args){
         TestDepenedns t= new TestDepenedns();

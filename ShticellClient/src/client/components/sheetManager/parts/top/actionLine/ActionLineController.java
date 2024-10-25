@@ -8,24 +8,15 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import parts.cell.CellDTO;
-import shticell.engines.engine.EngineImpl;
-
 public class ActionLineController {
 
-    private SheetManagerController mainController;
+    private SheetManagerController parentController;
 
-    @FXML
-    private Label cellId;
-    @FXML
-    private Label cellOriginalValue;
-    @FXML
-    private Button updateCell;
-    @FXML
-    private Label cellLastUpdate;
-    @FXML
-    private TextField updateCellValueField;
-
-    private EngineImpl engine;
+    @FXML private Label cellId;
+    @FXML private Label cellOriginalValue;
+    @FXML private Button updateCell;
+    @FXML private Label cellLastUpdate;
+    @FXML private TextField updateCellValueField;
 
     public void initializeActionLine(SimpleBooleanProperty cellSelected, BooleanBinding hasEditPermission) {
         BooleanBinding cellSelectedAndHasEditPermission = cellSelected.and(hasEditPermission);
@@ -36,7 +27,6 @@ public class ActionLineController {
 
     public void setActionLine(CellDTO cell) {
         if (cell != null) {
-            // עדכון השדות בשורת הפעולה לפי פרטי התא
             cellId.setText(cell.getCoord().toString());
             cellOriginalValue.setText(cell.getOriginalValue());
 
@@ -66,15 +56,10 @@ public class ActionLineController {
     }
 
     public void updateCellButtonAction() {
-        mainController.updateCellValue(updateCellValueField.getText());
+        parentController.updateCellValue(updateCellValueField.getText());
     }
 
-
-    public void setMainController(SheetManagerController mainController) {
-        this.mainController = mainController;
+    public void setParentController(SheetManagerController mainController) {
+        this.parentController = mainController;
     }
-
 }
-
-
-

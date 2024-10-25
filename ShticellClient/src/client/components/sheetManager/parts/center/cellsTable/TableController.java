@@ -28,7 +28,7 @@ import static client.components.Utils.Constants.CELL_FXML_RESOURCE_LOCATION;
 
 public class TableController {
     private final String basicCellStyle = "-fx-background-color: #f0f0f0; -fx-alignment: center; -fx-border-color: black; -fx-border-width: 0.5px;";
-    private SheetManagerController mainController;
+    private SheetManagerController parentController;
     @FXML private GridPane dynamicGridPane;
     private final Map<String, CellController> coordToCellControllerMap = new HashMap<>();
     private Coordinate currentlyFocusedCoord; // שדה לשמירת הקואורדינטה הממוקדת הנוכחית
@@ -180,44 +180,9 @@ public class TableController {
         }
     }
 
-    public void setMainController(SheetManagerController mainController) {
-        this.mainController = mainController;
+    public void setParentController(SheetManagerController parentController) {
+        this.parentController = parentController;
     }
-
-//    private void handleCellClick(String newCoord) {
-//
-//        boolean isNewCoordSelected = newCoord != null;
-//        boolean isDoubleClick = currentlyFocusedCoord != null && currentlyFocusedCoord.toString().equals(newCoord);
-//
-//        if (isDoubleClick) {
-//            removeMarksOfFocusedCell();
-//            mainController.handleCellClick(null); // ביטול בחירת תא
-//
-//        } else if (isNewCoordSelected) {
-//            clearMarkOfCells(); // ניקוי הדגשות תאים ישנות
-//            addMarksOfFocusingToCell(CoordinateImpl.parseCoordinate(newCoord));
-//            setFocusedCoord(CoordinateImpl.parseCoordinate(newCoord));
-//            mainController.handleCellClick(currentlyFocusedCoord); // עדכון בחירת תא
-//        }
-//    }
-
-//    private void handleCellClick(String newCoord) {
-//
-//        boolean isNewCoordSelected = newCoord != null;
-//        boolean isDoubleClick = currentlyFocusedCoord != null && currentlyFocusedCoord.toString().equals(newCoord);
-//
-//        Platform.runLater(() -> {
-//            if (isDoubleClick) {
-//                removeMarksOfFocusedCell(); // הסרת ההדגשות מהתא הממוקד
-//                mainController.handleCellClick(null); // ביטול בחירת תא
-//            } else if (isNewCoordSelected) {
-//                clearMarkOfCells(); // ניקוי הדגשות תאים ישנות
-//                addMarksOfFocusingToCell(CoordinateImpl.parseCoordinate(newCoord)); // הוספת הדגשה לתא החדש
-//                setFocusedCoord(CoordinateImpl.parseCoordinate(newCoord)); // עדכון הקואורדינטה הממוקדת
-//                mainController.handleCellClick(currentlyFocusedCoord); // עדכון בחירת תא
-//            }
-//        });
-//    }
 
 private void handleCellClick(String newCoord) {
     boolean isNewCoordSelected = newCoord != null;
@@ -225,13 +190,13 @@ private void handleCellClick(String newCoord) {
 
     if (isDoubleClick) {
         removeMarksOfFocusedCell(() -> {
-            mainController.handleCellClick(null); // ביטול בחירת תא לאחר הסרת הסימונים
+            parentController.handleCellClick(null); // ביטול בחירת תא לאחר הסרת הסימונים
         });
     } else if (isNewCoordSelected) {
         clearMarkOfCells(() -> {
             addMarksOfFocusingToCell(CoordinateImpl.parseCoordinate(newCoord), () -> {
                 setFocusedCoord(CoordinateImpl.parseCoordinate(newCoord)); // עדכון הקואורדינטה הממוקדת
-                mainController.handleCellClick(currentlyFocusedCoord); // עדכון בחירת תא לאחר הוספת סימונים
+                parentController.handleCellClick(currentlyFocusedCoord); // עדכון בחירת תא לאחר הוספת סימונים
             });
         });
     }
@@ -246,18 +211,16 @@ private void handleCellClick(String newCoord) {
             }
         }
 
-        // קריאה ל-onComplete אחרי ניקוי הסימונים
         if (onComplete != null) {
             onComplete.run();
         }
     }
 
-
     public void removeMarksOfFocusedCell(Runnable onComplete) {
         if (currentlyFocusedCellController != null) {
             currentlyFocusedCellController.resetBorder();
 
-            mainController.getCellDTO(currentlyFocusedCoord, cell -> {
+            parentController.getCellDTO(currentlyFocusedCoord, cell -> {
                 Platform.runLater(() -> {
                     List<Coordinate> dependsOn = cell.getDependsOn();
                     for (Coordinate coord : dependsOn) {
@@ -290,7 +253,7 @@ private void handleCellClick(String newCoord) {
         currentlyFocusedCellController.setBorder("red", "3px"); // סימון הגבול של התא הנוכחי
 
         // בקשה אסינכרונית ל-CellDTO עבור התא הממוקד
-        mainController.getCellDTO(currentlyFocusedCoord, cell -> {
+        parentController.getCellDTO(currentlyFocusedCoord, cell -> {
             Platform.runLater(() -> {
                 // סימון התאים שתלויים בתא הממוקד
                 List<Coordinate> dependsOn = cell.getDependsOn();
@@ -318,19 +281,6 @@ private void handleCellClick(String newCoord) {
         });
     }
 
-
-//    private void deselectPreviousCell(Coordinate coord) {
-//        // הסרת הסימון מהתא שהיה ממוקד קודם
-//        Platform.runLater(() -> {
-//            CellController previousCellController = coordToCellControllerMap.get(coord.toString());
-//            if (previousCellController != null) {
-//                previousCellController.resetBorder(); // הסרת סימון גבול
-//            }
-//        });
-//    }
-
-
-
     private void handleColumnClick(int colIndex) {
         clearMarkOfCells(() -> {
             currentColumnIndex = colIndex;
@@ -347,7 +297,7 @@ private void handleCellClick(String newCoord) {
                     currentlyHighlightedColumn.add(coord); // הוסף את התא לרשימת התאים בעמודה הנבחרת
                 }
             }
-            mainController.handleColumnSelection();
+            parentController.handleColumnSelection();
         });
     }
 
@@ -367,7 +317,7 @@ private void handleCellClick(String newCoord) {
                     }
                 }
 
-                mainController.handleRowSelection(); // Notify the main controller about the row selection
+                parentController.handleRowSelection(); // Notify the main controller about the row selection
             });
         }
 
@@ -389,7 +339,6 @@ private void handleCellClick(String newCoord) {
             for (Coordinate coord : rangeCoordinates) {
                 CellController cellController = coordToCellControllerMap.get(coord.toString());
                 cellController.setRangeHighlight();
-                //cellController.setBackgroundColor("red");
             }
             currentlyHighlightedRange = rangeCoordinates;
         });
@@ -424,13 +373,6 @@ private void handleCellClick(String newCoord) {
         }
     }
 
-//    public void clearMarkOfCells() {
-//        clearCurrentHighlightRange();
-//        removeMarksOfFocusedCell();
-//        clearColumnHighlight();
-//        clearRowHighlight();
-//
-//    }
     public void clearRowHighlight() {
         if (currentlyHighlightedRow != null) {
             for (Coordinate coord : currentlyHighlightedRow) {
@@ -494,5 +436,4 @@ private void handleCellClick(String newCoord) {
     public Coordinate getFocusedCoord(){
         return currentlyFocusedCoord;
     }
-
 }

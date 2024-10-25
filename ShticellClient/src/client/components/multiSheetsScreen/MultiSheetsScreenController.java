@@ -115,7 +115,6 @@ public class MultiSheetsScreenController {
         //resetPermissionsProperties();
         //selectedSheetName.set("");
         sheetsTableController.startListRefresher();
-        System.out.println("MultiSheetsScreenController is active");
     }
 
     public void handleSheetSelect(String sheetSelectedName, PermissionType permission) {

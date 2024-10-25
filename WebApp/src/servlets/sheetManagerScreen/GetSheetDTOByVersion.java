@@ -32,7 +32,6 @@ public class GetSheetDTOByVersion extends HttpServlet {
             return;
         }
 
-        System.out.println("Getting sheetDTO, request URI is: " + request.getRequestURI());
         try (PrintWriter out = response.getWriter()) {
             Gson gsonBuilder = new GsonBuilder()
                     .registerTypeAdapter(EffectiveValue.class, new EffectiveValueSerializer())

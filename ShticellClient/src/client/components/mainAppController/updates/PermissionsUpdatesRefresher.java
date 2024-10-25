@@ -33,20 +33,12 @@ public class PermissionsUpdatesRefresher extends TimerTask {
     @Override
     public void run() {
 
-//        if (!shouldUpdate.get()) {
-//            return;
-//        }
-
-        //final int finalRequestNumber = ++requestNumber;
-        //httpRequestLoggerConsumer.accept("About to invoke: " + GET_SHEETS_LIST + " | Users Request # " + finalRequestNumber);
-        //System.out.println("About to invoke: " + GET_SHEETS_LIST + " | Users Request # " + finalRequestNumber);
         HttpClientUtil.runAsyncByUrl(GET_PERMISSION_UPDATE_FOR_USER, new Callback() {
 
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
                 //httpRequestLoggerConsumer.accept("Users Request # " + finalRequestNumber + " | Ended with failure...");
                 //System.out.println("Users Request # " + finalRequestNumber + " | Ended with failure...");
-
             }
 
             @Override

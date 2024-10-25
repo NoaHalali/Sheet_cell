@@ -34,11 +34,9 @@ import static client.components.Utils.Constants.TABLE_FXML_RESOURCE_LOCATION;
 
 public class CommandsController {
 
-    private SheetManagerController mainController;
+    private SheetManagerController parentController;
     private DialogManager dialogManager = new DialogManager();
-    //private SimpleBooleanProperty showWhatIfSlider = new SimpleBooleanProperty(false);
 
-    //@FXML private Button setColumnRowWidthButton;
     @FXML private Button setColumnWidthButton;
     @FXML private Button setRowHeightButton;
     @FXML private Button setColumnAlignmentButton;
@@ -56,10 +54,6 @@ public class CommandsController {
     @FXML private TextField whatIfMinimumTextField;
     @FXML private TextField whatIfMaximumTextField;
     @FXML private Button calculateWhatIfButton;
-//    @FXML private Label minimumSelectionNumberLabel;
-//    @FXML private Label maximumSelectionNumberLabel;
-    //@FXML private GridPane graphs;
-   // @FXML private GraphsController graphsController;
 
     @FXML private TextField filterRangeTextField;
     @FXML private TextField filterColumnsTextField;
@@ -93,7 +87,7 @@ public class CommandsController {
     public void applyTextColorAction() {
         Color selectedColor = textColorPicker.getValue();
         if (selectedColor != null) {
-            mainController.setCellTextColor(selectedColor);
+            parentController.setCellTextColor(selectedColor);
         }
     }
 
@@ -101,17 +95,17 @@ public class CommandsController {
     public void applyBackgroundColorAction() {
         Color selectedColor = backgroundColorPicker.getValue();
         if (selectedColor != null) {
-            mainController.setCellBackgroundColor(selectedColor);
+            parentController.setCellBackgroundColor(selectedColor);
         }
     }
 
     @FXML
     public void resetCellStyleAction() {
-        mainController.resetCellStyle();
+        parentController.resetCellStyle();
     }
 
-    public void setMainController(SheetManagerController mainController) {
-        this.mainController = mainController;
+    public void setParentController(SheetManagerController parentController) {
+        this.parentController = parentController;
     }
 
     @FXML
@@ -119,7 +113,7 @@ public class CommandsController {
         try {
             List<Character> colsList = colsStringToCharList(sortColumnsTextField.getText());
 
-            mainController.getSortedSheetDTO(sortRangeTextField.getText(), colsList, sheet -> {
+            parentController.getSortedSheetDTO(sortRangeTextField.getText(), colsList, sheet -> {
                 try {
                     previewSheetDTOWithPrevStyleInPopup(sheet,"Sorted Sheet Preview");
                 } catch (Exception e) {
@@ -142,7 +136,7 @@ public class CommandsController {
 
         // קבלת ה-TableController ואתחולו עם הגרסה הנבחרת של הגיליון
         TableController tableController = loader.getController();
-        Map<String, String> styleMap = mainController.getStylesFromMainSheet();
+        Map<String, String> styleMap = parentController.getStylesFromMainSheet();
         tableController.showSheetPreview(sheet);
         tableController.updateCellsStyleAfterSort(styleMap, sheet);
 
@@ -204,40 +198,12 @@ public class CommandsController {
 
     }
 
-
-//private SheetDTO openFilterOptionsPopupAndGetFilteredSheet() throws Exception {
-//    List<Character> colsList = colsStringToCharList(filterColumnsTextField.getText());
-//    String rangeDefinition = filterRangeTextField.getText();
-//
-//    Map<String,Set<EffectiveValue>> values = mainController.getDistinctValuesOfMultipleColsInRange(colsList, rangeDefinition);
-//
-//    // קריאה למתודה שתפתח מספר פופאפים
-//    Map<String,Set<EffectiveValue>> filteredValues = openMultipleFilterPopups(values);
-//    // החזרת ערך מתאים
-//    return mainController.filterData(filteredValues, rangeDefinition);
-//}
-
-//        private SheetDTO openFilterOptionsPopupAndGetFilteredSheet() throws Exception {
-//            return openFilterOptionsPopupAndGetFilteredSheet(
-//                    sheet -> {
-//                        // פתיחת פופאפ עם הגיליון המסונן
-//                        try {
-//                            previewSheetDTOWithPrevStyleInPopup(sheet,"Filtered Sheet Preview");
-//                        } catch (Exception e) {
-//                            StageUtils.showAlert("Error", e.getMessage());
-//                        }
-//                    },
-//                    errorMessage -> {
-//                        StageUtils.showAlert("Error", errorMessage);
-//                    }
-//            );
-//
     private void openFilterOptionsPopupAndGetFilteredSheet(Consumer<SheetDTO> onSuccess, Consumer<String> onFailure) throws Exception {
         List<Character> colsList = colsStringToCharList(filterColumnsTextField.getText());
         String rangeDefinition = filterRangeTextField.getText();
 
         // קריאה למתודה שמקבלת את הערכים הייחודיים
-        mainController.getDistinctValuesOfMultipleColsInRange(colsList, rangeDefinition, values -> {
+        parentController.getDistinctValuesOfMultipleColsInRange(colsList, rangeDefinition, values -> {
             // קריאה למתודה שתפתח את הפופאפים ותאפשר סינון
             Map<String, Set<EffectiveValue>> filteredValues = null;
             try {
@@ -247,7 +213,7 @@ public class CommandsController {
             }
 
             // קריאה לפילטר נתונים בהתאם לערכים המסוננים
-            mainController.filterData(filteredValues, rangeDefinition, filteredSheet -> {
+            parentController.filterData(filteredValues, rangeDefinition, filteredSheet -> {
                 onSuccess.accept(filteredSheet);  // קריאה ל-onSuccess במקרה של הצלחה
             }, errorMessage -> {
                 onFailure.accept(errorMessage);  // קריאה ל-onFailure במקרה של שגיאה
@@ -289,8 +255,6 @@ public class CommandsController {
                     .map(stringToEffectiveValueMap::get)
                     .collect(Collectors.toSet());
            filteredValues.put(key,selectedValues);
-            // תוכל לקרוא לפונקציה filterData עם הערכים שנבחרו
-            //mainController.filterData(selectedValues, col, rangeDefinition);
         }
         return filteredValues;
     }
@@ -307,23 +271,23 @@ public class CommandsController {
 
     // פעולה לפתיחת דיאלוג לעיצוב עמודות
     public void showColumnWidthDialog() {
-        int currentColumnWidth = mainController.getFocusedColumnWidth();
+        int currentColumnWidth = parentController.getFocusedColumnWidth();
         dialogManager.showColumnWidthDialog(currentColumnWidth,
-                width -> mainController.setColumnWidth(width)  // קריאה לפונקציה לעדכון רוחב עמודה
+                width -> parentController.setColumnWidth(width)  // קריאה לפונקציה לעדכון רוחב עמודה
         );
     }
 
     // פעולה לפתיחת דיאלוג לעיצוב שורות
     public void showRowHeightDialog() {
-        int currentRowHeight = mainController.getFocusedRowHeight();
+        int currentRowHeight = parentController.getFocusedRowHeight();
         dialogManager.showRowHeightDialog(currentRowHeight,
-                height -> mainController.setRowHeight(height)  // קריאה לפונקציה לעדכון גובה שורה
+                height -> parentController.setRowHeight(height)  // קריאה לפונקציה לעדכון גובה שורה
         );
     }
     // פעולה לפתיחת דיאלוג יישור עמודות
     public void showColumnAlignmentDialog() {
         dialogManager.showColumnAlignmentDialog(
-                alignment -> mainController.setColumnAlignment(alignment)  // פונקציה לעדכון יישור עמודה
+                alignment -> parentController.setColumnAlignment(alignment)  // פונקציה לעדכון יישור עמודה
         );
     }
 
@@ -332,7 +296,7 @@ public class CommandsController {
     {
         try {
             GraphController graphsController = new GraphController();
-            graphsController.setMainController(mainController);
+            graphsController.setMainController(parentController);
             String xRange = xColRangeTextField.getText();
             String yRange = yColRangeTextField.getText();
             graphsController.createGraph(xRange, yRange);
@@ -353,10 +317,10 @@ public class CommandsController {
         }
 
         // קריאה למתודה האסינכרונית עם Consumers
-        mainController.setEngineInWhatIfMode(mainController.getCurrentlyFocusedCellCoord(),
+        parentController.setEngineInWhatIfMode(parentController.getCurrentlyFocusedCellCoord(),
                 (success) -> { // מה לעשות במקרה של הצלחה
-                    mainController.changeWhatIfMode(true);
-                    Coordinate focusedCoord = mainController.getCurrentlyFocusedCellCoord();
+                    parentController.changeWhatIfMode(true);
+                    Coordinate focusedCoord = parentController.getCurrentlyFocusedCellCoord();
                     whatIfCoordinateLabel.setText(focusedCoord.toString());
                     minimumValueSliderLabel.setText(whatIfMinimumTextField.getText());
                     maximumValueSliderLabel.setText(whatIfMaximumTextField.getText());
@@ -379,12 +343,12 @@ public class CommandsController {
 
     @FXML
     private void handlesWhatIfSliderMove() {
-        mainController.calculateWhatIfValueForCell(whatIfSlider.getValue());
+        parentController.calculateWhatIfValueForCell(whatIfSlider.getValue());
     }
 
     public void handleExitWhatIfMode() {
-        mainController.changeWhatIfMode(false);
-        mainController.showCurrentSheet();
+        parentController.changeWhatIfMode(false);
+        parentController.showCurrentSheet();
     }
 
     private void bindRowsColsStyle(SimpleBooleanProperty columnSelected, SimpleBooleanProperty rowSelected, BooleanBinding hasEditPermission) {
@@ -423,5 +387,4 @@ public class CommandsController {
         String width = columnRowWidthTextField.getText();
         // לוגיקה להגדרת רוחב העמודות/שורות והטיפול ב-wrap/clip
     }
-
 }

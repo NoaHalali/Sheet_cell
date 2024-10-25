@@ -22,7 +22,6 @@ public class LoginServlet extends HttpServlet {
 
         String usernameFromSession = SessionUtils.getUsername(request);
         UserManager userManager = ServletUtils.getUserManager(getServletContext());
-        System.out.println("Servlet Checking if user exists: " + usernameFromSession);
 
         if (usernameFromSession == null) { //user is not logged in yet
 

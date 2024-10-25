@@ -72,7 +72,6 @@ public class LoginController {
                             errorMessageProperty.set("Something went wrong: " + responseBody)
                     );
                 } else {
-                   // System.out.println("Login successful");
 
                     Platform.runLater(() -> {
                         mainController.updateUserName(userName);
@@ -94,7 +93,7 @@ public class LoginController {
     }
 
     private void updateHttpStatusLine(String data) {
-        System.out.println(data);
+        //System.out.println(data);
         //mainController.updateHttpLine(data);
     }
 

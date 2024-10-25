@@ -47,8 +47,6 @@ public class RequestsListRefresher extends TimerTask {
                 .build()
                 .toString();
 
-        //httpRequestLoggerConsumer.accept("About to invoke: " + GET_SHEETS_LIST + " | Users Request # " + finalRequestNumber);
-        //System.out.println("About to invoke: " + GET_SHEETS_LIST + " | Users Request # " + finalRequestNumber);
         HttpClientUtil.runAsyncByUrl(finalUrl, new Callback() {
 
             @Override

@@ -27,17 +27,9 @@ public class DeleteRangeServlet extends HttpServlet {
         PrintWriter out = response.getWriter();
 
         try {
-            //String sheetName = request.getParameter("sheetName");
             String sheetName = SessionUtils.getViewedSheetName(request);
             String rangeName = request.getParameter("rangeName");
-            System.out.println("Received sheetName: " + sheetName);
-            System.out.println("Received rangeName: " + rangeName);
 
-//            if (sheetName == null || rangeName == null) {
-//                // אם אחד הפרמטרים חסר, נחזיר שגיאה
-//                resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing sheetName or range");
-//                return;
-//            }
             if (sheetName == null) {
                 response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing sheet name");
                 return;
@@ -58,21 +50,18 @@ public class DeleteRangeServlet extends HttpServlet {
                 out.println(json);  // This is the only valid JSON response
 
             } catch (IllegalArgumentException e) {
-                // Handle invalid input error
                 response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
                 String json = gson.toJson(e.getMessage());
 
                 response.getWriter().write( json);
 
             } catch (Exception e) {
-                // במקרה שנזרקה שגיאה, נחזיר שגיאת שרת
                 response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
                 return;
             }
 
 
         } catch (Exception e) {
-            // במקרה של שגיאה כללית, נחזיר שגיאת שרת
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "An error occurred: " + e.getMessage());
         }
     }

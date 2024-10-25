@@ -41,9 +41,9 @@ public class CoordinateImpl implements Coordinate, Serializable {
 
     public static Coordinate parseCoordinate(String input) throws IllegalArgumentException {
 
-        if(input==null) {
-            System.out.println("was here");
-        }
+//        if(input==null) {
+//            System.out.println("was here");
+//        }
 
         if (input.matches("^[A-Za-z]+[0-9]+$")) { // Accepts both uppercase and lowercase letters
             String columnString = input.replaceAll("[0-9]", "");
