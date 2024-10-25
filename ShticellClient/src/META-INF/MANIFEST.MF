@@ -1,0 +1,3 @@
+Manifest-Version: 1.0
+Main-Class: client.main.ClientMain
+Class-Path: DTO.jar Engine.jar lib/jaxb/angus-activation.jar lib/jaxb/jakarta.activation-api.jar lib/jaxb/jakarta.xml.bind-api.jar lib/jaxb/jaxb-core.jar lib/jaxb/jaxb/jaxb-impl.jar lib/jaxb/jaxb-jxc.jar lib/jaxb/jaxb-xjc.jar lib/Gson/gson-2.1.jar lib/Gson/gson-2.1-javadoc.jar lib/Gson/gson-2.1-sources.jar lib/OKHttp/okhttp-4.9.1.jar lib/OKHttp/okio-2.8.0.jar lib/OKHttp/kotlin-stdlib-1.4.10.jar lib/OKHttp/kotlin-stdlib-common-1.4.10.jar lib/OKHttp/annotations-13.0.jar lib/
