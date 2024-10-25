@@ -51,7 +51,6 @@ public class RequestsManager {
                 .build()
                 .toString();
 
-        System.out.println("New request is launched for: " + GET_SHEET_DTO);
 
         HttpClientUtil.runAsyncByUrl(finalUrl, new Callback() {
             @Override
@@ -72,7 +71,6 @@ public class RequestsManager {
 
                     // ממירים את ה-Response ל-SheetDTO
                     SheetDTO sheet = gson.fromJson(responseBody, SheetDTO.class);
-                    System.out.println("Sheet constructor from json string: " + sheet);
 
 
                     // מעבירים את ה-DTO ל-UI באמצעות ה-Consumer של onSuccess
@@ -171,7 +169,6 @@ public class RequestsManager {
                 .build()
                 .toString();
 
-        System.out.println("New request is launched for: " + GET_SHEET_DTO_BY_VERSION);
 
         HttpClientUtil.runAsyncByUrl(finalUrl, new Callback() {
             @Override
@@ -192,7 +189,6 @@ public class RequestsManager {
 
                     // ממירים את ה-Response ל-SheetDTO
                     SheetDTO sheet = gson.fromJson(responseBody, SheetDTO.class);
-                    System.out.println("Sheet constructor from json string: " + sheet);
 
 
                     // מעבירים את ה-DTO ל-UI באמצעות ה-Consumer של onSuccess
@@ -292,7 +288,6 @@ public class RequestsManager {
                 .build()
                 .toString();
 
-        System.out.println("New request is launched for: " + GET_RANGE_COORDINATES);
 
         HttpClientUtil.runAsyncByUrl(finalUrl, new Callback() {
             @Override

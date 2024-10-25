@@ -49,7 +49,7 @@ public class MultiSheetEngineManager {
 //    }
 
     public synchronized void addSheetEngine(Sheet sheet,String owner) {
-        this.sheetEngines.put(sheet.getSheetName(), new SheetEngineImpl(sheet,owner));
+        this.sheetEngines.put(sheet.getSheetName().toLowerCase(), new SheetEngineImpl(sheet,owner));
     }
     public boolean isSheetNameExists(String sheetName) {
         return this.sheetEngines.containsKey(sheetName.toLowerCase());

@@ -54,7 +54,6 @@ public class LoginController {
                         .build()
                         .toString();
 
-        updateHttpStatusLine("New request is launched for: " + finalUrl);
 
         HttpClientUtil.runAsyncByUrl(finalUrl, new Callback() {
 
@@ -73,7 +72,7 @@ public class LoginController {
                             errorMessageProperty.set("Something went wrong: " + responseBody)
                     );
                 } else {
-                    System.out.println("Login successful");
+                   // System.out.println("Login successful");
 
                     Platform.runLater(() -> {
                         mainController.updateUserName(userName);

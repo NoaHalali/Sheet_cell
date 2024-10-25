@@ -43,7 +43,6 @@ public class LoadSheetFilesController {
                 .method("POST", body)
                 .build();
 
-        System.out.println("New request is launched for: " + UPLOAD_FILE );
 
 
         HttpClientUtil.runAsyncByRequest(request, new Callback() {
