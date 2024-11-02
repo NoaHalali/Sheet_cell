@@ -13,6 +13,7 @@ public class Constants {
 
     // fxml locations
     public final static String MAIN_PAGE_FXML_RESOURCE_LOCATION = "/client/components/mainAppController/app-main.fxml";
+    public final static String CHAT_AREA_FXML_RESOURCE_LOCATION = "/client/components/chatRoom/chat-area.fxml";
     public final static String LOGIN_PAGE_FXML_RESOURCE_LOCATION = "/client/components/login/login.fxml";
     public final static String SHEET_MANAGER_FXML_RESOURCE_LOCATION = "/client/components/sheetManager/sheetManager.fxml";
     public final static String MULTI_SHEETS_SCREEN_FXML_RESOURCE_LOCATION = "/client/components/multiSheetsScreen/multiSheetsScreen.fxml";
@@ -70,6 +71,9 @@ public class Constants {
     public static final String HANDLE_REQUEST_PERMISSION_URL = FULL_SERVER_PATH + "/handleRequestPermission";
     public static final String GET_REQUESTS_LIST_URL = FULL_SERVER_PATH + "/getRequestsList";
 
+    //chat room
+    public static final String SEND_CHAT_LINE = FULL_SERVER_PATH + "/sendChat";
+    public static final String CHAT_LINES_LIST = FULL_SERVER_PATH + "/chatLinesList";
 
     // GSON instance
     public final static Gson GSON_INSTANCE = new Gson();

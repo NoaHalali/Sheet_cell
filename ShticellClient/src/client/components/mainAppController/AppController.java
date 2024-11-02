@@ -1,5 +1,6 @@
 package client.components.mainAppController;
 
+import client.components.chatRoom.ChatAreaController;
 import client.components.login.LoginController;
 import client.components.mainAppController.updates.PermissionsUpdatesController;
 import client.components.multiSheetsScreen.MultiSheetsScreenController;
@@ -36,6 +37,9 @@ public class AppController {
     private ScrollPane multiSheetsScreenComponent;
     private MultiSheetsScreenController multiSheetsScreenController;
 
+    private GridPane chatRoomComponent;
+    private ChatAreaController chatAreaController;
+
     @FXML private Label userGreetingLabel;
     @FXML private AnchorPane mainPanel;
 
@@ -59,6 +63,7 @@ public class AppController {
         loadLoginPage();
         loadSheetManagerPage();
         loadMultiSheetsScreen();
+        loadChatRoom();
         permissionsUpdatesController.setParentController(this);
     }
 
@@ -87,6 +92,19 @@ public class AppController {
             multiSheetsScreenComponent = fxmlLoader.load();
             multiSheetsScreenController = fxmlLoader.getController();
             multiSheetsScreenController.setMainController(this);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    public void loadChatRoom(){
+        URL chatRoomScreenURL = getClass().getResource(CHAT_AREA_FXML_RESOURCE_LOCATION);
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader();
+            fxmlLoader.setLocation(chatRoomScreenURL);
+            chatRoomComponent = fxmlLoader.load();
+            chatAreaController = fxmlLoader.getController();
+            chatAreaController.setMainController(this);
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -149,6 +167,11 @@ public class AppController {
         switchToMultiSheetsScreen();
 
     }
+    public void switchToChatRoom() {
+        screen = Screen.CHAT_ROOM;
+        chatAreaController.startListRefresher();
+        setMainPanelTo(chatRoomComponent);
+    }
 
 //    public void switchToLogin() {
 //        Platform.runLater(() -> {
@@ -181,10 +204,12 @@ public class AppController {
         String selectedSheetName = multiSheetsScreenController.getSelectedSheetName();
         if (selectedSheetName.equals(sheetName)) {
             multiSheetsScreenController.handleApprovePermissionForSelectedSheet(permission);
-            if(screen ==Screen.SINGLE_SHEET_MANAGER)
+            if(screen == Screen.SINGLE_SHEET_MANAGER)
             {
                 sheetManagerController.refreshSheetPermission(permission);
             }
         }
     }
+
+
 }

@@ -8,6 +8,16 @@
 
 <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="228.0" spacing="20.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.components.multiSheetsScreen.commands.CommandsController">
    <children>
+      <Button fx:id="chatRoomButton" mnemonicParsing="false" onAction="#handleChatRoomButtonClick" text="Move to chat room"
+              style="-fx-background-color: #ff5733;      /* צבע רקע בולט */
+               -fx-text-fill: #ffffff;             /* צבע טקסט לבן */
+               -fx-font-size: 16px;                /* גודל טקסט מוגדל */
+               -fx-font-weight: bold;              /* טקסט מודגש */
+               -fx-padding: 10px;                  /* ריווח פנימי */
+               -fx-border-color: #ff5733;          /* צבע מסגרת */
+               -fx-border-radius: 10px;            /* פינות מעוגלות */
+               -fx-background-radius: 10px;" />
+
       <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
          <children>
             <Label prefHeight="17.0" prefWidth="90.0" text="Selected sheet :" />

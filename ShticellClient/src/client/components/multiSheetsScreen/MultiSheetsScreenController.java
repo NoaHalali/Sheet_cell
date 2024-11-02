@@ -162,6 +162,10 @@ public class MultiSheetsScreenController {
         permissionForSelectedSheet.set(permission);
     }
 
+    public void switchToChatRoom() {
+        mainController.switchToChatRoom();
+    }
+
 //    private void updatePermissionsProperties(PermissionType permissionForSelectedSheet) {
 //        resetPermissionsProperties();
 //        switch (permissionForSelectedSheet){

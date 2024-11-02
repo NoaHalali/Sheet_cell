@@ -29,6 +29,7 @@ public class CommandsController {
     private MultiSheetsScreenController parentController;
 
     @FXML private Button viewSheetButton;
+    @FXML private Button chatRoomButton;
     @FXML private Label sheetNameLabel;
     @FXML private MenuButton requestPermissionMenuButton;
     @FXML private MenuButton handleRequestMenuButton;
@@ -175,5 +176,9 @@ public class CommandsController {
                 }
             }
         });
+    }
+    @FXML
+    public void handleChatRoomButtonClick() {
+        parentController.switchToChatRoom();
     }
 }

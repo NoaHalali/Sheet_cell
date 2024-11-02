@@ -71,11 +71,11 @@ public class PermissionsUpdatesRefresher extends TimerTask {
                 + ", has been " + requestStatus.toString() + ". ";
         if (requestStatus == RequestStatus.APPROVED) {
             parentController.handleApprovePermissionForSheet(sheetName, permission);
-            if (screen == Screen.MULTI_SHEETS) {
-                message += "select the sheet again to see the changes.";
-            } else if (screen == Screen.SINGLE_SHEET_MANAGER) {
-                message += "go back to dashboard and select the sheet again to see the changes.";
-            }
+//            if (screen == Screen.MULTI_SHEETS) {
+//                message += "select the sheet again to see the changes.";
+//            } else if (screen == Screen.SINGLE_SHEET_MANAGER) {
+//                message += "go back to dashboard and select the sheet again to see the changes.";
+//            }
         }
 
         return message;
