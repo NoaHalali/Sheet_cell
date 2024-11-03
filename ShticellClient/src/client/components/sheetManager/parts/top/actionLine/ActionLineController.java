@@ -32,12 +32,12 @@ public class ActionLineController {
 
             int lastUpdateVersion = cell.getLastUpdatedVersion();
             String lastUpdateMessage;
-            if(lastUpdateVersion == 0) { //TODO: maybe change and init in the engine
+            if(lastUpdateVersion == 0) {
                 lastUpdateMessage = "";
             } else if (lastUpdateVersion == 1) {
                 lastUpdateMessage = "version 1" ;
             } else {
-                lastUpdateMessage = "version" + lastUpdateVersion + ", by " + cell.getLastEditedBy();
+                lastUpdateMessage = "version " + lastUpdateVersion + ", by " + cell.getLastEditedBy();
             }
             cellLastUpdate.setText(lastUpdateMessage);
 
