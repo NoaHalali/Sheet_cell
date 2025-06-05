@@ -1,39 +1,45 @@
 # Shticell - Spreadsheet Application
 
-## Overview
-Shticell is a powerful spreadsheet application that combines the functionality of traditional spreadsheet software with modern features. It offers both a console-based interface and a graphical user interface built with JavaFX.
+A modern spreadsheet application with a graphical user interface (JavaFX) and advanced features for data management, analysis, and collaboration.
+
+---
 
 ## Features
-- Real-time calculations and formula support
-- Advanced sorting and filtering capabilities
-- Version control integration
-- Multi-user collaboration
-- Dynamic "What-If" analysis
-- Both console and GUI interfaces
-- Complex functions and formulas support
 
-## Project Structure
-- `engine/` - Core spreadsheet engine
-- `GUI/` - JavaFX graphical interface
-- `UI/` - User interface components
-- `WebApp/` - Web application components
-- `ShticellClient/` - Client-side implementation
-- `DTO/` - Data Transfer Objects
+| Feature                | Description                                                      |
+|------------------------|------------------------------------------------------------------|
+| Real-time calculations | Automatic updates for formulas and cell dependencies             |
+| Sorting & Filtering    | Advanced tools for organizing and viewing your data              |
+| Version control        | Track changes and manage multiple versions of your sheets        |
+| Multi-user collaboration | Work together on the same sheet in real time                  |
+| What-If analysis       | Dynamic scenario analysis with adjustable parameters             |
+| Custom cell styling    | Change cell colors, text, and styles easily                     |
+| Graphs & Charts        | Visualize your data with built-in graphing tools                |
+| Range management       | Define and manage named ranges for quick access                 |
 
-## Screenshots
+---
 
-### Login Screen
-![Login Screen](docs/screenshot0.png)
+## Code Structure
 
-### Main Spreadsheet View
-![Main Spreadsheet View](docs/screenshot1.png)
+```
+engine/           # Core spreadsheet logic and data model
+WebApp/           # Web application components (if applicable)
+ShticellClient/   # Client-side logic and networking
+DTO/              # Data Transfer Objects for communication between layers
 
-### Dashboard and Sheet Management
-![Dashboard and Sheet Management](docs/screenshot2.png)
+# Previous versions (for reference only):
+# GUI/ - Old JavaFX graphical version
+# UI/  - Old console version
+```
 
-### What-If Analysis Mode
-![What-If Analysis Mode](docs/screenshot3.png)
+---
 
-### Graph/Chart Feature
-![Graph/Chart Feature](docs/screenshot4.png)
+## Usage Example
+
+- **Edit a cell:** Click a cell, enter a new value, and see all dependent cells update instantly.
+- **Apply What-If:** Use the What-If slider to simulate changes and analyze results in real time.
+- **Sort/Filter:** Select a range and sort or filter your data by any column.
+- **Create a graph:** Select data ranges and generate a graph with one click.
+
+---
 
