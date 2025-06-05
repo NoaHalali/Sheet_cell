@@ -46,7 +46,7 @@ public class RequestPermissionServlet extends HttpServlet {
             try {
                 PermissionType permission = PermissionType.valueOf(permissionType.toUpperCase());
                 addUserPermissionRequest(sheetName.toLowerCase(), permission, username);
-                response.setStatus(HttpServletResponse.SC_OK);//todo add in others
+                response.setStatus(HttpServletResponse.SC_OK);
                 //out.println("Permission request " + permissionType + ", by the user '" + username +"', for sheet '" +sheetName+  "' added successfully");
             } catch (IllegalArgumentException e) {
                 response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid permissionType: " + permissionType);

@@ -184,7 +184,6 @@ public class Sheet implements Serializable {
     public boolean updateCellValue(String originalValue,Cell changeCell) throws Exception {
         boolean isDeleted;
         if (originalValue.isEmpty()) {
-            //changeCell.checkIfCellCanBeDeleted();
             deleteCell(changeCell.getCoordinate());
             isDeleted = true;
         }
@@ -192,9 +191,9 @@ public class Sheet implements Serializable {
             isDeleted = false;
             List<Cell> dependsOnCellList = new LinkedList<Cell>();
             List<Range> rangesDependsOnList= new LinkedList<Range>();
-            Expression expression = FunctionParser.getExpressionOfCell(originalValue, dependsOnCellList,rangesDependsOnList,this);;
-            //changeCell = getCellByCoord(coord);
-            Expression oldExpression = changeCell.getCellValue();
+            Expression expression = FunctionParser.getExpressionOfCell(originalValue, dependsOnCellList,rangesDependsOnList,this); //this also updates the dependsOnCellList
+
+            Expression oldExpression = changeCell.getCellValue(); //save the old expression in case the new one is invalid
             changeCell.setDependsOn(dependsOnCellList);
 
             changeCell.setRangesDependsOnList(rangesDependsOnList);
@@ -213,9 +212,6 @@ public class Sheet implements Serializable {
         }
         return isDeleted;
     }
-
-
-
 
     public Cell[][] getCellsMatrix() {
         return cellsMatrix;

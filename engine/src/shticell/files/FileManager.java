@@ -56,7 +56,7 @@ public class FileManager {
 //        }
 //    }
 
-    public synchronized STLSheet loadXML(InputStream inputStream)throws JAXBException {//TODO USED TO THROW RUNTIME EXEP
+    public synchronized STLSheet loadXML(InputStream inputStream)throws JAXBException {
 //        try {
             //InputStream inputStream = new FileInputStream(new File(filePath));
 

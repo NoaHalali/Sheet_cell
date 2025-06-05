@@ -27,7 +27,6 @@ public class Cell implements Serializable {
     private String lastEditedBy;
 
 
-    //TODO - maybe send version of sheet
     public Cell(Coordinate coordinate, String originalValue) {
         this.coordinate = coordinate;
         this.originalValue = originalValue;
@@ -229,7 +228,7 @@ public class Cell implements Serializable {
         cellValue.calculateEffectiveValue();
         for (Cell cell : influencingOn) {
             if (!coordSet.contains(cell.getCoordinate())) {
-                coordSet.add(cell.getCoordinate());
+                coordSet.add(cell.getCoordinate()); //add to the set of cells that we already checked
                 try {
                     cell.checkIfCellExpressionCanBeUpdated(coordSet);
                 } catch (ClassCastException e) {

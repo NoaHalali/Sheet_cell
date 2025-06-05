@@ -35,7 +35,6 @@ public class GetPermissionUpdatesForUserServlet extends HttpServlet {
 
 
             if (update != null) {
-                //TODO: extrect sheetname from session and request, compare and if equal and  approve, change the session parameter
                 updateSessionPermissionIfNeeded(request, update);
 
                 response.setStatus(HttpServletResponse.SC_OK);

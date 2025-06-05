@@ -9,14 +9,14 @@ import java.util.Map;
 
 public class PermissionsManager {
 
-    private Map<String, PermissionType> usersPermissions = new HashMap<>();//תכלס
+    private Map<String, PermissionType> usersPermissions = new HashMap<>();
     private List<UserRequest> requestsHistory = new ArrayList<>();
     private int requestsNumber;
 
     public PermissionsManager(String owner) {
         requestsNumber = 1;
         usersPermissions.put(owner, PermissionType.OWNER);
-        requestsHistory.add(new UserRequest( owner,PermissionType.OWNER,RequestStatus.APPROVED,requestsNumber)); //TODO maybe add request number here
+        requestsHistory.add(new UserRequest( owner,PermissionType.OWNER,RequestStatus.APPROVED,requestsNumber));
     }
 
     //Map<Integer, UserPermissionDTO> allHistory = new HashMap<>();//אושרו

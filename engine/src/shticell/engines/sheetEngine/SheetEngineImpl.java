@@ -74,11 +74,11 @@ public class SheetEngineImpl implements SheetEngine {
 
         if (clonedSheet != null) {
             Cell cell = clonedSheet.getCellByCoord(coord);
-            String oldOriginalValue;
-            if (cell != null) {
+            String oldOriginalValue; //for checking if the original value changed
+            if (cell != null) { // cell exists
                 oldOriginalValue = cell.getOriginalValue();
                 boolean originalValueChanged = !newOriginalValue.equals(oldOriginalValue);
-                boolean tryToDeleteGhostCell = newOriginalValue.isEmpty();
+                boolean tryToDeleteGhostCell = newOriginalValue.isEmpty(); //if the new value is empty, we want to delete the cell
 
                 if (originalValueChanged) {
                     clonedSheet.updateCellValue(newOriginalValue, cell);
@@ -90,7 +90,7 @@ public class SheetEngineImpl implements SheetEngine {
 
                 }
                 else{ // original value didn't change
-                    if(tryToDeleteGhostCell){ //trying to delete ghost cell
+                    if(tryToDeleteGhostCell){
                         throw new Exception("Cell at coordinate "+coord+" is already empty!");
                     }
                     return false;

@@ -81,7 +81,6 @@ public  class FunctionParser {
     }
 
 
-    //מחזירה אקספרשיון מערך מקור
     public static Expression getExpressionOfCell(String OriginalValue, List<Cell> dependsOnCellList, List<Range>rangesDependsOnList, Sheet evalSheet) throws Exception {
         List<String> list = splitExpressionToStrings(OriginalValue);
         Expression arg2 = null,arg3 = null, res = null;
@@ -91,8 +90,7 @@ public  class FunctionParser {
             res = getSmallArgs(list.get(0));
         }
         else {
-
-            Expression  arg1 = getExpressionOfCell(list.get(1), dependsOnCellList, rangesDependsOnList, evalSheet);
+            Expression arg1 = getExpressionOfCell(list.get(1), dependsOnCellList, rangesDependsOnList, evalSheet);
 
             if(list.size() > 2 ){
                 arg2 = getExpressionOfCell(list.get(2), dependsOnCellList,rangesDependsOnList,evalSheet);
@@ -220,7 +218,7 @@ public  class FunctionParser {
                     arg3 = getExpressionOfCell(list.get(3), dependsOnCellList,rangesDependsOnList,evalSheet);
                     res = new Sub(arg1,arg2,arg3);
                     break;
-                case "REF"://sheet סטטי ?
+                case "REF":
                     if(list.size() != 2){
                         throw new IllegalArgumentException("REF function expected to get 1 arguments") ;
                     }
